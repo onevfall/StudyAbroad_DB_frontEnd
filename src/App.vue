@@ -1,10 +1,18 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <navbar></navbar>
+  <router-view></router-view>
 </template>
+<script>
+import Navbar from "../src/components/Navbar.vue";
+export default {
+  components: {
+    Navbar
+  },
+  mounted(){
+    this.$router.replace('/home')
+  }
+};
+</script>
 
 <style>
 #app {
