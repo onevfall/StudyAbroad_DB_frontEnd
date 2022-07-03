@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import NewsPage from '../views/NewsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
+import RegisterPage from '../views/RegisterPage.vue'
 import store from '../store/index'
 import { ElMessage } from 'element-plus'
 const routes = [
@@ -28,6 +29,14 @@ const routes = [
     component:LoginPage,
     meta:{
       title:'用户登录'
+    }
+  },
+  {
+    path:'/register',
+    name:'register',
+    component:RegisterPage,
+    meta:{
+      title:'用户注册'
     }
   }
 ]
