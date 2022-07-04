@@ -16,11 +16,11 @@
         <el-main>
           <div class="loginField">
             <div class="inputCard">
-              <div class="label">手机号/用户名/邮箱</div>
+              <div class="label">用户ID</div>
               <el-row>
                 <el-col :span="10">
                   <el-input
-                    v-model="user_phone"
+                    v-model="user_id"
                     class="w-50 m-2"
                     :input-style="this.input_style"
                   >
@@ -63,7 +63,7 @@ export default {
   components: { ElMessage },
   data() {
     return {
-      user_phone: "",
+      user_id: "",
       user_password: "",
     };
   },
@@ -73,21 +73,39 @@ export default {
           
           */
       //发起请求
-      axios
-        .post("/login", {
-          user_phone: this.user_phone,
+      // axios({
+      //       url:"login",
+      //       //url:"http://localhost:54686/Home/LoginIn",
+      //       params:{
+      //           user_id:this.user_id,
+      //           user_password:this.user_password
+      //       },
+      //       method:"post",
+      //   }).then(res => {
+      //       console.log(res);
+      //       alert(res.data);
+      //   });
+
+      axios({
+        url: "login",
+        params: {
+          user_id: this.user_id,
           user_password: this.user_password,
-        })
+        },
+        method: "post",
+      })
         .then((res) => {
           console.log(res.data);
-          let response = JSON.parse(res.data);
-          console.log(response);
-          if (response.state == true) {
-            var user_info=response.data;
+          var response=res.data
+          console.log(response.state);
+          if (response.status == true) {
+            var user_info = response.data;
             //若成功登录
             ElMessage({
-              message: user_info.user_name+"，欢迎您！",
+              message: user_info.user_name + "，欢迎您！",
               type: "success",
+              showClose:true,
+              duration:2000
             });
             store.commit("loginIn", user_info);
             if (this.$route.query.redirect) {
@@ -99,9 +117,8 @@ export default {
             }
           } else {
             //若登录失败
-            ElMessage.error('手机号或密码不正确！')
-            this.user_phone="",
-            this.user_password=""
+            ElMessage.error("用户ID或密码不正确！");
+            (this.user_id = ""), (this.user_password = "");
           }
         })
         .catch((err) => {
