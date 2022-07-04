@@ -35,7 +35,7 @@
 
             <div class="inputCard">
               <div class="label">验证码</div>
-              <el-row :gutter="10">
+              <el-row>
                 <el-col :span="10">
                   <el-input
                     v-model="iden_code"
@@ -43,22 +43,20 @@
                     :input-style="this.input_style"
                     v-on:input="validateCAPTCHA()"
                   >
-                    <!-- <template #suffix>
-                      <el-icon color="#409eff"><UserFilled /></el-icon>
-                    </template> -->
+                    <template #append>
+                      <el-button
+                        type="primary"
+                        @click="getIdeCode"
+                        :disabled="isDisposed"
+                      >
+                        {{
+                          this.isDisposed
+                            ? `${this.time}s后重新获取`
+                            : "获取验证码"
+                        }}
+                      </el-button>
+                    </template>
                   </el-input>
-                </el-col>
-                <el-col :span="2">
-                  <el-button
-                    type="button"
-                    @click="getIdeCode"
-                    :disabled="isDisposed"
-                    class="btn btn-primary"
-                  >
-                    {{
-                      this.isDisposed ? `${this.time}s后重新获取` : "获取验证码"
-                    }}
-                  </el-button>
                 </el-col>
               </el-row>
             </div>
@@ -131,7 +129,7 @@ export default {
       })
         .then((res) => {
           //console.log("res.data"+res.data);
-          console.log("res.status"+res.data.status);
+          console.log("res.status" + res.data.status);
           // let response = JSON.parse(res.data);
           // console.log(response);
           if (res.data.status == true) {
@@ -140,7 +138,7 @@ export default {
               message: "注册成功！",
               type: "success",
             });
-            this.$router.replace("/login");       
+            this.$router.replace("/login");
           } else {
             //若注册失败
             ElMessage.error("该手机号已有账号，注册失败！");
