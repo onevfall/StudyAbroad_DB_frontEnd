@@ -71,6 +71,8 @@ export default {
          ElMessage({
               message: "账号已退出！",
               type: "success",
+              showClose:true,
+              duration:1000
             });
         this.$router.replace('\home')
     }
