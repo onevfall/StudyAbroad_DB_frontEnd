@@ -1,0 +1,95 @@
+<template>
+  <el-menu
+    :default-active="this.$router.currentRoute.value.name"
+    class="el-menu-demo"
+    mode="horizontal"
+    background-color="#87a5c7"
+    text-color="#fff"
+    active-text-color="#ffd04b"
+    @select="handleSelect"
+  >
+    <el-menu-item index="0"
+      ><img src="../assets/logo.png" class="logo"
+    /></el-menu-item>
+    <el-menu-item index="home" @click="goHome">首页</el-menu-item>
+    <el-sub-menu index="2">
+      <template #title>找对学校</template>
+      <el-menu-item index="2-1">普通学校</el-menu-item>
+      <el-menu-item index="2-2">艺术学校</el-menu-item>
+      <el-menu-item index="2-3">中学专区</el-menu-item>
+    </el-sub-menu>
+    <el-sub-menu index="3">
+      <template #title>说说留学</template>
+      <el-menu-item index="3-1">留学问答</el-menu-item>
+      <el-menu-item index="3-2">留学分享</el-menu-item>
+    </el-sub-menu>
+    <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
+    <el-menu-item index="5">留学顾问</el-menu-item>
+    <el-sub-menu index="6" v-if="is_login == false">
+      <template #title>登录/注册</template>
+      <el-menu-item index="login" @click="goLogin">登录</el-menu-item>
+      <el-menu-item index="register" @click="goRegister">注册</el-menu-item>
+    </el-sub-menu>
+    <el-sub-menu index="7" v-else>
+      <template #title>个人中心</template>
+      <el-menu-item index="7-1">我的信息</el-menu-item>
+      <el-menu-item index="7-2">我的动态</el-menu-item>
+      <el-menu-item index="7-3">关注/收藏</el-menu-item>
+      <el-menu-item index="7-4">财务管理</el-menu-item>
+      <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
+    </el-sub-menu>
+  </el-menu>
+</template>
+
+<script>
+import router from "@/router";
+import { ElMessage } from "element-plus";
+export default {
+  components: {
+    ElMessage,
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    goHome() {
+      router.push({ name: "home" });
+    },
+    goNews() {
+      router.push({
+        name: "news",
+      });
+    },
+    goLogin() {
+      router.push({
+        name: "login",
+      });
+    },
+    goRegister() {
+      router.push({
+        name: "register",
+      });
+    },
+    //退出账号并跳转至首页
+    loginOut() {
+      this.$store.commit("loginOut");
+      ElMessage({
+        message: "账号已退出！",
+        type: "success",
+      });
+      this.$router.replace("/home");
+    },
+  },
+  computed: {
+    is_login() {
+      return this.$store.state.is_login;
+    },
+  },
+};
+</script>
+
+<style scoped>
+.logo {
+  height: 56px;
+}
+</style>
