@@ -77,7 +77,7 @@ export default {
         message: "账号已退出！",
         type: "success",
       });
-      this.$router.replace("home");
+      this.$router.replace("/home");
     },
   },
   computed: {
