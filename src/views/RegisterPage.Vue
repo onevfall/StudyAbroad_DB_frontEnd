@@ -11,7 +11,7 @@
       </el-header>
       <el-container>
         <el-aside width="900px">
-          <img src="../assets/drawing_login.png" class="drawing" />
+          <img src="../assets/drawing_register.png" class="drawing" />
         </el-aside>
 
         <el-main>
@@ -85,7 +85,14 @@
                     type="password"
                     v-on:input="validatePassword()"
                     clearable
-                  />
+                  >
+                    <template #append>
+                    <el-icon v-if="check" :color="green"
+                      ><SuccessFilled
+                    /></el-icon>
+                    <el-icon v-else :color="red"><WarningFilled /></el-icon>
+                    </template>
+                  </el-input>
                 </el-col>
               </el-row>
             </div>
@@ -97,11 +104,30 @@
         </el-main>
       </el-container>
     </el-container>
+    <el-dialog
+    v-model="dialogVisible"
+    title="注册成功"
+    width="40%"
+    append-to-body
+  >
+    <span>您的ID为{{ this.user_id }},请您牢记</span>
+    <span>5秒后将跳转回到登录界面</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false"
+          >确认</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
   </div>
+  
 </template>
 
 <script>
 import { ElMessage } from "element-plus";
+import { ref } from 'vue'
+import { ElMessageBox } from 'element-plus'
 import axios from "axios";
 import store from "@/store";
 import { tryOnBeforeMount } from "@vueuse/core";
@@ -112,50 +138,74 @@ export default {
       iden_code: "",
       user_phone: "",
       user_password: "",
+      user_id: "",
       tmp_password: "",
       time: 60,
       isDisposed: false,
+      check: false,
+      dialogVisible: false,
     };
   },
   methods: {
     register() {
-      axios({
-        url: "http://43.142.41.192:6001/api/register",
-        params: {
-          user_phone: this.user_phone,
-          user_password: this.user_password,
-        },
-        method: "post",
-      })
-        .then((res) => {
-          //console.log("res.data"+res.data);
-          console.log("res.status" + res.data.status);
-          // let response = JSON.parse(res.data);
-          // console.log(response);
-          if (res.data.status == true) {
-            //若成功注册
-            ElMessage({
-              message: "注册成功！",
-              type: "success",
-            });
-            this.$router.replace("/login");
-          } else {
-            //若注册失败
-            ElMessage.error("该手机号已有账号，注册失败！");
+      if (
+        this.user_phone === "" ||
+        this.iden_code === "" ||
+        this.user_password === "" ||
+        this.tmp_password === ""
+      ) {
+        ElMessage.error("以上四项均为必填项！");
+        return;
+      } else if (this.user_password !== this.tmp_password) {
+        ElMessage.error("两次输入密码不相同！请再次确认密码");
+        return;
+      } else {
+        axios({
+          url: "http://43.142.41.192:6001/api/register",
+          params: {
+            user_phone: this.user_phone,
+            user_password: this.user_password,
+          },
+          method: "post",
+        })
+          .then((res) => {
+            console.log(res);
+            console.log(res.data);
+            console.log("res.status" + res.data.status);
+            if (res.data.status == true) {
+              //若成功注册
+              ElMessage({
+                message: "注册成功！",
+                type: "success",
+              });
+              this.user_id = res.data.data.user_id;
+              console.log(this.user_id);
+              this.dialogVisible = true;
+              this.sleep(5000);
+              this.dialogVisible = false;
+              console.log("close");
+              // setTimeout(() => {
+              //   console.log("111");
+              // }, 5000);
+              //this.$router.replace("/login");
+            } else {
+              //若注册失败
+              ElMessage.error("该手机号已有账号，注册失败！");
+              (this.user_phone = ""),
+                (this.user_password = ""),
+                (this.iden_code = ""),
+                (this.tmp_password = "");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            ElMessage.error("注册失败！");
             (this.user_phone = ""),
               (this.user_password = ""),
               (this.iden_code = ""),
               (this.tmp_password = "");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          ElMessage.error("注册失败！");
-          (this.user_phone = ""),
-            (this.user_password = ""),
-            (this.iden_code = ""),
-            (this.tmp_password = "");
-        });
+          });
+      }
     },
     validatePhone() {
       if (this.user_phone === "") {
@@ -197,13 +247,10 @@ export default {
           type: "error",
         });
       } else if (this.user_password !== this.tmp_password) {
-        ElMessage({
-          message: "两次输入密码不相同！",
-          grouping: true,
-          type: "error",
-        });
+        this.check = false;
       } else {
         ElMessage.success("两次输入密码相同");
+        this.check = true;
       }
     },
     handleTimeChange() {
@@ -233,6 +280,26 @@ export default {
       this.isDisposed = true;
       this.handleTimeChange();
     },
+    handleClose() {
+      ElMessageBox.confirm("确认关闭此对话框吗?")
+        .then(() => {
+          this.dialogVisible = false;
+          // done();
+        })
+        .catch(() => {
+          // catch error
+        });
+    },
+    sleep(numberMillis) {
+      var now = new Date();
+      var exitTime = now.getTime() + numberMillis;
+      console.log("11100");
+      console.log(this.dialogVisible);
+      while (true) {
+        now = new Date();
+        if (now.getTime() > exitTime) return;
+      }
+    },
   },
 };
 </script>
@@ -249,11 +316,11 @@ export default {
   height: 600px;
 }
 .registerField {
-  margin-top: 30%;
+  margin-top: 15%;
 }
 .inputCard {
   color: #409eff;
-  margin-top: 10%;
+  margin-top: 5%;
 }
 .inputCard .label {
   text-align: left;
@@ -267,5 +334,8 @@ export default {
   --el-input-border-color: #a0cfff;
   --el-input-bg-color: #ffffff00;
   --el-input-hover-border-color: #88c3fe;
+}
+.dialog-footer button:first-child {
+  margin-right: 10px;
 }
 </style>
