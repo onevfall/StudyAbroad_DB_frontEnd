@@ -3,7 +3,7 @@ import { user_table } from '../DemoData/login';
 import { formatterDate } from '@/utils/date';
 
 export default {
-    'post|/api/login': option => {
+    'post|/api111/login': option => {
         var { user_phone, user_password } = JSON.parse(option.body)
 
         for (let i = 0; i < user_table.length; ++i) {
@@ -22,7 +22,7 @@ export default {
             }
         })
     },
-    'post|/api/register': option => {
+    'post|/api111/register': option => {
         var { user_phone, user_password } = JSON.parse(option.body)
 
         for (let i = 0; i < user_table.length; ++i) {//遍历 防止手机号重复注册

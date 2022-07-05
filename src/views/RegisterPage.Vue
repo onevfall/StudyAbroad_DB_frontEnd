@@ -87,10 +87,10 @@
                     clearable
                   >
                     <template #append>
-                    <el-icon v-if="check" :color="green"
+                    <el-icon v-if="check" style="color:green"
                       ><SuccessFilled
                     /></el-icon>
-                    <el-icon v-else :color="red"><WarningFilled /></el-icon>
+                    <el-icon v-else style="color:#F56C6C"><WarningFilled /></el-icon>
                     </template>
                   </el-input>
                 </el-col>
@@ -108,13 +108,19 @@
     v-model="dialogVisible"
     title="注册成功"
     width="40%"
+    :before-close="handleClose"
     append-to-body
   >
-    <span>您的ID为{{ this.user_id }},请您牢记</span>
-    <span>5秒后将跳转回到登录界面</span>
+    <span>您的注册手机号为 {{ this.user_phone }}  </span>
+    <br />
+    <span>您的ID为 {{ this.user_id }} </span>
+    <br />
+    <span>您的密码为 {{ this.user_password }} </span>
+    <br />
+    <span>请您牢记以上信息, ID及密码将作为用户登录唯一凭证</span>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false"
+        <el-button type="primary" @click="closeDialog"
           >确认</el-button
         >
       </span>
@@ -181,9 +187,9 @@ export default {
               this.user_id = res.data.data.user_id;
               console.log(this.user_id);
               this.dialogVisible = true;
-              this.sleep(5000);
-              this.dialogVisible = false;
-              console.log("close");
+              // this.sleep(5000);
+              // this.dialogVisible = false;
+              // console.log("close");
               // setTimeout(() => {
               //   console.log("111");
               // }, 5000);
@@ -300,6 +306,10 @@ export default {
         if (now.getTime() > exitTime) return;
       }
     },
+    closeDialog(){
+      this.dialogVisible = false;
+      this.$router.replace("/login");
+    }
   },
 };
 </script>
