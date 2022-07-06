@@ -25,13 +25,13 @@
     </el-sub-menu>
     <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
     <el-menu-item index="5">留学顾问</el-menu-item>
-    <el-sub-menu index="6" v-if="is_login==false">
-      <template #title >登录/注册</template>
+    <el-sub-menu index="6" v-if="is_login == false">
+      <template #title>登录/注册</template>
       <el-menu-item index="login" @click="goLogin">登录</el-menu-item>
-      <el-menu-item index="6-2">注册</el-menu-item>
+      <el-menu-item index="register" @click="goRegister">注册</el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="7" v-else>
-      <template #title >个人中心</template>
+      <template #title>个人中心</template>
       <el-menu-item index="7-1">我的信息</el-menu-item>
       <el-menu-item index="7-2">我的动态</el-menu-item>
       <el-menu-item index="7-3">关注/收藏</el-menu-item>
@@ -45,8 +45,8 @@
 import router from "@/router";
 import { ElMessage } from "element-plus";
 export default {
-  components:{
-      ElMessage
+  components: {
+    ElMessage,
   },
   data() {
     return {};
@@ -65,21 +65,26 @@ export default {
         name: "login",
       });
     },
+    goRegister() {
+      router.push({
+        name: "register",
+      });
+    },
     //退出账号并跳转至首页
-    loginOut(){
-        this.$store.commit("loginOut");
-         ElMessage({
-              message: "账号已退出！",
-              type: "success",
-            });
-        this.$router.replace('\home')
-    }
+    loginOut() {
+      this.$store.commit("loginOut");
+      ElMessage({
+        message: "账号已退出！",
+        type: "success",
+      });
+      this.$router.replace("/home");
+    },
   },
-  computed:{
-      is_login(){
-          return this.$store.state.is_login;
-      }
-  }
+  computed: {
+    is_login() {
+      return this.$store.state.is_login;
+    },
+  },
 };
 </script>
 
