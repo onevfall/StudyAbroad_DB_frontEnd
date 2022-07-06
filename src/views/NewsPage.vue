@@ -15,15 +15,16 @@
   </div>
   <div class="input-txt">
   <el-input
-    v-model="textarea"
-    :rows="2"
+    v-model="myComment"
+    :rows="3"
     type="textarea"
     placeholder="评论点什么吧..."
+    clearable
   />
   </div>
   <el-form
     ref="ruleFormRef"
-    :model="ruleForm"
+  
     status-icon
     :rules="rules"
     label-width="0px"
@@ -34,7 +35,7 @@
       <el-card class="box-card">
     
         <div class="card-header">
-          <span>Name Surname</span>
+          <span>Name1 Surname1</span>
           <el-button class="button" text>show more </el-button>
         </div>
     
@@ -43,13 +44,15 @@
                     class="commentForm"
                     :input-style="this.input_style"
                     type="textarea"
-                    placeholder="哈哈哈"
+                    :rows="2"
+                    disabled
+                    placeholder="哈哈哈哈哈哈哈"
                   />
       </el-card>
       <el-card class="box-card">
     
         <div class="card-header">
-          <span>Name Surname</span>
+          <span>Name2 Surname2</span>
           <el-button class="button" text ><font color: blue>show more</font> </el-button>
         </div>
     
@@ -58,8 +61,9 @@
                     class="commentForm"
                     :input-style="this.input_style"
                     type="textarea"
+                    disabled
                     placeholder="哈哈哈"
-                    
+                    :rows="2"
                   />
         </el-card>
     </el-form-item>
@@ -75,9 +79,9 @@
         <div class="title">
         大标题
         </div>
-        <el-icon><ArrowUpBold />   </el-icon>
-        &nbsp
-        <el-icon><ChatLineSquare /></el-icon>
+        <el-button type=""><el-icon><ArrowUpBold />   </el-icon></el-button>
+        
+        <el-button type=""><el-icon><ChatLineSquare /></el-icon></el-button>
         <div class="issueTime">
           发布时间:2022年7月4日
         </div>
@@ -97,20 +101,19 @@
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
 
-// import { ref } from 'vue';
+//import { ref } from 'vue';
 import { reactive, ref } from 'vue';
-// import type { FormInstance } from 'element-plus';
-const textarea = ref('');
-const ruleForm = reactive({
-  pass: '',
-  
-});
-const rules = reactive({
-  pass: [{ trigger: 'blur' }],
-  
-})
+
+
 export default {
+  data() {
+  return{
+    myComment:"",
+
+  };
+},
   methods:{
 
   }
