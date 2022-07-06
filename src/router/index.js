@@ -3,6 +3,7 @@ import HomePage from '../views/HomePage.vue'
 import NewsPage from '../views/NewsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
+import BlogDetail from '../views/BlogDetail.vue'
 import store from '../store/index'
 import { ElMessage } from 'element-plus'
 const routes = [
@@ -38,6 +39,15 @@ const routes = [
     meta:{
       title:'用户注册'
     }
+  },
+  //动态详情页面放在此目前做测试，真正使用时采用嵌套路由的方式使用
+  {
+    path:'/blog_detail',//路径暂且做测试
+    name:'blog_detail',
+    component:BlogDetail,
+    meta:{
+      title:'动态详情'
+    }
   }
 ]
 
@@ -60,6 +70,8 @@ router.beforeEach(to=>{
       ElMessage({
         message: '请先登录',
         type: 'warning',
+        showClose:true,
+        duration:2000
       })
       return{
         path:'/login',
