@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <div id="registerTips">
-          <el-link type="primary" style="font-size: small"
+          <el-link type="primary" style="font-size: small" @click="goRegister"
             >还没有账号，注册<el-icon color="#409eff"><Right /></el-icon
           ></el-link>
         </div>
@@ -68,24 +68,13 @@ export default {
     };
   },
   methods: {
+    goRegister(){
+      this.$router.replace('/register');
+    },
     login() {
       /*此处日后需要加数据格式验证
           
           */
-      //发起请求
-      // axios({
-      //       url:"login",
-      //       //url:"http://localhost:54686/Home/LoginIn",
-      //       params:{
-      //           user_id:this.user_id,
-      //           user_password:this.user_password
-      //       },
-      //       method:"post",
-      //   }).then(res => {
-      //       console.log(res);
-      //       alert(res.data);
-      //   });
-
       axios({
         url: "login",
         params: {
