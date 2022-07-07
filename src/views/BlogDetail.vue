@@ -1,13 +1,14 @@
 <template>
-  <!-- <div class="common-layout">
+  <div class="common-layout">
     <el-container>
-      <el-aside width="450px" style="background-color:black">Aside</el-aside>
+      <el-aside width="400px">
+        <user-info-board
+          class="UserInfo"
+          :blog_user_info="this.blog_user_info"
+        ></user-info-board>
+      </el-aside>
       <el-main>Main</el-main>
     </el-container>
-  </div> -->
-  <div>
-    <user-info-board :blog_user_info="this.blog_user_info"></user-info-board>
-    
   </div>
 </template>
 
@@ -30,7 +31,8 @@ export default {
       user_phone: "17703561185",
       user_password: "",
       user_name: "用户17703561185",
-      user_profile: "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/",
+      user_profile:
+        "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/",
       user_createtime: "",
       user_birthday: "",
       user_gender: "",
@@ -41,10 +43,15 @@ export default {
       user_level: 3,
       user_coin: 0,
     };
-   
+
     console.log(this.blog_user_info.user_profile);
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.UserInfo {
+  margin-top: 20px;
+  margin-left: 25px;
+}
+</style>
