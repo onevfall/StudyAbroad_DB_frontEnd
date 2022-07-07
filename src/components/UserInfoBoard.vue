@@ -17,7 +17,18 @@
         <el-button type="primary" @click="FollowUser">+关注</el-button>
       </div>
     </template>
-    <span style="font-size: small">{{ userSignature }}</span>
+    <el-row gutter='10' justify="center">
+      <el-col span='30' >
+         <el-tag class="ml-2" type="warning">同济大学本科</el-tag>
+      </el-col>
+       <el-col span='30' >
+         <el-tag class="ml-2" type="warning">哈佛大学硕士</el-tag>
+      </el-col>
+       <el-col span='30' >
+         <el-tag class="ml-2" type="warning">哈佛大学博士</el-tag>
+      </el-col>
+    </el-row>
+    <div class="user_signature">{{ userSignature }}</div>
     <el-row gutter="40">
       <el-col span="8">
         <div class="info_field">
@@ -134,6 +145,16 @@ export default {
       }
     },
   },
+  beforeMount(){
+  
+    axios({
+      url:'userinfo?user_id='+ 1
+    }).then(res=>{
+      console.log(res);
+    }).catch(errMsg=>{
+      console.log(errMsg);
+    })
+  }
 };
 </script>
 
@@ -162,5 +183,10 @@ export default {
 }
 .info_field .label {
   margin-bottom: 5px;
+}
+.user_signature{
+  font-size: small;
+  margin-top: 10px;
+
 }
 </style>
