@@ -26,13 +26,13 @@ export default {
   created() {
     //在此处向服务器请求数据，初始化所需变量
     this.blog_user_info = {
-      user_id: 9,
+      user_id: 1,
       user_email: "",
       user_phone: "17703561185",
       user_password: "",
       user_name: "用户17703561185",
       user_profile:
-        "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/",
+        "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/9.jpg",
       user_createtime: "",
       user_birthday: "",
       user_gender: "",
