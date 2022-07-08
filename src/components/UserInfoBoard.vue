@@ -3,21 +3,27 @@
   <el-card class="box-card" :body-style="this.body_style">
     <template #header>
       <div class="card-header">
-        <el-avatar
-          :src="
-            'https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/' +
-            this.blog_user_info.user_id +
-            '.jpg'
-          "
-          size="large"
-        />
+        <el-avatar :src="this.blog_user_info.user_profile" size="large" />
         <span
           ><b>{{ blog_user_info.user_name }}</b></span
         >
-        <el-button type="primary" @click="FollowUser">+关注</el-button>
+        <el-button
+          type="primary"
+          v-if="this.is_follow == false"
+          @click="FollowUser"
+          >+关注</el-button
+        >
+        <el-button type="primary" v-else @click="CancelFollow">-取关</el-button>
       </div>
     </template>
-    <span style="font-size: small">{{ userSignature }}</span>
+    <el-row gutter="10" justify="center">
+      <el-col span="10" v-for="identity in this.identity_info" :key="identity">
+        <el-tag class="ml-2" type="warning">{{
+          identity.university_name + identity.identity
+        }}</el-tag>
+      </el-col>
+    </el-row>
+    <div class="user_signature">{{ userSignature }}</div>
     <el-row gutter="40">
       <el-col span="8">
         <div class="info_field">
@@ -51,9 +57,8 @@ export default {
   },
   data() {
     return {
-      body_style: {
-        // color: "red",
-      },
+      identity_info: [],
+      is_follow: false, //当前登录用户是否关注此用户
     };
   },
   computed: {
@@ -80,6 +85,31 @@ export default {
     },
   },
   methods: {
+    //取关
+    CancelFollow() {
+      axios({
+        url:'follow',
+        params: {
+              user_id: this.$store.state.user_info.user_id,
+              follow_user_id: this.blog_user_info.user_id,
+            },
+        method:'put',
+      }).then(res=>{
+        console.log(res.data.status);
+        if(res.data.status==true){
+          this.is_follow=false;
+          ElMessage({
+                  message: "成功取关！",
+                  type: "success",
+                  showClose: true,
+                  duration: 2000,
+                });
+        }
+      }).catch(errMsg=>{
+        console.log(errMsg);
+      })
+    },
+    //关注
     FollowUser() {
       if (this.$store.state.is_login == false) {
         //若未登录
@@ -98,7 +128,7 @@ export default {
         ) {
           //若自己关注自己则报错
           ElMessage({
-            message: "不可以关注自己哦！",
+            message: "不可以关注自己！",
             type: "warning",
             showClose: true,
             duration: 2000,
@@ -111,28 +141,52 @@ export default {
               follow_user_id: this.blog_user_info.user_id,
             },
             method: "post",
-          }).then((res) => {
-            if (res.data.status==false) {
-              ElMessage({
-                message: "已经关注过了！",
-                type: "warning",
-                showClose: true,
-                duration: 2000,
-              });
-            }else{
-              ElMessage({
-                message: "成功关注！",
-                type: "success",
-                showClose: true,
-                duration: 2000,
-              });
-            }
-          }).catch(errMsg=>{
-            console.log(errMsg);
-          });
+          })
+            .then((res) => {
+              if (res.data.status == false) {
+                ElMessage({
+                  message: "已经关注过了！",
+                  type: "warning",
+                  showClose: true,
+                  duration: 2000,
+                });
+              } else {
+                this.is_follow=true
+                ElMessage({
+                  message: "成功关注！",
+                  type: "success",
+                  showClose: true,
+                  duration: 2000,
+                });
+              }
+            })
+            .catch((errMsg) => {
+              console.log(errMsg);
+            });
         }
       }
     },
+  },
+  beforeMount() {
+    //认证信息
+    axios({
+      url: "userinfo?user_id=" + this.blog_user_info.user_id,
+    })
+      .then((res) => {
+        this.identity_info = [].concat(res.data.data.identity_info);
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+      });
+    //当前用户是否关注
+    axios({
+      url:"follow?user_id="+this.$store.state.user_info.user_id+"&follow_user_id="+this.blog_user_info.user_id,
+      method:'get'
+    }).then(res=>{
+      this.is_follow=res.data.status
+    }).catch(errMsg=>{
+      console.log(errMsg);
+    })
   },
 };
 </script>
@@ -162,5 +216,9 @@ export default {
 }
 .info_field .label {
   margin-bottom: 5px;
+}
+.user_signature {
+  font-size: small;
+  margin-top: 10px;
 }
 </style>
