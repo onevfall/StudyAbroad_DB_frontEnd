@@ -6,13 +6,8 @@
           class="UserInfo"
           :blog_user_info="this.blog_user_info"
         ></user-info-board>
-        <span>
-          <side-card class="SideCard" :card_info="this.card_info[0]">
-          </side-card>
-        </span>
-        <span>
-          <side-card class="SideCard" :card_info="this.card_info[1]">
-          </side-card>
+        <span v-for="(card, index) in this.card_info" :key="card">
+          <side-card class="SideCard" :card_info="this.card_info[index]"> </side-card>
         </span>
       </el-aside>
       <el-main>{{ this.answer_content }}</el-main>
@@ -106,91 +101,38 @@ export default {
       user_level: 3,
       user_coin: 0,
     };
-    this.card_info = [
-      {
-        essence: "问题",
-        content:
-          "11近期上海再次暴发疫情,由KTV串联而成的疫情传播链不断扩散,已经导致近百人感染,大家需要提高自己的疫情防控意识",
-        keyword: "疫情暴发,KTV,扩散",
-        id: 1,
-      },
-      {
-        essence: "问题",
-        content:
-          "22近期上海再次暴发疫情,由KTV串联而成的疫情传播链不断扩散,已经导致近百人感染,大家需要提高自己的疫情防控意识",
-        keyword: "疫情暴发,KTV,扩散",
-        id: 2,
-      },
-    ];
-    // this.relate_question = {
-
-    // };
-
-    console.log(this.blog_user_info.user_profile);
-  },
-  activated() {
-    console.log(this.$route.query.id);
-    this.answer_id = this.$route.query.id;
-    axios({
-      url: "http://43.142.41.192:6001/api/answer",
-      params: {
-        answer_id: this.answer_id,
-      },
-      method: "get",
-    })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-        if (res.data.status === true) {
-          this.answer_content = res.data.data.answer_content;
-          console.log(this.answer_content);
-        } else {
-          console.log("内容获取失败");
-        }
+    this.card_info = [{ id: 1 }, { id: 2 }];
+    for (let i = 0; i < this.card_info.length; ++i) {
+      axios({
+        url: "http://43.142.41.192:6001/api/question",
+        params: {
+          question_id: this.card_info[i].id,
+        },
+        method: "get",
       })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    this.blog_user_info = {
-      user_id: 9,
-      user_email: "",
-      user_phone: "17703561185",
-      user_password: "",
-      user_name: "用户17703561185",
-      user_profile:
-        "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/",
-      user_createtime: "",
-      user_birthday: "",
-      user_gender: "",
-      user_state: 1,
-      user_signature: "精准与否，就是屠宰和手术的区别",
-      user_follower: 0,
-      user_follows: 0,
-      user_level: 3,
-      user_coin: 0,
-    };
-    this.card_info = [
-      {
-        essence: "问题",
-        content:
-          "11近期上海再次暴发疫情,由KTV串联而成的疫情传播链不断扩散,已经导致近百人感染,大家需要提高自己的疫情防控意识",
-        keyword: "疫情暴发,KTV,扩散",
-        id: 1,
-      },
-      {
-        essence: "问题",
-        content:
-          "22近期上海再次暴发疫情,由KTV串联而成的疫情传播链不断扩散,已经导致近百人感染,大家需要提高自己的疫情防控意识",
-        keyword: "疫情暴发,KTV,扩散",
-        id: 2,
-      },
-    ];
-    // this.relate_question = {
-
-    // };
+        .then((res) => {
+          console.log(res);
+          console.log("card info");
+          console.log(this.card_info[i].id);
+          console.log(res.data);
+          if (res.data.status === true) {
+            this.card_info[i].content = res.data.data.question_title;
+            this.card_info[i].keyword = res.data.data.question_tag;
+            this.card_info[i].essence = "问题";
+            console.log(this.card_info[i])
+            // this.answer_content = res.data.data.answer_content;
+            // console.log(this.answer_content);
+          } else {
+            console.log("内容获取失败");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
     console.log(this.blog_user_info.user_profile);
   },
+  
 };
 </script>
 

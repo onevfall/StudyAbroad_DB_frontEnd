@@ -93,6 +93,7 @@ export default {
     /* font-size: small;  */
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align:left;
     color:#469afb;
     font-family: "宋体";
 }
