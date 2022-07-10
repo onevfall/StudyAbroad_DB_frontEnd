@@ -9,10 +9,14 @@
 
 <script>
 export default {
-  components: {
+    components: {
       
-  },
-};
+    },
+  methods: {
+  }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.dv { width: 100%; height: 500px; }
+</style>

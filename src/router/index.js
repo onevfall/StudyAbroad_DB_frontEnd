@@ -4,6 +4,7 @@ import NewsPage from '../views/NewsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
+import SchoolDetail from '../views/SchoolDetail.vue'
 import store from '../store/index'
 import { ElMessage } from 'element-plus'
 const routes = [
@@ -47,6 +48,14 @@ const routes = [
     component:BlogDetail,
     meta:{
       title:'动态详情'
+    }
+  },
+  {
+    path:'/school_detail',//路径暂且做测试
+    name:'school_detail',
+    component:SchoolDetail,
+    meta:{
+      title:'学校详情'
     }
   }
 ]
