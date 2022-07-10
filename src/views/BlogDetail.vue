@@ -6,6 +6,8 @@
           class="UserInfo"
           :blog_user_info="this.blog_user_info"
         ></user-info-board>
+        <blog-info-board>
+        </blog-info-board>
       </el-aside>
       <el-main>Main</el-main>
     </el-container>
@@ -14,9 +16,11 @@
 
 <script>
 import UserInfoBoard from "../components/UserInfoBoard.vue";
+import BlogInfoBoard from "../components/BlogInfoBoard.vue";
 export default {
   components: {
     UserInfoBoard,
+    BlogInfoBoard
   },
   data() {
     return {
