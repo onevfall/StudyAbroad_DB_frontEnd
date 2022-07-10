@@ -3,14 +3,11 @@
     <school-info></school-info>
     <el-container>
       <el-aside width="400px">
-        <user-info-board
-          class="UserInfo"
-          :blog_user_info="this.blog_user_info"
-        ></user-info-board>
+        
       </el-aside>
       <el-main>Main
         
-        <BmapDemo :school ="school_name"></BmapDemo>
+        <BmapDemo :school ="this.school_info"></BmapDemo>
       </el-main>
     </el-container>
   </div>
@@ -30,10 +27,11 @@ export default {
   },
   data() {
     return {
-      school_name:"哈佛大学"
+      school_info: "",
     };
   },
-  beforeMount(){
+  created() {
+    //在此处向服务器请求数据，初始化所需变量
     axios({
         url: "university?university_id="+2,
         method: "get",
@@ -41,7 +39,7 @@ export default {
         .then((res) => {
           console.log(res.data);
           var response=res.data
-          console.log(response.state);
+          //console.log(response.state);
           if (response.status == true) {
             this.school_info = response.data;
             console.log(this.school_info.university_name);
@@ -50,29 +48,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-  },
-  created() {
-    //在此处向服务器请求数据，初始化所需变量
-    this.blog_user_info = {
-      user_id: 1,
-      user_email: "",
-      user_phone: "17703561185",
-      user_password: "",
-      user_name: "用户17703561185",
-      user_profile:
-        "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/9.jpg",
-      user_createtime: "",
-      user_birthday: "",
-      user_gender: "",
-      user_state: 1,
-      user_signature: "精准与否，就是屠宰和手术的区别",
-      user_follower: 0,
-      user_follows: 0,
-      user_level: 3,
-      user_coin: 0,
-    };
-
-    console.log(this.blog_user_info.user_profile);
   },
 };
 </script>
