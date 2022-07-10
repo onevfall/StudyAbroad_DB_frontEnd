@@ -39,6 +39,7 @@
       <el-menu-item index="7-4">财务管理</el-menu-item>
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
+    <el-menu-item index="school-detail" @click="goSchoolDetail">学校详情</el-menu-item>
   </el-menu>
 </template>
 
@@ -75,6 +76,11 @@ export default {
     goBlogDetail(){
       router.push({
         name:"blog_detail"
+      })
+    },
+    goSchoolDetail(){
+      router.push({
+        name:"school_detail"
       })
     },
     //退出账号并跳转至首页
