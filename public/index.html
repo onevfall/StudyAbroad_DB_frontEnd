@@ -6,11 +6,15 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=Pt75j8EAMFCuq9P38oWo0AaHnXERFV3X">
+      <div class = "info">返回哈佛大学关键字的检索结果，并展示在地图上</div>
+      </script>
   </head>
   <body style="background-color:  #f1f9ff;">
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
