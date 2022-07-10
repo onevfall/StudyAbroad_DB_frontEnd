@@ -25,6 +25,7 @@
     </el-sub-menu>
     <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
     <el-menu-item index="5">留学顾问</el-menu-item>
+    <el-menu-item index='blog_detail' @click="goBlogDetail">动态详情(测试用)</el-menu-item>
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
       <el-menu-item index="login" @click="goLogin">登录</el-menu-item>
@@ -38,6 +39,7 @@
       <el-menu-item index="7-4">财务管理</el-menu-item>
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
+    <el-menu-item index="school-detail" @click="goSchoolDetail">学校详情</el-menu-item>
   </el-menu>
 </template>
 
@@ -70,12 +72,25 @@ export default {
         name: "register",
       });
     },
+    //不应该在导航栏，此时仅为测试用
+    goBlogDetail(){
+      router.push({
+        name:"blog_detail"
+      })
+    },
+    goSchoolDetail(){
+      router.push({
+        name:"school_detail"
+      })
+    },
     //退出账号并跳转至首页
     loginOut() {
       this.$store.commit("loginOut");
       ElMessage({
         message: "账号已退出！",
         type: "success",
+        showClose:true,
+        duration:2000
       });
       this.$router.replace("/home");
     },
