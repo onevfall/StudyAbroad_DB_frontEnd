@@ -1,11 +1,12 @@
 <template>
   <div class="my_eboothHeader">
-    <div class="info_table" style="height: 300px; width: 100%; position: absolute; background: rgb(26, 46, 80); opacity: 0.5; z-index: 1;">
+    <div class="info_table" style="height: 541px; width: 100%; position: absolute; background: rgb(26, 46, 80); opacity: 0.5; z-index: 1;">
     </div>  
+    <input type="hidden" value="us00012021062410073553812821"> <input type="hidden" value="6"> <input type="hidden" value="1">
      <div class="main clearfix">
         <div class="left">
           <div class="con1" style="min-height: 100px;">
-          <img src="https://filebrowse.edufair.com//2019/8/20190826/858999190826092417033.png" alt="" class="school_badge">
+          <img src="https://filebrowse.edufair.com//2019/8/20190826/858999190826092417033.png" alt="" class="school">
            <div class="title">
             <p title="Harvard University" class="p1">
             Harvard University
@@ -60,10 +61,6 @@ export default {
 }
 .content {
   font-size: small;
-}
-.school_badge{
-  height: 100px;
-  width: 100px;
 }
 </style>
 
