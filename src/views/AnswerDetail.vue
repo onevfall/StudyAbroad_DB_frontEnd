@@ -61,35 +61,70 @@
           <el-divider />
           <el-container>
             <el-header class="header_comment">
-              <el-avatar :src="this.blog_user_info.user_profile" :size="40"/>            
+              <el-avatar
+                :src="this.blog_user_info.user_profile"
+                :size="40"
+                class="header_img"
+              />
+              <!-- <el-avatar > user</el-avatar>           -->
               <el-input
-                  id="replyInput"
-                  v-model="comment_now"
-                  class="reply_input"
-                  placeholder="评论点什么..."
-                  type="text"
-                  @focus="btnShow = true"
-                  style="margin-left: 2%;margin-top:5px;margin-right:10px;"/>
+                id="replyInput"
+                v-model="comment_now"
+                class="reply_input"
+                placeholder="评论点什么..."
+                type="text"
+                @focus="btnShow = true"
+                style="margin-left: 2%; margin-top: 5px; margin-right: 10px"
+              />
               <el-button
-                  class="reply_btn"
-                  size="medium"
-                  @click="sendComment"
-                  type="primary"
-                  style="margin-top:5px;"
-                  >发表评论
+                class="reply_btn"
+                size="medium"
+                @click="sendComment"
+                type="primary"
+                style="margin-top: 5px"
+                >发表评论
               </el-button>
-
             </el-header>
             <el-main>
-              
+              <InfiniteList
+                v-if="this.comments.length!==0"
+                :data="this.comments"
+                :width="'100%'"
+                :height="500"
+                :itemsize="50"
+                v-slot="{ index }"
+              >
+                <div class="author_title">
+                  <el-avatar
+                    :src="this.comments[index].UserProfile"
+                    size="large"
+                    class="header_img"
+                  />
+                  <span class="author_name"
+                    ><b>{{ this.comments[index].UserName }}</b></span
+                  ><br />
+                  <!-- <span class="author_time">2019年9月16日 18:43</span> -->
+                </div>
+                <div style="text-align: left; margin-left: 10.5%">
+                  {{this.comments[index].AnswerCommentContent}}
+                </div>
+                <div class="comment_button">
+                  <el-icon style="color: #409eff"><CaretTop /></el-icon>
+                  <span style="color: #409eff; margin-right: 2%">{{this.comments[index].AnswerCommentLike}}</span>
+                  <el-icon style="color: #409eff"><CaretTop /></el-icon>
+                  <span style="color: #409eff">111</span>
+                </div>
+              </InfiniteList>
+
+              <!-- <div v-for="(item,i) in this.comments" :key="i" > -->
+
+              <!-- </div> -->
             </el-main>
 
-            
-              
-              <!-- el-avatar的src需要改 -->
-              <!-- <div class="reply_info"> -->
-                
-                <!-- <div
+            <!-- el-avatar的src需要改 -->
+            <!-- <div class="reply_info"> -->
+
+            <!-- <div
                   tabindex="0"
                   contenteditable="true"
                   id="replyInput"
@@ -99,8 +134,8 @@
                   @focus="btnShow = true"
                   @input="onDivInput($event)"
                 ></div> -->
-              <!-- </div> -->
-              <!-- <div class="reply_btn_box" v-show="sendReplybtn_show">
+            <!-- </div> -->
+            <!-- <div class="reply_btn_box" v-show="sendReplybtn_show">
                 <el-button
                   class="reply_btn"
                   size="medium"
@@ -109,7 +144,6 @@
                   >发表评论</el-button
                 >
               </div> -->
-            
           </el-container>
         </div>
 
@@ -124,6 +158,7 @@
 <script>
 import UserInfoBoard from "../components/UserInfoBoard.vue";
 import SideCard from "../components/SideCard.vue";
+import InfiniteList from "vue3-infinite-list";
 import axios from "axios";
 export default {
   components: {
@@ -142,6 +177,7 @@ export default {
       question_time: "",
       comment_now: "",
       sendReplybtn_show: false,
+      comments: [],
     };
   },
   watch: {
@@ -179,6 +215,23 @@ export default {
         .then((res) => {
           this.question_content = res.data.data.question_title;
           this.question_time = res.data.data.question_time;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      axios({
+        url:"http://43.142.41.192:6001/api/answer/comment",
+        params:{
+          answer_id:this.answer_id,
+        },
+        method: "get",
+      })
+      .then((res) => {
+        for(let i = 0; i <  res.data.data.comment_list.length; ++i)
+        {
+          this.comments[i]=res.data.data.comment_list[i];
+          console.log(this.comments[i]);
+        }
         })
         .catch((err) => {
           console.log(err);
@@ -258,6 +311,23 @@ export default {
           console.log(err);
         });
     }
+    axios({
+        url:"http://43.142.41.192:6001/api/answer/comment",
+        params:{
+          answer_id:this.answer_id,
+        },
+        method: "get",
+      })
+      .then((res) => {
+        for(let i = 0; i <  res.data.data.comment_list.length; ++i)
+        {
+          this.comments[i]=res.data.data.comment_list[i];
+          console.log(this.comments[i]);
+        }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     console.log(this.blog_user_info.user_profile);
   },
   methods: {
@@ -335,6 +405,7 @@ export default {
 .my_reply .header_img {
   display: inline-block;
   vertical-align: top;
+  border-radius: 50%;
 }
 
 .header_comment {
@@ -345,6 +416,49 @@ export default {
   align-items: center;
 }
 
+.header_comment .header_img {
+  display: inline-block;
+  vertical-align: top;
+}
+.author_title {
+  text-align: left;
+  margin-left: 3%;
+  display: flex;
+  align-items: center;
+}
+.author_title .author_name {
+  display: inline-block;
+  margin-left: 2%;
+}
+.comment_button {
+  text-align: center;
+  margin-left: 3%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* .author_title .header_img{
+   display:inline-block;
+   vertical-align:top;
+}
+.author_title .author_info{
+    display:inline-block;
+    margin-left:5px;
+    width:60%;
+    height:40px;
+    line-height:20px;
+}
+
+.author_title .author_info .author_name{
+  color:#000;
+  font-size:18px;
+  font-weight:bold;
+}
+.author_title .author_info .author_time{
+  color:#cabab0;
+  font-size:14px;
+} */
 /* .header_comment .reply_input{
   margin-left: 3%;
   
