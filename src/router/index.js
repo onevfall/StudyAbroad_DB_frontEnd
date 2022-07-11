@@ -58,7 +58,7 @@ const routes = [
     meta:{
       title:'回答详情'
     }
-  }
+  },
 ]
 
 const router = createRouter({
