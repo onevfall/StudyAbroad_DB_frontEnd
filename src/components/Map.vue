@@ -2,34 +2,24 @@
   <!--bmap框-->
  
   <div class="bmap" id="container"></div>
-   <div>{{school.university_name}}关键字的检索结果</div> 
+   <div>{{school}}关键字的检索结果</div> 
 </template>
 
 <script>
-
 export default {
   name: 'BmapDemo',
-  props:["school"],
-  data(){//存一下map
-    return {
-      thisMap: "",
-    };
-    },
-  updated(){//一开始数据没到，更新渲染呗
-    var map =this.thisMap;
-    var local = new BMapGL.LocalSearch(map, {
-		  renderOptions:{map: map}
-	  });
-    //let {sc}=props;
-    console.log(this.school);
-    //console.log(prop.school);
-    console.log("test fot props");
-    local.search(this.school.university_name); 
-	  
+  props:{
+    school:{
+      type:String,
+      require:true
+    }
   },
-  mounted() {
-	  var map = new BMapGL.Map("container"); 
-    this.thisMap=map;         
+  data(){
+
+  },
+  mounted () {
+    //this.school=prop.school;
+	  var map = new BMapGL.Map("container");          
 	  map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 15);
 	  map.enableScrollWheelZoom(true); 
 
@@ -37,10 +27,9 @@ export default {
 		  renderOptions:{map: map}
 	  });
     //let {sc}=props;
-    console.log(this.school);
-    //console.log(prop.school);
+    //console.log(sc);
     console.log("test fot props");
-	  local.search(this.school.university_name); 
+	  local.search(this.school); 
 
     const scaleCtrl = new BMapGL.ScaleControl();  // 添加比例尺控件
     map.addControl(scaleCtrl);
@@ -50,6 +39,8 @@ export default {
     map.addControl(cityCtrl);
   // 其他两种控件添加方法类似
  // ...
+
+
   }
 }
 </script>
