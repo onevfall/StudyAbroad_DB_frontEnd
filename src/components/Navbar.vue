@@ -1,3 +1,7 @@
+<!--
+描述：导航栏
+作者：焦佳宇
+-->
 <template>
   <el-menu
     :default-active="this.$router.currentRoute.value.name"

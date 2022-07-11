@@ -1,3 +1,7 @@
+<!--
+描述：相关快讯卡片组件
+作者：焦佳宇
+-->
 <template>
   <el-card class="box-card news_card" shadow="hover" @click="goNewsDetail">
     <template #header>

@@ -1,3 +1,7 @@
+<!--
+描述：动态详情页面
+作者：焦佳宇
+-->
 <template>
   <div class="common-layout">
     <el-container>
@@ -56,7 +60,7 @@ export default {
     };
     //相关博客
     axios({
-      url:"/blog/bloglist",
+      url:"/blog/time?num=3&tag='生活'",
       method:"get"
     }).then(res=>{
       this.blog_relevant=[].concat(res.data.data.blog)
