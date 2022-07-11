@@ -8,12 +8,15 @@
           ><b>{{ blog_user_info.user_name }}</b></span
         >
         <el-button
-          type="primary"
+          type="warning"  circle
           v-if="this.is_follow == false"
           @click="FollowUser"
-          >+关注</el-button
-        >
-        <el-button type="primary" v-else @click="CancelFollow">-取关</el-button>
+          ><el-icon size="large" color="#ffffff"><Star /></el-icon
+        ></el-button>
+
+        <el-button type="warning" circle v-else @click="CancelFollow"
+          ><el-icon size="large" color="#ffffff"><StarFilled /></el-icon
+        ></el-button>
       </div>
     </template>
     <el-row gutter="10" justify="center">
@@ -88,26 +91,28 @@ export default {
     //取关
     CancelFollow() {
       axios({
-        url:'follow',
+        url: "follow",
         params: {
-              user_id: this.$store.state.user_info.user_id,
-              follow_user_id: this.blog_user_info.user_id,
-            },
-        method:'put',
-      }).then(res=>{
-        console.log(res.data.status);
-        if(res.data.status==true){
-          this.is_follow=false;
-          ElMessage({
-                  message: "成功取关！",
-                  type: "success",
-                  showClose: true,
-                  duration: 2000,
-                });
-        }
-      }).catch(errMsg=>{
-        console.log(errMsg);
+          user_id: this.$store.state.user_info.user_id,
+          follow_user_id: this.blog_user_info.user_id,
+        },
+        method: "put",
       })
+        .then((res) => {
+          console.log(res.data.status);
+          if (res.data.status == true) {
+            this.is_follow = false;
+            ElMessage({
+              message: "成功取关！",
+              type: "success",
+              showClose: true,
+              duration: 2000,
+            });
+          }
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
     },
     //关注
     FollowUser() {
@@ -151,7 +156,7 @@ export default {
                   duration: 2000,
                 });
               } else {
-                this.is_follow=true
+                this.is_follow = true;
                 ElMessage({
                   message: "成功关注！",
                   type: "success",
@@ -180,13 +185,19 @@ export default {
       });
     //当前用户是否关注
     axios({
-      url:"follow?user_id="+this.$store.state.user_info.user_id+"&follow_user_id="+this.blog_user_info.user_id,
-      method:'get'
-    }).then(res=>{
-      this.is_follow=res.data.status
-    }).catch(errMsg=>{
-      console.log(errMsg);
+      url:
+        "follow?user_id=" +
+        this.$store.state.user_info.user_id +
+        "&follow_user_id=" +
+        this.blog_user_info.user_id,
+      method: "get",
     })
+      .then((res) => {
+        this.is_follow = res.data.status;
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+      });
   },
 };
 </script>
