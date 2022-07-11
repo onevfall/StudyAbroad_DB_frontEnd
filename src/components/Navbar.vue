@@ -12,12 +12,7 @@
       ><img src="../assets/logo.png" class="logo"
     /></el-menu-item>
     <el-menu-item index="home" @click="goHome">首页</el-menu-item>
-    <el-sub-menu index="2">
-      <template #title>找对学校</template>
-      <el-menu-item index="2-1">普通学校</el-menu-item>
-      <el-menu-item index="2-2">艺术学校</el-menu-item>
-      <el-menu-item index="2-3">中学专区</el-menu-item>
-    </el-sub-menu>
+    <el-menu-item index="2" @click="goSchoolCenter">找对学校</el-menu-item>
     <el-sub-menu index="3">
       <template #title>说说留学</template>
       <el-menu-item index="3-1">留学问答</el-menu-item>
@@ -76,6 +71,11 @@ export default {
     goBlogDetail(){
       router.push({
         name:"blog_detail"
+      })
+    },
+    goSchoolCenter(){
+      router.push({
+        name:'school_center'
       })
     },
     goSchoolDetail(){

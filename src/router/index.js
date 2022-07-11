@@ -5,6 +5,7 @@ import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
+import SchoolCenterPage from '../views/SchoolCenterPage.vue'
 import store from '../store/index'
 import { ElMessage } from 'element-plus'
 const routes = [
@@ -56,6 +57,14 @@ const routes = [
     component:SchoolDetail,
     meta:{
       title:'学校详情'
+    }
+  },
+  { 
+    path:'/school_center',
+    name:'school_center',
+    component:SchoolCenterPage,
+    meta:{
+      title:'大学中心'
     }
   }
 ]
