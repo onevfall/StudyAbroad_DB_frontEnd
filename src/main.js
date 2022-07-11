@@ -22,7 +22,9 @@ import App from './App.vue'
 //配置全局baseURL默认值
 axios.defaults.baseURL="/api"
 
+
 const app = createApp(App).use(ElementPlus).use(store).use(router).use(VueAxios,axios).use(mock)
+// const app = createApp(App).use(ElementPlus).use(store).use(router).use(VueAxios,axios)
 
 //初始化图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
