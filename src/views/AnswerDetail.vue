@@ -103,55 +103,31 @@
                   <span class="author_name"
                     ><b>{{ this.comments[i].UserName }}</b></span
                   ><br />
-                  <!-- <span class="author_time">2019年9月16日 18:43</span> -->
+
                 </div>
                 <div style="text-align: left; margin-left: 10.5%">
                   {{this.comments[i].AnswerCommentContent}}
                 </div>
                 <div class="comment_button">
-                  <el-icon style="color: #409eff"><CaretTop /></el-icon>
-                  <span style="color: #409eff; margin-right: 2%">{{this.comments[i].AnswerCommentLike}}</span>
+                  <like-button
+                  content_type="3"
+                  :content_id="this.comments[i].AnswerCommentId"
+                  :show_num="true"
+                  size="small"
+                  @giveLike="like"
+                  @cancelLike="unlike"
+                   />
+                  <!-- <el-icon style="color: #409eff"><CaretTop /></el-icon> -->
+                  <!-- <span style="color: #409eff; margin-right: 2%">{{this.comments[i].AnswerCommentLike}}</span> -->
                   <el-icon style="color: #409eff"><CaretTop /></el-icon>
                   <span style="color: #409eff">111</span>
                 </div>
                 </div>
               </el-scrollbar>
-
-              
-
-              <!-- </div> -->
             </el-main>
-
-            <!-- el-avatar的src需要改 -->
-            <!-- <div class="reply_info"> -->
-
-            <!-- <div
-                  tabindex="0"
-                  contenteditable="true"
-                  id="replyInput"
-                  spellcheck="false"
-                  placeholder="输入评论..."
-                  class="reply_input"
-                  @focus="btnShow = true"
-                  @input="onDivInput($event)"
-                ></div> -->
-            <!-- </div> -->
-            <!-- <div class="reply_btn_box" v-show="sendReplybtn_show">
-                <el-button
-                  class="reply_btn"
-                  size="medium"
-                  @click="sendComment"
-                  type="primary"
-                  >发表评论</el-button
-                >
-              </div> -->
           </el-container>
         </div>
-
-        <!-- <div v-clickoutside="hideReplyBtn" @click="inputFocus" class="my-reply"></div> -->
       </el-main>
-
-      <!-- <el-main>{{ this.answer_content }}</el-main> -->
     </el-container>
   </div>
 </template>
@@ -159,12 +135,16 @@
 <script>
 import UserInfoBoard from "../components/UserInfoBoard.vue";
 import SideCard from "../components/SideCard.vue";
+import LikeButton from "../components/LikeButton.vue";
 import InfiniteList from "vue3-infinite-list";
 import axios from "axios";
+import { ElMessage } from "element-plus";
 export default {
   components: {
     UserInfoBoard,
     SideCard,
+    LikeButton,
+    ElMessage,
   },
   data() {
     return {
@@ -348,6 +328,40 @@ export default {
       this.comment_now = e.target.innerHTML;
     },
     sendComment() {},
+    like(res) {
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "点赞成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      } else {
+        ElMessage({
+          type: "error",
+          message: "点赞失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    },
+    unLike(res) {
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "取消点赞成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      } else {
+        ElMessage({
+          type: "error",
+          message: "取消点赞失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    },
   },
 };
 </script>

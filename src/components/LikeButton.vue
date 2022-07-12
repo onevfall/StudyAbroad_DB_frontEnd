@@ -57,6 +57,8 @@ export default {
           if (res.data.status) {
             this.is_liked = true;
             this.like_nums++;
+            console.log("inside button,liked success");
+            console.log(this.like_nums);
             this.$emit('giveLike',true)
           }else{
             this.$emit('giveLike',false)
