@@ -85,6 +85,8 @@ const routes = [
     component:InstitutionDetail,
     meta:{
       title:'机构详情'
+    }
+  },
   { 
     path:'/school_center',
     name:'school_center',
