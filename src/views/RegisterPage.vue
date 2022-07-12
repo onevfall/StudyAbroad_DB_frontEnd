@@ -1,3 +1,7 @@
+<!--
+描述：注册页（验证码功能未完成）
+作者：方新宇
+-->
 <template>
   <div class="common-layout">
     <el-container>
