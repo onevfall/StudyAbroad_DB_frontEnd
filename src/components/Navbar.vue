@@ -81,7 +81,7 @@ export default {
     goAnswerDetail(){
       router.push({
         name:"answer_detail",
-        query:{id:2},//模拟带参数路由
+        query:{question_id:1,answer_id:1},//模拟带参数路由
       })
     },
     goSchoolCenter(){

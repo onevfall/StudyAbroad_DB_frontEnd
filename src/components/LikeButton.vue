@@ -123,9 +123,13 @@ export default {
         method: "get",
       })
         .then((res) => {
-          console.log(res.data.data.like_times);
-          this.like_nums=res.data.data.like_times
+          console.log(res.data);
+          // console.log(res.data.data.like_times);
+          // console.log("init like nums");
+          this.like_nums=res.data.data.like_times;
+          // console.log(this.like_nums);
           this.is_liked = res.data.status;
+          // console.log(this.is_liked);
         })
         .catch((errMsg) => {
           console.log(errMsg);

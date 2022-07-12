@@ -171,7 +171,7 @@ export default {
         return;
       } else {
         axios({
-          url: "http://43.142.41.192:6001/api/register",
+          url: "/register",
           params: {
             user_phone: this.user_phone,
             user_password: this.user_password,
