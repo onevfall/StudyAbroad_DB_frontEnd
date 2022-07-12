@@ -59,5 +59,13 @@ export default {
             data: {
             }
         })
-    }
+    },
+    // 'get|/api/university/rank?rank_year=2021&tag=THE_rank&university_country=美国':option =>{
+    //     var { rank_year, tag,university_country } = JSON.parse(option.body)
+    //     console.log('mock')
+    //     console.log(option)
+    //     console.log('mock'+rank_year)
+    //     console.log('mock'+tag)
+    //     console.log('mock'+university_country)
+    // }
 }
