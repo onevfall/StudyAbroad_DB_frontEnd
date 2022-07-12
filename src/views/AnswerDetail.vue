@@ -159,6 +159,7 @@
 <script>
 import UserInfoBoard from "../components/UserInfoBoard.vue";
 import SideCard from "../components/SideCard.vue";
+import InfiniteList from "vue3-infinite-list";
 import axios from "axios";
 export default {
   components: {
