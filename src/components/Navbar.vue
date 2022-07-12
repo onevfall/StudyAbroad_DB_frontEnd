@@ -39,7 +39,8 @@
       <el-menu-item index="7-4">财务管理</el-menu-item>
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="school-detail" @click="goSchoolDetail">学校详情</el-menu-item>
+    <el-menu-item index="school_detail" @click="goSchoolDetail">学校详情</el-menu-item>
+    <el-menu-item index="institution_detail" @click="goInstitutionDetail">机构详情</el-menu-item>
   </el-menu>
 </template>
 
@@ -78,9 +79,16 @@ export default {
         name:"blog_detail"
       })
     },
+    //测试高校
     goSchoolDetail(){
       router.push({
         name:"school_detail"
+      })
+    },
+    //测试机构
+    goInstitutionDetail(){
+      router.push({
+        name:"institution_detail"
       })
     },
     //退出账号并跳转至首页
