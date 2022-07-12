@@ -113,7 +113,7 @@ export default {
               errMsg = "不能给自己投币！";
             } else {
               errMsg = "余额不足,当前余额为";
-            }
+            } 
             ElMessage({
               type: "warning",
               message: errMsg,
