@@ -86,37 +86,34 @@
               </el-button>
             </el-header>
             <el-main>
-              <InfiniteList
+              <el-scrollbar
                 v-if="this.comments.length!==0"
-                :data="this.comments"
-                :width="'100%'"
-                :height="500"
-                :itemsize="50"
-                v-slot="{ index }"
-              >
-                <div class="author_title">
+                height="200px">
+                <div  v-for="(item,i) in this.comments" :key="i">
+                <div class="author_title" >
                   <el-avatar
-                    :src="this.comments[index].UserProfile"
+                    :src="item.UserProfile"
                     size="large"
                     class="header_img"
                   />
                   <span class="author_name"
-                    ><b>{{ this.comments[index].UserName }}</b></span
+                    ><b>{{ this.comments[i].UserName }}</b></span
                   ><br />
                   <!-- <span class="author_time">2019年9月16日 18:43</span> -->
                 </div>
                 <div style="text-align: left; margin-left: 10.5%">
-                  {{this.comments[index].AnswerCommentContent}}
+                  {{this.comments[i].AnswerCommentContent}}
                 </div>
                 <div class="comment_button">
                   <el-icon style="color: #409eff"><CaretTop /></el-icon>
-                  <span style="color: #409eff; margin-right: 2%">{{this.comments[index].AnswerCommentLike}}</span>
+                  <span style="color: #409eff; margin-right: 2%">{{this.comments[i].AnswerCommentLike}}</span>
                   <el-icon style="color: #409eff"><CaretTop /></el-icon>
                   <span style="color: #409eff">111</span>
                 </div>
-              </InfiniteList>
+                </div>
+              </el-scrollbar>
 
-              <!-- <div v-for="(item,i) in this.comments" :key="i" > -->
+              
 
               <!-- </div> -->
             </el-main>
