@@ -1,13 +1,13 @@
 <template>
   <div>
-    <school-info :school ="this.school_info"></school-info>
+    <institution-info :institution ="this.institution_info"></institution-info>
     <el-container>
       <el-aside width="400px">
         
       </el-aside>
       <el-main>
         <div class="info_detail">
-        <school-info-card :school="this.school_info"> </school-info-card>
+        <institution-info-card :institution="this.institution_info"> </institution-info-card>
         </div>
       </el-main>
     </el-container>
@@ -18,24 +18,24 @@
 
 import BmapDemo from "../components/Map.vue"
 import axios from "axios";
-import SchoolInfo from "../components/SchoolInfo.vue";
-import SchoolInfoCard from "../components/SchoolInfoCard.vue";
+import InstitutionInfo from "../components/InstitutionInfo.vue";
+import InstitutionInfoCard from "../components/InstitutionInfoCard.vue";
 export default {
   components: {
-    SchoolInfo,
-    SchoolInfoCard,
+    InstitutionInfo,
+    InstitutionInfoCard,
     BmapDemo
   },
   data() {
     return {
-      school_info: "",
+      institution_info: "",
     };
   },
-  props:["school_id"],
+  props:["institution_id"],
   created() {
-    //鍦ㄦ澶勫悜鏈嶅姟鍣ㄨ姹傛暟鎹紝鍒濆鍖栨墍闇�鍙橀噺
+    //在此处向服务器请求数据，初始化所需变量
     axios({
-        url: "university?university_id="+9,
+        url: "institution?institution_id="+0,
         method: "get",
       })
         .then((res) => {
@@ -43,8 +43,8 @@ export default {
           var response=res.data
           //console.log(response.state);
           if (response.status == true) {
-            this.school_info = response.data;
-            console.log(this.school_info.university_chname);
+            this.institution_info = response.data;
+            console.log(this.institution_info.institution_name);
           }
         })
         .catch((err) => {
