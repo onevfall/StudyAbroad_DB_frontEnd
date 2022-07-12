@@ -1,3 +1,7 @@
+<!--
+描述：回答详情界面——展示某个问题的回答、作者、及评论区等
+作者：方新宇
+-->
 <template>
   <div class="common-layout">
     <el-container>

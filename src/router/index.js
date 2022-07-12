@@ -6,6 +6,7 @@ import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
+import SchoolCenterPage from '../views/SchoolCenterPage.vue'
 import store from '../store/index'
 import { ElMessage } from 'element-plus'
 const routes = [
@@ -68,6 +69,14 @@ const routes = [
       title:'学校详情'
     }
   },
+  { 
+    path:'/school_center',
+    name:'school_center',
+    component:SchoolCenterPage,
+    meta:{
+      title:'大学中心'
+    }
+  }
 ]
 
 const router = createRouter({

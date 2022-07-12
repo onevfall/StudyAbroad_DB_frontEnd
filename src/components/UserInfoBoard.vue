@@ -1,3 +1,7 @@
+<!--
+描述：用户信息展示组件
+作者：焦佳宇
+-->
 <template>
   <!-- 用户信息展示卡片的封装，需传入用户信息对象 -->
   <el-card class="box-card" :body-style="this.body_style">
@@ -8,15 +12,13 @@
           ><b>{{ blog_user_info.user_name }}</b></span
         >
         <el-button
-          type="warning"  circle
+          type="primary" 
           v-if="this.is_follow == false"
           @click="FollowUser"
-          ><el-icon size="large" color="#ffffff"><Star /></el-icon
-        ></el-button>
+          >+关注</el-button>
 
-        <el-button type="warning" circle v-else @click="CancelFollow"
-          ><el-icon size="large" color="#ffffff"><StarFilled /></el-icon
-        ></el-button>
+        <el-button type="primary" v-else @click="CancelFollow"
+          >-取关</el-button>
       </div>
     </template>
     <el-row gutter="10" justify="center">
@@ -175,7 +177,7 @@ export default {
   beforeMount() {
     //认证信息
     axios({
-      url: "userinfo?user_id=" + this.blog_user_info.user_id,
+      url: "userinfo/identity?user_id=" + this.blog_user_info.user_id,
     })
       .then((res) => {
         this.identity_info = [].concat(res.data.data.identity_info);
@@ -187,7 +189,7 @@ export default {
     axios({
       url:
         "follow?user_id=" +
-        this.$store.state.user_info.user_id +
+        this.$store.state.user_info.user_id + 
         "&follow_user_id=" +
         this.blog_user_info.user_id,
       method: "get",

@@ -1,3 +1,7 @@
+<!--
+描述：问答板块边栏卡片
+作者：方新宇
+-->
 <template>
   <!-- 用户信息展示卡片的封装，需传入用户信息对象 -->
   <el-card class="box-card" :body-style="this.body_style">
