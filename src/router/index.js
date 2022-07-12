@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import NewsPage from '../views/NewsPage.vue'
+import BlogPage from '../views/BlogPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
@@ -41,6 +42,14 @@ const routes = [
     component:RegisterPage,
     meta:{
       title:'用户注册'
+    }
+  },
+  {
+    path:'/blog',
+    name:'blog',
+    component: BlogPage,
+    meta:{
+      title:'动态'
     }
   },
   //动态详情页面放在此目前做测试，真正使用时采用嵌套路由的方式使用

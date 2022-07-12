@@ -12,13 +12,13 @@
           ><b>{{ blog_user_info.user_name }}</b></span
         >
         <el-button
-          type="primary" 
+          type="primary"
           v-if="this.is_follow == false"
           @click="FollowUser"
-          >+关注</el-button>
+          >+关注</el-button
+        >
 
-        <el-button type="primary" v-else @click="CancelFollow"
-          >-取关</el-button>
+        <el-button type="primary" v-else @click="CancelFollow">-取关</el-button>
       </div>
     </template>
     <el-row gutter="10" justify="center">
@@ -127,7 +127,10 @@ export default {
           duration: 2000,
         });
         /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
-        this.$router.push("\login");
+        this.$router.push({
+          path: "/login",
+          query: { redirect: this.$route.path },
+        });
       } else {
         //若已登录
         if (
@@ -189,7 +192,7 @@ export default {
     axios({
       url:
         "follow?user_id=" +
-        this.$store.state.user_info.user_id + 
+        this.$store.state.user_info.user_id +
         "&follow_user_id=" +
         this.blog_user_info.user_id,
       method: "get",
