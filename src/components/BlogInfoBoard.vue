@@ -1,14 +1,11 @@
+<!--
+描述：动态卡片组件
+作者：焦佳宇
+-->
 <template>
   <el-card :body-style="{ padding: '0px' }" class="blog_card">
     <div class="image_field">
-      <img
-        class="card_image"
-        :src="
-          'https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/blog/' +
-          blog_info.BlogId +
-          '.jpg'
-        "
-      />
+      <img class="card_image" :src="this.blog_image" />
     </div>
 
     <div style="padding: 14px">
@@ -20,9 +17,7 @@
             }}</el-tag>
           </el-col>
           <el-col span="1">
-            <el-tag class="ml-2" type="primary" size="small">{{
-              blogTime
-            }}</el-tag>
+            <el-tag class="ml-2" size="small">{{ blogTime }}</el-tag>
           </el-col>
         </el-row>
       </section>
@@ -32,36 +27,20 @@
       <section class="card_user">
         <el-row gutter="10" align="middle">
           <el-col :span="2">
-            <el-avatar
-              :src="
-                'https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/' +
-                blog_info.BlogUserId +
-                '.jpg'
-              "
-              size="small"
-            />
+            <el-avatar :src="this.user_info.user_profile" size="small" />
           </el-col>
           <el-col :span="12" style="text-align: left">
-            <span class="user_name"> 皮了卡了那个丘 </span>
+            <span class="user_name"> {{ this.user_info.user_name }} </span>
           </el-col>
-          <el-col :span="2" style="text-align: left" v-if="is_liked==false">
-            <el-icon size="large" @click="likeChange"><Chicken /></el-icon>
-          </el-col>
-          <el-col :span="2" style="text-align: left" v-else>
-            <el-icon size="large" color="#d25f1e" @click="likeChange"><Chicken /></el-icon>
-          </el-col>
-          <el-col :span="3" style="text-align: left">
-            {{blog_info.BlogLike}}
-          </el-col>
-          <el-col :span="2" style="text-align: left" v-if="is_coined==false">
-            <el-icon size="large" @click="coinIn"><Coin /></el-icon>
-          </el-col>
-          <el-col :span="2" style="text-align: left" v-else>
-            <el-icon size="large" color="#fbc563" @click="coinIn"><Coin /></el-icon>
-          </el-col>
-          <el-col :span="3" style="text-align: left">
-            {{blog_info.BlogCoin}}
-          </el-col>
+          <like-button
+            content_type="0"
+            :content_id="blog_info.BlogId"
+            :show_num="true"
+            size="normal"
+            @giveLike="like"
+            @cancelLike="unLike"
+          />
+          <coin-button />
         </el-row>
       </section>
     </div>
@@ -69,8 +48,17 @@
 </template>
 
 <script>
-//到时候传入一个
+import axios from "axios";
+import LikeButton from "../components/LikeButton.vue";
+import CoinButton from "../components/CoinButton.vue";
+import { ElMessage } from "element-plus";
+
 export default {
+  components: {
+    LikeButton,
+    CoinButton,
+    ElMessage
+  },
   props: ["blog_info"],
   computed: {
     blogTime() {
@@ -86,17 +74,62 @@ export default {
   },
   data() {
     return {
-      is_liked: false,
-      is_coined: false,
+      user_info: "",
+      blog_image: "",
     };
   },
   methods: {
-    likeChange(){
-      this.is_liked=!this.is_liked
+    like(res) {
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "点赞成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      } else {
+        ElMessage({
+          type: "error",
+          message: "点赞失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
     },
-    coinIn(){
-      this.is_coined=!this.is_coined
-    }
+    unLike(res) {
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "取消点赞成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      } else {
+        ElMessage({
+          type: "error",
+          message: "取消点赞失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    },
+  },
+  created() {
+    axios({
+      url: "userinfo?user_id=" + this.blog_info.BlogUserId,
+      method: "get",
+    })
+      .then((res) => {
+        this.user_info = res.data.data;
+        if (this.blog_info.BlogImage == null) {
+          this.blog_image = this.user_info.user_profile;
+        } else {
+          this.blog_image = this.blog_info.BlogImage;
+        }
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+      });
   },
 };
 </script>
@@ -128,7 +161,7 @@ export default {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.card_user{
+.card_user {
   color: #959595;
 }
 </style>
