@@ -19,7 +19,7 @@
     <el-menu-item index="2" @click="goSchoolCenter">找对学校</el-menu-item>
     <el-sub-menu index="3">
       <template #title>说说留学</template>
-      <el-menu-item index="3-1">留学问答</el-menu-item>
+      <el-menu-item index="answer_detail" @click="goAnswerDetail">留学问答(测试用 跳转至回答详情界面)</el-menu-item>
       <el-menu-item index="3-2">留学分享</el-menu-item>
     </el-sub-menu>
     <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
@@ -75,6 +75,13 @@ export default {
     goBlogDetail(){
       router.push({
         name:"blog_detail"
+      })
+    },
+    //不应该在导航栏，此时仅为测试用
+    goAnswerDetail(){
+      router.push({
+        name:"answer_detail",
+        query:{id:2},//模拟带参数路由
       })
     },
     goSchoolCenter(){

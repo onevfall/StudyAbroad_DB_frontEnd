@@ -4,6 +4,7 @@ import NewsPage from '../views/NewsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
+import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
 import store from '../store/index'
@@ -49,6 +50,15 @@ const routes = [
     component:BlogDetail,
     meta:{
       title:'动态详情'
+    }
+  },
+  //回答详情页面同样作为临时测试使用
+  {
+    path:'/answer_detail',//路径暂且做测试
+    name:'answer_detail',
+    component:AnswerDetail,
+    meta:{
+      title:'回答详情'
     }
   },
   {
