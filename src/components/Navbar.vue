@@ -23,7 +23,7 @@
       <el-menu-item index="3-1">留学问答</el-menu-item>
       <el-menu-item index="3-2">留学分享</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
+    <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
     <el-menu-item index="5">留学顾问</el-menu-item>
     <el-menu-item index='blog_detail' @click="goBlogDetail">动态详情(测试用)</el-menu-item>
     <el-sub-menu index="6" v-if="is_login == false">
@@ -57,9 +57,9 @@ export default {
     goHome() {
       router.push({ name: "home" });
     },
-    goNews() {
+    goNewsHome() {
       router.push({
-        name: "news",
+        name: "newsHome",
       });
     },
     goLogin() {

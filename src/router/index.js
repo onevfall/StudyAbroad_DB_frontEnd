@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
+import NewsHomePage from '../views/NewsHomePage.vue'
 import NewsPage from '../views/NewsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
@@ -14,6 +15,15 @@ const routes = [
     component:HomePage,
     meta:{
       title:'首页'
+    }
+  },
+  {
+    path:'/newsHome',
+    name:'newsHome',
+    component:NewsHomePage,
+    meta:{
+      title:'留学快讯首页',
+      requireAuth:true
     }
   },
   {
