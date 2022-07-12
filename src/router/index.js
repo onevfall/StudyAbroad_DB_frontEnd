@@ -7,6 +7,7 @@ import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
+import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
 import store from '../store/index'
 import { ElMessage } from 'element-plus'
@@ -78,6 +79,12 @@ const routes = [
       title:'学校详情'
     }
   },
+  {
+    path:'/institution_detail',//路径暂且做测试
+    name:'institution_detail',
+    component:InstitutionDetail,
+    meta:{
+      title:'机构详情'
   { 
     path:'/school_center',
     name:'school_center',
