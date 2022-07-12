@@ -79,6 +79,7 @@ export default {
       /*此处日后需要加数据格式验证
           
           */
+     
       axios({
         url: "login",
         params: {
@@ -88,7 +89,7 @@ export default {
         method: "post",
       })
         .then((res) => {
-          console.log(res.data);
+          console.log(res);
           var response=res.data
           console.log(response.state);
           if (response.status == true) {

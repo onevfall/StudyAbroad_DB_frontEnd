@@ -32,15 +32,26 @@
           <el-col :span="12" style="text-align: left">
             <span class="user_name"> {{ this.user_info.user_name }} </span>
           </el-col>
-          <like-button
-            content_type="0"
-            :content_id="blog_info.BlogId"
-            :show_num="true"
-            size="normal"
-            @giveLike="like"
-            @cancelLike="unLike"
-          />
-          <coin-button />
+          <el-col :span="5">
+            <like-button
+              content_type="0"
+              :content_id="blog_info.BlogId"
+              :show_num="true"
+              size="normal"
+              @giveLike="like"
+              @cancelLike="unLike"
+            />
+          </el-col>
+          <el-col :span="5">
+            <coin-button
+              content_type="0"
+              :content_id="blog_info.BlogId"
+              :show_num="true"
+              size="normal"
+              @giveCoin="coinIn"
+            />
+          </el-col>
+       
         </el-row>
       </section>
     </div>
@@ -57,7 +68,7 @@ export default {
   components: {
     LikeButton,
     CoinButton,
-    ElMessage
+    ElMessage,
   },
   props: ["blog_info"],
   computed: {
@@ -113,6 +124,16 @@ export default {
         });
       }
     },
+    coinIn(res){
+      if(res){
+        ElMessage({
+          type: "success",
+          message: "投币成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    }
   },
   created() {
     axios({
@@ -146,6 +167,7 @@ export default {
 .blog_card {
   width: 350px;
   border-radius: 10px;
+  
 }
 .image_field {
   height: 300px;
