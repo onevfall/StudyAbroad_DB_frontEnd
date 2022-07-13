@@ -5,7 +5,10 @@
 <template>
   <div class="total-layout">
     <el-container>
-      <el-header>Header</el-header>
+      <el-header height="300px">
+        <el-carousel indicator-position="outside">
+        </el-carousel>
+      </el-header>
       <el-main
         ><div class="partial-layout">
           <el-container>
@@ -124,8 +127,9 @@
 
 <script>
 import { computed, ref } from "vue";
-import axios from "axios";
 
+import axios from "axios";
+import Carousel from "../components/Carousel.vue";
 export default {
   data() {
     return {
