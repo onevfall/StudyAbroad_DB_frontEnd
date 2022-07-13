@@ -1,3 +1,8 @@
+<!--
+加载图标
+描述：加载图标动画
+作者：张子涵
+-->
 <template>
 <div id="anime_box">
     <div id="anime_point_1"></div>
