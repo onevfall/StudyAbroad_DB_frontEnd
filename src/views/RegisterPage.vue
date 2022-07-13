@@ -186,9 +186,6 @@ export default {
           // },
           method: "post",
         })
-        // axios.post('/re'
-
-        // )
           .then((res) => {
             console.log(res);
             console.log(res.data);

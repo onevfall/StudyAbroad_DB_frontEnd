@@ -82,19 +82,11 @@ export default {
       }
     },
     userSignature() {
-      if (
-        this.blog_user_info.user_signature == undefined ||
-        this.blog_user_info.user_signature.length < 1
-      ) {
-        return "该用户尚未编写个性签名";
-      } else {
+      if (this.blog_user_info.user_signature >= 1 ) {
         return this.blog_user_info.user_signature;
+      } else {
+        return "该用户尚未编写个性签名";
       }
-      // if (this.blog_user_info.user_signature >= 1 ) {
-      //   return this.blog_user_info.user_signature;
-      // } else {
-      //   return "该用户尚未编写个性签名";
-      // }
     },
   },
   methods: {
