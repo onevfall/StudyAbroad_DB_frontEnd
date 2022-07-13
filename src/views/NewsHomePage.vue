@@ -1,3 +1,7 @@
+<!--
+快讯首页
+作者：ym
+-->
 <template>
   <div class="total-layout">
     <el-container>
@@ -44,43 +48,56 @@
                         class="list"
                         :infinite-scroll-disabled="disabled"
                       >
-                        <li v-for="news in this.news_relevant" :key="news" class="list-item">
+                        <li
+                          v-for="news in this.news_relevant"
+                          :key="news"
+                          class="list-item"
+                        >
                           <div class="common-layout2">
                             <el-container>
                               <el-aside width="200px">
-                                
-                  
-                                <el-image style="width: 200px; " :src="news.NewsFlashImage" :fit="fit" />
+                                <el-image
+                                  style="width: 200px"
+                                  :src="news.NewsFlashImage"
+                                  :fit="fit"
+                                />
                               </el-aside>
-                              <el-main class="mainColor">
+                              <el-main style="width: 600px" class="mainColor">
                                 <el-card>
                                   <template #header>
                                     <div class="card-header2">
                                       <span
-                                        >{{ news.NewsFlashTitle }}
-                                        <br /><br />
-                                        </span>
-                                      
-                                      <el-button class="button2"
-                                        >{{ news.NewsFlashDate }}
-                                      </el-button>
-                                      <el-button class="button2"
-                                        >{{ news.NewsFlashRegion }}
-                                      </el-button>
-                                      <el-button class="button2"
-                                        >{{ news.NewsFlashTitleTag }}
-                                      </el-button>
+                                        >{{ news.NewsFlashTitle }} <br /><br />
+                                      </span>
+                                      <el-tag
+                                        class="ml-2"
+                                        type="primary"
+                                        size="small"
+                                        >{{ news.NewsFlashDate }}</el-tag
+                                      >
+                                      <el-tag
+                                        class="ml-2"
+                                        type="success"
+                                        size="small"
+                                        >{{ news.NewsFlashRegion }}</el-tag
+                                      >
+                                      <el-tag
+                                        class="ml-2"
+                                        type="warning"
+                                        size="small"
+                                        >{{ news.NewsFlashTag }}</el-tag
+                                      >
                                     </div>
                                   </template>
                                   <div class="content_main">
-                                    {{ news.NewsFlashContent.substr(0,50)+"..." }}
+                                    {{ news.NewsFlashSummary }}
                                   </div>
 
                                   <div class="moreInfo">
                                     <el-button
                                       type="primary"
                                       class="button3"
-                                      @click="jumpToNewsPage"
+                                      @click="jumpToNewsPage(news)"
                                       >查看详情</el-button
                                     >
                                   </div>
@@ -100,7 +117,6 @@
           </el-container>
         </div></el-main
       >
-
       <el-footer>Footer</el-footer>
     </el-container>
   </div>
@@ -109,6 +125,7 @@
 <script>
 import { computed, ref } from "vue";
 import axios from "axios";
+
 export default {
   data() {
     return {
@@ -131,35 +148,23 @@ export default {
 
   created() {
     //在此处向服务器请求数据，初始化所需变量
-    // var tem_info = {
-    //   news_flash_id: 1,
-    //   news_flash_pic: "../assets/logo.png",
-    //   news_flash_date: "2022-6-29",
-    //   news_flash_title: "黄渡理工暑期不允许留校学生出校",
-    //   news_flash_tag: "黄渡理工",
-    //   news_flash_region: "江苏",
-    //   news_flash_content:
-    //     "近日，《关于疫情期间黄渡理工留校管理条例》经黄渡理工十一届人大常委会第七次会议通过，将于今年7月1日起生效。该条例对防疫安全等级管理、出入校申请条例、留校生生话管理规章制度、相应法律责任等作出了详尽规定。特别是对近日广大黄渡人民广泛关注的“关于暑期学生是否可以出校”这一问题，该条例明确“说不”。根据这一条例，未经允许，擅自离开校园，或私自与校外人员有物品传递解除等行为，对违反者、协助者等违法行为人，最多可予以留校察看、开除等处分。望广大黄渡子女引以为戒。近日，《关于疫情期间黄渡理工留校管理条例》经黄渡理工十一届人大常委会第七次会议通过，将于今年7月1日起生效。该条例对防疫安全等级管理、出入校申请条例、留校生生话管理规章制度、相应法律责任等作出了详尽规定。特别是对近日广大黄渡人民广泛关注的“关于暑期学生是否可以出校”这一问题，该条例明确“说不”。根据这一条例，未经允许，擅自离开校园，或私自与校外人员有物品传递解除等行为，对违反者、协助者等违法行为人，最多可予以留校察看、开除等处分,望广大黄渡学子引以为戒。\n \n黄渡新闻报道：4月27号晚，上海市某985高校志愿者李同学微信账号被盗，盗号者在年级大会上口出狂言：“别他骂了隔壁，念你那通稿，谁不会啊，能不能开个麦啊，赤佬”。事件引发了许多网友的关注，校方表示对这种行为保持强烈谴责，并保留追究到底的权力，呼吁同学们4月28日晚上7点务必在电脑前检测个人账号安全，不要离开电脑桌，更不要到阳台前，以免让不法分子有机可乘。当日，某乎网友开始了一项“‘65472’造句大赛”，表示对盗号分子虚伪假面的强烈遣责 。“大赛”开始于晚上23点左右，截至28日早上7点，已有700多网友通过电脑或手机参与。许多网友的词句也颇为用心。部分网友不了解事情始末，纷纷在网上留言询问：”到底发生啥了，一群谜语人，到处发病，谁来给我解释啊，无语“。随着事件“盗号者”身份的揭露，让网友惊讶的是这名事情的起因居然是盗号者不喜欢吃”猪肉刺身“。热心网友王老师说道：”刺身以漂亮的造型、新鲜的原料、柔嫩鲜美的口感以及带有刺激性的调味料，强烈地吸引着人们的胃口。当事人不喜欢吃刺身根本是无稽之谈，因此而发动盗号行为并发出不当言论更是超出常理，其背后可能有境外势力作祟“。黄渡新闻记者小焦现场报道\n\n近日，《关于疫情期间黄渡理工留校管理条例》经黄渡理工十一届人大常委会第七次会议通过，将于今年7月1日起生效。该条例对防疫安全等级管理、出入校申请条例、留校生生话管理规章制度、相应法律责任等作出了详尽规定。特别是对近日广大黄渡人民广泛关注的“关于暑期学生是否可以出校”这一问题，该条例明确“说不”。根据这一条例，未经允许，擅自离开校园，或私自与校外人员有物品传递解除等行为，对违反者、协助者等违法行为人，最多可予以留校察看、开除等处分。望广大黄渡子女引以为戒。近日，《关于疫情期间黄渡理工留校管理条例》经黄渡理工十一届人大常委会第七次会议通过，将于今年7月1日起生效。该条例对防疫安全等级管理、出入校申请条例、留校生生话管理规章制度、相应法律责任等作出了详尽规定。特别是对近日广大黄渡人民广泛关注的“关于暑期学生是否可以出校”这一问题，该条例明确“说不”。根据这一条例，未经允许，擅自离开校园，或私自与校外人员有物品传递解除等行为，对违反者、协助者等违法行为人，最多可予以留校察看、开除等处分,望广大黄渡学子引以为戒。\n \n黄渡新闻报道：4月27号晚，上海市某985高校志愿者李同学微信账号被盗，盗号者在年级大会上口出狂言：“别他骂了隔壁，念你那通稿，谁不会啊，能不能开个麦啊，赤佬”。事件引发了许多网友的关注，校方表示对这种行为保持强烈谴责，并保留追究到底的权力，呼吁同学们4月28日晚上7点务必在电脑前检测个人账号安全，不要离开电脑桌，更不要到阳台前，以免让不法分子有机可乘。当日，某乎网友开始了一项“‘65472’造句大赛”，表示对盗号分子虚伪假面的强烈遣责 。“大赛”开始于晚上23点左右，截至28日早上7点，已有700多网友通过电脑或手机参与。许多网友的词句也颇为用心。部分网友不了解事情始末，纷纷在网上留言询问：”到底发生啥了，一群谜语人，到处发病，谁来给我解释啊，无语“。随着事件“盗号者”身份的揭露，让网友惊讶的是这名事情的起因居然是盗号者不喜欢吃”猪肉刺身“。热心网友王老师说道：”刺身以漂亮的造型、新鲜的原料、柔嫩鲜美的口感以及带有刺激性的调味料，强烈地吸引着人们的胃口。当事人不喜欢吃刺身根本是无稽之谈，因此而发动盗号行为并发出不当言论更是超出常理，其背后可能有境外势力作祟“。黄渡新闻记者小焦现场报道",
-    // };
-    // this.news_info = tem_info;
-
-
     axios({
-      url:"newsflash",
-     
-      method:"get"
-    }).then((res)=>{
-      console.log(res);
-      
-      console.log(res.data);
-      console.log(res.data.data);
-      console.log(res.data.data.newsflashs);
-      this.news_relevant=res.data.data.newsflashs;
-      console.log(this.news_relevant);
-    }).catch(errMsg=>{
-      console.log(errMsg);
+      url: "newsflash/all",
+
+      method: "get",
     })
-    
+      .then((res) => {
+        console.log(res);
+
+        console.log(res.data);
+        console.log(res.data.data);
+        console.log(res.data.data.newsflashs);
+        this.news_relevant = res.data.data.newsflashs;
+        console.log(this.news_relevant);
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+      });
   },
   methods: {
     load() {
@@ -169,8 +174,13 @@ export default {
         this.loading = false;
       }, 2000);
     },
-    jumpToNewsPage() {
-      this.$router.push("/news");
+    jumpToNewsPage(news) {
+      this.$router.push({
+        path: "news",
+        query: {
+          news_id: news.NewsFlashId,
+        },
+      });
     },
   },
 };
@@ -242,14 +252,8 @@ export default {
   align-items: center;
   font-size: 15px;
   color: rgb(30, 23, 118);
-  
 }
-.button2 {
-  font-size: 10px;
-  margin: 3%;
-  padding: 0%;
-  border: 0%;
-}
+
 .button3 {
   font-size: 10px;
   color: white;
@@ -257,7 +261,9 @@ export default {
 .moreInfo {
   margin-left: 80%;
 }
-
+.content_main {
+  text-align: left;
+}
 .common-layout2 {
   margin-bottom: 5%;
 }
@@ -284,5 +290,4 @@ export default {
   height: 250px;
   background: white;
 }
-
 </style>
