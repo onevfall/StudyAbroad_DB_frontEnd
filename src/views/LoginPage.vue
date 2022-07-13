@@ -104,7 +104,7 @@ export default {
         method: "post",
       })
         .then((res) => {
-          console.log(res.data);
+          console.log(res);
           var response=res.data
           console.log(response.state);
           if (response.status == true) {

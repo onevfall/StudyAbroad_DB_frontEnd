@@ -1,17 +1,17 @@
 <template>
   <el-container class="info_table">
-      <el-aside width=60% class="left">
+      <el-aside width="700px" class="left">
           <div class="con1"  style="width:100%;float:left;" >
-          <img :src="this.school.university_badge"  class="school_badge">
+          <img :src="this.institution.insitution_profile"  class="insitution_profile">
            <div style="float:left;text-align:left;">
-            <p class="p1" style="font-size:30px">{{school.university_enname}}</p>
-            <p class="p1">{{school.university_chname}}</p>
-            <p class="p1">{{school.university_abbreviation}}</p>
+            <p class="p1" style="font-size:30px">{{institution.institution_name}}</p>
+            <p class="p1">{{institution.institution_name}}</p>
+            <p class="p1">{{institution.institution_abbreviation}}</p>
            </div>
           </div> 
           <p style="float:left;">
-            <span class="con2_span" style="float:left;text-align:left;">{{school.university_introduction}}</span> 
-            <span class="show" style="float:right;text-align:right;">[更多]</span> <!---->
+            <span class="con2_span" style="float:left;">{{institution.institution_introduction}}</span> 
+            <span class="show"><span class="more">[更多]</span></span> <!---->
           </p>
   </el-aside>
 
@@ -29,7 +29,7 @@ export default {
   components:{
     Loading
   },
-  props: ["school"],
+  props: ["institution"],
   computed: {
     contentShow() {
       
@@ -56,7 +56,7 @@ export default {
   z-index: -1;
 }
 
-.school_badge{
+.institution_badge{
   background:white;
   margin:30px;
   margin-bottom: 0;

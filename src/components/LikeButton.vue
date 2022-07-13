@@ -3,15 +3,22 @@
 作者：焦佳宇
 -->
 <template>
-  <el-col :span="2" style="text-align: left" v-if="is_liked == false">
-    <el-icon :size=this.size @click="like"><Chicken /></el-icon>
-  </el-col>
-  <el-col :span="2" style="text-align: left" v-else>
-    <el-icon :size=this.size color="#d25f1e" @click="unLike"><Chicken /></el-icon>
-  </el-col>
-  <el-col :span="3" :style="{'text-align': 'left','font-size':this.size}" v-if='this.show_num==true'>
-    {{ like_nums }}
-  </el-col>
+  <div>
+    <span style="text-align: left; margin-right: 8px" v-if="is_liked == false">
+      <el-icon :size="this.size" @click="like"><Chicken /></el-icon>
+    </span>
+    <span style="text-align: left; margin-right: 8px" v-else>
+      <el-icon :size="this.size" color="#d25f1e" @click="unLike"
+        ><Chicken
+      /></el-icon>
+    </span>
+    <span
+      :style="{ 'text-align': 'left', 'font-size': this.size }"
+      v-if="this.show_num == true"
+    >
+      {{ like_nums }}
+    </span>
+  </div>
 </template>
 
 <script>
@@ -22,7 +29,7 @@ export default {
     type: 0-动态、1-动态评论、2-回答、3-回答评论
     content_id:要操作的内容的id
     */
-  props: ["content_type", "content_id",'show_num','size'],
+  props: ["content_type", "content_id", "show_num", "size"],
   components: {
     ElMessage,
   },
@@ -30,7 +37,7 @@ export default {
     return {
       is_liked: false,
       dynamic_type: "",
-      like_nums:''
+      like_nums: "",
     };
   },
   methods: {
@@ -44,7 +51,10 @@ export default {
           duration: 2000,
         });
         /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
-        this.$router.push("\login");
+        this.$router.push({
+          path: "/login",
+          query: { redirect: this.$route.path },
+        });
       } else {
         axios({
           url: "like/" + this.dynamic_type,
@@ -53,43 +63,56 @@ export default {
             [this.dynamic_type + "_id"]: this.content_id,
           },
           method: "post",
-        }).then((res) => {
-          if (res.data.status) {
-            this.is_liked = true;
-            this.like_nums++;
-            console.log("inside button,liked success");
-            console.log(this.like_nums);
-            this.$emit('giveLike',true)
-          }else{
-            this.$emit('giveLike',false)
-          }
-        }).catch(errMsg=>{
-          alert('对id为'+this.content_id+'的'+this.dynamic_type+"点赞，相关API此时未完成")
-          console.log(errMsg);
-        });
+        })
+          .then((res) => {
+            if (res.data.status) {
+              this.is_liked = true;
+              this.like_nums++;
+              this.$emit("giveLike", true);
+            } else {
+              this.$emit("giveLike", false);
+            }
+          })
+          .catch((errMsg) => {
+            alert(
+              "对id为" +
+                this.content_id +
+                "的" +
+                this.dynamic_type +
+                "点赞，相关API此时未完成"
+            );
+            console.log(errMsg);
+          });
       }
     },
     unLike() {
       axios({
-          url: "like/" + this.dynamic_type,
-          params: {
-            user_id: this.$store.state.user_info.user_id,
-            [this.dynamic_type + "_id"]: this.content_id,
-          },
-          method: "put",
-        }).then((res) => {
+        url: "like/" + this.dynamic_type,
+        params: {
+          user_id: this.$store.state.user_info.user_id,
+          [this.dynamic_type + "_id"]: this.content_id,
+        },
+        method: "put",
+      })
+        .then((res) => {
           if (res.data.status) {
             this.is_liked = false;
             this.like_nums--;
-            this.$emit('cancelLike',true)
-          }else{
-            this.$emit('cancelLike',false)
+            this.$emit("cancelLike", true);
+          } else {
+            this.$emit("cancelLike", false);
           }
-        }).catch(errMsg=>{
-          alert('取消对id为'+this.content_id+'的'+this.dynamic_type+"点赞，相关API此时未完成")
+        })
+        .catch((errMsg) => {
+          alert(
+            "取消对id为" +
+              this.content_id +
+              "的" +
+              this.dynamic_type +
+              "点赞，相关API此时未完成"
+          );
           console.log(errMsg);
         });
-     
     },
   },
   created() {
@@ -123,11 +146,7 @@ export default {
         method: "get",
       })
         .then((res) => {
-          console.log(res.data);
-          // console.log(res.data.data.like_times);
-          // console.log("init like nums");
-          this.like_nums=res.data.data.like_times;
-          // console.log(this.like_nums);
+          this.like_nums = res.data.data.like_times;
           this.is_liked = res.data.status;
           // console.log(this.is_liked);
         })
@@ -149,7 +168,7 @@ export default {
         method: "get",
       })
         .then((res) => {
-          this.like_nums=res.data.data.like_times
+          this.like_nums = res.data.data.like_times;
           this.is_liked = false;
         })
         .catch((errMsg) => {

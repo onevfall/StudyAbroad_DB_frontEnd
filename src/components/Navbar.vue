@@ -16,11 +16,11 @@
       ><img src="../assets/logo.png" class="logo"
     /></el-menu-item>
     <el-menu-item index="home" @click="goHome">首页</el-menu-item>
-    <el-menu-item index="2" @click="goSchoolCenter">找对学校</el-menu-item>
+    <el-menu-item index="school_center" @click="goSchoolCenter">找对学校</el-menu-item>
     <el-sub-menu index="3">
       <template #title>说说留学</template>
       <el-menu-item index="answer_detail" @click="goAnswerDetail">留学问答(测试用 跳转至回答详情界面)</el-menu-item>
-      <el-menu-item index="3-2">留学分享</el-menu-item>
+      <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
     <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
     <el-menu-item index="5">留学顾问</el-menu-item>
@@ -38,7 +38,8 @@
       <el-menu-item index="7-4">财务管理</el-menu-item>
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="school-detail" @click="goSchoolDetail">学校详情</el-menu-item>
+    <el-menu-item index="school_detail" @click="goSchoolDetail">学校详情</el-menu-item>
+    <el-menu-item index="institution_detail" @click="goInstitutionDetail">机构详情</el-menu-item>
   </el-menu>
 </template>
 
@@ -59,6 +60,11 @@ export default {
     goNews() {
       router.push({
         name: "news",
+      });
+    },
+    goBlog(){
+       router.push({
+        name: "blog",
       });
     },
     goLogin() {
@@ -89,9 +95,16 @@ export default {
         name:'school_center'
       })
     },
+    //测试高校
     goSchoolDetail(){
       router.push({
         name:"school_detail"
+      })
+    },
+    //测试机构
+    goInstitutionDetail(){
+      router.push({
+        name:"institution_detail"
       })
     },
     //退出账号并跳转至首页

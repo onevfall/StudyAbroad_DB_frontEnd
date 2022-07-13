@@ -1,13 +1,14 @@
 <template>
-  <div class="common-layout">
-    <school-info></school-info>
+  <div>
+    <school-info :school ="this.school_info"></school-info>
     <el-container>
-      <el-aside width="400px">
+      <el-aside width=25%>
         
       </el-aside>
-      <el-main>Main
-        
-        <BmapDemo :school ="this.school_info"></BmapDemo>
+      <el-main>
+        <div class="info_detail">
+        <school-info-card :school="this.school_info"> </school-info-card>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -16,24 +17,32 @@
 <script>
 
 import BmapDemo from "../components/Map.vue"
-import UserInfoBoard from "../components/UserInfoBoard.vue";
 import axios from "axios";
 import SchoolInfo from "../components/SchoolInfo.vue";
+import SchoolInfoCard from "../components/SchoolInfoCard.vue";
 export default {
   components: {
-    UserInfoBoard,
     SchoolInfo,
+    SchoolInfoCard,
     BmapDemo
   },
   data() {
     return {
       school_info: "",
+      school_id:"",
     };
   },
+  props:["school_id"],
+  methods:{
+    getParams(){
+      this.school_id = this.$route.query.school_id 
+    },
+  },
   created() {
+    this.getParams();
     //在此处向服务器请求数据，初始化所需变量
     axios({
-        url: "university?university_id="+2,
+        url: "university?university_id="+this.school_id,
         method: "get",
       })
         .then((res) => {
@@ -42,7 +51,7 @@ export default {
           //console.log(response.state);
           if (response.status == true) {
             this.school_info = response.data;
-            console.log(this.school_info.university_name);
+            console.log(this.school_info.university_chname);
           }
         })
         .catch((err) => {
@@ -53,8 +62,5 @@ export default {
 </script>
 
 <style scoped>
-.UserInfo {
-  margin-top: 20px;
-  margin-left: 25px;
-}
+
 </style>
