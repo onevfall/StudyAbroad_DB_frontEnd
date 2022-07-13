@@ -1,3 +1,8 @@
+<!--
+高校信息
+描述：展示高校具体各板块信息
+作者：张子涵
+-->
 <template>
   <el-container class="info_table">
       <el-aside width=60% class="left">

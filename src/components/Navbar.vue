@@ -40,6 +40,7 @@
     </el-sub-menu>
     <el-menu-item index="school_detail" @click="goSchoolDetail">学校详情</el-menu-item>
     <el-menu-item index="institution_detail" @click="goInstitutionDetail">机构详情</el-menu-item>
+    <el-menu-item index="question" @click="goQuestion">问题</el-menu-item>
   </el-menu>
 </template>
 
@@ -87,7 +88,7 @@ export default {
     goAnswerDetail(){
       router.push({
         name:"answer_detail",
-        query:{id:2},//模拟带参数路由
+        query:{question_id:1,answer_id:1},//模拟带参数路由
       })
     },
     goSchoolCenter(){
@@ -105,6 +106,12 @@ export default {
     goInstitutionDetail(){
       router.push({
         name:"institution_detail"
+      })
+    },
+    //测试问题
+    goQuestion(){
+      router.push({
+        name:"question"
       })
     },
     //退出账号并跳转至首页
