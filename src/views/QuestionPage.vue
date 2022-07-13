@@ -20,13 +20,13 @@
               </el-row>
               <el-row class="user_info">
                 <el-col :span="2">
-                  <el-avatar shape="circle" :size="50" :src="circleUrl" />
+                  <el-avatar shape="circle" :size="50" :src="this.question_info.user_profile" />
                 </el-col>
                 <span class="user_name">
                   {{this.question_info.user_name}}
                 </span>
                 <el-col id="user_identify" :span="2">
-                  <el-tag type="warning" size="large">已认证:{{this.question_info.user_university}} {{this.question_info.user_qualification}}</el-tag>
+                  <el-tag v-if="this.question_info.user_qualification!=null" type="warning" size="large">已认证:{{this.question_info.user_university}} {{this.question_info.user_qualification}}</el-tag>
                 </el-col>
               </el-row>
               <el-row id="question_content">问题：{{this.question_info.question_title}}</el-row>
@@ -62,7 +62,7 @@
           </el-row>
         </el-card>
         <el-row class="bottom">
-          <el-col :span="18">
+          <el-col :span="16">
             <el-card id="answer_card" shadow="never">
               <el-row style="margin-bottom:30px">
                 {{answer_num}}条回答
@@ -71,10 +71,10 @@
                 <div @click="goToAnswerPage(ans.AnswerId)">
                   <el-row>
                     <el-col :span="2">
-                      <el-avatar shape="circle" :size="50" :src="circleUrl" />
+                      <el-avatar shape="circle" :size="50" :src="ans.UserProfile" />
                     </el-col>
                     <span class="user_name">
-                      {{ans.AnswerUserId}}
+                      {{ans.UserName}}
                     </span>
                   </el-row>
                   <el-row id="answer_content">
@@ -84,9 +84,9 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="6">
-            <div class="card" v-for="ques in this.question_relevant" :key="ques">
-              <related-question :question_info="ques"></related-question>
+          <el-col :span="8">
+            <div class="card" v-for="ques in this.card_info" :key="ques">
+              <side-card :card_info="ques"></side-card>
             </div>
           </el-col>
         </el-row>
@@ -100,17 +100,20 @@
 <script>
 // @ is an alias to /src
 import RelatedQuestion from '@/components/RelatedQuestion.vue';
+import SideCard from "../components/SideCard.vue";
 import axios from "axios"
 export default {
   name: 'QuestionPage',
   components: {
     RelatedQuestion,
+    SideCard,
   },
   data() {
     return {
       relevant_question_info: "",//相关问题
       question_relevant: [], //存储相关问题的信息
       question_info:"",//问题信息
+      card_info:[],//卡片信息(用于传参)
       answer_info:[],//回答信息
       question_id:12,
       answer_num:0,
@@ -134,8 +137,11 @@ export default {
         this.textStatus="收起";
       }
     },
-    goToAnswerPage:function(answer_id){
-      alert("跳转至id为"+answer_id+"的回答页面")
+    goToAnswerPage:function(ans_id){
+      this.$router.push({
+        name:"answer_detail",
+        query:{answer_id:ans_id,question_id:this.question_info.question_id},
+      });
     },
   },
   computed: {
@@ -181,6 +187,7 @@ export default {
       console.log(res.data.data);
       this.answer_num=res.data.data.count;
       this.answer_info=res.data.data.answers;
+      console.log(this.answer_info);
     })
     .catch((err) => {
       console.log(err);
@@ -197,10 +204,17 @@ export default {
       console.log(res.data.data);
       this.related_question_tag=res.data.data.tag;
       this.question_relevant=res.data.data.related_questions;
-      for(var i=0;i<this.question_relevant.length;i++)
+      for(let i=0;i<this.question_relevant.length;i++)
       {
-        this.question_relevant[i].question_tag=res.data.data.tag;
+        var tem_info = {
+          essence:"问题",
+          content:this.question_relevant[i].QuestionSummary,
+          keyword:res.data.data.tag,
+          id:this.question_relevant[i].QuestionId,
+        };
+        this.card_info.push(tem_info);
       };
+      console.log(this.card_info);
     })
     .catch((err) => {
       console.log(err);
@@ -295,7 +309,7 @@ export default {
 }
 
 #answer_card{
-  margin-right:50px;
+  margin-right:20px;
   font-family:SimSun;
   font-weight:bolder;
   padding-left:20px;
@@ -309,6 +323,11 @@ export default {
   border-bottom:0.8px solid black;
   font-size:15px;
   color:grey;
+}
+
+.card{
+  margin-left:29px;
+  margin-bottom:20px;
 }
 
 #answer_content{
