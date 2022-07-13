@@ -82,7 +82,7 @@ export default {
       this.$router.push({
         path:'/school_detail',
         query:{
-          id:this.school.university_id
+          school_id:this.school.university_id
         }
       })
     }

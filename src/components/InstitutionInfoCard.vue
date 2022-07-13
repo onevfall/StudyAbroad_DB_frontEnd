@@ -1,3 +1,8 @@
+<!--
+机构信息卡
+描述：展示机构信息卡（详情页最上）
+作者：张子涵
+-->
 <template>
   <div class="info_border" id="0"> 
     <div class="tips_bar" ></div>
