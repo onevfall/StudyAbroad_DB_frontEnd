@@ -1,3 +1,8 @@
+<!--
+高校地图
+描述：留作备用的调用方法
+作者：张子涵
+-->
 <template>
   <!--bmap框-->
   <div class="bmap" id="container"></div>
