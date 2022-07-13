@@ -1,3 +1,8 @@
+<!--
+机构详情
+描述：展示详细机构信息
+作者：张子涵
+-->
 <template>
   <div>
     <institution-info :institution ="this.institution_info"></institution-info>
@@ -51,6 +56,9 @@ export default {
           console.log(err);
         });
   },
+  mounted(){
+     window.scrollTo(0,0);
+  }
 };
 </script>
 
