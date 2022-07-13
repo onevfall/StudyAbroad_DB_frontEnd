@@ -10,13 +10,13 @@
       </div>
       <el-row gutter='10' justify="left">
           <el-col span='30' >
-         <el-tag class="ml-2" type="primary" size="small">{{new_info.news_flash_date}}</el-tag>
+         <el-tag class="ml-2" type="primary" size="small">{{new_info.NewsFlashDate}}</el-tag>
       </el-col>
       <el-col span='30' >
-         <el-tag class="ml-2" type="success" size="small">{{new_info.news_flash_region}}</el-tag>
+         <el-tag class="ml-2" type="success" size="small">{{new_info.NewsFlashRegion}}</el-tag>
       </el-col>
        <el-col span='30' >
-         <el-tag class="ml-2" type="warning" size="small">{{new_info.news_flash_tag}}</el-tag>
+         <el-tag class="ml-2" type="warning" size="small">{{new_info.NewsFlashTag}}</el-tag>
       </el-col>
     </el-row>
     </template>
@@ -32,16 +32,16 @@ export default {
   props: ["new_info"],
   computed: {
     contentShow() {
-      if (this.new_info.news_flash_content.length < 60) {
-        return this.new_info.news_flash_content;
+      if (this.new_info.NewsFlashContent.length < 60) {
+        return this.new_info.NewsFlashContent;
       } else {
-        return this.new_info.news_flash_content.slice(0, 60) + "...";
+        return this.new_info.NewsFlashContent.slice(0, 60) + "...";
       }
     },
   },
   methods:{
       goNewsDetail(){
-          alert("跳转至id为"+ this.new_info.news_flash_id+"的快讯详情页面")
+          alert("跳转至id为"+ this.new_info.NewsFlashId+"的快讯详情页面")
       }
   }
 };

@@ -79,13 +79,15 @@ export default {
       /*此处日后需要加数据格式验证
           
           */
-     
+      var d=new FormData();
+      d.append("user_id",this.user_id);
+      d.append("user_password",this.user_password);
       axios({
-        url: "login",
-        params: {
-          user_id: this.user_id,
-          user_password: this.user_password,
+        headers:{
+          'Content-Type':'application/x-www-form-urlencoded'
         },
+        url: "http://localhost:8080/api/login",
+        data:d,
         method: "post",
       })
         .then((res) => {
