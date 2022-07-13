@@ -1,3 +1,8 @@
+<!--
+高校详情
+描述：展示详细高校信息
+作者：张子涵
+-->
 <template>
   <div>
     <school-info :school ="this.school_info"></school-info>
@@ -58,6 +63,9 @@ export default {
           console.log(err);
         });
   },
+  mounted(){
+     window.scrollTo(0,0);
+  }
 };
 </script>
 
