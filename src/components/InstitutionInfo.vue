@@ -1,3 +1,8 @@
+<!--
+机构信息
+描述：展示机构各板块信息（详情页最上）
+作者：张子涵
+-->
 <template>
   <el-container class="info_table">
       <el-aside width="700px" class="left">
