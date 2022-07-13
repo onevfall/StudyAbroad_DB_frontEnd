@@ -19,6 +19,7 @@ import mock from './mock/index'
 //引入 根组件
 import App from './App.vue'
 
+
 //配置全局baseURL默认值
 axios.defaults.baseURL="/api"
 

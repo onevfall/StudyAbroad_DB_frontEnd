@@ -6,7 +6,7 @@
   <el-card class="box-card news_card" shadow="hover" @click="goNewsDetail">
     <template #header>
       <div class="card-header">
-        <span>{{ new_info.news_flash_title }}</span>
+        <span>{{ new_info.NewsFlashTitle }}</span>
       </div>
       <el-row gutter='10' justify="left">
           <el-col span='30' >
