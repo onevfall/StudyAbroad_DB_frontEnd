@@ -7,9 +7,9 @@
     <!-- 排名小卡片 -->
     <el-card class="rank_card">
       <div class="rank_text">
-        <div>{{ QS_rank }}</div>
-        <div>{{ THE_rank }}</div>
-        <div>{{ USNews_rank }}</div>
+        <div>{{ school.university_qs_rank }}</div>
+        <div>{{ school.university_the_rank }}</div>
+        <div>{{ school.university_usnews_rank }}</div>
       </div>
     </el-card>
 
@@ -17,10 +17,10 @@
       <div class="two_block_hori">
         <div>
           <div class="avatar_text">
-            <el-avatar shape="square" :size="70" :src="university_img" />
+            <el-avatar shape="square" :size="70" :src="school.university_badge" />
             <div>
-                <p class="enname">{{ university_enname }}</p>
-                <p class="chname">{{ university_chname }}</p>
+                <p class="enname">{{ school.university_enname }}</p>
+                <p class="chname">{{ school.university_chname }}</p>
               
             </div>
           </div>
@@ -31,19 +31,19 @@
                   <el-col :span="8">
                     <div >
                       <span class="info_text">在校人数:</span>
-                      <span style="color:gray;">{{university_student_num}}</span>
+                      <span style="color:gray;">{{school.university_student_num}}</span>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div>
                       <span class="info_text">位置：</span>
-                      <span style="color:gray;">{{university_location}}</span>
+                      <span style="color:gray;">{{school.university_location}}</span>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div>
                       <span class="info_text">学费：</span>
-                      <span style="color:gray;">{{university_money}}</span>
+                      <span style="color:gray;">{{school.university_money}}</span>
                     </div>
                   </el-col>
                 </el-row>
@@ -51,7 +51,7 @@
 
                 <div>
                     <span class="info_text">简介：</span>
-                    <span style="color:gray;">{{university_intro}}</span>
+                    <span style="color:gray;">{{school.university_introduction}}</span>
                 </div>
               
           </div>
@@ -59,7 +59,7 @@
 
         <!-- 右侧点击去看看 -->
         <div>
-          <el-button type="warning" size="large" color="#626aef"
+          <el-button type="warning" size="large" color="#626aef" @click="seeSchool"
             >去看看</el-button
           >
         </div>
@@ -71,22 +71,22 @@
 <script>
 export default {
   props: [
-    //应该接收的是：已经被筛选后的数据库中存储的大学名字，大学校徽，大学当年三大排名，简介
-    "university_chname", //中文名
-    "university_enname",//英文名
-    "university_img", //校徽
-    "university_intro", //简介
-    "QS_rank",
-    "THE_rank",
-    "USNews_rank",
-    "university_student_num", //学生人数
-    "university_location",  //地址
-    "university_money",     //学费
+    'school',
   ],
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    seeSchool(){
+      // <router-link target="_blank" :to="{path:'/home',query:{id:'1'}}">新页面打开home页</router-link>;
+      this.$router.push({
+        path:'/school_detail',
+        query:{
+          id:this.school.university_id
+        }
+      })
+    }
+  },
 };
 </script>
 
