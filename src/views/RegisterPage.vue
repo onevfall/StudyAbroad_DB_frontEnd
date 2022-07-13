@@ -170,14 +170,25 @@ export default {
         ElMessage.error("两次输入密码不相同！请再次确认密码");
         return;
       } else {
+        var d=new FormData();
+        d.append("user_phone",this.user_phone);
+        d.append("user_password",this.user_password);
+        console.log(d);
         axios({
-          url: "/register",
-          params: {
-            user_phone: this.user_phone,
-            user_password: this.user_password,
+          headers:{
+            'Content-Type':'application/x-www-form-urlencoded'
           },
+          url: "/register",
+          data:d,
+          // params: {
+          //   user_phone: this.user_phone,
+          //   user_password: this.user_password,
+          // },
           method: "post",
         })
+        // axios.post('/re'
+
+        // )
           .then((res) => {
             console.log(res);
             console.log(res.data);
@@ -191,13 +202,6 @@ export default {
               this.user_id = res.data.data.user_id;
               console.log(this.user_id);
               this.dialogVisible = true;
-              // this.sleep(5000);
-              // this.dialogVisible = false;
-              // console.log("close");
-              // setTimeout(() => {
-              //   console.log("111");
-              // }, 5000);
-              //this.$router.replace("/login");
             } else {
               //若注册失败
               ElMessage.error("该手机号已有账号，注册失败！");

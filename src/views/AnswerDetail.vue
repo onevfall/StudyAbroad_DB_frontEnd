@@ -93,6 +93,8 @@
               <el-input
                 id="replyInput"
                 v-model="comment_now"
+                maxlength="128"
+                show-word-limit
                 class="reply_input"
                 placeholder="评论点什么..."
                 type="text"
@@ -159,14 +161,15 @@ export default {
       this.initPage();
     },
   },
-  created() {
+  async created() {
     //在此处向服务器请求数据，初始化所需变量
-    this.initPage();
+    await this.initPage();
   },
   methods: {
-    initPage(){
+    async initPage(){
       this.answer_id = this.$route.query.answer_id;//获取本页的answer
-      axios.get('/answer',{
+      console.log("00")
+      await axios.get('/answer',{
         params:{
           answer_id:this.answer_id,
         }
@@ -183,8 +186,29 @@ export default {
         console.log(err);
       });
 
+      await axios.get('/userinfo',{
+        params:{
+          user_id:this.answer_infor.answer_user_id,
+        }
+      })
+      .then((res) => {
+        if (res.data.status === true) {
+          console.log(res.data.data);
+          this.answer_user_info = res.data.data;//获取answer_user_info全部内容 未验证过
+        } else {
+          console.log(res);
+          console.log("11内容获取失败");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });//给user_id为2的用户填充点信息
+      // this.answer_user_info.user_signature = "向前奔跑，永远热爱";
+      // console.log("111");
+      // console.log(this.answer_user_info);
+
       this.question_id = this.$route.query.question_id;
-      axios.get('/question',{
+      await axios.get('/question',{
         params:{
           question_id:this.question_id,
         }
@@ -200,44 +224,28 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-
-      // axios.get('/userinfo',{
-      //   params:{
-      //     user_id:this.answer_infor.answer_user_id,
-      //   }
-      // })
-      // .then((res) => {
-      //   if (res.data.status === true) {
-      //     console.log(res.data.data);
-      //     this.answer_user_info = res.data.data;//获取answer_user_info全部内容 未验证过
-      //   } else {
-      //     console.log("11内容获取失败");
-      //   }
-      // })
-      // .catch((err) => {
-      //   console.log(err);
-      // });//给user_id为2的用户填充点信息
-      this.answer_user_info = {
-      user_id: 1,
-      user_email: "",
-      user_phone: "17703561185",
-      user_password: "",
-      user_name: "用户17703561185",
-      user_profile:
-        "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/",
-      user_createtime: "",
-      user_birthday: "",
-      user_gender: "",
-      user_state: 1,
-      user_signature: "精准与否，就是屠宰和手术的区别",
-      user_follower: 0,
-      user_follows: 0,
-      user_level: 3,
-      user_coin: 0,
-    };
+        console.log(this.answer_infor.answer_user_id);
+    //   this.answer_user_info = {
+    //   user_id: 1,
+    //   user_email: "",
+    //   user_phone: "17703561185",
+    //   user_password: "",
+    //   user_name: "用户17703561185",
+    //   user_profile:
+    //     "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/",
+    //   user_createtime: "",
+    //   user_birthday: "",
+    //   user_gender: "",
+    //   user_state: 1,
+    //   user_signature: "精准与否，就是屠宰和手术的区别",
+    //   user_follower: 0,
+    //   user_follows: 0,
+    //   user_level: 3,
+    //   user_coin: 0,
+    // };
     this.card_info = [{ id: 1 }, { id: 2 }];//暂时随便定两个卡片，获取卡片对应问题id的相关度算法后续写
     for (let i = 0; i < this.card_info.length; ++i) {
-      axios.get('/question',{
+      await axios.get('/question',{
         params:{
           question_id:this.card_info[i].id,
         }
@@ -256,7 +264,7 @@ export default {
         });
     }
 
-    axios.get('/answer/comment',{
+    await axios.get('/answer/comment',{
       params:{
           answer_id:this.answer_id,
         }
@@ -271,6 +279,24 @@ export default {
       });
     },
     sendComment() {
+      if (this.$store.state.is_login == false) {
+        //若未登录
+        ElMessage({
+          message: "请先登录",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
+        });
+        this.comment_now="";
+        /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
+        console.log(this.$route)
+        this.$route.query.redirect = this.$route.fullPath;
+        console.log(this.$route.query.redirect);
+        this.$router.push("login");
+      }
+      else{
+
+      }
       // 里面要写未登录状况下的跳转处理 以及跳转时对输入的保存？
     },
     like(res) {
