@@ -1,29 +1,37 @@
-<template>
+<!--
+高校信息卡
+描述：展示高校信息卡（详情页最上）
+作者：张子涵
+-->
+<template >
   <div class="info_border" id="0"> 
     <div class="tips_bar" ></div>
     <span style="font-size:30px;line-height: 60px;">基本信息</span>
 
       <el-container class="info_table">
         <el-main>
-          <div><img src="../assets/location.png">
+          <div style="color:coral"><img src="../assets/location.png" style="filter: drop-shadow(0 0 0 coral);">
             {{school.university_country}} {{school.university_location}}</div>
           <div><img src="../assets/navigator.png">
-            学校官方网站：{{school.university_website}}</div>
+            学校官方网站：<a :href=this.school.university_website target="_blank">{{school.university_website}}</a></div>
           <div><img src="../assets/message.png">
-            国际学生招生处联系邮箱：{{school.university_email}}</div>
-          <div><img src="../assets/dollar.png">
-            国际学生年度学费：30w+</div>
+            国际学生招生处联系邮箱：<a href="#" target="_blank">{{school.university_email}}</a></div>
+          <div ><img src="../assets/dollar.png">
+            国际学生年度学费：<span  style="color:coral;font-size: larger;">30w+</span></div>
+          <div  ><img src="../assets/uni_currency.png">
+            在校人数：
+            <span  style="color:coral;font-size: larger;">{{school.university_student_num}} </span>
+          </div>
+        
       </el-main>
 
       <el-aside width=25%>
         <div><img src="../assets/location.png"><br>
-        国家：{{school.university_country}} <br>
-        省份：{{school.university_location}}<br>
-        学校：{{school.university_chname}}<br>
-        名称：{{school.university_enname}}</div>
-        <div><img src="../assets/uni_currency.png">
-        在校人数：{{school.university_student_num}} </div>
-        
+        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
+        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
+        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
+        </div>
       </el-aside>
     </el-container>
   </div>
@@ -37,13 +45,14 @@
         <BmapDemo :school="this.school"></BmapDemo>
       </el-main>
 
-      <el-aside width=25%>
-        <br><br>
+      <el-aside width=25% class="location_info">
+        <br>
         <div><img src="../assets/location.png"><br>
-        国家：{{school.university_country}} <br>
-        省份：{{school.university_location}}<br>
-        学校：{{school.university_chname}}<br>
-        名称：{{school.university_enname}}</div>
+        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
+        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
+        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
+        </div>
       </el-aside>
     </el-container>
   </div>
@@ -54,14 +63,22 @@
     <span style="font-size:30px;line-height: 60px;">本研申请要求</span>
     <div class="info_table">
     
+    <div class="score_info"><img src="../assets/cup.png">
+      <span  class="info_tag">
+        平均SAT</span>： <span class="score_content">1024</span>
+    </div>
     <div><img src="../assets/cup.png">
-      平均SAT： 1024</div>
+      <span  class="info_tag">
+        平均Tofel</span>： <span class="score_content">119</span>
+    </div>
     <div><img src="../assets/cup.png">
-      平均Tofel：119</div>
-    <div><img src="../assets/cup.png">
-      平均雅思： 7.0</div>
+      <span  class="info_tag">
+        平均雅思</span>：  <span class="score_content">7.0</span>
+    </div>
     <div><img src="../assets/dollar.png">
-      国际学生年度学费：30w+</div>
+      <span  class="info_tag">
+        国际学生年度学费</span>： <span class="score_content">30w+</span>
+    </div>
   </div>
   </div>
 
@@ -72,12 +89,12 @@
 
       <el-container class="info_table">
         <el-main>
-          <div><img src="../assets/navigator.png">
-            学校官方网站：{{school.university_website}}</div>
+         <div><img src="../assets/navigator.png">
+            学校官方网站：<a :href=this.school.university_website target="_blank">{{school.university_website}}</a></div>
           <div><img src="../assets/message.png">
-            国际学生招生处联系邮箱：{{school.university_email}}</div>
-          <div><img src="../assets/dollar.png">
-            国际学生年度学费：30w+</div>
+            国际学生招生处联系邮箱：<a href="#" target="_blank">{{school.university_email}}</a></div>
+          <div ><img src="../assets/dollar.png">
+            国际学生年度学费：<span  style="color:coral;font-size: larger;">30w+</span></div>
       </el-main>
 
       <el-aside width=25%>
@@ -99,12 +116,11 @@
 
       <el-aside width=25%>
         <div><img src="../assets/location.png"><br>
-        国家：{{school.university_country}} <br>
-        省份：{{school.university_location}}<br>
-        学校：{{school.university_chname}}<br>
-        名称：{{school.university_enname}}</div>
-        <div><img src="../assets/uni_currency.png">
-        在校人数：{{school.university_student_num}} </div>
+        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
+        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
+        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
+        </div>
         
       </el-aside>
     </el-container>
@@ -116,23 +132,27 @@
 
       <el-container class="info_table">
         <el-main>
+        <div class="score_info"><img src="../assets/cup.png">
+            <span  class="info_tag">
+              平均SAT</span>： <span class="score_content">1024</span>
+          </div>
           <div><img src="../assets/cup.png">
-            平均SAT： 1024</div>
+            <span  class="info_tag">
+              平均Tofel</span>： <span class="score_content">119</span>
+          </div>
           <div><img src="../assets/cup.png">
-            平均Tofel：119</div>
-          <div><img src="../assets/cup.png">
-            平均雅思： 7.0</div>
+            <span  class="info_tag">
+              平均雅思</span>：  <span class="score_content">7.0</span>
+          </div>
       </el-main>
 
       <el-aside width=25%>
         <div><img src="../assets/location.png"><br>
-        国家：{{school.university_country}} <br>
-        省份：{{school.university_location}}<br>
-        学校：{{school.university_chname}}<br>
-        名称：{{school.university_enname}}</div>
-        <div><img src="../assets/uni_currency.png">
-        在校人数：{{school.university_student_num}} </div>
-        
+        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
+        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
+        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
+        </div>
       </el-aside>
     </el-container>
   </div>
@@ -149,13 +169,11 @@
 
       <el-aside width=25%>
         <div><img src="../assets/location.png"><br>
-        国家：{{school.university_country}} <br>
-        省份：{{school.university_location}}<br>
-        学校：{{school.university_chname}}<br>
-        名称：{{school.university_enname}}</div>
-        <div><img src="../assets/uni_currency.png">
-        在校人数：{{school.university_student_num}} </div>
-        
+        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
+        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
+        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
+        </div> 
       </el-aside>
     </el-container>
   </div>
@@ -191,10 +209,10 @@ export default {
 .tips_bar{
     margin:10px;
     float:left;
-    border:1px solid black;
-    background-color: #FBC563;
+    border:0px solid black;
+    background-color: coral;
     opacity: 1;
-    color:#FBC563;
+    color:coral;
     height:40px;
     width:10px;
 }
@@ -211,12 +229,32 @@ export default {
     line-height:30px;
     padding:20px;
     margin:10px;
-    background:#F0F9FC;
+    background:#fbfeff;
     border: 1px solid  black;
     text-align:left;
     vertical-align:middle;
 }
 
+.info_tag{
+  font-size: smaller;
+  border-bottom: 3px solid coral;
+  color:rgb(30, 30, 30);
+}
+.info_content{
+  font-size: larger;
+}
+
+.location_info{
+  line-height: 40px;
+}
+
+.score_info{
+  line-height: 40px;
+}
+.score_content{
+  color: coral;
+  font-size: larger;
+}
 
 </style>
 

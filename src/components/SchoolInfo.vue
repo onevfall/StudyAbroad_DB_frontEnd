@@ -1,6 +1,11 @@
+<!--
+高校信息
+描述：展示高校具体各板块信息
+作者：张子涵
+-->
 <template>
   <el-container class="info_table">
-      <el-aside width="700px" class="left">
+      <el-aside width=60% class="left">
           <div class="con1"  style="width:100%;float:left;" >
           <img :src="this.school.university_badge"  class="school_badge">
            <div style="float:left;text-align:left;">
@@ -10,8 +15,8 @@
            </div>
           </div> 
           <p style="float:left;">
-            <span class="con2_span" style="float:left;">{{school.university_introduction}}</span> 
-            <span class="show"><span class="more">[更多]</span></span> <!---->
+            <span class="con2_span" style="float:left;text-align:left;">{{school.university_introduction}}</span> 
+            <span class="show" style="float:right;text-align:right;">[更多]</span> <!---->
           </p>
   </el-aside>
 
