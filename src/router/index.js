@@ -2,11 +2,13 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import NewsHomePage from '../views/NewsHomePage.vue'
 import NewsPage from '../views/NewsPage.vue'
+import BlogPage from '../views/BlogPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
+import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
 import store from '../store/index'
 import { ElMessage } from 'element-plus'
@@ -53,6 +55,14 @@ const routes = [
       title:'用户注册'
     }
   },
+  {
+    path:'/blog',
+    name:'blog',
+    component: BlogPage,
+    meta:{
+      title:'动态'
+    }
+  },
   //动态详情页面放在此目前做测试，真正使用时采用嵌套路由的方式使用
   {
     path:'/blog_detail',//路径暂且做测试
@@ -77,6 +87,14 @@ const routes = [
     component:SchoolDetail,
     meta:{
       title:'学校详情'
+    }
+  },
+  {
+    path:'/institution_detail',//路径暂且做测试
+    name:'institution_detail',
+    component:InstitutionDetail,
+    meta:{
+      title:'机构详情'
     }
   },
   { 
