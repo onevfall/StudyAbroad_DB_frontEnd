@@ -22,8 +22,13 @@
       <el-menu-item index="answer_detail" @click="goAnswerDetail">留学问答(测试用 跳转至回答详情界面)</el-menu-item>
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
+<<<<<<< Updated upstream
+    <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
     <el-menu-item index="5">留学顾问</el-menu-item>
+=======
+    <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
+    <el-menu-item index="institution_center" @click="goInstitutionCenter">留学顾问</el-menu-item>
+>>>>>>> Stashed changes
     <el-menu-item index='blog_detail' @click="goBlogDetail">动态详情(测试用)</el-menu-item>
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
@@ -58,9 +63,9 @@ export default {
     goHome() {
       router.push({ name: "home" });
     },
-    goNews() {
+    goNewsHome() {
       router.push({
-        name: "news",
+        name: "newsHome",
       });
     },
     goBlog(){
@@ -89,6 +94,11 @@ export default {
       router.push({
         name:"answer_detail",
         query:{question_id:1,answer_id:1},//模拟带参数路由
+      })
+    },
+    goInstitutionCenter(){
+      router.push({
+        name:'institution_center'
       })
     },
     goSchoolCenter(){
