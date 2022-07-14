@@ -7,28 +7,29 @@
   <div class="info_border" id="0"> 
     <div class="tips_bar" ></div>
     <span style="font-size:30px;line-height: 60px;">基本信息</span>
-
       <el-container class="info_table">
         <el-main>
-          <div><img src="../assets/location.png">
-            {{institution.institution_country}} {{institution.institution_location}}</div>
+          <div style="color:coral"><img src="../assets/location.png" style="filter: drop-shadow(0 0 0 coral);">
+            {{institution.institution_province}} {{institution.institution_city}}</div>
           <div><img src="../assets/navigator.png">
-            学校官方网站：{{institution.institution_website}}</div>
+            机构官方网站：<a :href=this.institution.institution_website target="_blank">{{institution.institution_website}}</a></div>
           <div><img src="../assets/message.png">
-            国际学生招生处联系邮箱：{{institution.institution_email}}</div>
-          <div><img src="../assets/dollar.png">
-            国际学生年度学费：30w+</div>
+            学生招生处联系邮箱：<a href="#" target="_blank">{{institution.institution_email}}</a></div>
+          <div><img src="../assets/uni_currency.png">
+            学生招生处联系电话：<a href="#" target="_blank">{{institution.institution_phone}}</a></div>
+          <div ><img src="../assets/dollar.png">
+            学生年度学费：<span  style="color:coral;font-size: larger;">30w+</span></div>
+        
       </el-main>
 
-      <el-aside width=25%>
-        <div><img src="../assets/location.png"><br>
-        国家：{{institution.institution_country}} <br>
-        省份：{{institution.institution_location}}<br>
-        学校：{{institution.institution_name}}<br>
-        名称：{{institution.institution_name}}</div>
-        <div><img src="../assets/uni_currency.png">
-        在校人数：{{institution.institution_student_num}} </div>
-        
+      <el-aside width=50%>
+      <div><img src="../assets/location.png"><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institution_province}} </span><br>
+        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institution_city}}</span><br>
+        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
+        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institution_name}}</span><br>
+
+        </div>
       </el-aside>
     </el-container>
   </div>
@@ -44,12 +45,14 @@
       </el-main>
 
       <el-aside width=25%>
-        <br><br>
+        <br>
         <div><img src="../assets/location.png"><br>
-        国家：{{institution.institution_country}} <br>
-        省份：{{institution.institution_location}}<br>
-        学校：{{institution.institution_name}}<br>
-        名称：{{institution.institution_name}}</div>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institution_province}} </span><br>
+        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institution_city}}</span><br>
+        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
+        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institution_name}}</span><br>
+
+        </div>
       </el-aside>
     </el-container>
   </div>
@@ -60,14 +63,22 @@
     <span style="font-size:30px;line-height: 60px;">经营资质</span>
     <div class="info_table">
     
+    <div class="score_info"><img src="../assets/cup.png">
+      <span  class="info_tag">
+        平均SAT</span>： <span class="score_content">1024</span>
+    </div>
     <div><img src="../assets/cup.png">
-      平均SAT： 1024</div>
+      <span  class="info_tag">
+        平均Tofel</span>： <span class="score_content">119</span>
+    </div>
     <div><img src="../assets/cup.png">
-      平均Tofel：119</div>
-    <div><img src="../assets/cup.png">
-      平均雅思： 7.0</div>
+      <span  class="info_tag">
+        平均雅思</span>：  <span class="score_content">7.0</span>
+    </div>
     <div><img src="../assets/dollar.png">
-      国际学生年度学费：30w+</div>
+      <span  class="info_tag">
+        学生年度学费</span>： <span class="score_content">30w+</span>
+    </div>
   </div>
   </div>
 
@@ -79,11 +90,11 @@
       <el-container class="info_table">
         <el-main>
           <div><img src="../assets/navigator.png">
-            学校官方网站：{{institution.institution_website}}</div>
+            学生招生处联系电话：<a :href=this.institution.institution_website target="_blank">{{institution.institution_phone}}</a></div>
           <div><img src="../assets/message.png">
-            国际学生招生处联系邮箱：{{institution.institution_email}}</div>
-          <div><img src="../assets/dollar.png">
-            国际学生年度学费：30w+</div>
+            学生招生处联系邮箱：<a href="#" target="_blank">{{institution.institution_email}}</a></div>
+          <div ><img src="../assets/dollar.png">
+            学生年度学费：<span  style="color:coral;font-size: larger;">30w+</span></div>
       </el-main>
 
       <el-aside width=25%>
@@ -95,23 +106,16 @@
 
   <div class="info_border" id="4"> 
     <div class="tips_bar" ></div>
-    <span style="font-size:30px;line-height: 60px;">教学项目及科研活动</span>
+    <span style="font-size:30px;line-height: 60px;">课程及课程特色</span>
 
       <el-container class="info_table">
         <el-main>
-          <div><img src="../assets/navigator.png">
-            学院及其实验室：{{institution.institution_college}}</div>
+          <div><img src="../assets/navigator.png" style="line-height:60px">
+            课程特色：{{institution.institution_lessons_characteristic}}</div>
       </el-main>
 
-      <el-aside width=25%>
-        <div><img src="../assets/location.png"><br>
-        国家：{{institution.institution_country}} <br>
-        省份：{{institution.institution_location}}<br>
-        学校：{{institution.institution_name}}<br>
-        名称：{{institution.institution_name}}</div>
-        <div><img src="../assets/uni_currency.png">
-        在校人数：{{institution.institution_student_num}} </div>
-        
+      <el-aside width=0%>
+    
       </el-aside>
     </el-container>
   </div>
@@ -122,23 +126,54 @@
 
       <el-container class="info_table">
         <el-main>
-          <div><img src="../assets/cup.png">
-            平均SAT： 1024</div>
-          <div><img src="../assets/cup.png">
-            平均Tofel：119</div>
-          <div><img src="../assets/cup.png">
-            平均雅思： 7.0</div>
+          <div class="score_info"><img src="../assets/cup.png">
+      <span  class="info_tag">
+        平均SAT</span>： <span class="score_content">1024</span>
+    </div>
+    <div><img src="../assets/cup.png">
+      <span  class="info_tag">
+        平均Tofel</span>： <span class="score_content">119</span>
+    </div>
+    <div><img src="../assets/cup.png">
+      <span  class="info_tag">
+        平均雅思</span>：  <span class="score_content">7.0</span>
+    </div>
+    <div><img src="../assets/dollar.png">
+      <span  class="info_tag">
+        学生年度学费</span>： <span class="score_content">30w+</span>
+    </div>
       </el-main>
 
-      <el-aside width=25%>
-        <div><img src="../assets/location.png"><br>
-        国家：{{institution.institution_country}} <br>
-        省份：{{institution.institution_location}}<br>
-        学校：{{institution.institution_name}}<br>
-        名称：{{institution.institution_name}}</div>
-        <div><img src="../assets/uni_currency.png">
-        在校人数：{{institution.institution_student_num}} </div>
-        
+      <el-aside width=50%>
+      <div><img src="../assets/location.png"><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institution_province}} </span><br>
+        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institution_city}}</span><br>
+        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
+        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institution_name}}</span><br>
+
+        </div>
+      </el-aside>
+    </el-container>
+  </div>
+
+<div class="info_border" id="6"> 
+    <div class="tips_bar" ></div>
+    <span style="font-size:30px;line-height: 60px;">机构资质证书</span>
+
+      <el-container class="info_table">
+        <el-main>
+          <div><img src="../assets/navigator.png">
+            机构资质证书：{{institution.institution_qualify}}</div>
+      </el-main>
+
+      <el-aside width=50%>
+      <div><img src="../assets/location.png"><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institution_province}} </span><br>
+        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institution_city}}</span><br>
+        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
+        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institution_name}}</span><br>
+
+        </div>
       </el-aside>
     </el-container>
   </div>
@@ -169,14 +204,13 @@ export default {
 </script>
 
 <style scoped>
-
 .tips_bar{
     margin:10px;
     float:left;
-    border:1px solid black;
-    background-color: #FBC563;
+    border:0px solid black;
+    background-color: coral;
     opacity: 1;
-    color:#FBC563;
+    color:coral;
     height:40px;
     width:10px;
 }
@@ -193,10 +227,31 @@ export default {
     line-height:30px;
     padding:20px;
     margin:10px;
-    background:#F0F9FC;
+    background:#fbfeff;
     border: 1px solid  black;
     text-align:left;
     vertical-align:middle;
+}
+
+.info_tag{
+  font-size: smaller;
+  border-bottom: 3px solid coral;
+  color:rgb(30, 30, 30);
+}
+.info_content{
+  font-size: larger;
+}
+
+.location_info{
+  line-height: 40px;
+}
+
+.score_info{
+  line-height: 40px;
+}
+.score_content{
+  color: coral;
+  font-size: larger;
 }
 
 
