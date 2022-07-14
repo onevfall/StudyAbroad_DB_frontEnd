@@ -17,12 +17,15 @@
           <div><img src="../assets/message.png">
             国际学生招生处联系邮箱：<a href="#" target="_blank">{{school.university_email}}</a></div>
           <div ><img src="../assets/dollar.png">
-            国际学生年度学费：<span  style="color:coral;font-size: larger;">30w+</span></div>
+            国际学生年度学费：<span  style="color:coral;font-size: larger;">{{school.university_tuition}}</span></div>
           <div  ><img src="../assets/uni_currency.png">
             在校人数：
             <span  style="color:coral;font-size: larger;">{{school.university_student_num}} </span>
           </div>
-        
+          <div  ><img src="../assets/uni_currency.png">
+            教师人数：
+            <span  style="color:coral;font-size: larger;">{{school.university_teacher_num}} </span>
+          </div>
       </el-main>
 
       <el-aside width=25%>
@@ -65,19 +68,19 @@
     
     <div class="score_info"><img src="../assets/cup.png">
       <span  class="info_tag">
-        平均SAT</span>： <span class="score_content">1024</span>
+        平均SAT</span>： <span class="score_content">1400</span>
     </div>
     <div><img src="../assets/cup.png">
       <span  class="info_tag">
-        平均Tofel</span>： <span class="score_content">119</span>
+        Tofel需求</span>： <span class="score_content">{{school.university_tofel_requirement}}</span>
     </div>
     <div><img src="../assets/cup.png">
       <span  class="info_tag">
-        平均雅思</span>：  <span class="score_content">7.0</span>
+        IELTS需求</span>：  <span class="score_content">{{school.university_ielts_requirement}}</span>
     </div>
     <div><img src="../assets/dollar.png">
       <span  class="info_tag">
-        国际学生年度学费</span>： <span class="score_content">30w+</span>
+        国际学生年度学费</span>： <span class="score_content">{{school.university_tuition}}</span>
     </div>
   </div>
   </div>
@@ -94,7 +97,7 @@
           <div><img src="../assets/message.png">
             国际学生招生处联系邮箱：<a href="#" target="_blank">{{school.university_email}}</a></div>
           <div ><img src="../assets/dollar.png">
-            国际学生年度学费：<span  style="color:coral;font-size: larger;">30w+</span></div>
+            国际学生年度学费：<span  style="color:coral;font-size: larger;">{{school.university_tuition}}</span></div>
       </el-main>
 
       <el-aside width=25%>
@@ -111,7 +114,9 @@
       <el-container class="info_table">
         <el-main>
           <div><img src="../assets/navigator.png">
-            学院及其实验室：{{school.university_college}}</div>
+            学院及其实验室：<div v-for="x in school.university_college">
+            {{x}}</div>
+            </div>
       </el-main>
 
       <el-aside width=25%>
@@ -133,17 +138,17 @@
       <el-container class="info_table">
         <el-main>
         <div class="score_info"><img src="../assets/cup.png">
-            <span  class="info_tag">
-              平均SAT</span>： <span class="score_content">1024</span>
-          </div>
-          <div><img src="../assets/cup.png">
-            <span  class="info_tag">
-              平均Tofel</span>： <span class="score_content">119</span>
-          </div>
-          <div><img src="../assets/cup.png">
-            <span  class="info_tag">
-              平均雅思</span>：  <span class="score_content">7.0</span>
-          </div>
+    <span  class="info_tag">
+        最低SAT</span>： <span class="score_content">1400</span>
+    </div>
+    <div><img src="../assets/cup.png">
+      <span  class="info_tag">
+        最低Tofel</span>： <span class="score_content">{{school.university_tofel_requirement}}</span>
+    </div>
+    <div><img src="../assets/cup.png">
+      <span  class="info_tag">
+        最低IELTS</span>：  <span class="score_content">{{school.university_ielts_requirement}}</span>
+    </div>
       </el-main>
 
       <el-aside width=25%>

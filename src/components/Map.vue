@@ -32,14 +32,16 @@ export default {
     }
     },
   updated(){//一开始数据没到，更新渲染呗
-      //谷歌坐标
+  //谷歌坐标
+      /*
     var y = 38.897709;
     var x = -77.036543;
     var ggPoint = new BMapGL.Point(x,y);
-    console.log("test for map");
+    console.log("test for map");*/
     //地图初始化
     var bm = this.thisMap;
-
+    bm.centerAndZoom(new BMapGL.Point(this.school.university_address_x,this.school.university_address_y), 17);
+    
     /*//添加谷歌marker和label
     var markergg = new BMapGL.Marker(ggPoint);
     bm.addOverlay(markergg); //添加谷歌marker
@@ -56,6 +58,7 @@ export default {
         bm.setCenter(data.points[0]);
       }
     }; */
+    /*
     var that = this;
     setTimeout(function(){
         var convertor = new BMapGL.Convertor();
@@ -71,7 +74,7 @@ export default {
         bm.centerAndZoom(data.points[0]);
       }
     })
-    }, 1000);
+    }, 1000);*/
 
 
 
@@ -109,7 +112,7 @@ export default {
     console.log("test for map");
     var map = new BMapGL.Map("container"); 
     this.thisMap=map;         
-	  map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 15);
+	  map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 16);
 	  map.enableScrollWheelZoom(true); 
 
     const scaleCtrl = new BMapGL.ScaleControl();  // 添加比例尺控件
