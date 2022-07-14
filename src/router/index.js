@@ -10,6 +10,7 @@ import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
 import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
+import InstitutionCenter from '../views/InstitutionCenter.vue'
 import store from '../store/index'
 import QuestionPage from '../views/QuestionPage.vue'
 import { ElMessage } from 'element-plus'
@@ -104,6 +105,14 @@ const routes = [
     component:SchoolCenterPage,
     meta:{
       title:'大学中心'
+    }
+  },
+  {
+    path:'/institution_center',
+    name:'institution_center',
+    component:InstitutionCenter,
+    meta:{
+      title:'机构中心'
     }
   },
   { 

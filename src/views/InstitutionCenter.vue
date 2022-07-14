@@ -1,5 +1,5 @@
 <!--
-描述：用于大学中心的显示，包括大学排名、检索等信息
+描述：用于机构中心的显示，包括机构显示、检索等信息
 作者：蔡明宏
 -->
 <template>
@@ -13,9 +13,9 @@
             <!-- 左侧空白 -->
             <el-aside width="250px"></el-aside>
             <el-container>
-              <!-- 一个“关于大学”的按钮，一个搜索栏 -->
+              <!-- 一个“关于机构”的按钮，一个搜索栏 -->
               <el-header height="70px" class="my_top_layout">
-                <div class="sch_box">关于大学</div>
+                <div class="sch_box">关于机构</div>
                 <!-- 搜索栏，可以考虑封装成一个组件，实现实时字段匹配 multiple reserve-keyword -->
                 <div class="search_component">
                   <el-select
@@ -23,13 +23,13 @@
                     filterable
                     remote
                     clearable
-                    placeholder="请输入大学名称"
+                    placeholder="请输入机构名称"
                     :remote-method="remoteMethod"
                     :loading="loading"
                     size="large"
                   >
                     <el-option
-                      v-for="item in all_school_list"
+                      v-for="item in all_institution_list"
                       :key="item.university_id"
                       :label="item.university_chname"
                       :value="item.university_id"
@@ -54,7 +54,7 @@
                   <el-row :gutter="10" justify="space-between">
                     <el-col :span="6">
                       <div class="grid-content ep-bg-purple">
-                        <span>国家</span>
+                        <span>所在省份</span>
                         <br />
                         <el-select
                           v-model="country_value"
@@ -74,7 +74,7 @@
                     </el-col>
                     <el-col :span="6">
                       <div class="grid-content">
-                        <span>排行榜类型</span>
+                        <span>所在城市</span>
                         <br />
                         <el-select
                           v-model="rank_type_value"
@@ -94,11 +94,11 @@
                     </el-col>
                     <el-col :span="6">
                       <div class="grid-content">
-                        <span>排行榜年份</span>
+                        <span>留学国家</span>
                         <br />
-                        <!-- 排行榜年份必须有，所以不设置可删除 -->
                         <el-select
                           v-model="year_value"
+                          clearable
                           class="m-2"
                           placeholder="请选择"
                           size="large"
@@ -137,37 +137,24 @@
     </div>
 
     <div class="left_text">
-      搜索结果如下,【<span style="color:coral;">{{this.school_list.length}}</span>】所学校符合你的搜索
+      搜索结果如下,【<span style="color:coral;">{{this.institution_list.length}}</span>】家机构符合你的搜索
     </div>
-    <hr />
-    <!-- 三个排名的罗列 -->
-    <div class="rank_row">
-      <p class="rank_text QS_rank_test">QS排名</p>
-      <p class="rank_text">THE排名</p>
-      <p class="rank_text">USNews排名</p>
-    </div>
-    <div class="downBox">
-      <div v-for="(school, index) in school_list" :key="index">
-        <school-card :school="school"></school-card>
-        <br />
-      </div>
-    </div>
+    <hr/>
   </div>
 </template>
 <script>
 import axios from "axios";
 import { onMounted, ref } from "vue";
-import SchoolCard from "../components/SchoolCard.vue"
+import InstitutionCard from "../components/InstitutionCard.vue"
 
 export default {
   components: {
-    SchoolCard
+    InstitutionCard
   },
   data() {
-    SchoolCard
     return {
-      school_list:[],      //经过筛选条件后下面展示的大学
-      all_school_list:[],  //最初赋值获得的所有大学   
+      institution_list:[],      //经过筛选条件后下面展示的机构
+      all_institution_list:[],  //最初赋值获得的所有机构   
       search_value:'',
       //以下为搜索限定词
       rank_type_value: ref(''),
@@ -253,8 +240,8 @@ export default {
           school_id:this.search_value
         }
       })
-
     },
+    
     filter(){
       var x = ""; //需要拼接的判断
       if(this.country_value==''&& this.rank_type_value==''){
@@ -288,18 +275,19 @@ export default {
       console.log("大失败")
     })
     },
+
   },
   created() {
     /*在此处向服务器请求数据，初始化所需变量*/
     axios({
       // 最初加载时，此处不限定国家
-      url:'university/rank' + '?rank_year=' + this.year_value,
+      url:'institution/list',
       method:'get',
     }).then((res)=>{
       console.log(res)
       console.log(res.data.data.university_list)
-      this.school_list = res.data.data.university_list
-      this.all_school_list = res.data.data.university_list
+      this.institution_list = res.data.data.university_list
+      this.all_institution_list = res.data.data.university_list
     })
     .catch((errMsg) =>{
       console.log(errMsg)
