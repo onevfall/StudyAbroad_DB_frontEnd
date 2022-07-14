@@ -46,6 +46,7 @@
                   <div class="latestNews">快讯摘要</div>
                   <div>
                     <div class="infinite-list-wrapper" style="overflow: auto">
+                      
                       <ul
                         v-infinite-scroll="load"
                         class="list"
@@ -283,7 +284,7 @@ export default {
 }
 
 .infinite-list-wrapper {
-  height: 400px;
+  
   text-align: center;
 }
 
