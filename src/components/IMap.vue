@@ -1,3 +1,8 @@
+<!--
+机构地图
+描述：展示机构地理信息位置
+作者：张子涵
+-->
 <template>
   <!--bmap框-->
   <div class="bmap" id="container"></div>

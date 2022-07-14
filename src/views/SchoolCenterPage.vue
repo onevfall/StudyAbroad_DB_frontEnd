@@ -19,25 +19,27 @@
                 <div class="sch_box">
                   关于大学
                 </div>
-                <!-- 搜索栏，可以考虑封装成一个组件，实现实时字段匹配 -->
-                <div style="margin-left:250px;margin-top:28px;" >
+                <!-- 搜索栏，可以考虑封装成一个组件，实现实时字段匹配 multiple reserve-keyword -->
+                <div class="search_component" >
                   <el-select
-                    v-model="value"
-                    multiple
+                    v-model="search_value"
                     filterable
                     remote
-                    reserve-keyword
-                    placeholder="请输入大学"
+                    placeholder="请输入大学名称"
                     :remote-method="remoteMethod"
                     :loading="loading"
+                    size="large"
                   >
                     <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
+                      v-for="item in all_school_list"
+                      :key="item.university_id"
+                      :label="item.university_chname"
+                      :value="item.university_id"
                     />
                   </el-select>
+                  <span style="margin:10px;" vertical-align: bottom> <!-- 搜索键 -->
+                  <el-button type="warning" size="large" color="#626aef" @click="goSearch" >搜索</el-button>
+                  </span>
                 </div>
                 
               </el-header>
@@ -106,8 +108,8 @@
                 </div>
               </el-main>
               <el-footer height="20px">
-                <div style="margin:10px;" vertical-align: bottom> <!-- 搜索键 -->
-                  <el-button type="warning" size="large" color="#626aef" @click="search" >搜索</el-button>
+                <div style="margin:10px;vertical-align: bottom;" > <!-- 搜索键 -->
+                  <el-button type="warning" size="large" color="#626aef" @click="filter" >搜索</el-button>
                 </div>
               </el-footer>
             </el-container>
@@ -131,11 +133,7 @@
     </div>
     <div class="downBox" >
       <div v-for="(school,index) in school_list" :key=index>
-      <school-card :QS_rank="school.university_qs_rank" :THE_rank="school.university_the_rank" 
-      :USNews_rank="school.university_usnews_rank" :university_chname="school.university_chname"
-      :university_enname="school.university_enname" :university_money="school.university_money"
-       :university_img="school.university_badge" :university_intro="school.university_introduction"
-       :university_student_num="school.university_student_num" :university_location="school.university_location"
+      <school-card :school="school"
       ></school-card> 
       <br>
       </div> 
@@ -154,8 +152,9 @@ export default {
   data() {
     SchoolCard
     return {
-      //存储的大学数组
-      school_list:[],   
+      school_list:[],      //经过筛选条件后下面展示的大学
+      all_school_list:[],  //最初赋值获得的所有大学   
+      search_value:'',
       //以下为搜索限定词
       rank_type_value: ref(''),
       country_value: ref(''),
@@ -233,7 +232,10 @@ export default {
     };
   },
   methods:{
-    search(){
+    goSearch(){
+
+    },
+    filter(){
       axios({
       // 点击搜索时加载符合条件的数据
       url:'university/rank' + '?rank_year=' + this.year_value +
@@ -260,16 +262,12 @@ export default {
     axios({
       // 最初加载时，此处不限定国家
       url:'university/rank' + '?rank_year=' + this.year_value,
-      // params:{
-      //   // tag:this.rank_type_value,
-      //   // university_country:this.country_value,
-      //   rank_year:this.year_value,
-      // },
       method:'get',
     }).then((res)=>{
       console.log(res)
       console.log(res.data.data.university_list)
       this.school_list = res.data.data.university_list
+      this.all_school_list = res.data.data.university_list
     })
     .catch((errMsg) =>{
       console.log(errMsg)
@@ -347,5 +345,10 @@ p.rank_text{
 }
 p.QS_rank_test{
   margin-left:120px;
+}
+.search_component{
+  margin-left:240px;
+  margin-top:20px;
+
 }
 </style>
