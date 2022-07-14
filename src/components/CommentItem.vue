@@ -30,7 +30,6 @@
         </div>
         <div class="content_main">
           {{ comment_infor.AnswerCommentContent }}
-          <!-- 我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐我的天呐 -->
         </div>
         <div class="comment_footer"></div>
       </div>
@@ -54,8 +53,8 @@ export default {
   props: ["comment_infor"],
   components: { LikeButton },
   created() {
-    this.comment_infor.reply_num = 0;
-    this.comment_infor.child_comments = [];
+    // this.comment_infor.reply_num = 0;
+    // this.comment_infor.child_comments = [];
     axios
       .get("/answer/reply", {
         params: {
@@ -63,12 +62,13 @@ export default {
         },
       })
       .then((res) => {
-        console.log("内部子评论请求");
+        console.log("内部子评论请求,评论id为"+this.comment_infor.AnswerCommentId+"内容为"+this.comment_infor.AnswerCommentContent);
         console.log(res.data);
         this.comment_infor.reply_num = res.data.data.reply_num;
-        for (let i = 0; i < res.data.data.reply_list.length; ++i) {
-          this.comment_infor.child_comments[i] = res.data.data.reply_list[i];
-        }
+        this.comment_infor.child_comments = res.data.data.reply_list;
+        // for (let i = 0; i < res.data.data.reply_list.length; ++i) {
+        //   this.comment_infor.child_comments[i] = res.data.data.reply_list[i];
+        // }
         console.log(this.comment_infor.child_comments);
       })
       .catch((err) => {

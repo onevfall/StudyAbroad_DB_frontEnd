@@ -19,7 +19,7 @@
     <el-menu-item index="school_center" @click="goSchoolCenter">找对学校</el-menu-item>
     <el-sub-menu index="3">
       <template #title>说说留学</template>
-      <el-menu-item index="answer_detail" @click="goAnswerDetail">留学问答(测试用 跳转至回答详情界面)</el-menu-item>
+      <el-menu-item index="answer_detail" @click="goQuestion">留学问答(测试用 跳转至问题详情界面)</el-menu-item>
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
     <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
@@ -111,7 +111,8 @@ export default {
     //测试问题
     goQuestion(){
       router.push({
-        name:"question"
+        name:"question",
+        query:{question_id:12},//模拟带参数路由
       })
     },
     //退出账号并跳转至首页

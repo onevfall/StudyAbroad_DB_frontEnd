@@ -71,7 +71,7 @@ export default {
         /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
         this.$router.push({
         path:'/login',
-        query:{redirect:this.$route.path}
+        query:{redirect:this.$route.fullpath},
       });
       } else {
         //呼出选择币数框
@@ -90,13 +90,17 @@ export default {
         return;
       }
       this.input_nums = false;
+      var d=new FormData();
+      d.append("user_id",this.$store.state.user_info.user_id);
+      d.append(this.dynamic_type + "_id",this.content_id);
+      d.append("num",this.coin_in_num);
+      console.log(d);
       axios({
+        headers:{
+            'Content-Type':'application/x-www-form-urlencoded'
+          },
         url: "coin/" + this.dynamic_type,
-        params: {
-          user_id: this.$store.state.user_info.user_id,
-          [this.dynamic_type + "_id"]: this.content_id,
-          num: this.coin_in_num,
-        },
+        data:d,
         method: "post",
       })
         .then((res) => {

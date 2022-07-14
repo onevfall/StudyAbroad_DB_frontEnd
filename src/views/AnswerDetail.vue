@@ -6,13 +6,17 @@
   <div class="common-layout">
     <el-container>
       <el-aside width="400px" style="top: 0px">
+        <img src="../assets/question.png" style="height: 200px" />
         <user-info-board
           class="UserInfo"
           :blog_user_info="this.answer_user_info"
         ></user-info-board>
         <span v-for="(card, index) in this.card_info" :key="card">
-          <side-card class="SideCard" :card_info="this.card_info[index]">
-          </side-card>
+          <question-side-card
+            class="SideCard"
+            :card_info="this.card_info[index]"
+          >
+          </question-side-card>
         </span>
       </el-aside>
       <el-main width="main" style="margin-left: 10px">
@@ -66,6 +70,16 @@
                     size="large"
                     @giveLike="like"
                     @cancelLike="unlike"
+                  />
+                </el-button>
+                <el-button type="primary">
+                  <div style="margin-right: 5px">投币</div>
+                  <coin-button
+                    content_type="1"
+                    :content_id="this.answer_id"
+                    :show_num="false"
+                    size="large"
+                    @giveCoin="coinIn"
                   />
                 </el-button>
               </div>
@@ -129,8 +143,9 @@
 
 <script>
 import UserInfoBoard from "../components/UserInfoBoard.vue";
-import SideCard from "../components/SideCard.vue";
+import QuestionSideCard from "../components/QuestionSideCard.vue";
 import LikeButton from "../components/LikeButton.vue";
+import CoinButton from "../components/CoinButton.vue";
 import CommentItem from "../components/CommentItem.vue";
 import axios from "axios";
 import { ElMessage } from "element-plus";
@@ -138,11 +153,12 @@ import { UserFilled } from "@element-plus/icons-vue";
 export default {
   components: {
     UserInfoBoard,
-    SideCard,
+    QuestionSideCard,
     LikeButton,
     ElMessage,
     CommentItem,
     UserFilled,
+    CoinButton
   },
   data() {
     return {
@@ -159,6 +175,7 @@ export default {
   },
   watch: {
     $route() {
+      //得与路由跳转前进行综合 beforeRouteEnter 未改 可能不需要
       this.initPage();
     },
   },
@@ -177,6 +194,7 @@ export default {
     this.initPage();
   },
   beforeRouteEnter(to, from, next) {
+    console.log("qqqqqq");
     console.log(to);
     console.log(from);
     console.log(to.query.answer_id);
@@ -250,6 +268,7 @@ export default {
             console.log(res.data.data);
             this.question_infor = res.data.data;
           } else {
+            console.log(res.data);
             console.log("内容获取失败");
           }
         })
@@ -257,28 +276,31 @@ export default {
           console.log(err);
         });
 
-      this.card_info = [{ id: 1 }, { id: 2 }]; //暂时随便定两个卡片，获取卡片对应问题id的相关度算法后续写
-      for (let i = 0; i < this.card_info.length; ++i) {
-        axios
-          .get("/question", {
-            params: {
-              question_id: this.card_info[i].id,
-            },
-          })
-          .then((res) => {
-            if (res.data.status === true) {
-              this.card_info[i].content = res.data.data.question_title;
-              this.card_info[i].keyword = res.data.data.question_tag;
-              this.card_info[i].essence = "问题";
-              console.log(this.card_info[i]);
-            } else {
-              console.log("内容获取失败");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      axios({
+        url: "question/related",
+        method: "get",
+        params: {
+          question_id: this.question_id,
+        },
+      })
+        .then((res) => {
+          console.log(res.data.data);
+          this.related_question_tag = res.data.data.tag;
+          this.question_relevant = res.data.data.related_questions;
+          for (let i = 0; i < this.question_relevant.length; i++) {
+            var tem_info = {
+              essence: "问题",
+              content: this.question_relevant[i].QuestionTitle,
+              keyword: res.data.data.tag.split(","),
+              id: this.question_relevant[i].QuestionId,
+            };
+            this.card_info[i]=tem_info;
+          }
+          console.log(this.card_info);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
       axios
         .get("/answer/comment", {
@@ -289,6 +311,8 @@ export default {
         .then((res) => {
           for (let i = 0; i < res.data.data.comment_list.length; ++i) {
             this.comments[i] = res.data.data.comment_list[i];
+            this.comments[i].reply_num = 0;
+            this.comments[i].child_comments = [];
           }
         })
         .catch((err) => {
@@ -328,6 +352,7 @@ export default {
             .then((res) => {
               console.log(res.data);
               this.commentChange = !this.commentChange;
+              this.comment_now = "";
               ElMessage({
                 type: "success",
                 message: "评论成功！",
@@ -337,18 +362,26 @@ export default {
               axios
                 .get("/answer/reply", {
                   params: {
-                    answer_comment_id: this.$store.state.reply_to.AnswerCommentId,
+                    answer_comment_id:
+                      this.$store.state.reply_to.AnswerCommentId,
                   },
                 })
                 .then((res) => {
-                  this.comment_infor.reply_num = res.data.data.reply_num;
-                  for (let i = 0; i < res.data.data.reply_list.length; ++i) {
-                    this.comment_infor.child_comments[i] =
-                      res.data.data.reply_list[i];
-                  }
+                  console.log(
+                    "对用户id为" +
+                      this.$store.state.reply_to.AnswerCommentId +
+                      "的评论的回复请求"
+                  );
+                  console.log(res);
+                  //this.comment_infor.reply_num = res.data.data.reply_num;
+                  this.$store.state.reply_to.child_comments =
+                    res.data.data.reply_list;
+                  console.log(this.$store.state.reply_to.child_comments);
+                  // for (let i = 0; i < res.data.data.reply_list.length; ++i) {
+                  //   this.comment_infor.child_comments[i] =
+                  //     res.data.data.reply_list[i];
+                  // }
                   this.$store.commit("InitReplyObj");
-                  this.comment_now = "";
-
                 })
                 .catch((err) => {
                   console.log(err);
@@ -394,6 +427,8 @@ export default {
                 .then((res) => {
                   for (let i = 0; i < res.data.data.comment_list.length; ++i) {
                     this.comments[i] = res.data.data.comment_list[i];
+                    this.comments[i].reply_num = 0;
+                    this.comments[i].child_comments = [];
                   }
                   this.comment_now = "";
                 })
@@ -408,7 +443,7 @@ export default {
       }
     },
     handleChange(val) {
-        console.log(val);
+      console.log(val);
     },
     like(res) {
       if (res) {
@@ -439,6 +474,16 @@ export default {
         ElMessage({
           type: "error",
           message: "取消点赞失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    },
+    coinIn(res){
+      if(res){
+        ElMessage({
+          type: "success",
+          message: "投币成功！",
           duration: 2000,
           showClose: true,
         });
@@ -531,54 +576,4 @@ export default {
   align-items: center;
 }
 
-/* .author_title .header_img{
-   display:inline-block;
-   vertical-align:top;
-}
-.author_title .author_info{
-    display:inline-block;
-    margin-left:5px;
-    width:60%;
-    height:40px;
-    line-height:20px;
-}
-
-.author_title .author_info .author_name{
-  color:#000;
-  font-size:18px;
-  font-weight:bold;
-}
-.author_title .author_info .author_time{
-  color:#cabab0;
-  font-size:14px;
-} */
-/* .header_comment .reply_input{
-  margin-left: 3%;
-  
-}
-
-.my_reply .reply_info {
-  display: inline-block;
-  margin-left: 5px;
-  width: 90%;
-}
-
-.my_reply .reply_info .reply_input {
-  min-height: 20px;
-  line-height: 22px;
-  padding: 10px 10px;
-  color: #ccc;
-  background-color: #fff;
-  border-radius: 5px;
-}
-
-.my_reply .reply_btn_box {
-  height: 25px;
-  margin: 10px 0;
-}
-.my_reply .reply_btn_box .reply_btn {
-  position: relative;
-  margin-right: 15px;
-  float: right;
-} */
 </style>
