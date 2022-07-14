@@ -1,3 +1,7 @@
+<!--
+描述：问答首页卡片
+作者：王若晗
+-->
 <template>
   <div class="card-field">
     <el-card class="question-card" shadow="hover">

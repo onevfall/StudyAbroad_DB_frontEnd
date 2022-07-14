@@ -1,3 +1,7 @@
+<!--
+描述：问答首页
+作者：王若晗
+-->
 <template>
   <el-container>
     <el-header>
@@ -111,5 +115,4 @@ export default ({
   .el-main{
     padding-bottom:50px;
   }
-
 </style>
