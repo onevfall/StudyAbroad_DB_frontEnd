@@ -125,8 +125,8 @@ const routes = [
     }
   },
   { 
-    path:'/qacenter',
-    name:'qacenter',
+    path:'/qa_center',
+    name:'qa_center',
     component:QACenterPage,
     meta:{
       title:'问答首页'
