@@ -24,7 +24,6 @@ axios.defaults.baseURL="/api"
 axios.defaults.headers.post['Content-Type']='application/x-www-form-urlencoded'
 
 const app = createApp(App).use(ElementPlus).use(store).use(router).use(VueAxios,axios).use(mock)
-// const app = createApp(App).use(ElementPlus).use(store).use(router).use(VueAxios,axios)
 
 //初始化图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

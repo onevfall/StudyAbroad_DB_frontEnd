@@ -79,31 +79,12 @@ export default {
       /*此处日后需要加数据格式验证
           
           */
-
-      // axios.post('/login',{
-      //   user_id: this.user_id,
-      //   user_password: this.user_password,
-      // },{
-      //   headers:{
-      //     'Content-Type':'application/x-www-form-urlencoded'
-      //   }
-      // })
-      var d=new FormData();
-      d.append("user_id",this.user_id);
-      d.append("user_password",this.user_password);
-      console.log(d);
-      axios({
-        headers:{
-            'Content-Type':'application/x-www-form-urlencoded'
-          },
-        url: "login",
-        data:d,
-        // params: {
-        //   user_id: this.user_id,
-        //   user_password: this.user_password,
-        // },
-        method: "post",
-      })
+    
+      axios
+        .post("login", {
+          user_id: this.user_id,
+          user_password: this.user_password,
+        })
         .then((res) => {
           console.log(res);
           var response = res.data;

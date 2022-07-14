@@ -91,10 +91,12 @@
                     clearable
                   >
                     <template #append>
-                    <el-icon v-if="check" style="color:green"
-                      ><SuccessFilled
-                    /></el-icon>
-                    <el-icon v-else style="color:#F56C6C"><WarningFilled /></el-icon>
+                      <el-icon v-if="check" style="color: green"
+                        ><SuccessFilled
+                      /></el-icon>
+                      <el-icon v-else style="color: #f56c6c"
+                        ><WarningFilled
+                      /></el-icon>
                     </template>
                   </el-input>
                 </el-col>
@@ -109,35 +111,32 @@
       </el-container>
     </el-container>
     <el-dialog
-    v-model="dialogVisible"
-    title="注册成功"
-    width="40%"
-    :before-close="handleClose"
-    append-to-body
-  >
-    <span>您的注册手机号为 {{ this.user_phone }}  </span>
-    <br />
-    <span>您的ID为 {{ this.user_id }} </span>
-    <br />
-    <span>您的密码为 {{ this.user_password }} </span>
-    <br />
-    <span>请您牢记以上信息, ID及密码将作为用户登录唯一凭证</span>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button type="primary" @click="closeDialog"
-          >确认</el-button
-        >
-      </span>
-    </template>
-  </el-dialog>
+      v-model="dialogVisible"
+      title="注册成功"
+      width="40%"
+      :before-close="handleClose"
+      append-to-body
+    >
+      <span>您的注册手机号为 {{ this.user_phone }} </span>
+      <br />
+      <span>您的ID为 {{ this.user_id }} </span>
+      <br />
+      <span>您的密码为 {{ this.user_password }} </span>
+      <br />
+      <span>请您牢记以上信息, ID及密码将作为用户登录唯一凭证</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="closeDialog">确认</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
-  
 </template>
 
 <script>
 import { ElMessage } from "element-plus";
-import { ref } from 'vue'
-import { ElMessageBox } from 'element-plus'
+import { ref } from "vue";
+import { ElMessageBox } from "element-plus";
 import axios from "axios";
 import store from "@/store";
 import { tryOnBeforeMount } from "@vueuse/core";
@@ -170,25 +169,15 @@ export default {
         ElMessage.error("两次输入密码不相同！请再次确认密码");
         return;
       } else {
-        var d=new FormData();
-        d.append("user_phone",this.user_phone);
-        d.append("user_password",this.user_password);
+        var d = new FormData();
+        d.append("user_phone", this.user_phone);
+        d.append("user_password", this.user_password);
         console.log(d);
-        axios({
-          headers:{
-            'Content-Type':'application/x-www-form-urlencoded'
-          },
-          url: "/register",
-          data:d,
-          // params: {
-          //   user_phone: this.user_phone,
-          //   user_password: this.user_password,
-          // },
-          method: "post",
-        })
-        // axios.post('/re'
-
-        // )
+        axios
+          .post("/register", {
+            user_phone: this.user_phone,
+            user_password: this.user_password,
+          })
           .then((res) => {
             console.log(res);
             console.log(res.data);
@@ -314,10 +303,10 @@ export default {
         if (now.getTime() > exitTime) return;
       }
     },
-    closeDialog(){
+    closeDialog() {
       this.dialogVisible = false;
       this.$router.replace("/login");
-    }
+    },
   },
 };
 </script>
