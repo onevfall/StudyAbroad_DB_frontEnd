@@ -21,7 +21,32 @@ export default createStore({
       user_level: -1,
       user_coin: -1
     },
-    is_login: false
+    is_login: false,
+    answer_user_info: {
+      user_id: -1,
+      user_email: "",
+      user_phone: "",
+      user_password: "",
+      user_name: "",
+      user_profile: "",
+      user_createtime: "",
+      user_birthday: "",
+      user_gender: "",
+      user_state: -1,
+      user_signature: "",
+      user_follower: -1,
+      user_follows: -1,
+      user_level: -1,
+      user_coin: -1
+    },
+    reply_to:{
+      AnswerCommentContent:"",
+      AnswerCommentId:-1,
+      AnswerCommentLike:"",
+      Count:0,
+      UserName:"",
+      UserProfile:"",
+    },
   },
   getters: {},
   mutations: {
@@ -50,6 +75,23 @@ export default createStore({
         user_level: -1,
         user_coin: -1
       }
+    },
+    ChangeAnswerUserInfo(state,answer_user_info){
+      state.answer_user_info=answer_user_info;
+    },
+    ChangeReplyObj(state,reply_to){
+      state.reply_to=reply_to;
+    },
+    InitReplyObj(state){
+      reply_to = {
+        AnswerCommentContent:"",
+        AnswerCommentId:-1,
+        AnswerCommentLike:"",
+        Count:0,
+        UserName:"",
+        UserProfile:"",
+      };
+      state.reply_to = reply_to;
     },
   },
   actions: {},

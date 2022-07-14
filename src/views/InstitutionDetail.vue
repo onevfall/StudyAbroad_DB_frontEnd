@@ -40,7 +40,7 @@ export default {
   created() {
     //在此处向服务器请求数据，初始化所需变量
     axios({
-        url: "institution?institution_id="+0,
+        url: "institution?institution_id="+4,
         method: "get",
       })
         .then((res) => {
