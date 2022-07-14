@@ -130,6 +130,7 @@
 <script>
 import UserInfoBoard from "../components/UserInfoBoard.vue";
 import SideCard from "../components/SideCard.vue";
+// import InfiniteList from "vue3-infinite-list";
 import LikeButton from "../components/LikeButton.vue";
 import CommentItem from "../components/CommentItem.vue"
 import axios from "axios";
