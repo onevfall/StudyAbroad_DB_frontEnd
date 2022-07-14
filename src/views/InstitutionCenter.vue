@@ -30,9 +30,9 @@
                   >
                     <el-option
                       v-for="item in all_institution_list"
-                      :key="item.university_id"
-                      :label="item.university_chname"
-                      :value="item.university_id"
+                      :key="item.institution_id"
+                      :label="item.institution_name"
+                      :value="item.institution_id"
                     />
                   </el-select>
                   <span style="margin: 10px; vertical-align: bottom">
@@ -57,17 +57,18 @@
                         <span>所在省份</span>
                         <br />
                         <el-select
-                          v-model="country_value"
+                          v-model="pname"
+                          @change="chooseProvince"
                           clearable
                           class="m-2"
                           placeholder="请选择"
                           size="large"
                         >
                           <el-option
-                            v-for="item in country_options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
+                            v-for="(item,index) in province"
+                            :key="index"
+                            :label="item.value"
+                            :value="item.id"
                           />
                         </el-select>
                       </div>
@@ -77,17 +78,18 @@
                         <span>所在城市</span>
                         <br />
                         <el-select
-                          v-model="rank_type_value"
+                          v-model="cname"
+                          @change="chooseCity"
                           clearable
                           class="m-2"
                           placeholder="请选择"
                           size="large"
                         >
                           <el-option
-                            v-for="item in rank_type_options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
+                            v-for="(item,index) in city"
+                            :key="index"
+                            :label="item.value"
+                            :value="item.id"
                           />
                         </el-select>
                       </div>
@@ -97,14 +99,14 @@
                         <span>留学国家</span>
                         <br />
                         <el-select
-                          v-model="year_value"
+                          v-model="institution_target"
                           clearable
                           class="m-2"
                           placeholder="请选择"
                           size="large"
                         >
                           <el-option
-                            v-for="item in year_options"
+                            v-for="item in country_options"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
@@ -140,11 +142,17 @@
       搜索结果如下,【<span style="color:coral;">{{this.institution_list.length}}</span>】家机构符合你的搜索
     </div>
     <hr/>
+    <div class="downBox">
+      <div v-for="(institution, index) in institution_list" :key="index">
+        <institution-card :institution="institution"></institution-card>
+        <br />
+      </div>
+    </div>
+
   </div>
 </template>
 <script>
 import axios from "axios";
-import { onMounted, ref } from "vue";
 import InstitutionCard from "../components/InstitutionCard.vue"
 
 export default {
@@ -157,9 +165,15 @@ export default {
       all_institution_list:[],  //最初赋值获得的所有机构   
       search_value:'',
       //以下为搜索限定词
-      rank_type_value: ref(''),
-      country_value: ref(''),
-      year_value: ref('2021'),
+      pname: "", //省的名字
+      cname: "", //市的名字
+      institution_target: "", //面向国家
+      city_data:require('../assets/city_data.json'), //加载城市json文件
+      //对城市的处理
+      province: [],
+      shi1: [],
+      city: [],
+      //面向国家的选择
       country_options: [
       {
         value: '美国',
@@ -198,84 +212,92 @@ export default {
         label: '其他',
       },
       ],
-      rank_type_options:[
-        {
-          value:'QS_rank',
-          label:'QS排名',
-        },
-        {
-          value:'THE_rank',
-          label:'THE排名',
-        },
-        {
-          value:'USNews_rank',
-          label:'USNews排名',
-        },
-      ],
-      year_options:[
-        {
-          value:'2022',
-          label:'2022',
-        },
-        {
-          value:'2021',
-          label:'2021',
-        },
-        {
-          value:'2020',
-          label:'2020',
-        },
-        {
-          value:'2019',
-          label:'2019',
-        }
-      ]
     };
   },
   methods:{
     goSearch(){
       this.$router.push({
-        path:'/school_detail',
+        path:'/institution_detail',
         query:{
-          school_id:this.search_value
+          institution_id:this.search_value
         }
       })
     },
     
     filter(){
       var x = ""; //需要拼接的判断
-      if(this.country_value==''&& this.rank_type_value==''){
-        x = '?rank_year=' + this.year_value;
+      if(this.pname!=''){ //省份非空，就加入省份
+        x += ('institution_province=' + this.pname); 
       }
-      else if(this.country_value==''&& this.rank_type_value!=''){
-        x = '?rank_year=' + this.year_value +'&' + 'tag=' + this.rank_type_value;
+      if(this.cname!=''){
+        x += ('&' + 'institution_city=' + this.cname);
       }
-      else if(this.country_value!=''&& this.rank_type_value==''){
-        x = '?rank_year=' + this.year_value + '&' + 'university_country=' + this.country_value;
+      if(this.institution_target!=""){
+        x += ('&' + 'institution_target=' + this.institution_target);
       }
-      else{
-        x = '?rank_year=' + this.year_value +
-           '&' + 'tag=' + this.rank_type_value +
-           '&' + 'university_country=' + this.country_value ;
-      }
+      console.log(x);
       axios({
       // 点击搜索时加载符合条件的数据
-      url:'university/rank' + x,
+      url:'institution/list?' + x,
       method:'get',
     }).then((res)=>{
       console.log(res)
-      console.log(res.data.data.university_list)
-      console.log("搜索成功")
+      console.log(res.data.data.institution_list)
+      console.log("机构搜索成功")
       console.log(this.country_value)
       console.log(this.rank_type_value)
-      this.school_list = res.data.data.university_list
+      this.institution_list = res.data.data.institution_list
     })
     .catch((errMsg) =>{
       console.log(errMsg)
-      console.log("大失败")
+      console.log("机构列表信息失败")
     })
     },
-
+    //获取城市数据
+     getCityData: function () {
+      let that = this;
+      that.city_data.forEach(function (item, index) {
+        //省级数据
+        that.province.push({
+          id: item.adcode,
+          value: item.name,
+          children: item.districts,
+        });
+      });
+    },
+    // 选省
+    chooseProvince: function (e) {
+      let that = this;
+      that.city = [];
+      that.cname = "";
+      for (var index2 in that.province) {
+        if (e === that.province[index2].id) {
+          that.shi1 = that.province[index2].children;
+          that.pname = that.province[index2].value;
+          that.shi1.forEach(function (citem, cindex) {
+            that.city.push({
+              id: citem.adcode,
+              value: citem.name,
+              children: [],
+            });
+          });
+        }
+      }
+      console.log(that.pname);
+    },
+    // 选市
+    chooseCity: function (e) {
+      let that = this;
+      for (var index3 in that.city) {
+        if (e === that.city[index3].id) {
+          that.cname = that.city[index3].value;
+        }
+      }
+      console.log(that.cname);
+    },
+  },
+  mounted(){
+    this.getCityData();
   },
   created() {
     /*在此处向服务器请求数据，初始化所需变量*/
@@ -285,15 +307,16 @@ export default {
       method:'get',
     }).then((res)=>{
       console.log(res)
-      console.log(res.data.data.university_list)
-      this.institution_list = res.data.data.university_list
-      this.all_institution_list = res.data.data.university_list
+      console.log(res.data.data.institution_list)
+      this.institution_list = res.data.data.institution_list
+      this.all_institution_list = res.data.data.institution_list
     })
     .catch((errMsg) =>{
       console.log(errMsg)
       console.log("大失败")
     })
   },
+ 
 };
 </script>
 

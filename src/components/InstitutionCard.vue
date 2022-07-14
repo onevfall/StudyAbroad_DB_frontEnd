@@ -3,63 +3,30 @@
 作者：蔡明宏
 -->
 <template>
-  <div class="school_card">
-    <!-- 排名小卡片 -->
-    <el-card class="rank_card">
-      <div class="rank_text">
-        <div>{{ school.university_qs_rank }}</div>
-        <div>{{ school.university_the_rank }}</div>
-        <div>{{ school.university_usnews_rank }}</div>
-      </div>
-    </el-card>
-
+  <div class="institution_card">
     <el-card class="two_block">
       <div class="two_block_hori">
         <div>
           <div class="avatar_text">
-            <el-avatar shape="square" :size="70" :src="school.university_badge" />
+            <el-avatar shape="square" :size="70" :src="institution.institution_profile" />
             <div>
-                <p class="enname">{{ school.university_enname }}</p>
-                <p class="chname">{{ school.university_chname }}</p>
-              
+                <p class="enname">{{ institution.institution_name }}</p>
             </div>
           </div>
-          <!-- 下面主要介绍在校人数、位置、简介 -->
+          <!-- 下面主要介绍机构简介 -->
           <div>
               <div style="margin:10px;"> 
-                <el-row :gutter="10" justify="space-around">
-                  <el-col :span="8">
-                    <div >
-                      <span class="info_text">在校人数:</span>
-                      <span style="color:gray;">{{school.university_student_num}}</span>
-                    </div>
-                  </el-col>
-                  <el-col :span="8">
-                    <div>
-                      <span class="info_text">位置：</span>
-                      <span style="color:gray;">{{school.university_location}}</span>
-                    </div>
-                  </el-col>
-                  <el-col :span="8">
-                    <div>
-                      <span class="info_text">学费：</span>
-                      <span style="color:gray;">{{school.university_money}}</span>
-                    </div>
-                  </el-col>
-                </el-row>
-                </div>
-
                 <div>
                     <span class="info_text">简介：</span>
-                    <span style="color:gray;">{{school.university_introduction}}</span>
+                    <span style="color:gray;">{{institution.institution_introduction}}</span>
                 </div>
-              
+              </div>
           </div>
         </div>
 
         <!-- 右侧点击去看看 -->
         <div>
-          <el-button type="warning" size="large" color="#626aef" @click="seeSchool"
+          <el-button type="warning" size="large" color="#626aef" @click="seeInstitution"
             >去看看</el-button
           >
         </div>
@@ -71,18 +38,18 @@
 <script>
 export default {
   props: [
-    'school',
+    'institution',
   ],
   data() {
     return {};
   },
   methods: {
-    seeSchool(){
+    seeInstitution(){
       // <router-link target="_blank" :to="{path:'/home',query:{id:'1'}}">新页面打开home页</router-link>;
       this.$router.push({
-        path:'/school_detail',
+        path:'/institution_detail',
         query:{
-          school_id:this.school.university_id
+          institution_id:this.institution.institution_id
         }
       })
     }
@@ -91,9 +58,9 @@ export default {
 </script>
 
 <style>
-.school_card {
+.institution_card {
   margin: 20px;
-  width: 90%;
+  width: 95%;
   height: 200px;
   display: flex;
   justify-content: center;
@@ -113,10 +80,11 @@ export default {
   justify-content: space-between;
 }
 .two_block {
-  /* margin-left: 20px; */
+  margin-left: 40x;
   padding: 10px;
   height: 200px;
   width: 60%;
+  /* align-self: center; */
 }
 .two_block_hori {
   display: flex;
