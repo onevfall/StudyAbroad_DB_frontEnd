@@ -205,7 +205,6 @@ export default {
       this.question_relevant=res.data.data.related_questions;
       for(let i=0;i<this.question_relevant.length;i++)
       {
-        console.log("救命");
         var tem_info = {
           essence:"问题",
           content:this.question_relevant[i].QuestionSummary,
