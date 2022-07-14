@@ -6,13 +6,17 @@
   <div class="common-layout">
     <el-container>
       <el-aside width="400px" style="top: 0px">
+        <img src="../assets/question.png" style="height: 200px" />
         <user-info-board
           class="UserInfo"
           :blog_user_info="this.answer_user_info"
         ></user-info-board>
         <span v-for="(card, index) in this.card_info" :key="card">
-          <side-card class="SideCard" :card_info="this.card_info[index]">
-          </side-card>
+          <question-side-card
+            class="SideCard"
+            :card_info="this.card_info[index]"
+          >
+          </question-side-card>
         </span>
       </el-aside>
       <el-main width="main" style="margin-left: 10px">
@@ -27,7 +31,7 @@
                   <el-row gutter="10" style="width: 100%">
                     <el-col span="1">
                       <el-tag class="ml-2" type="primary" size="large">
-                        {{"提问时间: " + this.question_infor.question_date}}
+                        {{ "提问时间: " + this.question_infor.question_date }}
                       </el-tag>
                     </el-col>
                   </el-row>
@@ -41,7 +45,10 @@
           <el-divider />
           <el-container>
             <el-header class="header_answercontent">
-              <el-avatar :src="this.answer_user_info.user_profile" size="large" />
+              <el-avatar
+                :src="this.answer_user_info.user_profile"
+                size="large"
+              />
               <span class="user_name"
                 ><b>{{ this.answer_user_info.user_name }}</b></span
               >
@@ -51,13 +58,11 @@
             </el-header>
             <el-main>
               <div class="content_main">
-                {{ this.answer_infor.answer_content}}
+                {{ this.answer_infor.answer_content }}
               </div>
               <div style="float: left; margin-left: 3%">
                 <el-button type="primary">
-                  <div style="margin-right: 5px;">
-                    赞同
-                  </div>               
+                  <div style="margin-right: 5px">赞同</div>
                   <like-button
                     content_type="2"
                     :content_id="this.answer_id"
@@ -67,6 +72,16 @@
                     @cancelLike="unlike"
                   />
                 </el-button>
+                <el-button type="primary">
+                  <div style="margin-right: 5px">投币</div>
+                  <coin-button
+                    content_type="1"
+                    :content_id="this.answer_id"
+                    :show_num="false"
+                    size="large"
+                    @giveCoin="coinIn"
+                  />
+                </el-button>
               </div>
             </el-main>
           </el-container>
@@ -74,21 +89,20 @@
           <el-container>
             <el-header class="header_comment">
               <el-col :span="1">
-              <div v-if="this.$store.state.is_login">
-                <el-avatar
-
-                  :src="this.$store.state.user_info.user_profile"
-                  :size="40"
-                  class="header_img"
-                />
-              </div>
-              <div v-else>
-                <el-avatar
-                  src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"   
-                  :size="40"
-                  class="header_img"
-                />
-              </div>
+                <div v-if="this.$store.state.is_login">
+                  <el-avatar
+                    :src="this.$store.state.user_info.user_profile"
+                    :size="40"
+                    class="header_img"
+                  />
+                </div>
+                <div v-else>
+                  <el-avatar
+                    src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                    :size="40"
+                    class="header_img"
+                  />
+                </div>
               </el-col>
               <el-input
                 id="replyInput"
@@ -96,7 +110,7 @@
                 maxlength="128"
                 show-word-limit
                 class="reply_input"
-                placeholder="评论点什么..."
+                :placeholder="nowplaceholder"
                 type="text"
                 style="margin-left: 1%; margin-top: 5px; margin-right: 10px"
               />
@@ -110,13 +124,13 @@
                 >发表评论
               </el-button>
             </el-header>
-            <el-main>
+            <el-main :key="this.commentChange">
               <el-scrollbar v-if="this.comments.length !== 0" height="200px">
-                <el-collapse accordion>
-                <div v-for="(item, i) in this.comments" :key="i">    
-                <comment-item :comment_infor="this.comments[i]">
-                </comment-item>
-                </div>
+                <el-collapse accordion @change="handleChange">
+                  <div v-for="(item, i) in this.comments" :key="i">
+                    <comment-item :comment_infor="this.comments[i]">
+                    </comment-item>
+                  </div>
                 </el-collapse>
               </el-scrollbar>
             </el-main>
@@ -129,133 +143,112 @@
 
 <script>
 import UserInfoBoard from "../components/UserInfoBoard.vue";
-import SideCard from "../components/SideCard.vue";
-// import InfiniteList from "vue3-infinite-list";
+import QuestionSideCard from "../components/QuestionSideCard.vue";
 import LikeButton from "../components/LikeButton.vue";
-import CommentItem from "../components/CommentItem.vue"
+import CoinButton from "../components/CoinButton.vue";
+import CommentItem from "../components/CommentItem.vue";
 import axios from "axios";
 import { ElMessage } from "element-plus";
-import { UserFilled } from '@element-plus/icons-vue'
+import { UserFilled } from "@element-plus/icons-vue";
 export default {
   components: {
     UserInfoBoard,
-    SideCard,
+    QuestionSideCard,
     LikeButton,
     ElMessage,
     CommentItem,
     UserFilled,
+    CoinButton
   },
   data() {
     return {
       answer_user_info: "",
-      answer_id:-1,
-      answer_infor:"",
+      answer_id: -1,
+      answer_infor: "",
       question_id: -1,
-      question_infor:"",
+      question_infor: "",
       card_info: [],
-      comment_now: "",//当前正在输入的comment
-      comments: [],//这个回答对应的下面的comment的全部信息
+      comment_now: "", //当前正在输入的comment
+      comments: [], //这个回答对应的下面的comment的全部信息
+      commentChange: false,
     };
   },
   watch: {
     $route() {
+      //得与路由跳转前进行综合 beforeRouteEnter 未改 可能不需要
       this.initPage();
     },
   },
-  async created() {
-    //在此处向服务器请求数据，初始化所需变量
-    await this.initPage();
+  computed: {
+    nowplaceholder() {
+      console.log(this.$store);
+      if (this.$store.state.reply_to.AnswerCommentId !== -1) {
+        return "回复" + this.$store.state.reply_to.UserName;
+      } else {
+        return "评论点什么...";
+      }
+    },
   },
-  methods: {
-    async initPage(){
-      this.answer_id = this.$route.query.answer_id;//获取本页的answer
-      console.log("00")
-      await axios.get('/answer',{
-        params:{
-          answer_id:this.answer_id,
-        }
-    })
+  created() {
+    //在此处向服务器请求数据，初始化所需变量
+    this.initPage();
+  },
+  beforeRouteEnter(to, from, next) {
+    console.log("qqqqqq");
+    console.log(to);
+    console.log(from);
+    console.log(to.query.answer_id);
+    axios
+      .get("/answer", {
+        params: {
+          answer_id: to.query.answer_id,
+        },
+      })
       .then((res) => {
         if (res.data.status === true) {
-          console.log(res.data.data);
-          this.answer_infor = res.data.data;//获取answer全部内容
+          console.log(res.data.data.answer_user_id);
+          axios
+            .get("/userinfo", {
+              params: {
+                user_id: res.data.data.answer_user_id,
+              },
+            })
+            .then((res) => {
+              if (res.data.status === true) {
+                console.log(res.data.data);
+                const store = from.matched[0].instances.default.$store;
+                console.log(store);
+                store.commit("ChangeAnswerUserInfo", res.data.data);
+                next(true); //获取answer_user_info全部内容 未验证过
+              } else {
+                console.log(res);
+                console.log("11内容获取失败");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } else {
           console.log("内容获取失败");
         }
-      })
-      .catch((err) => {
-        console.log(err);
       });
-
-      await axios.get('/userinfo',{
-        params:{
-          user_id:this.answer_infor.answer_user_id,
-        }
-      })
-      .then((res) => {
-        if (res.data.status === true) {
-          console.log(res.data.data);
-          this.answer_user_info = res.data.data;//获取answer_user_info全部内容 未验证过
-        } else {
-          console.log(res);
-          console.log("11内容获取失败");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });//给user_id为2的用户填充点信息
-      // this.answer_user_info.user_signature = "向前奔跑，永远热爱";
-      // console.log("111");
-      // console.log(this.answer_user_info);
-
-      this.question_id = this.$route.query.question_id;
-      await axios.get('/question',{
-        params:{
-          question_id:this.question_id,
-        }
-      })
-        .then((res) => {
-          if (res.data.status === true) {
-          console.log(res.data.data)
-          this.question_infor = res.data.data;
-          } else{
-            console.log("内容获取失败");
-          }
+  },
+  methods: {
+    initPage() {
+      this.answer_id = this.$route.query.answer_id; //获取本页的answer
+      this.answer_user_info = this.$store.state.answer_user_info;
+      console.log(this.$store.state.answer_user_info);
+      console.log("00");
+      axios
+        .get("/answer", {
+          params: {
+            answer_id: this.answer_id,
+          },
         })
-        .catch((err) => {
-          console.log(err);
-        });
-        console.log(this.answer_infor.answer_user_id);
-    //   this.answer_user_info = {
-    //   user_id: 1,
-    //   user_email: "",
-    //   user_phone: "17703561185",
-    //   user_password: "",
-    //   user_name: "用户17703561185",
-    //   user_profile:
-    //     "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/",
-    //   user_createtime: "",
-    //   user_birthday: "",
-    //   user_gender: "",
-    //   user_state: 1,
-    //   user_signature: "精准与否，就是屠宰和手术的区别",
-    //   user_follower: 0,
-    //   user_follows: 0,
-    //   user_level: 3,
-    //   user_coin: 0,
-    // };
-    this.card_info = [{ id: 1 }, { id: 2 }];//暂时随便定两个卡片，获取卡片对应问题id的相关度算法后续写
-    for (let i = 0; i < this.card_info.length; ++i) {
-      await axios.get('/question',{
-        params:{
-          question_id:this.card_info[i].id,
-        }
-      })
         .then((res) => {
           if (res.data.status === true) {
-            this.card_info[i].content = res.data.data.question_title;
-            this.card_info[i].keyword = res.data.data.question_tag;
-            this.card_info[i].essence = "问题";
+            // console.log(res.data.data);
+            this.answer_infor = res.data.data; //获取answer全部内容
           } else {
             console.log("内容获取失败");
           }
@@ -263,21 +256,68 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    }
+      this.question_id = this.$route.query.question_id;
+      axios
+        .get("/question", {
+          params: {
+            question_id: this.question_id,
+          },
+        })
+        .then((res) => {
+          if (res.data.status === true) {
+            console.log(res.data.data);
+            this.question_infor = res.data.data;
+          } else {
+            console.log(res.data);
+            console.log("内容获取失败");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-    await axios.get('/answer/comment',{
-      params:{
-          answer_id:this.answer_id,
-        }
-    })
-      .then((res) => {
-        for (let i = 0; i < res.data.data.comment_list.length; ++i) {
-          this.comments[i] = res.data.data.comment_list[i];
-        }
+      axios({
+        url: "question/related",
+        method: "get",
+        params: {
+          question_id: this.question_id,
+        },
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          console.log(res.data.data);
+          this.related_question_tag = res.data.data.tag;
+          this.question_relevant = res.data.data.related_questions;
+          for (let i = 0; i < this.question_relevant.length; i++) {
+            var tem_info = {
+              essence: "问题",
+              content: this.question_relevant[i].QuestionTitle,
+              keyword: res.data.data.tag.split(","),
+              id: this.question_relevant[i].QuestionId,
+            };
+            this.card_info[i]=tem_info;
+          }
+          console.log(this.card_info);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      axios
+        .get("/answer/comment", {
+          params: {
+            answer_id: this.answer_id,
+          },
+        })
+        .then((res) => {
+          for (let i = 0; i < res.data.data.comment_list.length; ++i) {
+            this.comments[i] = res.data.data.comment_list[i];
+            this.comments[i].reply_num = 0;
+            this.comments[i].child_comments = [];
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     sendComment() {
       if (this.$store.state.is_login == false) {
@@ -288,17 +328,122 @@ export default {
           showClose: true,
           duration: 2000,
         });
-        this.comment_now="";
-        /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
-        console.log(this.$route)
-        this.$route.query.redirect = this.$route.fullPath;
-        console.log(this.$route.query.redirect);
-        this.$router.push("login");
+        this.comment_now = "";
+        this.$router.push({
+          path: "/login",
+          query: { redirect: this.$route.fullPath },
+        });
+      } else {
+        if (this.$store.state.reply_to.AnswerCommentId !== -1) {
+          //说明回复给一个评论
+          var d = new FormData();
+          d.append("comment_id", this.$store.state.reply_to.AnswerCommentId);
+          d.append("reply_user_id", this.$store.state.user_info.user_id);
+          d.append("reply_content", this.comment_now);
+          //console.log(d);
+          axios({
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            url: "/answer/reply",
+            data: d,
+            method: "post",
+          }) //待修改
+            .then((res) => {
+              console.log(res.data);
+              this.commentChange = !this.commentChange;
+              this.comment_now = "";
+              ElMessage({
+                type: "success",
+                message: "评论成功！",
+                duration: 2000,
+                showClose: true,
+              });
+              axios
+                .get("/answer/reply", {
+                  params: {
+                    answer_comment_id:
+                      this.$store.state.reply_to.AnswerCommentId,
+                  },
+                })
+                .then((res) => {
+                  console.log(
+                    "对用户id为" +
+                      this.$store.state.reply_to.AnswerCommentId +
+                      "的评论的回复请求"
+                  );
+                  console.log(res);
+                  //this.comment_infor.reply_num = res.data.data.reply_num;
+                  this.$store.state.reply_to.child_comments =
+                    res.data.data.reply_list;
+                  console.log(this.$store.state.reply_to.child_comments);
+                  // for (let i = 0; i < res.data.data.reply_list.length; ++i) {
+                  //   this.comment_infor.child_comments[i] =
+                  //     res.data.data.reply_list[i];
+                  // }
+                  this.$store.commit("InitReplyObj");
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          //说明是对回答的评论
+          var d = new FormData();
+          d.append("answer_id", this.answer_id);
+          d.append(
+            "answer_comment_user_id",
+            this.$store.state.user_info.user_id
+          );
+          d.append("answer_comment_content", this.comment_now);
+          console.log(d);
+          axios({
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            url: "/answer/comment",
+            data: d,
+            method: "post",
+          })
+            .then((res) => {
+              //this.answer_comment_id =
+              console.log(res.data);
+              this.commentChange = !this.commentChange;
+              ElMessage({
+                type: "success",
+                message: "评论成功！",
+                duration: 2000,
+                showClose: true,
+              });
+              axios //重新把全部一级comments获取一遍，实现刷新
+                .get("/answer/comment", {
+                  params: {
+                    answer_id: this.answer_id,
+                  },
+                })
+                .then((res) => {
+                  for (let i = 0; i < res.data.data.comment_list.length; ++i) {
+                    this.comments[i] = res.data.data.comment_list[i];
+                    this.comments[i].reply_num = 0;
+                    this.comments[i].child_comments = [];
+                  }
+                  this.comment_now = "";
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       }
-      else{
-
-      }
-      // 里面要写未登录状况下的跳转处理 以及跳转时对输入的保存？
+    },
+    handleChange(val) {
+      console.log(val);
     },
     like(res) {
       if (res) {
@@ -329,6 +474,16 @@ export default {
         ElMessage({
           type: "error",
           message: "取消点赞失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    },
+    coinIn(res){
+      if(res){
+        ElMessage({
+          type: "success",
+          message: "投币成功！",
           duration: 2000,
           showClose: true,
         });
@@ -421,54 +576,4 @@ export default {
   align-items: center;
 }
 
-/* .author_title .header_img{
-   display:inline-block;
-   vertical-align:top;
-}
-.author_title .author_info{
-    display:inline-block;
-    margin-left:5px;
-    width:60%;
-    height:40px;
-    line-height:20px;
-}
-
-.author_title .author_info .author_name{
-  color:#000;
-  font-size:18px;
-  font-weight:bold;
-}
-.author_title .author_info .author_time{
-  color:#cabab0;
-  font-size:14px;
-} */
-/* .header_comment .reply_input{
-  margin-left: 3%;
-  
-}
-
-.my_reply .reply_info {
-  display: inline-block;
-  margin-left: 5px;
-  width: 90%;
-}
-
-.my_reply .reply_info .reply_input {
-  min-height: 20px;
-  line-height: 22px;
-  padding: 10px 10px;
-  color: #ccc;
-  background-color: #fff;
-  border-radius: 5px;
-}
-
-.my_reply .reply_btn_box {
-  height: 25px;
-  margin: 10px 0;
-}
-.my_reply .reply_btn_box .reply_btn {
-  position: relative;
-  margin-right: 15px;
-  float: right;
-} */
 </style>
