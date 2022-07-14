@@ -6,10 +6,11 @@
 <template>
   <div>
     <span style="text-align: left; margin-right: 8px" v-if="is_coined == false">
-      <el-icon :size="this.size" @click="coinConfirm"><Coin /></el-icon>
+     
+      <img src="../assets/dollar.png" :style="{height:this.icon_size+'px'}" @click="coinConfirm">
     </span>
     <span style="text-align: left; margin-right: 8px" v-else>
-      <el-icon :size="this.size" color="#fbc563"><Coin /></el-icon>
+      <img src="../assets/dollar_solid.png" :style="{height:this.icon_size+'px'}" >
     </span>
     <span
       :style="{ 'text-align': 'left', 'font-size': this.size }"
@@ -55,6 +56,7 @@ export default {
       coin_nums: "",
       input_nums: false,
       coin_in_num: 1,
+      icon_size:0
     };
   },
   methods: {
@@ -90,19 +92,13 @@ export default {
         return;
       }
       this.input_nums = false;
-      var d=new FormData();
-      d.append("user_id",this.$store.state.user_info.user_id);
-      d.append(this.dynamic_type + "_id",this.content_id);
-      d.append("num",this.coin_in_num);
-      console.log(d);
-      axios({
-        headers:{
-            'Content-Type':'application/x-www-form-urlencoded'
-          },
-        url: "coin/" + this.dynamic_type,
-        data:d,
-        method: "post",
-      })
+
+      axios
+        .post("coin/" + this.dynamic_type, {
+          user_id: this.$store.state.user_info.user_id,
+          [this.dynamic_type + "_id"]: this.content_id,
+          num: this.coin_in_num,
+        })
         .then((res) => {
           console.log(67);
           console.log(res.data);
@@ -117,7 +113,7 @@ export default {
               errMsg = "不能给自己投币！";
             } else {
               errMsg = "余额不足,当前余额为";
-            } 
+            }
             ElMessage({
               type: "warning",
               message: errMsg,
@@ -140,6 +136,31 @@ export default {
     },
   },
   created() {
+     //设定大小
+    switch(this.size){
+      case "xx-small":
+        this.icon_size=9;
+        break;
+      case "x-small":
+        this.icon_size=10;
+        break;
+      case "small":
+        this.icon_size=12;
+        break;
+      case "normal":
+        this.icon_size=14;
+        break;
+      case "large":
+        this.icon_size=17;
+        break;
+      case "x-large":
+        this.icon_size=24;
+        break;
+      case "xx-large":
+        this.icon_size=30;
+        break;
+
+    }
     //动态改变url
     switch (this.content_type) {
       case "0":
@@ -151,8 +172,7 @@ export default {
     }
     //查询是否投过币
     if (this.$store.state.is_login) {
-      axios({
-        url:
+      axios.get(
           "coin/" +
           this.dynamic_type +
           "?user_id=" +
@@ -161,8 +181,7 @@ export default {
           this.dynamic_type +
           "_id=" +
           this.content_id,
-        method: "get",
-      })
+       )
         .then((res) => {
           console.log(res.data.data);
           this.coin_nums = res.data.data.blog_coin;
@@ -173,8 +192,7 @@ export default {
         });
     } else {
       //查询投币个数
-      axios({
-        url:
+      axios.get(
           "coin/" +
           this.dynamic_type +
           "?user_id=" +
@@ -182,9 +200,9 @@ export default {
           "&" +
           this.dynamic_type +
           "_id=" +
-          this.content_id,
-        method: "get",
-      })
+          this.content_id
+       
+      )
         .then((res) => {
           console.log(res.data.data.blog_coin);
           this.coin_nums = res.data.data.blog_coin;

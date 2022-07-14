@@ -10,20 +10,54 @@
           class="UserInfo"
           :blog_user_info="this.blog_user_info"
         ></user-info-board>
-        
+
         <div v-for="blog in this.blog_relevant" :key="blog">
-        <blog-info-board :blog_info="blog" class="BlogCard"/>
-        
+          <blog-info-board :blog_info="blog" class="BlogCard" />
         </div>
       </el-aside>
       <el-main>
-        <like-button :show_num="true" :content_id="0" content_type="0" size="xx-small"></like-button>
-        <like-button :show_num="true" :content_id="0" content_type="0" size="x-small"></like-button>
-        <like-button :show_num="true" :content_id="0" content_type="0" size="small"></like-button>
-        <like-button :show_num="true" :content_id="0" content_type="0" size="normal"></like-button>
-        <like-button :show_num="true" :content_id="0" content_type="0" size="large"></like-button>
-        <like-button :show_num="true" :content_id="0" content_type="0" size="x-large"></like-button>
-        <like-button :show_num="true" :content_id="0" content_type="0" size="xx-large"></like-button>
+        <like-button
+          :show_num="true"
+          :content_id="0"
+          content_type="0"
+          size="xx-small"
+        ></like-button>
+        <like-button
+          :show_num="true"
+          :content_id="0"
+          content_type="0"
+          size="x-small"
+        ></like-button>
+        <like-button
+          :show_num="true"
+          :content_id="0"
+          content_type="0"
+          size="small"
+        ></like-button>
+        <like-button
+          :show_num="true"
+          :content_id="0"
+          content_type="0"
+          size="normal"
+        ></like-button>
+        <like-button
+          :show_num="true"
+          :content_id="0"
+          content_type="0"
+          size="large"
+        ></like-button>
+        <like-button
+          :show_num="true"
+          :content_id="0"
+          content_type="0"
+          size="x-large"
+        ></like-button>
+        <like-button
+          :show_num="true"
+          :content_id="0"
+          content_type="0"
+          size="xx-large"
+        ></like-button>
       </el-main>
     </el-container>
   </div>
@@ -32,19 +66,19 @@
 <script>
 import UserInfoBoard from "../components/UserInfoBoard.vue";
 import BlogInfoBoard from "../components/BlogInfoBoard.vue";
-import axios from "axios"
-import LikeButton from '../components/LikeButton.vue';
+import axios from "axios";
+import LikeButton from "../components/LikeButton.vue";
 export default {
   components: {
     UserInfoBoard,
     BlogInfoBoard,
-    LikeButton
+    LikeButton,
   },
   data() {
     return {
       blog_user_info: "",
-      blog_relevant:[],
-      blog_detail:""
+      blog_relevant: [],
+      blog_detail: "",
     };
   },
   created() {
@@ -69,16 +103,18 @@ export default {
       user_coin: 0,
     };
     //相关博客
-    axios({
-      url:"/blog/time?num=3&tag='生活'",
-      method:"get"
-    }).then(res=>{
-      this.blog_relevant=[].concat(res.data.data.blog)
-    }).catch(errMsg=>{
-      console.log(errMsg);
-    })
+    axios
+      .get("/blog/tag?num=3&tag=编程")
+      .then((res) => {
+        console.log(777);
+        console.log(res);
+        this.blog_relevant = [].concat(res.data.data.blog);
+        console.log(this.blog_relevant);
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+      });
     //当前博客内容
-
   },
 };
 </script>
@@ -88,7 +124,7 @@ export default {
   margin-top: 20px;
   margin-left: 25px;
 }
-.BlogCard{
+.BlogCard {
   margin-left: 25px;
   margin-top: 20px;
 }
