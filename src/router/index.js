@@ -13,6 +13,7 @@ import SchoolCenterPage from '../views/SchoolCenterPage.vue'
 import InstitutionCenter from '../views/InstitutionCenter.vue'
 import store from '../store/index'
 import QuestionPage from '../views/QuestionPage.vue'
+import QACenterPage from '../views/QACenterPage.vue'
 import { ElMessage } from 'element-plus'
 const routes = [
   {
@@ -121,6 +122,14 @@ const routes = [
     component:QuestionPage,
     meta:{
       title:'问题'
+    }
+  },
+  { 
+    path:'/qacenter',
+    name:'qacenter',
+    component:QACenterPage,
+    meta:{
+      title:'问答首页'
     }
   }
 ]
