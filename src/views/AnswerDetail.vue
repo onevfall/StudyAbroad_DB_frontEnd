@@ -8,7 +8,7 @@
       <el-aside width="400px" style="top: 0px">
         <user-info-board
           class="UserInfo"
-          :blog_user_info="this.blog_user_info"
+          :blog_user_info="this.answer_user_info"
         ></user-info-board>
         <span v-for="(card, index) in this.card_info" :key="card">
           <side-card class="SideCard" :card_info="this.card_info[index]">
@@ -22,14 +22,12 @@
               <el-aside style="width: 100%">
                 <div class="content_header">
                   <p class="title">
-                    <!-- {{ this.question_content }} -->
-                    这个问题呢是这样的八八八
+                    {{ this.question_infor.question_title }}
                   </p>
                   <el-row gutter="10" style="width: 100%">
                     <el-col span="1">
                       <el-tag class="ml-2" type="primary" size="large">
-                        <!-- {{this.question_time}} -->
-                        提出时间: 2022-07-07T23:07:08
+                        {{"提问时间: " + this.question_infor.question_date}}
                       </el-tag>
                     </el-col>
                   </el-row>
@@ -43,9 +41,9 @@
           <el-divider />
           <el-container>
             <el-header class="header_answercontent">
-              <el-avatar :src="this.blog_user_info.user_profile" size="large" />
+              <el-avatar :src="this.answer_user_info.user_profile" size="large" />
               <span class="user_name"
-                ><b>{{ this.blog_user_info.user_name }}</b></span
+                ><b>{{ this.answer_user_info.user_name }}</b></span
               >
               <el-tag class="ml-2" type="primary" size="large">{{
                 "该问题已被题主采纳"
@@ -53,11 +51,21 @@
             </el-header>
             <el-main>
               <div class="content_main">
-                {{ this.answer_content }}
+                {{ this.answer_infor.answer_content}}
               </div>
               <div style="float: left; margin-left: 3%">
                 <el-button type="primary">
-                  赞同<el-icon class="el-icon--right"><CaretTop /></el-icon>
+                  <div style="margin-right: 5px;">
+                    赞同
+                  </div>               
+                  <like-button
+                    content_type="2"
+                    :content_id="this.answer_id"
+                    :show_num="false"
+                    size="large"
+                    @giveLike="like"
+                    @cancelLike="unlike"
+                  />
                 </el-button>
               </div>
             </el-main>
@@ -65,21 +73,34 @@
           <el-divider />
           <el-container>
             <el-header class="header_comment">
-              <el-avatar
-                :src="this.blog_user_info.user_profile"
-                :size="40"
-                class="header_img"
-              />
-              <!-- <el-avatar > user</el-avatar>           -->
+              <el-col :span="1">
+              <div v-if="this.$store.state.is_login">
+                <el-avatar
+
+                  :src="this.$store.state.user_info.user_profile"
+                  :size="40"
+                  class="header_img"
+                />
+              </div>
+              <div v-else>
+                <el-avatar
+                  src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"   
+                  :size="40"
+                  class="header_img"
+                />
+              </div>
+              </el-col>
               <el-input
                 id="replyInput"
                 v-model="comment_now"
+                maxlength="128"
+                show-word-limit
                 class="reply_input"
                 placeholder="评论点什么..."
                 type="text"
-                @focus="btnShow = true"
-                style="margin-left: 2%; margin-top: 5px; margin-right: 10px"
+                style="margin-left: 1%; margin-top: 5px; margin-right: 10px"
               />
+
               <el-button
                 class="reply_btn"
                 size="medium"
@@ -90,68 +111,18 @@
               </el-button>
             </el-header>
             <el-main>
-              <el-scrollbar
-                v-if="this.comments.length!==0"
-                height="200px">
-                <div  v-for="(item,i) in this.comments" :key="i">
-                <div class="author_title" >
-                  <el-avatar
-                    :src="item.UserProfile"
-                    size="large"
-                    class="header_img"
-                  />
-                  <span class="author_name"
-                    ><b>{{ this.comments[i].UserName }}</b></span
-                  ><br />
-                  <!-- <span class="author_time">2019年9月16日 18:43</span> -->
+              <el-scrollbar v-if="this.comments.length !== 0" height="200px">
+                <el-collapse accordion>
+                <div v-for="(item, i) in this.comments" :key="i">    
+                <comment-item :comment_infor="this.comments[i]">
+                </comment-item>
                 </div>
-                <div style="text-align: left; margin-left: 10.5%">
-                  {{this.comments[i].AnswerCommentContent}}
-                </div>
-                <div class="comment_button">
-                  <el-icon style="color: #409eff"><CaretTop /></el-icon>
-                  <span style="color: #409eff; margin-right: 2%">{{this.comments[i].AnswerCommentLike}}</span>
-                  <el-icon style="color: #409eff"><CaretTop /></el-icon>
-                  <span style="color: #409eff">111</span>
-                </div>
-                </div>
+                </el-collapse>
               </el-scrollbar>
-
-              
-
-              <!-- </div> -->
             </el-main>
-
-            <!-- el-avatar的src需要改 -->
-            <!-- <div class="reply_info"> -->
-
-            <!-- <div
-                  tabindex="0"
-                  contenteditable="true"
-                  id="replyInput"
-                  spellcheck="false"
-                  placeholder="输入评论..."
-                  class="reply_input"
-                  @focus="btnShow = true"
-                  @input="onDivInput($event)"
-                ></div> -->
-            <!-- </div> -->
-            <!-- <div class="reply_btn_box" v-show="sendReplybtn_show">
-                <el-button
-                  class="reply_btn"
-                  size="medium"
-                  @click="sendComment"
-                  type="primary"
-                  >发表评论</el-button
-                >
-              </div> -->
           </el-container>
         </div>
-
-        <!-- <div v-clickoutside="hideReplyBtn" @click="inputFocus" class="my-reply"></div> -->
       </el-main>
-
-      <!-- <el-main>{{ this.answer_content }}</el-main> -->
     </el-container>
   </div>
 </template>
@@ -159,104 +130,54 @@
 <script>
 import UserInfoBoard from "../components/UserInfoBoard.vue";
 import SideCard from "../components/SideCard.vue";
-import InfiniteList from "vue3-infinite-list";
+import LikeButton from "../components/LikeButton.vue";
+import CommentItem from "../components/CommentItem.vue"
 import axios from "axios";
+import { ElMessage } from "element-plus";
+import { UserFilled } from '@element-plus/icons-vue'
 export default {
   components: {
     UserInfoBoard,
     SideCard,
+    LikeButton,
+    ElMessage,
+    CommentItem,
+    UserFilled,
   },
   data() {
     return {
-      blog_user_info: "",
-      card_info: [],
-      answer_id: -1,
-      answer_content: "",
-      answer_time: "",
+      answer_user_info: "",
+      answer_id:-1,
+      answer_infor:"",
       question_id: -1,
-      question_content: "",
-      question_time: "",
-      comment_now: "",
-      sendReplybtn_show: false,
-      comments: [],
+      question_infor:"",
+      card_info: [],
+      comment_now: "",//当前正在输入的comment
+      comments: [],//这个回答对应的下面的comment的全部信息
     };
   },
   watch: {
     $route() {
-      console.log(this.$route.query.id);
-      this.answer_id = this.$route.query.id;
-      axios({
-        url: "http://43.142.41.192:6001/api/answer",
-        params: {
-          answer_id: this.answer_id,
-        },
-        method: "get",
-      })
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
-          if (res.data.status === true) {
-            this.answer_content = res.data.data.answer_content;
-            //this.answer_content ="中国社会科学院大学图书馆日前发文透露，近日，由于我校读者违规使用《Westlaw Classic法律在线》数据库，我校接到数据库商的通报，学校IP受到该数据库商永久封禁，影响数据库的正常使用。消息称，经网络中心和图书馆联合调查，确认为我校法学院2018级博士研究生邱波同学所为。数据库商提供数据显示：邱同学在2022年6月16日137分钟内下载842篇文献，6月17日137分钟内下载1736篇文献。此行为严重影响了我校师生正常的学习和科研秩序，也有损我校声誉。"+"称我校某IP地址在极短时间内连续下载了Westlaw数据库的2050个文档，已经构成超量下载。经查实，超量下载者为本校软件与微电子学院2015级硕士研究生黄某。"
-            this.answer_time = res.data.data.answer_time;
-          } else {
-            console.log("内容获取失败");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      axios({
-        url: "http://43.142.41.192:6001/api/question",
-        params: {
-          question_id: this.question_id,
-        },
-        method: "get",
-      })
-        .then((res) => {
-          this.question_content = res.data.data.question_title;
-          this.question_time = res.data.data.question_time;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      axios({
-        url:"http://43.142.41.192:6001/api/answer/comment",
-        params:{
-          answer_id:this.answer_id,
-        },
-        method: "get",
-      })
-      .then((res) => {
-        for(let i = 0; i <  res.data.data.comment_list.length; ++i)
-        {
-          this.comments[i]=res.data.data.comment_list[i];
-          console.log(this.comments[i]);
-        }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      //this.init_answer_detail();
+      this.initPage();
     },
   },
-  created() {
+  async created() {
     //在此处向服务器请求数据，初始化所需变量
-    console.log(this.$route.query.id);
-    this.answer_id = this.$route.query.id;
-    axios({
-      url: "http://43.142.41.192:6001/api/answer",
-      params: {
-        answer_id: this.answer_id,
-      },
-      method: "get",
+    await this.initPage();
+  },
+  methods: {
+    async initPage(){
+      this.answer_id = this.$route.query.answer_id;//获取本页的answer
+      console.log("00")
+      await axios.get('/answer',{
+        params:{
+          answer_id:this.answer_id,
+        }
     })
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
         if (res.data.status === true) {
-          this.answer_content = res.data.data.answer_content;
-          console.log(this.answer_content);
+          console.log(res.data.data);
+          this.answer_infor = res.data.data;//获取answer全部内容
         } else {
           console.log("内容获取失败");
         }
@@ -265,45 +186,75 @@ export default {
         console.log(err);
       });
 
-    this.blog_user_info = {
-      user_id: 1,
-      user_email: "",
-      user_phone: "17703561185",
-      user_password: "",
-      user_name: "用户17703561185",
-      user_profile:
-        "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/",
-      user_createtime: "",
-      user_birthday: "",
-      user_gender: "",
-      user_state: 1,
-      user_signature: "精准与否，就是屠宰和手术的区别",
-      user_follower: 0,
-      user_follows: 0,
-      user_level: 3,
-      user_coin: 0,
-    };
-    this.card_info = [{ id: 1 }, { id: 2 }];
-    for (let i = 0; i < this.card_info.length; ++i) {
-      axios({
-        url: "http://43.142.41.192:6001/api/question",
-        params: {
-          question_id: this.card_info[i].id,
-        },
-        method: "get",
+      await axios.get('/userinfo',{
+        params:{
+          user_id:this.answer_infor.answer_user_id,
+        }
+      })
+      .then((res) => {
+        if (res.data.status === true) {
+          console.log(res.data.data);
+          this.answer_user_info = res.data.data;//获取answer_user_info全部内容 未验证过
+        } else {
+          console.log(res);
+          console.log("11内容获取失败");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });//给user_id为2的用户填充点信息
+      // this.answer_user_info.user_signature = "向前奔跑，永远热爱";
+      // console.log("111");
+      // console.log(this.answer_user_info);
+
+      this.question_id = this.$route.query.question_id;
+      await axios.get('/question',{
+        params:{
+          question_id:this.question_id,
+        }
       })
         .then((res) => {
-          console.log(res);
-          console.log("card info");
-          console.log(this.card_info[i].id);
-          console.log(res.data);
+          if (res.data.status === true) {
+          console.log(res.data.data)
+          this.question_infor = res.data.data;
+          } else{
+            console.log("内容获取失败");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        console.log(this.answer_infor.answer_user_id);
+    //   this.answer_user_info = {
+    //   user_id: 1,
+    //   user_email: "",
+    //   user_phone: "17703561185",
+    //   user_password: "",
+    //   user_name: "用户17703561185",
+    //   user_profile:
+    //     "https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/user_profile/",
+    //   user_createtime: "",
+    //   user_birthday: "",
+    //   user_gender: "",
+    //   user_state: 1,
+    //   user_signature: "精准与否，就是屠宰和手术的区别",
+    //   user_follower: 0,
+    //   user_follows: 0,
+    //   user_level: 3,
+    //   user_coin: 0,
+    // };
+    this.card_info = [{ id: 1 }, { id: 2 }];//暂时随便定两个卡片，获取卡片对应问题id的相关度算法后续写
+    for (let i = 0; i < this.card_info.length; ++i) {
+      await axios.get('/question',{
+        params:{
+          question_id:this.card_info[i].id,
+        }
+      })
+        .then((res) => {
           if (res.data.status === true) {
             this.card_info[i].content = res.data.data.question_title;
             this.card_info[i].keyword = res.data.data.question_tag;
             this.card_info[i].essence = "问题";
-            console.log(this.card_info[i]);
-            // this.answer_content = res.data.data.answer_content;
-            // console.log(this.answer_content);
           } else {
             console.log("内容获取失败");
           }
@@ -312,42 +263,76 @@ export default {
           console.log(err);
         });
     }
-    axios({
-        url:"http://43.142.41.192:6001/api/answer/comment",
-        params:{
+
+    await axios.get('/answer/comment',{
+      params:{
           answer_id:this.answer_id,
-        },
-        method: "get",
-      })
-      .then((res) => {
-        for(let i = 0; i <  res.data.data.comment_list.length; ++i)
-        {
-          this.comments[i]=res.data.data.comment_list[i];
-          console.log(this.comments[i]);
         }
-        })
-        .catch((err) => {
-          console.log(err);
+    })
+      .then((res) => {
+        for (let i = 0; i < res.data.data.comment_list.length; ++i) {
+          this.comments[i] = res.data.data.comment_list[i];
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    },
+    sendComment() {
+      if (this.$store.state.is_login == false) {
+        //若未登录
+        ElMessage({
+          message: "请先登录",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
         });
-    console.log(this.blog_user_info.user_profile);
-  },
-  methods: {
-    inputFocus() {
-      var replyInput = document.getElementById("replyInput");
-      replyInput.style.padding = "8px 8px";
-      replyInput.style.border = "2px solid blue";
-      replyInput.focus();
+        this.comment_now="";
+        /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
+        console.log(this.$route)
+        this.$route.query.redirect = this.$route.fullPath;
+        console.log(this.$route.query.redirect);
+        this.$router.push("login");
+      }
+      else{
+
+      }
+      // 里面要写未登录状况下的跳转处理 以及跳转时对输入的保存？
     },
-    hideReplyBtn() {
-      var replyInput = document.getElementById("replyInput");
-      this.sendReplybtn_show = false;
-      replyInput.style.padding = "10px";
-      replyInput.style.border = "none";
+    like(res) {
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "点赞成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      } else {
+        ElMessage({
+          type: "error",
+          message: "点赞失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
     },
-    onDivInput: function (e) {
-      this.comment_now = e.target.innerHTML;
+    unLike(res) {
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "取消点赞成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      } else {
+        ElMessage({
+          type: "error",
+          message: "取消点赞失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
     },
-    sendComment() {},
   },
 };
 </script>
@@ -417,13 +402,9 @@ export default {
   align-items: center;
 }
 
-.header_comment .header_img {
-  display: inline-block;
-  vertical-align: top;
-}
-.author_title {
+.thor_title {
   text-align: left;
-  margin-left: 3%;
+  margin-left: 7%;
   display: flex;
   align-items: center;
 }
