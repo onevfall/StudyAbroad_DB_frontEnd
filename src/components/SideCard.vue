@@ -15,6 +15,7 @@
     </template>
     <span class="content" >内容梗概: {{ card_info.content }}</span>
     <span class="keyword" >关键词: {{ card_info.keyword }}</span>
+    <!-- 关键词还需要改成类似认证的tag形式，需要前端对传来的字符串进行split -->
     <div class="nextpage">
         <el-icon class="icon"><Compass /></el-icon>
         <el-button class="button" :type="primary" text @click="toDetailPage">点击此处查看详情</el-button>
@@ -41,7 +42,7 @@ export default {
     
   },
   methods: {
-    toDetailPage(){
+    toDetailPage(){//后续待改
         if(this.card_info.essence === "问题")
         {
           console.log(this.card_info.id);

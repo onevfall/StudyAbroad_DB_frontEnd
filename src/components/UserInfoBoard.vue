@@ -82,11 +82,19 @@ export default {
       }
     },
     userSignature() {
-      if (this.blog_user_info.user_signature.length >= 1) {
-        return this.blog_user_info.user_signature;
-      } else {
+      if (
+        this.blog_user_info.user_signature == undefined ||
+        this.blog_user_info.user_signature.length < 1
+      ) {
         return "该用户尚未编写个性签名";
+      } else {
+        return this.blog_user_info.user_signature;
       }
+      // if (this.blog_user_info.user_signature >= 1 ) {
+      //   return this.blog_user_info.user_signature;
+      // } else {
+      //   return "该用户尚未编写个性签名";
+      // }
     },
   },
   methods: {
@@ -177,8 +185,10 @@ export default {
       }
     },
   },
+  // onMounted(){
   beforeMount() {
     //认证信息
+    //console.log(this.blog_user_info); //若为beforeMount 则此处打印为空 无法获取identity
     axios({
       url: "userinfo/identity?user_id=" + this.blog_user_info.user_id,
     })

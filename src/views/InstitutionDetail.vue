@@ -1,3 +1,8 @@
+<!--
+æœºæ„è¯¦æƒ…
+æè¿°ï¼šå±•ç¤ºè¯¦ç»†æœºæ„ä¿¡æ¯
+ä½œè€…ï¼šå¼ å­æ¶µ
+-->
 <template>
   <div>
     <institution-info :institution ="this.institution_info"></institution-info>
@@ -33,7 +38,7 @@ export default {
   },
   props:["institution_id"],
   created() {
-    //ÔÚ´Ë´¦Ïò·şÎñÆ÷ÇëÇóÊı¾İ£¬³õÊ¼»¯ËùĞè±äÁ¿
+    //åœ¨æ­¤å¤„å‘æœåŠ¡å™¨è¯·æ±‚æ•°æ®ï¼Œåˆå§‹åŒ–æ‰€éœ€å˜é‡
     axios({
         url: "institution?institution_id="+0,
         method: "get",
@@ -51,6 +56,9 @@ export default {
           console.log(err);
         });
   },
+  mounted(){
+     window.scrollTo(0,0);
+  }
 };
 </script>
 
