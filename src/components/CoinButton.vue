@@ -72,9 +72,9 @@ export default {
         });
         /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
         this.$router.push({
-          path: "/login",
-          query: { redirect: this.$route.path },
-        });
+        path:'/login',
+        query:{redirect:this.$route.fullpath},
+      });
       } else {
         //呼出选择币数框
         this.input_nums = true;
@@ -92,6 +92,7 @@ export default {
         return;
       }
       this.input_nums = false;
+
       axios
         .post("coin/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,

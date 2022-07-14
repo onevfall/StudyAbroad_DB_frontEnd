@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
+import NewsHomePage from '../views/NewsHomePage.vue'
 import NewsPage from '../views/NewsPage.vue'
 import BlogPage from '../views/BlogPage.vue'
 import LoginPage from '../views/LoginPage.vue'
@@ -9,6 +10,7 @@ import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
 import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
+import InstitutionCenter from '../views/InstitutionCenter.vue'
 import store from '../store/index'
 import QuestionPage from '../views/QuestionPage.vue'
 import { ElMessage } from 'element-plus'
@@ -19,6 +21,15 @@ const routes = [
     component:HomePage,
     meta:{
       title:'首页'
+    }
+  },
+  {
+    path:'/newsHome',
+    name:'newsHome',
+    component:NewsHomePage,
+    meta:{
+      title:'留学快讯首页',
+      requireAuth:true
     }
   },
   {
@@ -94,6 +105,14 @@ const routes = [
     component:SchoolCenterPage,
     meta:{
       title:'大学中心'
+    }
+  },
+  {
+    path:'/institution_center',
+    name:'institution_center',
+    component:InstitutionCenter,
+    meta:{
+      title:'机构中心'
     }
   },
   { 

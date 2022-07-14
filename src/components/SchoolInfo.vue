@@ -21,7 +21,35 @@
   </el-aside>
 
       <el-main>相关图片
-        <Loading></Loading>
+        <div class="container">
+    <div class="lunbo" @mouseenter="clear" @mouseleave="run">
+        
+      <div class="img" >
+        <img :src="dataList[currentIndex]" alt="" />
+      </div>
+        
+      <div class="dooted" v-if="this.dataList.length">
+        <ul class="doo">
+          <li 
+            v-for="(item, index) in this.dataList"
+            :key="index"
+            :class="{ current: currentIndex == index }"
+            @click="gotoPage(index)"
+          ></li>
+        </ul>
+      </div>
+        
+      <div class="right_turn turn" @click="next()">
+        <i class="el-icon-arrow-right"></i>
+      </div>
+       
+      <div class="left_turn turn " @click="up()">
+        <i class="el-icon-arrow-left"></i>
+      </div>
+    </div>
+
+  </div>
+
       </el-main>
     </el-container>
     
@@ -35,16 +63,52 @@ export default {
     Loading
   },
   props: ["school"],
-  computed: {
-    contentShow() {
-      
-    },
+  data () {
+    return {
+      dataList: [],
+      currentIndex: 0, // 默认显示图片
+      timer: null // 定时器
+    }
   },
-  methods:{
-     //goNewsDetail(){
-       //   alert("跳转至id为"+ this.new_info.news_flash_id+"的快讯详情页面")
-      //}
+  created () {
+    this.run()
+  },
+  updated(){
+    this.dataList=this.school.university_photo;
+  },
+  methods: {
+      //点击小圆圈切换图片
+    gotoPage (index) {
+      this.currentIndex = index
+    },
+      //下一张
+    next () {
+      if (this.currentIndex === this.dataList.length - 1) {
+        this.currentIndex = 0
+      } else {
+        this.currentIndex++
+      }
+    },
+      //上一张
+    up () {
+      if (this.currentIndex === 0) {
+        this.currentIndex = this.dataList.length - 1
+      } else {
+        this.currentIndex--
+      }
+    },
+      //清除定时器
+    clear () {
+      clearInterval(this.timer)
+    },
+    // 定时器
+    run () {
+      this.timer = setInterval(() => {
+        this.next()
+      }, 2000)
+    }
   }
+
 };
 </script>
 
@@ -57,6 +121,7 @@ export default {
   color:white;
   
   background: rgb(26, 46, 80);
+  background-image: linear-gradient(#a6c1ee, #d3afa5);
   opacity: 1; 
   z-index: -1;
 }
@@ -77,7 +142,62 @@ export default {
 
 .left::-webkit-scrollbar{
   background-color: rgb(36, 56, 90);
+  background-image: linear-gradient(#a6c1ea, #d3afae);
   color: rgb(26, 46, 80);
+}
+
+ul li {
+  float: left;
+  width: 30px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  color: rgba(240, 238, 238, 0.8);
+  font-size: 14px;
+}
+.container {
+  position: relative;
+  height: 90%;
+  width: 100%;
+  margin: 0 ;
+}
+
+.container  .img {  
+    height: 100%;
+    width: 100%;
+    border: 1px solid gray;
+  }
+  .container  .img img {  
+    height: 100%;
+    width: 100%;
+  }
+  .dooted {
+    position: absolute;
+    bottom: -10px;
+    right: 0px;
+  }
+
+.turn {
+  width: 30px;
+  height:30px;
+  line-height: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #9d9d9d73;
+}
+.right_turn {
+  position: absolute;
+  top: 100px;
+  right: 0;
+}
+.left_turn {
+  position: absolute;
+  top: 100px;
+  left: 0;
+}
+.current {
+  color: gray;
 }
 
 </style>

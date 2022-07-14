@@ -29,8 +29,19 @@ export default {
     console.log(this.institution.institution_name);
     //console.log(prop.school);
     console.log("test fot props");
-    local.search(this.institution.institution_name); 
-
+    local.search(this.institution.institution_location); 
+    
+//创建地址解析器实例
+        var myGeo = new BMapGL.Geocoder();
+        // 将地址解析结果显示在地图上，并调整地图视野
+        myGeo.getPoint(this.institution.institution_location, function(point){
+            if(point){
+                map.centerAndZoom(point, 16);
+                map.addOverlay(new BMapGL.Marker(point, {title: this.institution.institution_location}))
+            }else{
+                alert('您选择的地址没有解析到结果！');
+            }
+        }, this.institution.institution_city)
   
   },
   mounted(){

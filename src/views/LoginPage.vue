@@ -79,7 +79,6 @@ export default {
       /*此处日后需要加数据格式验证
           
           */
-    
       axios
         .post("login", {
           user_id: this.user_id,
@@ -99,12 +98,6 @@ export default {
               duration: 2000,
             });
             store.commit("loginIn", user_info);
-            // console.log(this.$route.query.redirect);
-            //let redirect = decodeURIComponent(this.$route.query.redirect || '/')
-            // console.log(redirect);
-            // this.$router.push({
-            //   path:redirect
-            // });
             if (this.$route.query.redirect) {
               //若从其他页面跳转而来则跳转回其他页面
               this.$router.replace(this.$route.query.redirect);
