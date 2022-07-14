@@ -15,8 +15,8 @@
            </div>
           </div> 
           <p style="float:left;">
-            <span class="con2_span" style="float:left;">{{institution.institution_introduction}}</span> 
-            <span class="show"><span class="more">[更多]</span></span> <!---->
+            <span class="con2_span" style="float:left;text-align:left;">{{institution.institution_introduction}}</span> 
+            <span class="show" style="float:right;text-align:right;">[更多]</span> <!---->
           </p>
   </el-aside>
 
@@ -57,6 +57,7 @@ export default {
   color:white;
   
   background: rgb(26, 46, 80);
+  background-image: linear-gradient(#a6c1ee, #d3afa5);
   opacity: 1; 
   z-index: -1;
 }
@@ -77,6 +78,7 @@ export default {
 
 .left::-webkit-scrollbar{
   background-color: rgb(36, 56, 90);
+  background-image: linear-gradient(#a6c1ee, #d3afa5);
   color: rgb(26, 46, 80);
 }
 
