@@ -144,14 +144,11 @@ export default {
             duration: 2000,
           });
         } else {
-          axios({
-            url: "follow",
-            params: {
+          axios
+            .post("follow", {
               user_id: this.$store.state.user_info.user_id,
               follow_user_id: this.blog_user_info.user_id,
-            },
-            method: "post",
-          })
+            })
             .then((res) => {
               if (res.data.status == false) {
                 ElMessage({
