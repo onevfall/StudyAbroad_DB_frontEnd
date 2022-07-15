@@ -22,7 +22,7 @@ import App from './App.vue'
 
 //配置全局baseURL默认值
 axios.defaults.baseURL="/api"
-
+axios.defaults.headers.post['Content-Type']='application/x-www-form-urlencoded'
 const app = createApp(App).use(ElementPlus).use(store).use(router).use(VueAxios,axios).use(mock)
 
 //初始化图标

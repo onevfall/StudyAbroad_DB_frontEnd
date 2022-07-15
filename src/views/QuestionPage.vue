@@ -10,7 +10,7 @@
           <el-row>
             <el-col :span="1"></el-col>
             <el-col :span="19">
-              <el-row>
+              <el-row type="flex" align="middle">
                 <el-col :span="2" v-if="this.question_info.user_university != 'null'">
                   <el-tag size="middle">{{
                     this.question_info.user_university
@@ -350,7 +350,7 @@ export default {
 }
 
 .bottom {
-  margin-top: 80px;
+  margin-top: 50px;
 }
 
 #question {
