@@ -34,7 +34,10 @@
         <div class="comment_footer"></div>
       </div>
     </template>
-    <div v-if="this.comment_infor.reply_num !== 0">
+    <div v-if="this.comment_infor.reply_num !== 0" style="margin-left:3%">
+      <!-- <div>
+
+      </div> -->
       <el-collapse accordion >
         <div v-for="(item, i) in this.comment_infor.child_comments" :key="i">
           <comment-item :comment_infor="this.comment_infor.child_comments[i]"> </comment-item>
@@ -76,7 +79,10 @@ export default {
       });
   },
   data() {
-    return {};
+    return {
+      isReply:false,
+
+    };
   },
   watch: {},
   methods: {
