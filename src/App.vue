@@ -1,12 +1,17 @@
 <template>
-  <navbar></navbar>
-  <router-view></router-view>
+  <navbar style="flex:1"></navbar>
+  <div class="content">
+  <router-view ></router-view>
+  </div>
+  <footer-study-abroad></footer-study-abroad>
 </template>
 <script>
 import Navbar from "../src/components/Navbar.vue";
+import FooterStudyAbroad from "../src/components/FooterStudyAbroad.vue"
 export default {
   components: {
-    Navbar
+    Navbar,
+    FooterStudyAbroad
   },
   mounted(){
     this.$router.replace('/home')
@@ -21,6 +26,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.content{
+  min-height: calc(100vh - 210px);
 }
 
 nav {
