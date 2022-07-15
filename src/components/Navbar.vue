@@ -22,10 +22,8 @@
       <el-menu-item index="question" @click="goQuestion">留学问答(测试用 跳转至问题详情界面)</el-menu-item>
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
-
-    <el-menu-item index="news" @click="goNews">留学快讯</el-menu-item>
-    <el-menu-item index="5">留学顾问</el-menu-item>
-
+    <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
+    <el-menu-item index="institution_center" @click="goInstitutionCenter">留学顾问</el-menu-item>
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
       <el-menu-item index="login" @click="goLogin">登录</el-menu-item>
