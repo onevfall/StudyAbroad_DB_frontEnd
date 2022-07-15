@@ -141,9 +141,11 @@ const router = createRouter({
 
 router.afterEach(to=>{
   document.title=to.meta.title;//更改标题
+  window.scrollTo(0, 0)
 })
 
 router.beforeEach(to=>{
+  if(to.name)
   if(to.matched.some(record=>record.meta.requireAuth)){
     //如果需要验证登录状态
     if(store.state.is_login==true){
