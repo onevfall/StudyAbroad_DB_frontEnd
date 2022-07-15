@@ -117,7 +117,7 @@ export default {
 
 
 .info_table{
-  height: 350px; 
+  height: 400px; 
   width: 100%; 
   color:white;
   
@@ -167,12 +167,12 @@ ul li {
 
 .container  .img {  
     width: 100%;
-    height: 300px;
+    height: 350px;
     border: 1px solid gray;
   }
   .container  .img img {  
     width: 100%;
-    height: 300px;
+    height: 350px;
   }
   .dooted {
     position: absolute;
