@@ -82,7 +82,7 @@ export default {
       }
     },
     userSignature() {
-      if (this.blog_user_info.user_signature >= 1 ) {
+      if (this.blog_user_info.user_signature >= 1) {
         return this.blog_user_info.user_signature;
       } else {
         return "该用户尚未编写个性签名";
@@ -92,14 +92,11 @@ export default {
   methods: {
     //取关
     CancelFollow() {
-      axios({
-        url: "follow",
-        params: {
+      axios
+        .put("follow", {
           user_id: this.$store.state.user_info.user_id,
           follow_user_id: this.blog_user_info.user_id,
-        },
-        method: "put",
-      })
+        })
         .then((res) => {
           console.log(res.data.status);
           if (res.data.status == true) {
@@ -177,7 +174,8 @@ export default {
   // onMounted(){
   beforeMount() {
     //认证信息
-    //console.log(this.blog_user_info); //若为beforeMount 则此处打印为空 无法获取identity
+   
+    console.log(this.blog_user_info); //若为beforeMount 则此处打印为空 无法获取identity
     axios({
       url: "userinfo/identity?user_id=" + this.blog_user_info.user_id,
     })
@@ -187,6 +185,8 @@ export default {
       .catch((errMsg) => {
         console.log(errMsg);
       });
+    
+
     //当前用户是否关注
     axios({
       url:
@@ -202,7 +202,9 @@ export default {
       .catch((errMsg) => {
         console.log(errMsg);
       });
+    
   },
+  
 };
 </script>
 
