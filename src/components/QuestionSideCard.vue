@@ -13,8 +13,12 @@
         <!-- 如何获知当前是动态详情界面还是问题详情界面 靠外部传参 essence-->
       </div>
     </template>
-    <span class="content" >内容梗概: {{ card_info.content }}</span>
-    <span class="keyword" >关键词: {{ card_info.keyword }}</span>
+    <span class="content" >问题: {{ card_info.content }}</span>
+    <span class="keyword" >关键词: 
+      <el-tag size="middle" v-for="tag in card_info.keyword" :key="tag" effect="plain">
+        {{tag}}
+        </el-tag>
+      </span>
     <!-- 关键词还需要改成类似认证的tag形式，需要前端对传来的字符串进行split -->
     <div class="nextpage">
         <el-icon class="icon"><Compass /></el-icon>
@@ -41,14 +45,15 @@ export default {
   computed: {
     
   },
+
   methods: {
     toDetailPage(){//后续待改
         if(this.card_info.essence === "问题")
         {
           console.log(this.card_info.id);
           this.$router.push({
-            name:"answer_detail",
-            query:{id:this.card_info.id},
+            name:"question",
+            query:{question_id:this.card_info.id},
           });
         }
         else

@@ -72,40 +72,21 @@ export default {
     };
   },
   methods: {
-    goRegister(){
-      this.$router.replace('/register');
+    goRegister() {
+      this.$router.replace("/register");
     },
     login() {
       /*此处日后需要加数据格式验证
           
           */
-      // axios.post('/login',{
-      //   user_id: this.user_id,
-      //   user_password: this.user_password,
-      // },{
-      //   headers:{
-      //     'Content-Type':'application/x-www-form-urlencoded'
-      //   }
-      // })
-      var d=new FormData();
-      d.append("user_id",this.user_id);
-      d.append("user_password",this.user_password);
-      console.log(d);
-      axios({
-        headers:{
-            'Content-Type':'application/x-www-form-urlencoded'
-          },
-        url: "login",
-        data:d,
-        // params: {
-        //   user_id: this.user_id,
-        //   user_password: this.user_password,
-        // },
-        method: "post",
-      })
+      axios
+        .post("login", {
+          user_id: this.user_id,
+          user_password: this.user_password,
+        })
         .then((res) => {
           console.log(res);
-          var response=res.data
+          var response = res.data;
           console.log(response.state);
           if (response.status == true) {
             var user_info = response.data;
@@ -113,16 +94,10 @@ export default {
             ElMessage({
               message: user_info.user_name + "，欢迎您！",
               type: "success",
-              showClose:true,
-              duration:2000
+              showClose: true,
+              duration: 2000,
             });
             store.commit("loginIn", user_info);
-            // console.log(this.$route.query.redirect);
-            //let redirect = decodeURIComponent(this.$route.query.redirect || '/')
-            // console.log(redirect);
-            // this.$router.push({
-            //   path:redirect
-            // });
             if (this.$route.query.redirect) {
               //若从其他页面跳转而来则跳转回其他页面
               this.$router.replace(this.$route.query.redirect);
@@ -141,6 +116,7 @@ export default {
         });
     },
   },
+  axios,
 };
 </script>
 

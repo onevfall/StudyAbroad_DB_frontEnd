@@ -19,12 +19,11 @@
     <el-menu-item index="school_center" @click="goSchoolCenter">找对学校</el-menu-item>
     <el-sub-menu index="3">
       <template #title>说说留学</template>
-      <el-menu-item index="answer_detail" @click="goAnswerDetail">留学问答(测试用 跳转至回答详情界面)</el-menu-item>
+      <el-menu-item index="question" @click="goQuestion">留学问答(测试用 跳转至问题详情界面)</el-menu-item>
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
     <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
     <el-menu-item index="institution_center" @click="goInstitutionCenter">留学顾问</el-menu-item>
-    <el-menu-item index='blog_detail' @click="goBlogDetail">动态详情(测试用)</el-menu-item>
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
       <el-menu-item index="login" @click="goLogin">登录</el-menu-item>
@@ -40,7 +39,7 @@
     </el-sub-menu>
     <el-menu-item index="school_detail" @click="goSchoolDetail">学校详情</el-menu-item>
     <el-menu-item index="institution_detail" @click="goInstitutionDetail">机构详情</el-menu-item>
-    <el-menu-item index="question" @click="goQuestion">问题</el-menu-item>
+    <el-menu-item index="qa_center" @click="goQACenter">问答首页</el-menu-item>
   </el-menu>
 </template>
 
@@ -78,12 +77,7 @@ export default {
         name: "register",
       });
     },
-    //不应该在导航栏，此时仅为测试用
-    goBlogDetail(){
-      router.push({
-        name:"blog_detail"
-      })
-    },
+
     //不应该在导航栏，此时仅为测试用
     goAnswerDetail(){
       router.push({
@@ -116,7 +110,13 @@ export default {
     //测试问题
     goQuestion(){
       router.push({
-        name:"question"
+        name:"question",
+        query:{question_id:12},//模拟带参数路由
+      })
+    },
+    goQACenter(){
+      router.push({
+        name:"qa_center"
       })
     },
     //退出账号并跳转至首页
