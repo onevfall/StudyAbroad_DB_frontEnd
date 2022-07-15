@@ -5,7 +5,7 @@
 -->
 <template>
   <div class="info_border" id="0"> 
-    <div class="tips_bar" ></div>
+    <div class="tips_bar" id="basic"></div>
     <span style="font-size:30px;line-height: 60px;">基本信息</span>
       <el-container class="info_table">
         <el-main>
@@ -36,7 +36,7 @@
 
 
   <div class="info_border" id="1"> 
-    <div class="tips_bar" ></div>
+    <div class="tips_bar" id="location"></div>
     <span style="font-size:30px;line-height: 60px;">机构地址</span>
   <el-container class="info_table">
       <el-main>
