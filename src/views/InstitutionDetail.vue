@@ -7,7 +7,7 @@
   <div>
     <institution-info :institution ="this.institution_info"></institution-info>
     <el-container>
-      <el-aside width="400px">
+      <el-aside width="300px">
         
       </el-aside>
       <el-main>
@@ -34,13 +34,20 @@ export default {
   data() {
     return {
       institution_info: "",
+      institution_id:"",
     };
   },
   props:["institution_id"],
+  methods:{
+    getParams(){
+      this.institution_id = this.$route.query.institution_id 
+    },
+  },
   created() {
+    this.getParams();
     //在此处向服务器请求数据，初始化所需变量
     axios({
-        url: "institution?institution_id="+4,
+        url: "institution?institution_id="+this.institution_id,
         method: "get",
       })
         .then((res) => {
