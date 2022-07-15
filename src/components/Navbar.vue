@@ -39,6 +39,7 @@
     </el-sub-menu>
     <el-menu-item index="school_detail" @click="goSchoolDetail">学校详情</el-menu-item>
     <el-menu-item index="institution_detail" @click="goInstitutionDetail">机构详情</el-menu-item>
+    <el-menu-item index="qa_center" @click="goQACenter">问答首页</el-menu-item>
   </el-menu>
 </template>
 
@@ -111,6 +112,11 @@ export default {
       router.push({
         name:"question",
         query:{question_id:12},//模拟带参数路由
+      })
+    },
+    goQACenter(){
+      router.push({
+        name:"qa_center"
       })
     },
     //退出账号并跳转至首页
