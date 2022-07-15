@@ -494,6 +494,9 @@ export default {
 </script>
 
 <style scoped>
+.common-layout{
+  margin-bottom: 40px;
+}
 .UserInfo {
   margin-top: 20px;
   margin-left: 25px;
