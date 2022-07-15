@@ -5,12 +5,11 @@
 <template>
   <div>
     <span style="text-align: left; margin-right: 8px" v-if="is_liked == false">
-      <el-icon :size="this.size" @click="like"><Chicken /></el-icon>
+      <!-- <el-icon :size="this.size" @click="like"><Chicken /></el-icon> -->
+      <img src="../assets/favorite.png" :style="{height:this.icon_size+'px'}" @click="like">
     </span>
     <span style="text-align: left; margin-right: 8px" v-else>
-      <el-icon :size="this.size" color="#d25f1e" @click="unLike"
-        ><Chicken
-      /></el-icon>
+      <img src="../assets/favorite_solid.png" :style="{height:this.icon_size+'px'}" @click="unLike">
     </span>
     <span
       :style="{ 'text-align': 'left', 'font-size': this.size }"
@@ -38,6 +37,7 @@ export default {
       is_liked: false,
       dynamic_type: "",
       like_nums: "",
+      icon_size:0
     };
   },
   methods: {
@@ -56,14 +56,11 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
-        axios({
-          url: "like/" + this.dynamic_type,
-          params: {
+        axios
+          .post("like/" + this.dynamic_type, {
             user_id: this.$store.state.user_info.user_id,
             [this.dynamic_type + "_id"]: this.content_id,
-          },
-          method: "post",
-        })
+          })
           .then((res) => {
             if (res.data.status) {
               this.is_liked = true;
@@ -86,14 +83,11 @@ export default {
       }
     },
     unLike() {
-      axios({
-        url: "like/" + this.dynamic_type,
-        params: {
+      axios
+        .put("like/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
-        },
-        method: "put",
-      })
+        })
         .then((res) => {
           if (res.data.status) {
             this.is_liked = false;
@@ -116,6 +110,31 @@ export default {
     },
   },
   created() {
+    //设定大小
+    switch(this.size){
+      case "xx-small":
+        this.icon_size=9;
+        break;
+      case "x-small":
+        this.icon_size=10;
+        break;
+      case "small":
+        this.icon_size=12;
+        break;
+      case "normal":
+        this.icon_size=14;
+        break;
+      case "large":
+        this.icon_size=17;
+        break;
+      case "x-large":
+        this.icon_size=24;
+        break;
+      case "xx-large":
+        this.icon_size=30;
+        break;
+
+    }
     //动态改变url
     switch (this.content_type) {
       case "0":
@@ -133,18 +152,16 @@ export default {
     }
     //查询是否点过赞
     if (this.$store.state.is_login) {
-      axios({
-        url:
-          "like/" +
+      axios(
+        "like/" +
           this.dynamic_type +
           "?user_id=" +
           this.$store.state.user_info.user_id +
           "&" +
           this.dynamic_type +
           "_id=" +
-          this.content_id,
-        method: "get",
-      })
+          this.content_id
+      )
         .then((res) => {
           this.like_nums = res.data.data.like_times;
           this.is_liked = res.data.status;
@@ -155,18 +172,16 @@ export default {
         });
     } else {
       //查询点赞个数
-      axios({
-        url:
-          "like/" +
+      axios(
+        "like/" +
           this.dynamic_type +
           "?user_id=" +
           1 +
           "&" +
           this.dynamic_type +
           "_id=" +
-          this.content_id,
-        method: "get",
-      })
+          this.content_id
+      )
         .then((res) => {
           this.like_nums = res.data.data.like_times;
           this.is_liked = false;

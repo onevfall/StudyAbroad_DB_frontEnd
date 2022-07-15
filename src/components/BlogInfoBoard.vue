@@ -5,10 +5,21 @@
 <template>
   <el-card :body-style="{ padding: '0px' }" class="blog_card">
     <div class="image_field">
-      <img class="card_image" :src="this.blog_image" />
+      <img
+        class="card_image"
+        :src="this.blog_image"
+        v-if="img_ready == true"
+        style="border-top-left-radius: 10px; border-top-right-radius: 10px"
+      />
+      <img
+        class="card_image"
+        src="../assets/loading.gif"
+        v-else
+        style="border-top-left-radius: 10px; border-top-right-radius: 10px"
+      />
     </div>
 
-    <div style="padding: 14px">
+    <div style="padding: 14px; padding-bottom: 0px">
       <section class="card_info">
         <el-row gutter="10" justify="left">
           <el-col span="1">
@@ -19,6 +30,7 @@
           <el-col span="1">
             <el-tag class="ml-2" size="small">{{ blogTime }}</el-tag>
           </el-col>
+        
         </el-row>
       </section>
       <section class="card_content">
@@ -51,9 +63,9 @@
               @giveCoin="coinIn"
             />
           </el-col>
-       
         </el-row>
       </section>
+      <el-button class="card-button" @click="goDetail">去看看</el-button>
     </div>
   </el-card>
 </template>
@@ -87,6 +99,7 @@ export default {
     return {
       user_info: "",
       blog_image: "",
+      img_ready: false,
     };
   },
   methods: {
@@ -124,8 +137,8 @@ export default {
         });
       }
     },
-    coinIn(res){
-      if(res){
+    coinIn(res) {
+      if (res) {
         ElMessage({
           type: "success",
           message: "投币成功！",
@@ -133,19 +146,25 @@ export default {
           showClose: true,
         });
       }
-    }
+    },
+    goDetail() {
+      //alert(this.blog_info.BlogId);
+      this.$router.push("/blog_detail");
+    },
   },
   created() {
-    axios({
-      url: "userinfo?user_id=" + this.blog_info.BlogUserId,
-      method: "get",
-    })
+    axios.get(
+      "userinfo?user_id=" + this.blog_info.BlogUserId,
+  
+    )
       .then((res) => {
         this.user_info = res.data.data;
         if (this.blog_info.BlogImage == null) {
           this.blog_image = this.user_info.user_profile;
+          this.img_ready = true;
         } else {
           this.blog_image = this.blog_info.BlogImage;
+          this.img_ready = true;
         }
       })
       .catch((errMsg) => {
@@ -167,7 +186,20 @@ export default {
 .blog_card {
   width: 350px;
   border-radius: 10px;
-  
+  transition: 0.5s ease-out;
+  overflow: visible;
+}
+.card-button {
+  transform: translate(-50%, 125%);
+  width: 50%;
+  border-radius: 1rem;
+  border: none;
+  background-color: #008bf8;
+  color: #fff;
+  font-size: 1rem;
+  opacity: 0;
+  transition: 0.3s ease-out;
+  margin-left: 50%;
 }
 .image_field {
   height: 300px;
@@ -185,5 +217,14 @@ export default {
 }
 .card_user {
   color: #959595;
+}
+.blog_card:hover {
+  border-color: #008bf8;
+  box-shadow: 0 8px 36px 0 rgba(0, 0, 0, 0.25);
+}
+
+.blog_card:hover .card-button {
+  transform: translate(-50%, 50%);
+  opacity: 1;
 }
 </style>
