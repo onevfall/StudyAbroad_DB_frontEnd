@@ -35,7 +35,7 @@
       </div>
     </template>
     <div v-if="this.comment_infor.reply_num !== 0" style="margin-left:3%">
-      <!-- <div>
+      <!-- <div> 输入框..
 
       </div> -->
       <el-collapse accordion >
