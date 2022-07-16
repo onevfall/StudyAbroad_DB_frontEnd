@@ -43,7 +43,7 @@
                   <el-col :span="8">
                     <div>
                       <span class="info_text">学费：</span>
-                      <span style="color:gray;">{{school.university_money}}</span>
+                      <span style="color:gray;">{{school.university_tuition}}</span>
                     </div>
                   </el-col>
                 </el-row>
@@ -94,7 +94,7 @@ export default {
 .school_card {
   margin: 20px;
   width: 90%;
-  height: 200px;
+  height: 20%;
   display: flex;
   justify-content: center;
 }
@@ -102,7 +102,7 @@ export default {
   padding-top: 25px; /* 调整上下间距的 */
   margin: 30px;
   width: 20%;
-  height: 100px;
+  height: 15%;
   vertical-align: middle;
 }
 .rank_text {
@@ -115,7 +115,7 @@ export default {
 .two_block {
   /* margin-left: 20px; */
   padding: 10px;
-  height: 200px;
+  height: 20%;
   width: 60%;
 }
 .two_block_hori {

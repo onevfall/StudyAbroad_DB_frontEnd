@@ -3,6 +3,7 @@
 作者：焦佳宇
 -->
 <template>
+  <page-loading v-if="blog_list.length == 0"></page-loading>
   <carousel
     type="card"
     indicator-position="none"
@@ -55,10 +56,12 @@
 import Carousel from "../components/Carousel.vue";
 import BlogInfoBoard from "../components/BlogInfoBoard.vue";
 import axios from "axios";
+import PageLoading from "../components/PageLoading.vue";
 export default {
   components: {
     Carousel,
     BlogInfoBoard,
+    PageLoading,
   },
   data() {
     return {
@@ -72,6 +75,7 @@ export default {
       if (this.sort_type == 0) {
         return;
       }
+  
       this.sort_type = 0;
       axios({
         url: "/blog/time?num=8",
@@ -105,11 +109,12 @@ export default {
         document.documentElement.clientHeight + window.scrollY >=
         document.documentElement.scrollHeight
       ) {
-        alert("触底了!!!!记得加载");
+        console.log();("触底了!!!!记得加载");
       }
     },
   },
   created() {
+    
     axios
       .get("/blog/time?num=8")
       .then((res) => {
@@ -122,6 +127,8 @@ export default {
   },
   mounted() {
     window.addEventListener("scroll", this.bottoomLoading);
+     
+
   },
   unmounted() {
     window.removeEventListener("scroll", this.bottoomLoading);

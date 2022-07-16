@@ -169,10 +169,6 @@ export default {
         ElMessage.error("两次输入密码不相同！请再次确认密码");
         return;
       } else {
-        var d = new FormData();
-        d.append("user_phone", this.user_phone);
-        d.append("user_password", this.user_password);
-        console.log(d);
         axios
           .post("/register", {
             user_phone: this.user_phone,
