@@ -65,6 +65,9 @@ export default {
 </script>
 
 <style scoped>
+.box-card{
+  max-height:200px;
+}
 .card-header {
   display: flex;
   /* justify-content: space-between; */
@@ -95,6 +98,7 @@ export default {
 }
 .content{
     width:300px;
+    height: 20px;
     word-break:break-all;
     display:inline-block;
     /* display:-webkit-box; */
@@ -106,6 +110,7 @@ export default {
     text-align:left;
     color:#469afb;
     font-family: "宋体";
+    min-height:20px;
 }
 
 .keyword{

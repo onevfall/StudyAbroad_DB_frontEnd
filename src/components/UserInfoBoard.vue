@@ -174,7 +174,8 @@ export default {
   // onMounted(){
   beforeMount() {
     //认证信息
-   
+    console.log("组件内开始挂载！")
+
     console.log(this.blog_user_info); //若为beforeMount 则此处打印为空 无法获取identity
     axios({
       url: "userinfo/identity?user_id=" + this.blog_user_info.user_id,
