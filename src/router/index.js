@@ -5,57 +5,67 @@ import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
+import PersonInformation from '../views/PersonInformation.vue'
 import store from '../store/index'
 import { ElMessage } from 'element-plus'
 const routes = [
   {
-    path:'/home',
-    name:'home',
-    component:HomePage,
-    meta:{
-      title:'首页'
+    path: '/home',
+    name: 'home',
+    component: HomePage,
+    meta: {
+      title: '首页'
     }
   },
   {
-    path:'/news',
-    name:'news',
-    component:NewsPage,
-    meta:{
-      title:'留学快讯',
-      requireAuth:true
+    path: '/news',
+    name: 'news',
+    component: NewsPage,
+    meta: {
+      title: '留学快讯',
+      // requireAuth: true
     }
   },
   {
-    path:'/login',
-    name:'login',
-    component:LoginPage,
-    meta:{
-      title:'用户登录'
+    path: '/login',
+    name: 'login',
+    component: LoginPage,
+    meta: {
+      title: '用户登录'
     }
   },
   {
-    path:'/register',
-    name:'register',
-    component:RegisterPage,
-    meta:{
-      title:'用户注册'
+    path: '/register',
+    name: 'register',
+    component: RegisterPage,
+    meta: {
+      title: '用户注册'
     }
   },
   //动态详情页面放在此目前做测试，真正使用时采用嵌套路由的方式使用
   {
-    path:'/blog_detail',//路径暂且做测试
-    name:'blog_detail',
-    component:BlogDetail,
-    meta:{
-      title:'动态详情'
+    path: '/blog_detail',//路径暂且做测试
+    name: 'blog_detail',
+    component: BlogDetail,
+    meta: {
+      title: '动态详情'
     }
   },
   {
-    path:'/school_detail',//路径暂且做测试
-    name:'school_detail',
-    component:SchoolDetail,
-    meta:{
-      title:'学校详情'
+    path: '/school_detail',//路径暂且做测试
+    name: 'school_detail',
+    component: SchoolDetail,
+    meta: {
+      title: '学校详情'
+    }
+  },
+  {
+    path: '/person_info',
+    name: 'person_info',
+    component: PersonInformation,
+    meta: {
+      title: '个人信息',
+      // requireAuth: true
     }
   }
 ]
@@ -65,30 +75,30 @@ const router = createRouter({
   routes
 })
 
-router.afterEach(to=>{
-  document.title=to.meta.title;//更改标题
+router.afterEach(to => {
+  document.title = to.meta.title;//更改标题
 })
 
-router.beforeEach(to=>{
-  if(to.matched.some(record=>record.meta.requireAuth)){
+router.beforeEach(to => {
+  if (to.matched.some(record => record.meta.requireAuth)) {
     //如果需要验证登录状态
-    if(store.state.is_login==true){
+    if (store.state.is_login == true) {
       return true
     }
-    else{
+    else {
       ElMessage({
         message: '请先登录',
         type: 'warning',
-        showClose:true,
-        duration:2000
+        showClose: true,
+        duration: 2000
       })
-      return{
-        path:'/login',
-        query:{redirect:to.fullPath}
+      return {
+        path: '/login',
+        query: { redirect: to.fullPath }
       }
     }
   }
-  else{
+  else {
     return true
   }
 })
