@@ -6,11 +6,17 @@
 <template>
   <div>
     <span style="text-align: left; margin-right: 8px" v-if="is_coined == false">
-     
-      <img src="../assets/dollar.png" :style="{height:this.icon_size+'px'}" @click="coinConfirm">
+      <img
+        src="../assets/dollar.png"
+        :style="{ height: this.icon_size + 'px' }"
+        @click="coinConfirm"
+      />
     </span>
     <span style="text-align: left; margin-right: 8px" v-else>
-      <img src="../assets/dollar_solid.png" :style="{height:this.icon_size+'px'}" >
+      <img
+        src="../assets/dollar_solid.png"
+        :style="{ height: this.icon_size + 'px' }"
+      />
     </span>
     <span
       :style="{ 'text-align': 'left', 'font-size': this.size }"
@@ -56,7 +62,7 @@ export default {
       coin_nums: "",
       input_nums: false,
       coin_in_num: 1,
-      icon_size:0
+      icon_size: 0,
     };
   },
   methods: {
@@ -72,9 +78,9 @@ export default {
         });
         /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
         this.$router.push({
-        path:'/login',
-        query:{redirect:this.$route.fullpath},
-      });
+          path: "/login",
+          query: { redirect: this.$route.fullPath },
+        });
       } else {
         //呼出选择币数框
         this.input_nums = true;
@@ -100,8 +106,6 @@ export default {
           num: this.coin_in_num,
         })
         .then((res) => {
-          console.log(67);
-          console.log(res.data);
           if (res.data.status) {
             this.is_coined = true;
             this.coin_nums += this.coin_in_num;
@@ -136,30 +140,29 @@ export default {
     },
   },
   created() {
-     //设定大小
-    switch(this.size){
+    //设定大小
+    switch (this.size) {
       case "xx-small":
-        this.icon_size=9;
+        this.icon_size = 9;
         break;
       case "x-small":
-        this.icon_size=10;
+        this.icon_size = 10;
         break;
       case "small":
-        this.icon_size=12;
+        this.icon_size = 12;
         break;
       case "normal":
-        this.icon_size=14;
+        this.icon_size = 14;
         break;
       case "large":
-        this.icon_size=17;
+        this.icon_size = 17;
         break;
       case "x-large":
-        this.icon_size=24;
+        this.icon_size = 24;
         break;
       case "xx-large":
-        this.icon_size=30;
+        this.icon_size = 30;
         break;
-
     }
     //动态改变url
     switch (this.content_type) {
@@ -172,18 +175,18 @@ export default {
     }
     //查询是否投过币
     if (this.$store.state.is_login) {
-      axios.get(
+      axios
+        .get(
           "coin/" +
-          this.dynamic_type +
-          "?user_id=" +
-          this.$store.state.user_info.user_id +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id,
-       )
+            this.dynamic_type +
+            "?user_id=" +
+            this.$store.state.user_info.user_id +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
+        )
         .then((res) => {
-          console.log(res.data.data);
           this.coin_nums = res.data.data.blog_coin;
           this.is_coined = res.data.status;
         })
@@ -192,19 +195,18 @@ export default {
         });
     } else {
       //查询投币个数
-      axios.get(
+      axios
+        .get(
           "coin/" +
-          this.dynamic_type +
-          "?user_id=" +
-          1 +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
-       
-      )
+            this.dynamic_type +
+            "?user_id=" +
+            1 +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
+        )
         .then((res) => {
-          console.log(res.data.data.blog_coin);
           this.coin_nums = res.data.data.blog_coin;
           this.is_coined = false;
         })

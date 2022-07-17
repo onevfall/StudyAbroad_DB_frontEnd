@@ -30,7 +30,6 @@
           <el-col span="1">
             <el-tag class="ml-2" size="small">{{ blogTime }}</el-tag>
           </el-col>
-        
         </el-row>
       </section>
       <section class="card_content">
@@ -148,14 +147,20 @@ export default {
       }
     },
     goDetail() {
-      //alert(this.blog_info.BlogId);
-      this.$router.push("/blog_detail");
+      this.$router.push({
+        path:"/blog_detail",
+        query:{
+          blog_id:this.blog_info.BlogId,
+          blog_tag:this.blog_info.BlogTag,
+          user_id:this.user_info.user_id
+        }
+        });
     },
   },
   created() {
     axios.get(
       "userinfo?user_id=" + this.blog_info.BlogUserId,
-  
+
     )
       .then((res) => {
         this.user_info = res.data.data;
