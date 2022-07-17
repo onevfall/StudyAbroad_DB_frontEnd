@@ -41,7 +41,7 @@
             <el-row style="margin-top:50px">
             <el-col :span="3"></el-col>
             <el-col :span="4" style="text-align:left">审核批注：</el-col>
-            <el-col :span="10" style="text-align:left"><el-input v-model="ReviewReason" placeholder="请输入审核批注" /></el-col>
+            <el-col :span="10" style="text-align:left"><el-input v-model="ReviewReason" placeholder="请输入审核批注" clearable/></el-col>
           </el-row>
           <el-row style="margin-top:50px">
             <el-col :span="12"></el-col>

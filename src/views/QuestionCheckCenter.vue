@@ -55,7 +55,7 @@
               <el-col :span="3" style="text-align:left">{{ ques.ReviewResult }}</el-col>
               <el-col :span="5" style="text-align:left">{{ ques.ReviewDate }}</el-col>
               <el-col :span="5" style="text-align:left">{{ ques.ReviewReason }}</el-col>
-              <el-col :span="4" style="text-align:left;color:red"><span style="padding-left:15px">已处理</span></el-col>
+              <el-col :span="4" id="checked-text">已处理</el-col>
             </el-row>
           </div>
         </el-scrollbar>
@@ -153,5 +153,11 @@ export default ({
     font-family:SimSun;
     font-size:19px;
     font-weight:900;
+  }
+
+  #checked-text{
+    text-align:left;
+    color:#e5415c;
+    padding-left:15px;
   }
 </style>
