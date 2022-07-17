@@ -61,28 +61,14 @@ export default {
 .institution_card {
   margin: 20px;
   width: 95%;
-  height: 200px;
+  height: 20%;
   display: flex;
   justify-content: center;
-}
-.rank_card {
-  padding-top: 25px; /* 调整上下间距的 */
-  margin: 30px;
-  width: 20%;
-  height: 100px;
-  vertical-align: middle;
-}
-.rank_text {
-  color: coral;
-  font-size: 25px;
-  vertical-align: middle;
-  display: flex;
-  justify-content: space-between;
 }
 .two_block {
   margin-left: 40x;
   padding: 10px;
-  height: 200px;
+  height: 20%;
   width: 60%;
   /* align-self: center; */
 }
