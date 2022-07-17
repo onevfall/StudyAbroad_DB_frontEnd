@@ -17,6 +17,8 @@ import PersonInformation from '../views/PersonInformation.vue'
 import store from '../store/index'
 import QuestionPage from '../views/QuestionPage.vue'
 import QACenterPage from '../views/QACenterPage.vue'
+import QuestionCheckCenter from '../views/QuestionCheckCenter.vue'
+import QuestionCheck from '../views/QuestionCheck.vue'
 import { ElMessage } from 'element-plus'
 const routes = [
   {
@@ -142,6 +144,22 @@ const routes = [
     component: QACenterPage,
     meta: {
       title: '问答首页'
+    }
+  },
+  {
+    path: '/question_check_center',
+    name: 'question_check_center',
+    component: QuestionCheckCenter,
+    meta: {
+      title: '问题审核中心'
+    }
+  },
+  {
+    path: '/question_check',
+    name: 'question_check',
+    component: QuestionCheck,
+    meta: {
+      title: '问题审核'
     }
   }
 ]

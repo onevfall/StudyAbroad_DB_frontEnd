@@ -55,6 +55,9 @@
     <el-menu-item index="person_info" @click="goPersonInformation"
       >个人信息</el-menu-item
     >
+    <el-menu-item index="question_check_center" @click="goQuestionCheckCenter"
+      >问题审核</el-menu-item
+    >
   </el-menu>
 </template>
 
@@ -137,6 +140,11 @@ export default {
     goQACenter() {
       router.push({
         name: "qa_center",
+      });
+    },
+    goQuestionCheckCenter() {
+      router.push({
+        name: 'question_check_center',
       });
     },
     //退出账号并跳转至首页

@@ -125,7 +125,6 @@
           </el-col>
         </el-row>
       </el-main>
-      <el-footer> </el-footer>
     </el-container>
   </div>
 </template>
@@ -273,17 +272,10 @@ export default {
 </script>
 
 <style scoped>
-.el-header {
-  background: #87a5c7;
-}
 .el-main {
   background: #f1f9ff;
   padding-left: 50px;
   padding-right: 50px;
-}
-
-.el-footer {
-  background: #87a5c7;
 }
 
 .logo {

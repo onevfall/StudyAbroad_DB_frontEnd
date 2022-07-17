@@ -32,13 +32,13 @@
           </el-button>
         </el-col>
       </el-row>
-      <el-row style="margin-top:20px" v-if="this.display_status">
-        <el-col :span="6" class="card-field" v-for="ques in this.question_time_info" :key="ques">
+      <el-row style="margin-top:20px" v-infinite-scroll="load" v-if="this.display_status">
+        <el-col :span="6" class="card-field" v-for="ques in this.question_time_info.slice(0,count)" :key="ques">
           <question-card :question_info="ques"></question-card>
         </el-col>
       </el-row>
-      <el-row style="margin-top:20px" v-if="!this.display_status">
-        <el-col :span="6" class="card-field" v-for="ques in this.question_heat_info" :key="ques">
+      <el-row style="margin-top:20px;" v-infinite-scroll="load" v-if="!this.display_status">
+        <el-col :span="6" class="card-field" v-for="ques in this.question_heat_info.slice(0,count)" :key="ques">
           <question-card :question_info="ques"></question-card>
         </el-col>
       </el-row>
@@ -59,6 +59,7 @@ export default ({
       question_time_info:[],
       question_heat_info:[],
       display_status:true,
+      count:8,
     };
   },
   methods:{
@@ -67,6 +68,9 @@ export default ({
     },
     heatStatus:function(){
       this.display_status=false;
+    },
+    load:function(){
+      this.count+=4;
     }
   },
   created(){
@@ -76,7 +80,7 @@ export default ({
       })
       .then((res) => {
         console.log(res.data.data);
-        this.question_time_info=res.data.data.question.slice(0,8);
+        this.question_time_info=res.data.data.question;
         for(let i=0;i<this.question_time_info.length;i++)
         {
           this.question_time_info[i].num=i;
@@ -91,7 +95,7 @@ export default ({
       })
       .then((res) => {
         console.log(res.data.data);
-        this.question_heat_info=res.data.data.question.slice(0,8);
+        this.question_heat_info=res.data.data.question;
         for(let i=0;i<this.question_heat_info.length;i++)
         {
           this.question_heat_info[i].num=i;
