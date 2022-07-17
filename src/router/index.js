@@ -8,6 +8,7 @@ import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
+import EditorPage from '../views/EditorPage.vue'
 
 import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
@@ -142,6 +143,15 @@ const routes = [
     component: QACenterPage,
     meta: {
       title: '问答首页'
+    }
+  },
+  //测试
+  {
+    path:'/editor',
+    name:'editor',
+    component:EditorPage,
+    meta:{
+      title:'测试文本编辑器'
     }
   }
 ]
