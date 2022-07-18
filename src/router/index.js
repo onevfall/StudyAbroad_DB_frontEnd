@@ -18,6 +18,7 @@ import PersonInformation from '../views/PersonInformation.vue'
 import store from '../store/index'
 import QuestionPage from '../views/QuestionPage.vue'
 import QACenterPage from '../views/QACenterPage.vue'
+import CoinCenter from '../views/CoinCenter.vue'
 import { ElMessage } from 'element-plus'
 const routes = [
   {
@@ -145,6 +146,7 @@ const routes = [
       title: '问答首页'
     }
   },
+
   //测试
   {
     path:'/editor',
@@ -153,7 +155,16 @@ const routes = [
     meta:{
       title:'测试文本编辑器'
     }
-  }
+  },
+  {
+    path: '/coin_center',
+    name: 'coin_center',
+    component: CoinCenter,
+    meta: {
+      title: '鸟币中心'
+    }
+  },
+
 ]
 
 const router = createRouter({
