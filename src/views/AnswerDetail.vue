@@ -38,9 +38,6 @@
                   </el-row>
                 </div>
               </el-aside>
-              <!-- <el-main>
-                <img src="../assets/drawing_news.png" style="height: 80px" />
-              </el-main> -->
             </el-container>
           </div>
           <el-divider />
@@ -108,55 +105,12 @@
             </el-main>
           </el-container>
           <el-divider />
-          <el-container>
-            <el-header class="header_comment">
-              <el-col :span="1">
-                <div v-if="this.$store.state.is_login">
-                  <el-avatar
-                    :src="this.$store.state.user_info.user_profile"
-                    :size="40"
-                    class="header_img"
-                  />
-                </div>
-                <div v-else>
-                  <el-avatar
-                    src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-                    :size="40"
-                    class="header_img"
-                  />
-                </div>
-              </el-col>
-              <el-input
-                id="replyInput"
-                v-model="comment_now"
-                maxlength="128"
-                show-word-limit
-                class="reply_input"
-                :placeholder="nowplaceholder"
-                type="text"
-                style="margin-left: 1%; margin-top: 5px; margin-right: 10px"
-              />
-
-              <el-button
-                class="reply_btn"
-                size="medium"
-                @click="sendComment"
-                type="primary"
-                style="margin-top: 5px"
-                >发表评论
-              </el-button>
-            </el-header>
-            <el-main :key="this.commentChange">
-              <el-scrollbar v-if="this.comments.length !== 0" height="200px">
-                <el-collapse accordion @change="handleChange">
-                  <div v-for="(item, i) in this.comments" :key="i">
-                    <comment-item :comment_infor="this.comments[i]">
-                    </comment-item>
-                  </div>
-                </el-collapse>
-              </el-scrollbar>
-            </el-main>
-          </el-container>
+          <div>
+            <comment-zone
+            type="0"
+            :id="this.answer_id">
+            </comment-zone>
+          </div>
         </div>
       </el-main>
     </el-container>
@@ -169,6 +123,7 @@ import QuestionSideCard from "../components/QuestionSideCard.vue";
 import LikeButton from "../components/LikeButton.vue";
 import CoinButton from "../components/CoinButton.vue";
 import CommentItem from "../components/CommentItem.vue";
+import CommentZone from "../components/CommentZone.vue"
 import axios from "axios";
 import { ElMessage } from "element-plus";
 import { UserFilled } from "@element-plus/icons-vue";
@@ -181,7 +136,8 @@ export default {
     CommentItem,
     UserFilled,
     CoinButton,
-  },
+    CommentZone,
+},
   data() {
     return {
       answer_user_info: "",
@@ -192,7 +148,7 @@ export default {
       card_info: [],
       comment_now: "", //当前正在输入的comment
       comments: [], //这个回答对应的下面的comment的全部信息
-      commentChange: false,
+      // comment_change: false,
     };
   },
   watch: {
@@ -202,14 +158,6 @@ export default {
     },
   },
   computed: {
-    nowplaceholder() {
-      console.log(this.$store);
-      if (this.$store.state.reply_to.AnswerCommentId !== -1) {
-        return "回复" + this.$store.state.reply_to.UserName;
-      } else {
-        return "评论点什么...";
-      }
-    },
     questionTime() {
       if (this.question_infor == "") return " ";
       else return this.question_infor.question_date.replace("T", " ");
@@ -375,131 +323,8 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-
-      axios
-        .get("/answer/comment", {
-          params: {
-            answer_id: this.answer_id,
-          },
-        })
-        .then((res) => {
-          for (let i = 0; i < res.data.data.comment_list.length; ++i) {
-            this.comments[i] = res.data.data.comment_list[i];
-            this.comments[i].reply_num = 0;
-            this.comments[i].child_comments = [];
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
-    sendComment() {
-      if (this.$store.state.is_login == false) {
-        //若未登录
-        ElMessage({
-          message: "请先登录",
-          type: "warning",
-          showClose: true,
-          duration: 2000,
-        });
-        this.comment_now = "";
-        this.$router.push({
-          path: "/login",
-          query: { redirect: this.$route.fullPath },
-        });
-      } else {
-        if (this.$store.state.reply_to.AnswerCommentId !== -1) {
-          //说明回复给一个评论
-          //console.log(d);
-          axios
-            .post("/answer/reply", {
-              comment_id: this.$store.state.reply_to.AnswerCommentId,
-              reply_user_id: this.$store.state.user_info.user_id,
-              reply_content: this.comment_now,
-            }) //待修改
-            .then((res) => {
-              console.log(res.data);
-              this.commentChange = !this.commentChange;
-              this.comment_now = "";
-              ElMessage({
-                type: "success",
-                message: "评论成功！",
-                duration: 2000,
-                showClose: true,
-              });
-              axios
-                .get("/answer/reply", {
-                  params: {
-                    answer_comment_id:
-                      this.$store.state.reply_to.AnswerCommentId,
-                  },
-                })
-                .then((res) => {
-                  console.log(
-                    "对用户id为" +
-                      this.$store.state.reply_to.AnswerCommentId +
-                      "的评论的回复请求"
-                  );
-                  console.log(res);
-                  //this.comment_infor.reply_num = res.data.data.reply_num;
-                  this.$store.state.reply_to.child_comments =
-                    res.data.data.reply_list;
-                  console.log(this.$store.state.reply_to.child_comments);
-                  // for (let i = 0; i < res.data.data.reply_list.length; ++i) {
-                  //   this.comment_infor.child_comments[i] =
-                  //     res.data.data.reply_list[i];
-                  // }
-                  this.$store.commit("InitReplyObj");
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
-          //说明是对回答的评论
-          axios
-            .post("/answer/comment", {
-              answer_id: this.answer_id,
-              answer_comment_user_id: this.$store.state.user_info.user_id,
-              answer_comment_content: this.comment_now,
-            })
-            .then((res) => {
-              //this.answer_comment_id =
-              console.log(res.data);
-              this.commentChange = !this.commentChange;
-              ElMessage({
-                type: "success",
-                message: "评论成功！",
-                duration: 2000,
-                showClose: true,
-              });
-              axios //重新把全部一级comments获取一遍，实现刷新
-                .get("/answer/comment", {
-                  params: {
-                    answer_id: this.answer_id,
-                  },
-                })
-                .then((res) => {
-                  for (let i = 0; i < res.data.data.comment_list.length; ++i) {
-                    this.comments[i] = res.data.data.comment_list[i];
-                    this.comments[i].reply_num = 0;
-                    this.comments[i].child_comments = [];
-                  }
-                  this.comment_now = "";
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      }
-    },
+    
     handleChange(val) {
       console.log(val);
     },
