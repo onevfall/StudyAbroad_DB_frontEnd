@@ -17,8 +17,9 @@
     /></el-menu-item>
     <el-menu-item index="home" @click="goHome">首页</el-menu-item>
     <el-menu-item index="school_center" @click="goSchoolCenter"
-      >找对学校</el-menu-item
-    >
+      >找对学校</el-menu-item>
+       <el-menu-item index="institution_center" @click="goInstitutionCenter"
+      >看看机构</el-menu-item>
     <el-sub-menu index="3">
       <template #title>说说留学</template>
       <el-menu-item index="question" @click="goQuestion"
@@ -27,9 +28,7 @@
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
     <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
-    <el-menu-item index="institution_center" @click="goInstitutionCenter"
-      >留学顾问</el-menu-item
-    >
+ 
 
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
@@ -44,14 +43,8 @@
       <el-menu-item index="7-4">财务管理</el-menu-item>
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="school_detail" @click="goSchoolDetail"
-      >学校详情</el-menu-item
-    >
-    <el-menu-item index="institution_detail" @click="goInstitutionDetail"
-      >机构详情</el-menu-item
-    >
     <el-menu-item index="qa_center" @click="goQACenter">问答首页</el-menu-item>
-
+    <el-menu-item index="coin_center" @click="goCoinCenter">鸟币中心(测试用)</el-menu-item>
     <el-menu-item index="person_info" @click="goPersonInformation"
       >个人信息</el-menu-item
     >
@@ -138,6 +131,11 @@ export default {
       router.push({
         name: "qa_center",
       });
+    },
+    goCoinCenter(){
+      router.push({
+        name:"coin_center"
+      })
     },
     //退出账号并跳转至首页
     loginOut() {
