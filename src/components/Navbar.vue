@@ -48,6 +48,9 @@
     <el-menu-item index="person_info" @click="goPersonInformation"
       >个人信息</el-menu-item
     >
+    <el-menu-item index="editor" @click="goEditor"
+      >富文本编辑器（测试）</el-menu-item
+    >
   </el-menu>
 </template>
 
@@ -131,6 +134,13 @@ export default {
       router.push({
         name: "qa_center",
       });
+    },
+
+    //测试
+    goEditor(){
+      router.push({
+        name:"editor"
+          })
     },
     goCoinCenter(){
       router.push({
