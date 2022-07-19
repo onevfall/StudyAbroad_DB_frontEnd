@@ -114,8 +114,15 @@
               </el-card>
             </el-tab-pane>
           
-            <el-tab-pane label="鸟币中心">财务</el-tab-pane>
-            <el-tab-pane label="发布历史">发布历史</el-tab-pane>
+            <el-tab-pane label="鸟币中心">
+              <coin-center></coin-center>
+            </el-tab-pane>
+            <el-tab-pane label="学历认证">
+
+            </el-tab-pane>
+            <el-tab-pane label="消息中心（我的举报）">
+
+            </el-tab-pane>
           </el-tabs>
         </el-main>
       </el-container>
@@ -126,10 +133,14 @@
 
 <script>
 import PersonInfoBox from "../components/PersonInfoBox.vue";
+import CoinCenter from "../components/CoinCenter.vue"
 import { ElMessage } from "element-plus";
 import { ref } from "vue";
 export default {
-  components: { PersonInfoBox },
+  components: { 
+    PersonInfoBox,
+    CoinCenter, 
+  },
   data() {
     return {
       person_info: "",

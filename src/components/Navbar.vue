@@ -41,8 +41,6 @@
       <el-menu-item index="7-4">财务管理</el-menu-item>
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
-    <!-- <el-menu-item index="qa_center" @click="goQACenter">问答首页</el-menu-item> -->
-    <el-menu-item index="coin_center" @click="goCoinCenter">鸟币中心(测试用)</el-menu-item>
     <el-menu-item index="person_info" @click="goPersonInformation"
       >个人信息</el-menu-item
     >
@@ -139,11 +137,6 @@ export default {
       router.push({
         name:"editor"
           })
-    },
-    goCoinCenter(){
-      router.push({
-        name:"coin_center"
-      })
     },
     //退出账号并跳转至首页
     loginOut() {
