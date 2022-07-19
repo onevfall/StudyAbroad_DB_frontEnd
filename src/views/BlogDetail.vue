@@ -77,7 +77,13 @@
             <img :src="this.blog_detail.blog_image" class="conten_image" />
           </div>
           <el-divider />
-          <div class="comment_field"></div>
+          <div>
+            <comment-zone
+            type="1"
+            :id="this.$route.query.blog_id">
+            </comment-zone>
+          </div>
+          <!-- <div class="comment_field"></div> -->
         </div>
       </el-main>
     </el-container>
@@ -91,6 +97,7 @@ import axios from "axios";
 import LikeButton from "../components/LikeButton.vue";
 import CoinButton from "../components/CoinButton.vue";
 import PageLoading from "../components/PageLoading.vue";
+import CommentZone from "../components/CommentZone.vue";
 export default {
   components: {
     UserInfoBoard,
@@ -98,6 +105,7 @@ export default {
     LikeButton,
     CoinButton,
     PageLoading,
+    CommentZone,
   },
   data() {
     return {
@@ -208,6 +216,6 @@ export default {
   margin-bottom: 2%;
   width: 60%;
 }
-.comment_field {
-}
+/* .comment_field {
+} */
 </style>

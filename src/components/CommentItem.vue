@@ -3,7 +3,8 @@
 作者：方新宇
 -->
 <template>
-  <el-collapse-item :key="this.comment_ischange">
+  <!-- <el-collapse-item :key="this.comment_ischange"> -->
+    <el-collapse-item >
     <template #title>
       <div class="self_comment">
         <div class="comment_header">
@@ -11,10 +12,26 @@
           <span class="comment_name"
             ><b>{{ comment_infor.UserName }}</b></span
           ><br />
-          <div style="width: 5%; display: flex; justify-content: space-around">
+          <div
+            style="width: 5%; display: flex; justify-content: space-around"
+            v-if="this.type == '0'"
+          >
             <like-button
               content_type="3"
               :content_id="comment_infor.AnswerCommentId"
+              :show_num="true"
+              size="normal"
+              @giveLike="like"
+              @cancelLike="unlike"
+            />
+          </div>
+          <div
+            style="width: 5%; display: flex; justify-content: space-around"
+            v-else
+          >
+            <like-button
+              content_type="3"
+              :content_id="comment_infor.BlogCommentId"
               :show_num="true"
               size="normal"
               @giveLike="like"
@@ -28,14 +45,17 @@
             <div style="display: flex; justify-content: space-around">回复</div>
           </div>
         </div>
-        <div class="content_main">
+        <div class="content_main" v-if="this.type == '0'">
           {{ comment_infor.AnswerCommentContent }}
+        </div>
+        <div class="content_main" v-else>
+          {{ comment_infor.BlogCommentContent }}
         </div>
         <div class="comment_footer"></div>
       </div>
     </template>
     <!-- 以下为输入框 -->
-    <div v-if="this.is_reply" class="reply_input">
+    <div v-if="this.is_reply" class="reply_input" :key="this.is_reply">
       <!-- <el-header class="header_comment"> -->
       <el-col :span="1">
         <div v-if="this.$store.state.is_login">
@@ -73,12 +93,20 @@
       </el-button>
       <!-- </el-header> -->
     </div>
-    <div v-if="this.comment_infor.reply_num !== 0" style="margin-left: 3%" :key="this.comment_ischange_1">
+    <!-- 以下为子评论 -->
+    <div
+      v-if="this.comment_infor.reply_num !== 0"
+      style="margin-left: 3%"
+      :key="this.comment_infor.child_comments"
+    >
       <!-- <div v-if="this.reply == true"> 
       </div> -->
-      <el-collapse accordion :key="this.comment_ischange_1">
+      <el-collapse accordion>
         <div v-for="(item, i) in this.comment_infor.child_comments" :key="i">
-          <comment-item :comment_infor="this.comment_infor.child_comments[i]" :type=this.type>
+          <comment-item
+            :comment_infor="this.comment_infor.child_comments[i]"
+            :type="this.type"
+          >
           </comment-item>
         </div>
       </el-collapse>
@@ -93,16 +121,15 @@ import axios from "axios";
 //import { ElMessage } from "element-plus";
 export default {
   name: "CommentItem",
-  props: ["comment_infor","type"],
-  components: { LikeButton,ElMessage },
-  data(){
-    return{
-      is_reply:false,
-      comment_now:"",
-      comment_ischange:false,
-      dynamic_type:"",
-      comment_ischange_1:false,
-    }
+  props: ["comment_infor", "type"],
+  components: { LikeButton, ElMessage },
+  data() {
+    return {
+      is_reply: false,
+      comment_now: "",
+      comment_ischange: false,
+      dynamic_type: "",
+    };
   },
   created() {
     // this.comment_infor.reply_num = 0;
@@ -115,26 +142,39 @@ export default {
         this.dynamic_type = "blog";
         break;
     }
-    console.log(this.dynamic_type+"_comment_id")
-    if(this.dynamic_type == "answer")
-    {
-    axios
-      .get("/"+this.dynamic_type+"/reply", {
-        params: {
-          answer_comment_id : this.comment_infor.AnswerCommentId,
-        },
-      })
-      .then((res) => {
-        this.comment_infor.reply_num = res.data.data.reply_num;
-        this.comment_infor.child_comments = res.data.data.reply_list;
-        console.log(this.comment_infor.child_comments);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (this.dynamic_type == "answer") {
+      axios
+        .get("/" + this.dynamic_type + "/reply", {
+          params: {
+            answer_comment_id: this.comment_infor.AnswerCommentId,
+          },
+        })
+        .then((res) => {
+          this.comment_infor.reply_num = res.data.data.reply_num;
+          this.comment_infor.child_comments = res.data.data.reply_list;
+          console.log(this.comment_infor.child_comments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .get("/" + this.dynamic_type + "/reply", {
+          params: {
+            blog_comment_id: this.comment_infor.BlogCommentId,
+          },
+        })
+        .then((res) => {
+          this.comment_infor.reply_num = res.data.data.reply_num;
+          this.comment_infor.child_comments = res.data.data.reply_list;
+          console.log(this.comment_infor.child_comments);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   },
-  computed:{
+  computed: {
     nowplaceholder() {
       // console.log(this.$store);
       if (this.comment_infor.UserName !== "") {
@@ -144,7 +184,44 @@ export default {
       }
     },
   },
-  watch: {},
+  watch: {
+    comment_ischange() {
+      if (this.dynamic_type == "answer") {
+        axios
+          .get("/answer/reply", {
+            params: {
+              answer_comment_id: this.comment_infor.AnswerCommentId,
+            },
+          })
+          .then((res) => {
+            console.log("发出子评论了,再次请求子评论数据");
+            console.log(res);
+            this.comment_infor.child_comments = res.data.data.reply_list;
+            console.log(this.comment_infor.child_comments);
+            this.$store.commit("RefreshCommitZone");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        axios
+          .get("/blog/reply", {
+            params: {
+              blog_comment_id: this.comment_infor.BlogCommentId,
+            },
+          })
+          .then((res) => {
+            console.log("11213142");
+            console.log(res);
+            this.comment_infor.child_comments = res.data.data.reply_list;
+            this.$store.commit("RefreshCommitZone");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
+  },
   methods: {
     reply() {
       if (this.$store.state.is_login == false) {
@@ -160,9 +237,7 @@ export default {
           path: "/login",
           query: { redirect: this.$route.fullPath },
         });
-      } 
-      else
-      {
+      } else {
         // console.log("67801");
         // console.log(this.comment_infor);
         this.is_reply = true;
@@ -184,16 +259,16 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
+        if (this.dynamic_type == "answer") {
           axios
             .post("/answer/reply", {
               comment_id: this.comment_infor.AnswerCommentId,
-              // comment_id: this.$store.state.reply_to.AnswerCommentId,
               reply_user_id: this.$store.state.user_info.user_id,
               reply_content: this.comment_now,
             }) //待修改
             .then((res) => {
               console.log(res.data);
-              this.comment_ischange = !this.comment_ischange//此处需修改
+
               ElMessage({
                 type: "success",
                 message: "评论成功！",
@@ -202,34 +277,39 @@ export default {
               });
               this.is_reply = false;
               this.comment_now = "";
-              axios
-                .get("/answer/reply", {
-                  params: {
-                    answer_comment_id : this.comment_infor.AnswerCommentId,
-                  },
-                })
-                .then((res) => {
-                  // console.log(
-                  //   "对用户id为" +
-                  //     this.comment_infor.AnswerCommentId +
-                  //     "的评论的回复请求"
-                  // );
-                  console.log("11213142")
-                  console.log(res);
-                  this.comment_infor.child_comments =
-                    res.data.data.reply_list;
-                  this.comment_ischange_1 = !this.comment_ischange_1;
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
+              this.comment_ischange = !this.comment_ischange;
+              console.log("更改！");
             })
             .catch((err) => {
               console.log(err);
             });
-        } 
-      },
-      like(res) {
+        } else {
+          axios
+            .post("/blog/reply", {
+              comment_id: this.comment_infor.BlogCommentId,
+              reply_user_id: this.$store.state.user_info.user_id,
+              reply_content: this.comment_now,
+            })
+            .then((res) => {
+              console.log(res.data);
+              ElMessage({
+                type: "success",
+                message: "评论成功！",
+                duration: 2000,
+                showClose: true,
+              });
+              this.is_reply = false;
+              this.comment_now = "";
+              this.comment_ischange = !this.comment_ischange;
+              console.log("更改！");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      }
+    },
+    like(res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -263,8 +343,7 @@ export default {
         });
       }
     },
-    },
-    
+  },
 };
 </script>
 
@@ -296,7 +375,7 @@ export default {
   outline: 0;
 }
 
-.reply_input{
+.reply_input {
   text-align: center;
   margin-left: 6%;
   display: flex;
