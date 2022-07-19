@@ -58,6 +58,7 @@
               <div class="content_main">
                 {{ this.answer_infor.answer_content }}
               </div>
+              <!-- <img :src="this.answer_infor.answer_contentpic" class="content_image" v-if="this.answer_infor.answer_contentpic"/> -->
               <!-- <div style="float: left; margin-left: 3%"> 事件穿透想不通 直接换文字了
                 <el-button type="" link style="pointer-events: none">
                   <div style="margin-right: 5px">赞同</div>

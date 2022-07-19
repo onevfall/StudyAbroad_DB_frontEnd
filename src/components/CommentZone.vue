@@ -1,5 +1,9 @@
+<!--
+描述：评论区相关组件
+作者：方新宇
+-->
 <template>
-  <el-container>
+  <el-container class="comment_zone">
     <el-header class="header_comment">
       <el-col :span="1">
         <div v-if="this.$store.state.is_login">
@@ -38,9 +42,9 @@
       </el-button>
     </el-header>
     <el-main :key="this.commentChange">
-      <el-scrollbar v-if="this.comments.length !== 0" height="200px">
+      <el-scrollbar v-if="this.comments.length !== 0" height="400px">
         <!-- <el-collapse accordion @change="handleChange"> -->
-        <el-collapse accordion>
+        <el-collapse accordion :key="this.$store.state.refresh_zone">
           <div v-for="(item, i) in this.comments" :key="i">
             <comment-item :comment_infor="this.comments[i]" :type=this.type> </comment-item>
           </div>
@@ -85,7 +89,7 @@ export default {
       })
       .then((res) => {
         for (let i = 0; i < res.data.data.comment_list.length; ++i) {
-          console.log("123")
+          console.log("123测试评论")
           console.log(this.id)
           console.log(res.data.data)
           this.comments[i] = res.data.data.comment_list[i];
