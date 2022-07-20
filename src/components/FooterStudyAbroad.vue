@@ -1,3 +1,8 @@
+<!--
+footer
+描述：本项目的footer栏目
+作者：张子涵
+-->
 <template>
   <section class="footer">
     <div>这是footer，这里可以存放我们网站的基础注册信息</div>
