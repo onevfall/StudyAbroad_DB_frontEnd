@@ -18,7 +18,7 @@ import PersonInformation from '../views/PersonInformation.vue'
 import store from '../store/index'
 import QuestionPage from '../views/QuestionPage.vue'
 import QACenterPage from '../views/QACenterPage.vue'
-import CoinCenter from '../views/CoinCenter.vue'
+
 import { ElMessage } from 'element-plus'
 const routes = [
   {
@@ -154,14 +154,6 @@ const routes = [
     component:EditorPage,
     meta:{
       title:'测试文本编辑器'
-    }
-  },
-  {
-    path: '/coin_center',
-    name: 'coin_center',
-    component: CoinCenter,
-    meta: {
-      title: '鸟币中心'
     }
   },
 
