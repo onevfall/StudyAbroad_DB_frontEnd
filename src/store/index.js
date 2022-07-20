@@ -47,6 +47,7 @@ export default createStore({
       UserName:"",
       UserProfile:"",
     },
+    refresh_zone:false,
   },
   getters: {},
   mutations: {
@@ -92,6 +93,9 @@ export default createStore({
         UserProfile:"",
       };
       state.reply_to = reply_to;
+    },
+    RefreshCommitZone(state){
+      state.refresh_zone = !state.refresh_zone
     },
   },
   actions: {},

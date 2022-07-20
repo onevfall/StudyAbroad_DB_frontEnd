@@ -11,10 +11,10 @@
           <!-- 搜索栏内部 -->
           <el-container>
             <!-- 左侧空白 -->
-            <el-aside width="250px"></el-aside>
+            <el-aside width="25%"></el-aside>
             <el-container>
               <!-- 一个“关于机构”的按钮，一个搜索栏 -->
-              <el-header height="70px" class="my_top_layout">
+              <el-header class="my_top_layout">
                 <div class="sch_box">关于机构</div>
                 <!-- 搜索栏，可以考虑封装成一个组件，实现实时字段匹配 multiple reserve-keyword -->
                 <div class="search_component">
@@ -117,7 +117,7 @@
                   </el-row>
                 </div>
               </el-main>
-              <el-footer height="20px">
+              <el-footer height="10px">
                 <div style="margin: 10px; vertical-align: bottom">
                   <!-- 搜索键 -->
                   <el-button
@@ -327,6 +327,7 @@ export default {
   width: 100%;
 }
 .my_top_layout {
+  height: 70px;
   display: flex;
   position: relative;
   /* justify-content: space-around; */
@@ -352,7 +353,7 @@ export default {
   background-blend-mode: overlay;
 }
 .drawing {
-  height: 240px;
+  height: 90%;
   object-fit: cover; /*图片缩放自适应原图的比例 */
 }
 .el-row {
@@ -373,7 +374,7 @@ export default {
   color: cadetblue;
   text-align: left;
   margin: 20px;
-  margin-left: 100px;
+  margin-left: 6%;
   font-size: 19px;
 }
 .rank_row {
@@ -387,10 +388,10 @@ p.rank_text {
   margin-left: 45px;
 }
 p.QS_rank_test {
-  margin-left: 120px;
+  margin-left: 8.5%;
 }
 .search_component {
-  margin-left: 240px;
-  margin-top: 20px;
+  margin-left: 35%;
+  margin-top: 2.8%;
 }
 </style>
