@@ -301,7 +301,7 @@ export default {
   cursor:pointer;
 }
 .coin-left-nodata {
-  width: 360px;
+  width: 368px;
   color: #99a2aa;
   text-align: center;
   line-height: 40px;
