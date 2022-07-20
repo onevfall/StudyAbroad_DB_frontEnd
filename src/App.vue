@@ -29,7 +29,7 @@ export default {
 }
 
 .content{
-  min-height: calc(100vh - 210px);
+  min-height: calc(100vh - 200px);
 }
 
 nav {
