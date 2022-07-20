@@ -18,6 +18,7 @@ import PersonInformation from '../views/PersonInformation.vue'
 import store from '../store/index'
 import QuestionPage from '../views/QuestionPage.vue'
 import QACenterPage from '../views/QACenterPage.vue'
+import CoinRecharge from '../views/CoinRecharge.vue'
 
 import { ElMessage } from 'element-plus'
 const routes = [
@@ -146,7 +147,15 @@ const routes = [
       title: '问答首页'
     }
   },
-
+  {
+    path: '/recharge',
+    name: 'recharge',
+    component: CoinRecharge,
+    meta: {
+      title: '充值页面'
+    }
+  },
+  
   //测试
   {
     path:'/editor',
