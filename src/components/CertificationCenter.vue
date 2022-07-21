@@ -81,8 +81,11 @@
                     <div class="infor_item_name">证明材料</div>
                     <el-upload
                       class="upload-demo"
+                      accept="image/jpeg,image/png"
+                      :on-change="onUploadChange"
+                      :auto-upload="false"
                       drag
-                      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                      action="#"
                       multiple
                     >
                       <el-icon class="el-icon--upload"
@@ -151,7 +154,7 @@
                   </div>
                   <div class="infor_item">
                     <div>
-                      <el-button type="success"
+                      <el-button type="success" @click="submit"
                         >确认提交<el-icon class="el-icon--right"
                           ><Upload /></el-icon
                       ></el-button>
@@ -174,11 +177,14 @@
 </template>
 
 <script>
+// import { throwStatement } from "@babel/types";
 import CertificationCard from "../components/CertificationCard.vue";
-
+import { ElMessage } from "element-plus";
+import axios from "axios";
 export default {
   components: {
     CertificationCard,
+    ElMessage,
   },
   data() {
     return {
@@ -210,6 +216,7 @@ export default {
         },
       ],
       now_input: {
+        certification_material:"",
         school_name: "",
         degree_name: "",
         admission_time: "",
@@ -217,9 +224,81 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+
+  },
   watch: {},
-  methods: {},
+  methods: {
+    submit(){
+      // console.log("12333");
+      // console.log(this.now_input);
+      // console.log(this.now_input.certification_material);
+      var startDate = this.now_input.admission_time[0].toISOString()
+      var endDate = this.now_input.admission_time[1].toISOString()
+      var admDate = startDate.substring(0, startDate.indexOf("T"))+" ~ "+endDate.substring(0, endDate.indexOf("T"));
+      console.log(admDate);
+      console.log(this.now_input);
+      console.log(this.$store.state.user_info.user_id);
+      axios
+        .post(
+        "/identity",{
+          img: this.now_input.certification_material,
+          user_id: this.$store.state.user_info.user_id,
+          identity:this.now_input.degree_name,
+          enrollment_time:admDate,
+          major:this.now_input.major_name,
+          university_name:this.now_input.school_name,
+        })
+      .then((res) => {
+        console.log(res);
+        if(res.data.status == true){
+          ElMessage.success("上传成功! 待审核通过后, 即完成认证");
+        }
+        else{
+          ElMessage.error("提交失败！");
+        }
+      })
+      .catch((err) => {
+          console.log(err);
+          ElMessage.error("提交失败！");
+      })
+      // this.now_input.admission_time = this.now_input.admission_time[0].toISOString().substring(0, str.indexOf("T"))+"~"+this.now_input.admission_time[0].toISOString().substring(0, str.indexOf("T"))
+      // console.log(this.now_input.admission_time);
+    },
+    async onUploadChange(file) { 
+      const isIMAGE = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/png'); 
+      const isLt2M = file.size / 1024 / 1024 / 2 < 1; 
+      if (!isIMAGE) { 
+        this.$message.error('上传文件只能是图片格式!'); 
+        return false; 
+      } 
+      if (!isLt2M) 
+      { 
+        this.$message.error('上传文件大小不能超过 2MB!'); 
+        return false; 
+      } 
+      var reader = new FileReader(); 
+      // console.log(file);
+      reader.readAsDataURL(file.raw); 
+      // var that = this;
+      // var tmp_pic;
+      reader.onload = e => {
+        let snippets = e.target.result;
+        this.now_input.certification_material = snippets;
+        // console.log(result)
+    }
+    // console.log(this.now_input.certification_material)//图片的base64数据
+    // console.log(this.result)
+      // reader.onload = () => { 
+      //   console.log(this.result);//图片的base64数据 
+      //   // that.now_input.certification_material = this.result;
+      // }
+      // setTimeout(this.now_input.certification_material = tmp_pic, 1000 )
+      // console.log(that)
+      // console.log(this)
+      // this.now_input.certification_material = tmp_pic;
+    }
+  },
 };
 </script>
 
