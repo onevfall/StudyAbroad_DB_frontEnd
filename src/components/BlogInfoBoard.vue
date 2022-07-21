@@ -87,6 +87,9 @@ export default {
       return this.blog_info.BlogDate.replace("T", " ");
     },
     blogSummary() {
+      if(this.blog_info.BlogSummary==null){
+        return ""
+      }
       if (this.blog_info.BlogSummary.length < 12) {
         return this.blog_info.BlogSummary;
       } else {
