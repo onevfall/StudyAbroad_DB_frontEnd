@@ -19,17 +19,15 @@
     <el-menu-item index="school_center" @click="goSchoolCenter"
       >找对学校</el-menu-item
     >
+    <el-menu-item index="institution_center" @click="goInstitutionCenter"
+      >看看机构</el-menu-item
+    >
     <el-sub-menu index="3">
       <template #title>说说留学</template>
-      <el-menu-item index="question" @click="goQuestion"
-        >留学问答(测试用 跳转至问题详情界面)</el-menu-item
-      >
+      <el-menu-item index="question" @click="goQACenter">留学问答</el-menu-item>
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
     <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
-    <el-menu-item index="institution_center" @click="goInstitutionCenter"
-      >留学顾问</el-menu-item
-    >
 
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
@@ -44,19 +42,14 @@
       <el-menu-item index="7-4">财务管理</el-menu-item>
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="school_detail" @click="goSchoolDetail"
-      >学校详情</el-menu-item
-    >
-    <el-menu-item index="institution_detail" @click="goInstitutionDetail"
-      >机构详情</el-menu-item
-    >
-    <el-menu-item index="qa_center" @click="goQACenter">问答首页</el-menu-item>
-
     <el-menu-item index="person_info" @click="goPersonInformation"
       >个人信息</el-menu-item
     >
     <el-menu-item index="person_space" @click="goPersonSpace"
       >个人空间</el-menu-item
+    >
+    <el-menu-item index="editor" @click="goEditor"
+      >富文本编辑器（测试）</el-menu-item
     >
   </el-menu>
 </template>
@@ -148,6 +141,13 @@ export default {
     goQACenter() {
       router.push({
         name: "qa_center",
+      });
+    },
+
+    //测试
+    goEditor() {
+      router.push({
+        name: "editor",
       });
     },
     //退出账号并跳转至首页
