@@ -8,6 +8,7 @@ import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
+import EditorPage from '../views/EditorPage.vue'
 
 import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
@@ -17,6 +18,8 @@ import PersonInformation from '../views/PersonInformation.vue'
 import store from '../store/index'
 import QuestionPage from '../views/QuestionPage.vue'
 import QACenterPage from '../views/QACenterPage.vue'
+import CoinRecharge from '../views/CoinRecharge.vue'
+
 import { ElMessage } from 'element-plus'
 const routes = [
   {
@@ -143,7 +146,26 @@ const routes = [
     meta: {
       title: '问答首页'
     }
-  }
+  },
+  {
+    path: '/recharge',
+    name: 'recharge',
+    component: CoinRecharge,
+    meta: {
+      title: '充值页面'
+    }
+  },
+  
+  //测试
+  {
+    path:'/editor',
+    name:'editor',
+    component:EditorPage,
+    meta:{
+      title:'测试文本编辑器'
+    }
+  },
+
 ]
 
 const router = createRouter({

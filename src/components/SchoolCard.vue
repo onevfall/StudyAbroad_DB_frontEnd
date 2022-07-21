@@ -99,10 +99,10 @@ export default {
   justify-content: center;
 }
 .rank_card {
-  padding-top: 25px; /* 调整上下间距的 */
+  padding: 30px; /* 调整上下间距的 */
   margin: 30px;
   width: 20%;
-  height: 15%;
+  height: 30%;
   vertical-align: middle;
 }
 .rank_text {
