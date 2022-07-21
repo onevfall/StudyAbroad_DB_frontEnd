@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import{encode,decode} from "../utils/base64"
 import Editor from "@tinymce/tinymce-vue";
 export default {
   components: {
@@ -52,26 +53,7 @@ export default {
     };
   },
   methods: {
-    encode(str) {
-      return btoa(
-        encodeURIComponent(str).replace(
-          /%([0-9A-F]{2})/g,
-          function toSolidBytes(match, p1) {
-            return String.fromCharCode("0x" + p1);
-          }
-        )
-      );
-    },
-    decode(str) {
-      return decodeURIComponent(
-        atob(str)
-          .split("")
-          .map(function (c) {
-            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-          })
-          .join("")
-      );
-    },
+   
     getContent() {
       //获取纯文本
       var activeEditor = tinymce.activeEditor;
@@ -80,13 +62,14 @@ export default {
       var text = (activeEditor.selection.getContent({ format: "text" }));
       return text.trim()
     },
+    getImage(){
+      //获取图片
+      
+    },
     submit() {
-      //将字符串 转换成 Blob 对象
-      var blob = new Blob([this.content], {
-        type: "text/plain",
-      });
-      var args={blob_content:blob,text_content:this.getContent()}
-      this.$emit('editorSubmit',args)
+    
+      var args={base64_content:encode(this.content),text_content:this.getContent()}
+      //this.$emit('editorSubmit',args)
     //   //转回 字符串
     //   var reader = new FileReader();
     //   reader.readAsText(blob, "utf-8");

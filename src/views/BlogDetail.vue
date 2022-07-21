@@ -98,6 +98,7 @@ import LikeButton from "../components/LikeButton.vue";
 import CoinButton from "../components/CoinButton.vue";
 import PageLoading from "../components/PageLoading.vue";
 import CommentZone from "../components/CommentZone.vue";
+import {decode} from "../utils/base64"
 export default {
   components: {
     UserInfoBoard,
@@ -141,6 +142,9 @@ export default {
         .get("/blog?blog_id=" + this.$route.query.blog_id)
         .then((res) => {
           this.blog_detail = res.data.data;
+          this.blog_detail = decode(this.blog_detail);
+          
+          
         })
         .catch((errMsg) => {
           console.log(errMsg);
