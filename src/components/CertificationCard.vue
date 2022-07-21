@@ -20,8 +20,6 @@
       </div>
       <div class="infor_item">
         <div class="infor_item_name">学历</div>
-        <!-- <span>{{}}</span> -->
-        <div class="infor_item_content">{{ certif_infor.identity }}</div>
       </div>
       <div class="infor_item">
         <div class="infor_item_name">入学时间</div>
