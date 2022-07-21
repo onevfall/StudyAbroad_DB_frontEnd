@@ -30,7 +30,10 @@
                       ></el-button>
                     </div> -->
 
-                    <el-row style="margin-top: 20px; width: 100%">
+                    <el-row
+                      style="margin-top: 20px; width: 100%"
+                      :key="need_refresh"
+                    >
                       <el-col
                         :span="12"
                         class="card-field"
@@ -39,12 +42,13 @@
                       >
                         <certification-card
                           :certif_infor="certification"
+                          @deletecheck="deletecheck"
                         ></certification-card>
                       </el-col>
                       <el-col
                         :span="12"
                         class="card-field"
-                        v-if="this.certification_infor.length != 3"
+                        v-if="this.certification_infor.length < 3"
                       >
                         <div style="margin-bottom: 15px">
                           <el-card
@@ -60,6 +64,7 @@
                                 type="primary"
                                 class="upload-button"
                                 size="large"
+                                @click=" this.activeName='2' "
                                 >点击此处上传认证
                                 <el-icon class="el-icon--right"
                                   ><Upload
@@ -81,8 +86,12 @@
                     <div class="infor_item_name">证明材料</div>
                     <el-upload
                       class="upload-demo"
+                      accept="image/jpeg,image/png"
+                      :on-change="onUploadChange"
+                      :auto-upload="false"
+                      limit="1"
                       drag
-                      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                      action="#"
                       multiple
                     >
                       <el-icon class="el-icon--upload"
@@ -93,7 +102,7 @@
                       </div>
                       <template #tip>
                         <div class="el-upload__tip">
-                          只允许上传jpg/png文件,大小不允许超过2M
+                          只允许上传单个jpg/png文件,大小不允许超过2M
                         </div>
                       </template>
                     </el-upload>
@@ -107,7 +116,6 @@
                         placeholder="请输入学校名称"
                         clearable
                       />
-                      <!-- style="width:124%" -->
                     </div>
                   </div>
                   <div class="infor_item">
@@ -151,7 +159,7 @@
                   </div>
                   <div class="infor_item">
                     <div>
-                      <el-button type="success"
+                      <el-button type="success" @click="submit"
                         >确认提交<el-icon class="el-icon--right"
                           ><Upload /></el-icon
                       ></el-button>
@@ -175,41 +183,21 @@
 
 <script>
 import CertificationCard from "../components/CertificationCard.vue";
-
+import { ElMessage } from "element-plus";
+import axios from "axios";
 export default {
   components: {
     CertificationCard,
+    ElMessage,
   },
   data() {
     return {
       activeName: "1",
-      certification_infor: [
-        {
-          img_url:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          school_name: "同济大学浙江学院",
-          degree: "本科",
-          time: "2020.9-2024.7",
-          major: "土木工程",
-        },
-        {
-          img_url:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          school_name: "同济大学浙江学院",
-          degree: "硕士",
-          time: "2020.9-2024.7",
-          major: "土木工程",
-        },
-        {
-          img_url:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          school_name: "同济大学浙江学院",
-          degree: "博士",
-          time: "2020.9-2024.7",
-          major: "土木工程",
-        },
-      ],
+      delete_dialog_visible: false,
+      need_refresh: false,
+      certification_infor: [],
       now_input: {
+        certification_material: "",
         school_name: "",
         degree_name: "",
         admission_time: "",
@@ -217,9 +205,130 @@ export default {
       },
     };
   },
-  created() {},
-  watch: {},
-  methods: {},
+  created() {
+    if (!this.$store.state.is_login) {
+      ElMessage({
+        message: "请先登录",
+        type: "warning",
+        showClose: true,
+        duration: 2000,
+      });
+      /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
+      this.$router.push({
+        path: "/login",
+        query: { redirect: this.$route.fullPath },
+      });
+    }
+    axios({
+      url: "/identity?user_id=" + this.$store.state.user_info.user_id,
+    })
+      .then((res) => {
+        console.log(res);
+        this.certification_infor = [].concat(res.data.data.identity_list);
+        this.certification_infor = this.sortByKey(
+          this.certification_infor,
+          "identity"
+        );
+        console.log(this.certification_infor);
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+      });
+  },
+  watch: {
+    need_refresh() {//重新申请数据 尚不确定是否成功
+      axios({
+        url: "/identity?user_id=" + this.$store.state.user_info.user_id,
+      })
+        .then((res) => {
+          console.log(res);
+          this.certification_infor = [].concat(res.data.data.identity_list);
+          this.certification_infor = this.sortByKey(
+            this.certification_infor,
+            "identity"
+          );
+          console.log(this.certification_infor);
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    },
+  },
+  methods: {
+    sortByKey(array, key) {
+      return array.sort(function (a, b) {
+        var x = a[key];
+        var y = b[key];
+        if (x == y) return 0;
+        if (x == "本科") return -1;
+        else if (y == "本科") return 1;
+        else if (x == "硕士") return -1;
+        else return 1;
+      });
+    },
+    submit() {
+      if (this.certification_infor.length >= 3) {
+        ElMessage.error("学历认证已完备! 如需更改, 请删除后再上传相关资料");
+        return;
+      }
+      if(this.now_input.certification_material == "" || this.now_input.school_name == "" || this.now_input.degree_name == "" || this.now_input.admission_name == "" || this.now_input.major_name == "" )
+      {
+        ElMessage.error("请先完善全部认证信息再提交!");
+        return;
+      }
+      var startDate = this.now_input.admission_time[0].toISOString();
+      var endDate = this.now_input.admission_time[1].toISOString();
+      var admDate =
+        startDate.substring(0, startDate.indexOf("T")) +
+        " ~ " +
+        endDate.substring(0, endDate.indexOf("T"));
+      axios
+        .post("/identity", {
+          img: this.now_input.certification_material,
+          user_id: this.$store.state.user_info.user_id,
+          identity: this.now_input.degree_name,
+          enrollment_time: admDate,
+          major: this.now_input.major_name,
+          university_name: this.now_input.school_name,
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.data.status == true) {
+            ElMessage.success("上传成功! 待审核通过后, 即完成认证");
+          } else {
+            ElMessage.error("提交失败！请检查各项输入是否合法");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          ElMessage.error("提交失败！请检查各项输入是否合法");
+        });
+    },
+    onUploadChange(file) {
+      const isIMAGE =
+        file.raw.type === "image/jpeg" || file.raw.type === "image/png";
+      const isLt2M = file.size / 1024 / 1024 / 2 < 1;
+      if (!isIMAGE) {
+        this.$message.error("上传文件只能是图片格式!");
+        return false;
+      }
+      if (!isLt2M) {
+        this.$message.error("上传文件大小不能超过 2MB!");
+        return false;
+      }
+      var reader = new FileReader();
+      reader.readAsDataURL(file.raw);
+      reader.onload = (e) => {
+        this.now_input.certification_material = e.target.result;
+        console.log(this.now_input.certification_material)
+      };
+    },
+    deletecheck(res){
+      if (res) {
+        this.need_refresh = ! this.need_refresh;
+      }
+    }
+  },
 };
 </script>
 
