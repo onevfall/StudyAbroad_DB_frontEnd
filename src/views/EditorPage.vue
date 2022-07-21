@@ -17,12 +17,12 @@ export default {
   },
   methods:{
     upLoad(args){
-      console.log(args.blob_content);
+      console.log(args.text_content);
       console.log(args.text_content);
       this.axios.post('blog',{
         user_id:'5',
         summary:args.text_content,
-        content:args.blob_content
+        content:args.base64_content
       }).then(res=>{
         console.log(res);
       }).catch(errMsg=>{
