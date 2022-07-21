@@ -1,3 +1,7 @@
+<!--
+描述：动态发布页面
+作者：焦佳宇
+-->
 <template>
   <div class="common-layout">
     <el-container>
