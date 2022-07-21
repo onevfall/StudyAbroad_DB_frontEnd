@@ -14,11 +14,13 @@ import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
 import InstitutionCenter from '../views/InstitutionCenter.vue'
 import PersonInformation from '../views/PersonInformation.vue'
+import PersonSpace from '../views/PersonSpace.vue'
 
 import store from '../store/index'
 import QuestionPage from '../views/QuestionPage.vue'
 import QACenterPage from '../views/QACenterPage.vue'
-import CoinCenter from '../views/CoinCenter.vue'
+import CoinRecharge from '../views/CoinRecharge.vue'
+
 import { ElMessage } from 'element-plus'
 const routes = [
   {
@@ -107,6 +109,15 @@ const routes = [
     }
   },
   {
+    path: '/person_space',
+    name: 'person_space',
+    component: PersonSpace,
+    meta: {
+      title: '个人空间',
+      // requireAuth: true
+    }
+  },
+  {
     path: '/institution_detail',//路径暂且做测试
     name: 'institution_detail',
     component: InstitutionDetail,
@@ -146,7 +157,15 @@ const routes = [
       title: '问答首页'
     }
   },
-
+  {
+    path: '/recharge',
+    name: 'recharge',
+    component: CoinRecharge,
+    meta: {
+      title: '充值页面'
+    }
+  },
+  
   //测试
   {
     path:'/editor',
@@ -154,14 +173,6 @@ const routes = [
     component:EditorPage,
     meta:{
       title:'测试文本编辑器'
-    }
-  },
-  {
-    path: '/coin_center',
-    name: 'coin_center',
-    component: CoinCenter,
-    meta: {
-      title: '鸟币中心'
     }
   },
 
@@ -173,33 +184,33 @@ const router = createRouter({
 })
 
 
-router.afterEach(to=>{
-  document.title=to.meta.title;//更改标题
+router.afterEach(to => {
+  document.title = to.meta.title;//更改标题
   window.scrollTo(0, 0)
 })
 
-router.beforeEach(to=>{
-  if(to.name)
-  if(to.matched.some(record=>record.meta.requireAuth)){
-    //如果需要验证登录状态
-    if (store.state.is_login == true) {
-      return true
-    }
-    else {
-      ElMessage({
-        message: '请先登录',
-        type: 'warning',
-        showClose: true,
-        duration: 2000
-      })
-      return {
-        path: '/login',
-        query: { redirect: to.fullPath }
+router.beforeEach(to => {
+  if (to.name)
+    if (to.matched.some(record => record.meta.requireAuth)) {
+      //如果需要验证登录状态
+      if (store.state.is_login == true) {
+        return true
+      }
+      else {
+        ElMessage({
+          message: '请先登录',
+          type: 'warning',
+          showClose: true,
+          duration: 2000
+        })
+        return {
+          path: '/login',
+          query: { redirect: to.fullPath }
+        }
       }
     }
-  }
-  else {
-    return true
-  }
+    else {
+      return true
+    }
 })
 export default router

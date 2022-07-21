@@ -17,18 +17,17 @@
     /></el-menu-item>
     <el-menu-item index="home" @click="goHome">首页</el-menu-item>
     <el-menu-item index="school_center" @click="goSchoolCenter"
-      >找对学校</el-menu-item>
-       <el-menu-item index="institution_center" @click="goInstitutionCenter"
-      >看看机构</el-menu-item>
+      >找对学校</el-menu-item
+    >
+    <el-menu-item index="institution_center" @click="goInstitutionCenter"
+      >看看机构</el-menu-item
+    >
     <el-sub-menu index="3">
       <template #title>说说留学</template>
-      <el-menu-item index="question" @click="goQuestion"
-        >留学问答(测试用 跳转至问题详情界面)</el-menu-item
-      >
+      <el-menu-item index="question" @click="goQACenter">留学问答</el-menu-item>
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
     <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
- 
 
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
@@ -43,10 +42,11 @@
       <el-menu-item index="7-4">财务管理</el-menu-item>
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="qa_center" @click="goQACenter">问答首页</el-menu-item>
-    <el-menu-item index="coin_center" @click="goCoinCenter">鸟币中心(测试用)</el-menu-item>
     <el-menu-item index="person_info" @click="goPersonInformation"
       >个人信息</el-menu-item
+    >
+    <el-menu-item index="person_space" @click="goPersonSpace"
+      >个人空间</el-menu-item
     >
     <el-menu-item index="editor" @click="goEditor"
       >富文本编辑器（测试）</el-menu-item
@@ -117,6 +117,14 @@ export default {
         name: "person_info",
       });
     },
+    goPersonSpace() {
+      router.push({
+        name: "person_space",
+        query: {
+          host_id: this.$store.state.user_info.user_id,
+        },
+      });
+    },
     //测试机构
     goInstitutionDetail() {
       router.push({
@@ -137,15 +145,10 @@ export default {
     },
 
     //测试
-    goEditor(){
+    goEditor() {
       router.push({
-        name:"editor"
-          })
-    },
-    goCoinCenter(){
-      router.push({
-        name:"coin_center"
-      })
+        name: "editor",
+      });
     },
     //退出账号并跳转至首页
     loginOut() {
