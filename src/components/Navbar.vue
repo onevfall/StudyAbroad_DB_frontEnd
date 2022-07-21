@@ -48,8 +48,8 @@
     <el-menu-item index="person_space" @click="goPersonSpace"
       >个人空间</el-menu-item
     >
-    <el-menu-item index="editor" @click="goEditor"
-      >富文本编辑器（测试）</el-menu-item
+    <el-menu-item index="blog_edit" @click="goEditor"
+      >动态发布</el-menu-item
     >
   </el-menu>
 </template>
@@ -147,7 +147,7 @@ export default {
     //测试
     goEditor() {
       router.push({
-        name: "editor",
+        name: "blog_edit",
       });
     },
     //退出账号并跳转至首页
