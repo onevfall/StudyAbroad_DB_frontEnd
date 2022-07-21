@@ -20,11 +20,11 @@
         <el-main>
           <div class="loginField">
             <div class="inputCard">
-              <div class="label">用户ID</div>
+              <div class="label">用户手机号</div>
               <el-row>
                 <el-col :span="10">
                   <el-input
-                    v-model="user_id"
+                    v-model="user_phone"
                     class="w-50 m-2"
                     :input-style="this.input_style"
                   >
@@ -67,7 +67,7 @@ export default {
   components: { ElMessage },
   data() {
     return {
-      user_id: "",
+      user_phone: "",
       user_password: "",
     };
   },
@@ -81,7 +81,7 @@ export default {
           */
       axios
         .post("login", {
-          user_id: this.user_id,
+          user_phone: this.user_phone,
           user_password: this.user_password,
         })
         .then((res) => {
@@ -107,8 +107,8 @@ export default {
             }
           } else {
             //若登录失败
-            ElMessage.error("用户ID或密码不正确！");
-            (this.user_id = ""), (this.user_password = "");
+            ElMessage.error("用户手机号或密码不正确！");
+            (this.user_phone = ""), (this.user_password = "");
           }
         })
         .catch((err) => {
