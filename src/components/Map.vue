@@ -109,7 +109,7 @@ export default {
     console.log(this.school.university_chname);
     //console.log(prop.school);
     console.log("test fot props");
-<<<<<<< HEAD
+
     //local.search(this.school.university_chname); 
 
     

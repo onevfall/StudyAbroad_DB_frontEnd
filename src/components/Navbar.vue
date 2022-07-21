@@ -17,16 +17,17 @@
     /></el-menu-item>
     <el-menu-item index="home" @click="goHome">首页</el-menu-item>
     <el-menu-item index="school_center" @click="goSchoolCenter"
-      >找对学校</el-menu-item>
-       <el-menu-item index="institution_center" @click="goInstitutionCenter"
-      >看看机构</el-menu-item>
+      >找对学校</el-menu-item
+    >
+    <el-menu-item index="institution_center" @click="goInstitutionCenter"
+      >看看机构</el-menu-item
+    >
     <el-sub-menu index="3">
       <template #title>说说留学</template>
       <el-menu-item index="question" @click="goQACenter">留学问答</el-menu-item>
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
     <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
- 
 
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
@@ -43,6 +44,9 @@
     </el-sub-menu>
     <el-menu-item index="person_info" @click="goPersonInformation"
       >个人信息</el-menu-item
+    >
+    <el-menu-item index="person_space" @click="goPersonSpace"
+      >个人空间</el-menu-item
     >
     <el-menu-item index="editor" @click="goEditor"
       >富文本编辑器（测试）</el-menu-item
@@ -113,6 +117,14 @@ export default {
         name: "person_info",
       });
     },
+    goPersonSpace() {
+      router.push({
+        name: "person_space",
+        query: {
+          host_id: this.$store.state.user_info.user_id,
+        },
+      });
+    },
     //测试机构
     goInstitutionDetail() {
       router.push({
@@ -133,10 +145,10 @@ export default {
     },
 
     //测试
-    goEditor(){
+    goEditor() {
       router.push({
-        name:"editor"
-          })
+        name: "editor",
+      });
     },
     //退出账号并跳转至首页
     loginOut() {
