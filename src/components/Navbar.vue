@@ -55,6 +55,9 @@
     <el-menu-item index="person_info" @click="goPersonInformation"
       >个人信息</el-menu-item
     >
+    <el-menu-item index="person_space" @click="goPersonSpace"
+      >个人空间</el-menu-item
+    >
   </el-menu>
 </template>
 
@@ -119,6 +122,14 @@ export default {
     goPersonInformation() {
       router.push({
         name: "person_info",
+      });
+    },
+    goPersonSpace() {
+      router.push({
+        name: "person_space",
+        query: {
+          host_id: this.$store.state.user_info.user_id,
+        },
       });
     },
     //测试机构
