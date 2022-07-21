@@ -1,5 +1,5 @@
 <!--
-描述：鸟币中心页面——用于鸟币管理（登录自动领取、交易记录、充值）的页面
+描述：鸟币中心页面——用于鸟币记录管理的页面
 作者：蔡明宏
 -->
 <template>
@@ -20,6 +20,7 @@
                       <p class="coin-rest-p">
                         鸟币余额：
                         <i class="coin-num">{{ coin_num }}</i>
+                        <a class="coin-recharge" @click="recharge">去充值</a>
                       </p>
                       <p class="coin-rest-info">
                         鸟币记录：
@@ -164,6 +165,7 @@
 </template>
 
 <script>
+import router from "@/router";
 export default {
   data() {
     return {
@@ -174,8 +176,13 @@ export default {
   },
   methods:{
     seeMore(){
-        this.activeName='2';
-    }
+      this.activeName='2';
+    },
+    recharge(){
+      router.push({
+        name:"recharge"
+          })
+    },
   }
 };
 </script>
@@ -246,6 +253,24 @@ export default {
   margin-left: 20px;
   color: #00a1d7;
   font-size: 24px;
+  margin-right: 85px;
+}
+
+.coin-recharge{
+  color: #fff;
+  background: #fc5531;
+  display: inline-block;
+  width: 72px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  border-radius: 15px;
+  font-size: 14px;
+  cursor:pointer;
+}
+/* 对于放上之后的颜色修改 */
+.coin-recharge:hover{
+  background: #ae2304;
 }
 .coin-rest-info {
   color: #222;
@@ -301,7 +326,7 @@ export default {
   cursor:pointer;
 }
 .coin-left-nodata {
-  width: 360px;
+  width: 368px;
   color: #99a2aa;
   text-align: center;
   line-height: 40px;
