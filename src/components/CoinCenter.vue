@@ -34,9 +34,9 @@
                         <table class="table-normal">
                           <thead>
                             <tr>
-                              <td class="tabel_1"><div>时间</div></td>
-                              <td class="tabel_2"><div>变化</div></td>
-                              <td class="tabel_3"><div>原因</div></td>
+                              <td class="table_1"><div>时间</div></td>
+                              <td class="table_2"><div>变化</div></td>
+                              <td class="table_3"><div>原因</div></td>
                             </tr>
                           </thead>
                           <tbody v-if="coin_change_list.length >= 7">
@@ -48,9 +48,9 @@
                               :key="index"
                             >
                               <!-- 需要变化记录的数据：需要弄清鸟币部分的表是怎么做的！ -->
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td><div>{{item.change_time.replace("T"," ")}}</div></td>
+                              <td><div>{{item.change_num}}</div></td>
+                              <td><div>{{item.change_reason}}</div></td>
                             </tr>
                           </tbody>
                           <tbody v-else-if="coin_change_list.length > 0">
@@ -59,9 +59,9 @@
                               v-for="(item, index) in coin_change_list"
                               :key="index"
                             >
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td><div>{{item.change_time.replace("T"," ")}}</div></td>
+                              <td><div>{{item.change_num}}</div></td>
+                              <td><div>{{item.change_reason}}</div></td>
                             </tr>
                           </tbody>
                           <tbody v-else>
@@ -117,9 +117,9 @@
                         <table class="table-normal">
                           <thead>
                             <tr>
-                              <td class="tabel_1"><div>时间</div></td>
-                              <td class="tabel_2"><div>变化</div></td>
-                              <td class="tabel_3"><div>原因</div></td>
+                              <td class="table_1"><div>时间</div></td>
+                              <td class="table_2"><div>变化</div></td>
+                              <td class="table_3"><div>原因</div></td>
                             </tr>
                           </thead>
                           <tbody v-if="coin_change_list.length >= 7">
@@ -131,9 +131,9 @@
                               :key="index"
                             >
                               <!-- 需要变化记录的数据：需要弄清鸟币部分的表是怎么做的！ -->
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td><div>{{item.change_time.replace("T"," ")}}</div></td>
+                              <td><div>{{item.change_num}}</div></td>
+                              <td><div>{{item.change_reason}}</div></td>
                             </tr>
                           </tbody>
                           <tbody v-else-if="coin_change_list.length > 0">
@@ -142,9 +142,9 @@
                               v-for="(item, index) in coin_change_list"
                               :key="index"
                             >
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td><div>{{item.change_time.replace("T"," ")}}</div></td>
+                              <td><div>{{item.change_num}}</div></td>
+                              <td><div>{{item.change_reason}}</div></td>
                             </tr>
                           </tbody>
                           <tbody v-else>
@@ -166,13 +166,44 @@
 
 <script>
 import router from "@/router";
+import { ElMessage } from "element-plus";
+import axios from "axios";
 export default {
+  components: {
+    ElMessage,
+  },
   data() {
     return {
       coin_num: 108, //鸟币数
       coin_change_list: [], //鸟币的改变记录
       activeName:'1',
     };
+  },
+  created() {
+    if (!this.$store.state.is_login) {
+      ElMessage({
+        message: "请先登录",
+        type: "warning",
+        showClose: true,
+        duration: 2000,
+      });
+      /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
+      this.$router.push({
+        path: "/login",
+        query: { redirect: this.$route.fullPath },
+      });
+    }
+    axios({
+      url: "/money/record?user_id=" + this.$store.state.user_info.user_id,
+    })
+      .then((res) => {
+        console.log("鸟币")
+        console.log(res);
+        this.coin_change_list = res.data.data.record_list;
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+      });
   },
   methods:{
     seeMore(){
@@ -304,15 +335,6 @@ export default {
   border-bottom: 1px solid #ddd;
   font-weight: 700;
 }
-.table_1 {
-  width: 36%;
-}
-.table_2 {
-  width: 21%;
-}
-.table_3 {
-  width: 43%;
-}
 .get-coin-more {
   background: #f5f5f5;
   border: 1px solid #ddd;
@@ -360,5 +382,24 @@ export default {
   margin: -3px 5px 0 0;
   vertical-align: middle;
   text-align: left;
+}
+.table-normal tbody tr td {
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+.table-normal tbody tr td:first-child {
+    border-left: none;
+}
+.table_1 {
+    width: 36%;
+}
+.table_2 {
+    width: 21%;
+}
+.coin-record .table_3 {
+    width: 43%;
 }
 </style>

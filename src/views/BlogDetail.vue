@@ -71,16 +71,11 @@
           </div>
           <el-divider />
           <div class="content_main">
-            <p>
-              {{ this.blog_detail.blog_content }}
-            </p>
-            <img :src="this.blog_detail.blog_image" class="conten_image" />
+            <p v-html="this.blog_detail.blog_content"></p>
           </div>
           <el-divider />
           <div>
-            <comment-zone
-            type="1"
-            :id="this.$route.query.blog_id">
+            <comment-zone type="1" :id="this.$route.query.blog_id">
             </comment-zone>
           </div>
           <!-- <div class="comment_field"></div> -->
@@ -98,6 +93,7 @@ import LikeButton from "../components/LikeButton.vue";
 import CoinButton from "../components/CoinButton.vue";
 import PageLoading from "../components/PageLoading.vue";
 import CommentZone from "../components/CommentZone.vue";
+import { decode } from "../utils/base64";
 export default {
   components: {
     UserInfoBoard,
@@ -125,8 +121,6 @@ export default {
       axios
         .get("/blog/tag?num=3&tag=" + this.$route.query.blog_tag)
         .then((res) => {
-          console.log(9898798789797);
-          console.log(res.data.data.blog);
           this.blog_relevant = [].concat(
             res.data.data.blog.filter(
               (blog) => blog.BlogId != this.$route.query.blog_id
@@ -141,6 +135,7 @@ export default {
         .get("/blog?blog_id=" + this.$route.query.blog_id)
         .then((res) => {
           this.blog_detail = res.data.data;
+          this.blog_detail.blog_content = decode(this.blog_detail.blog_content);
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -175,7 +170,6 @@ export default {
     },
   },
   created() {
-    console.log(this.$route.query);
     this.getData();
   },
 };

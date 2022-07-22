@@ -78,12 +78,11 @@ export default {
   
       this.sort_type = 0;
       axios({
-        url: "/blog/time?num=8",
+        url: "/blog/time?num=100",
         method: "get",
       })
         .then((res) => {
           this.blog_list = [].concat(res.data.data.blog);
-          this.blog_list = this.blog_list.concat(res.data.data.blog);
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -95,10 +94,9 @@ export default {
       }
       this.sort_type = 1;
       axios
-        .get("/blog/heat?num=8")
+        .get("/blog/heat?num=100")
         .then((res) => {
           this.blog_list = [].concat(res.data.data.blog);
-          this.blog_list = this.blog_list.concat(res.data.data.blog);
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -116,10 +114,9 @@ export default {
   created() {
     
     axios
-      .get("/blog/time?num=8")
+      .get("/blog/time?num=100")
       .then((res) => {
         this.blog_list = [].concat(res.data.data.blog);
-        this.blog_list = this.blog_list.concat(res.data.data.blog);
       })
       .catch((errMsg) => {
         console.log(errMsg);
