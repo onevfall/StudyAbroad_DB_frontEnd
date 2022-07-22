@@ -4,10 +4,10 @@
 -->
 <template>
   <editor :init="this.init" :api-key="this.api_key" v-model="content"></editor>
-  <el-button type="primary" @click="submit">提交</el-button>
 </template>
 
 <script>
+import { encode, decode } from "../utils/base64";
 import Editor from "@tinymce/tinymce-vue";
 export default {
   components: {
@@ -21,16 +21,16 @@ export default {
         language: "zh_CN", //语言类型
         placeholder: "在这里输入...",
         branding: false, //tiny技术支持信息是否显示
-        min_width: 320,
-        min_height: 220,
-        height: 500,
-        resize: "both", //编辑器宽高是否可变，
+        width: "100%",
+        height: 600,
+        min_height: 600,
+
         statusbar: true, //最下方的元素路径和字数统计那一栏是否显示
         elementpath: false, //元素路径是否显示
         font_formats:
           "微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC,sans-serif;苹果苹方=PingFang SC,Microsoft YaHei,sans-serif;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei,sans-serif;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;", //字体样式
         plugins:
-          "preview searchreplace autolink directionality visualblocks visualchars fullscreen image link template code codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern autosave emoticons", //插件配置
+          "autoresize preview searchreplace autolink directionality visualblocks visualchars fullscreen image link template code codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern autosave emoticons", //插件配置
         toolbar: [
           "fullscreen undo redo restoredraft | cut copy paste pastetext | forecolor backcolor bold italic underline strikethrough link anchor | alignleft aligncenter alignright alignjustify outdent indent | bullist numlist | blockquote subscript superscript removeformat ",
           "styleselect formatselect fontselect fontsizeselect |  table image axupimgs emoticons charmap hr pagebreak insertdatetime  selectall visualblocks searchreplace | code print preview | indent2em lineheight formatpainter",
@@ -52,49 +52,39 @@ export default {
     };
   },
   methods: {
-    encode(str) {
-      return btoa(
-        encodeURIComponent(str).replace(
-          /%([0-9A-F]{2})/g,
-          function toSolidBytes(match, p1) {
-            return String.fromCharCode("0x" + p1);
-          }
-        )
-      );
-    },
-    decode(str) {
-      return decodeURIComponent(
-        atob(str)
-          .split("")
-          .map(function (c) {
-            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-          })
-          .join("")
-      );
-    },
     getContent() {
       //获取纯文本
       var activeEditor = tinymce.activeEditor;
       var editBody = activeEditor.getBody();
       activeEditor.selection.select(editBody);
-      var text = (activeEditor.selection.getContent({ format: "text" }));
-      return text.trim()
+      var text = activeEditor.selection.getContent({ format: "text" });
+      return text.trim();
+    },
+    getImage() {
+      //获取图片
+      var reg = /<img.+?src=('|")?([^'"]+)('|")?(?:\s+|>)/gim;
+      var arr = [];
+      let tem;
+      while ((tem = reg.exec(this.content))) {
+        arr.push(tem[2]);
+      }
+      return arr;
     },
     submit() {
-      //将字符串 转换成 Blob 对象
-      var blob = new Blob([this.content], {
-        type: "text/plain",
-      });
-      var args={blob_content:blob,text_content:this.getContent()}
-      this.$emit('editorSubmit',args)
-    //   //转回 字符串
-    //   var reader = new FileReader();
-    //   reader.readAsText(blob, "utf-8");
-    //   reader.onload = (e) => {
-    //     console.log("转回字符串：");
-    //     console.info(reader.result);
-    //     console.log(this.content);
-    //   };
+      var args = {
+        base64_content: encode(this.content), //富文本内容——经过base64编码
+        text_content: this.getContent(), //纯文本
+        image_array: this.getImage(), //包含图片url数组
+      };
+      this.$emit("editorSubmit", args);
+      //   //转回 字符串
+      //   var reader = new FileReader();
+      //   reader.readAsText(blob, "utf-8");
+      //   reader.onload = (e) => {
+      //     console.log("转回字符串：");
+      //     console.info(reader.result);
+      //     console.log(this.content);
+      //   };
     },
   },
 };
