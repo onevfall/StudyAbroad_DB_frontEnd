@@ -37,7 +37,7 @@
     <el-sub-menu index="7" v-else>
       <template #title>个人中心</template>
       <el-menu-item index="7-1">我的信息</el-menu-item>
-      <el-menu-item index="7-2">发布历史</el-menu-item>
+      <el-menu-item index="blog_edit" @click="goEditor">动态发布</el-menu-item>
       <el-menu-item index="7-3">关注/收藏</el-menu-item>
       <el-menu-item index="7-4">财务管理</el-menu-item>
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
@@ -47,9 +47,6 @@
     >
     <el-menu-item index="person_space" @click="goPersonSpace"
       >个人空间</el-menu-item
-    >
-    <el-menu-item index="blog_edit" @click="goEditor"
-      >动态发布</el-menu-item
     >
   </el-menu>
 </template>
