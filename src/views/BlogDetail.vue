@@ -18,7 +18,7 @@
           </div>
         </el-scrollbar> -->
 
-        <div v-for="blog in this.blog_relevant" :key="blog">
+        <div v-for="blog in this.blog_relevant.slice(0,2)" :key="blog">
           <blog-info-board :blog_info="blog" class="BlogCard" />
         </div>
       </el-aside>
@@ -36,9 +36,9 @@
                         {{ BlogTime }}
                       </el-tag>
                     </el-col>
-                    <el-col span="1">
+                    <el-col span="1" v-for="tag in blog_detail.blog_tag" :key="tag">
                       <el-tag class="ml-2" type="success" size="large">
-                        {{ blog_detail.blog_tag }}
+                        {{ tag }}
                       </el-tag>
                     </el-col>
                     <el-col span="1">
@@ -112,6 +112,8 @@ export default {
   },
   methods: {
     getData() {
+      console.log(999);
+      console.log(this.$route.query.blog_tag);
       /*在此处向服务器请求数据，初始化所需变量*/
       //博客用户
       axios.get("userinfo?user_id=" + this.$route.query.user_id).then((res) => {
@@ -155,10 +157,13 @@ export default {
       if (this.blog_detail == "") {
         return "";
       }
-      if (this.blog_detail.blog_content.length < 12) {
-        return this.blog_detail.blog_content;
+      if(this.blog_detail.blog_summary==""){
+        return "";
+      }
+      if (this.blog_detail.blog_summary.length < 12) {
+        return this.blog_detail.blog_summary;
       } else {
-        return this.blog_detail.blog_content.slice(0, 12) + "...";
+        return this.blog_detail.blog_summary.slice(0, 12) + "...";
       }
     },
     BlogTime() {

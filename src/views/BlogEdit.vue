@@ -24,12 +24,11 @@
         <el-row :gutter="30" style="margin-top: 5px">
           <el-col span="3" style="margin-top: 5px"> 动态话题: </el-col>
           <el-col span="3">
-            <el-checkbox-group v-model="tagList" :min="1">
-              <el-checkbox label="Option A" />
-              <el-checkbox label="Option B" />
-              <el-checkbox label="Option C" />
-              <el-checkbox label="disabled" />
-              <el-checkbox label="selected and disabled" />
+            <el-checkbox-group v-model="tagList">
+              <el-checkbox label="生活" />
+              <el-checkbox label="娱乐" />
+              <el-checkbox label="学习" />
+              <el-checkbox label="科研" />
             </el-checkbox-group>
           </el-col>
         </el-row>
@@ -37,7 +36,12 @@
       <el-main class="card content_field"
         ><div class="input_field">
           <editor ref="text_editor" v-model="content" @editorSubmit="upLoad" />
-          <button @click="callEditor" class="mine_button">
+          <button
+            @click="callEditor"
+            class="mine_button"
+            v-loading.fullscreen.lock="fullscreenLoading"
+            element-loading-text="正在提交..."
+          >
             <div class="svg-wrapper-1">
               <div class="svg-wrapper">
                 <svg
@@ -64,33 +68,97 @@
 
 <script>
 import Editor from "../components/Editor";
+import { ElMessage } from "element-plus";
+
 export default {
   components: {
     Editor,
+    ElMessage,
   },
   data() {
     return {
       tagList: [],
+      fullscreenLoading: false,
     };
   },
   methods: {
     callEditor() {
-      console.log(111);
-      this.$refs.text_editor.submit();
+      if (this.tagList.length == 0) {
+        ElMessage({
+          message: "请选择至少一个关键词",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
+        });
+      } else {
+        this.$refs.text_editor.submit();
+      }
     },
     upLoad(args) {
-      console.log(args.text_content);
-      console.log(args.image_content);
+      this.fullscreenLoading = true;
+      //处理summary
+      var summary = "";
+      if (args.text_content.length == 0) {
+        ElMessage({
+          message: "请输入有效内容",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
+        });
+        return;
+      } else if (args.text_content.length < 15) {
+        summary = args.text_content;
+      } else {
+        summary = args.text_content.slice(0, 15);
+      }
+      //处理tag
+      var tag = "";
+      for (let i = 0; i < this.tagList.length; ++i) {
+        tag += this.tagList[i] + "-";
+      }
+      tag = tag.slice(0, tag.length - 1);
+      //处理图片
+      var image_url = "";
+      if (args.image_array.length != 0) {
+        image_url = args.image_array[0]; //选第一张图片
+      }
       this.axios
-        .post("blog111", {
-          user_id: "5",
-          summary: "关于只狼boss难度排名，自认还是比较有资格回答的",
+        .post("blog", {
+          user_id: this.$store.state.user_info.user_id,
+          summary: summary,
           content: args.base64_content,
+          tag: tag,
+          image_url: image_url,
         })
         .then((res) => {
-          console.log(res);
+          if (res.data.status == true) {
+            this.fullscreenLoading = false;
+            ElMessage({
+              type: "success",
+              message: "提交成功，正在等待审核",
+              duration: 2000,
+              showClose: true,
+            });
+            this.$router.back();
+          } else {
+            this.fullscreenLoading = false;
+
+            ElMessage({
+              type: "warning",
+              message: "提交失败，请输入合法字段",
+              duration: 2000,
+              showClose: true,
+            });
+          }
         })
         .catch((errMsg) => {
+          this.fullscreenLoading = false;
+          ElMessage({
+              type: "warning",
+              message: "提交失败，请检查网络连接",
+              duration: 2000,
+              showClose: true,
+            });
           console.log(errMsg);
         });
     },
@@ -124,57 +192,57 @@ export default {
 }
 
 .mine_button {
+  margin-left: 45%;
   margin-top: 2vh;
- font-family: inherit;
- font-size: 16px;
- background: rgb(37, 150, 249);
- color: white;
- padding: 0.7em 1em;
- padding-left: 0.9em;
- display: flex;
- align-items: center;
- border: none;
- border-radius: 16px;
- overflow: hidden;
- transition: all 0.2s;
+  font-family: inherit;
+  font-size: 16px;
+  background: rgb(37, 150, 249);
+  color: white;
+  padding: 0.7em 1em;
+  padding-left: 0.9em;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
 }
 
 .mine_button span {
- display: block;
- margin-left: 0.3em;
- transition: all 0.3s ease-in-out;
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
 }
 
 .mine_button svg {
- display: block;
- transform-origin: center center;
- transition: transform 0.3s ease-in-out;
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
 }
 
 .mine_button:hover .svg-wrapper {
- animation: fly-1 0.6s ease-in-out infinite alternate;
+  animation: fly-1 0.6s ease-in-out infinite alternate;
 }
 
 .mine_button:hover svg {
- transform: translateX(1.2em) rotate(45deg) scale(1.1);
+  transform: translateX(1.2em) rotate(45deg) scale(1.1);
 }
 
 .mine_button:hover span {
- transform: translateX(5em);
+  transform: translateX(5em);
 }
 
 .mine_button:active {
- transform: scale(0.95);
+  transform: scale(0.95);
 }
 
 @keyframes fly-1 {
- from {
-  transform: translateY(0.1em);
- }
+  from {
+    transform: translateY(0.1em);
+  }
 
- to {
-  transform: translateY(-0.1em);
- }
+  to {
+    transform: translateY(-0.1em);
+  }
 }
-
 </style>

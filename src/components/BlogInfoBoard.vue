@@ -22,9 +22,9 @@
     <div style="padding: 14px; padding-bottom: 0px">
       <section class="card_info">
         <el-row gutter="10" justify="left">
-          <el-col span="1">
+          <el-col span="1" v-for="tag in blog_info.BlogTag" :key="tag">
             <el-tag class="ml-2" type="success" size="small">{{
-              blog_info.BlogTag
+              tag
             }}</el-tag>
           </el-col>
           <el-col span="1">
