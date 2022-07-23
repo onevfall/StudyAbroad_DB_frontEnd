@@ -23,9 +23,7 @@
       <section class="card_info">
         <el-row gutter="10" justify="left">
           <el-col span="1" v-for="tag in blog_info.BlogTag" :key="tag">
-            <el-tag class="ml-2" type="success" size="small">{{
-              tag
-            }}</el-tag>
+            <el-tag class="ml-2" type="success" size="small">{{ tag }}</el-tag>
           </el-col>
           <el-col span="1">
             <el-tag class="ml-2" size="small">{{ blogTime }}</el-tag>
@@ -38,10 +36,10 @@
       <section class="card_user">
         <el-row gutter="10" align="middle">
           <el-col :span="2">
-            <el-avatar :src="this.user_info.user_profile" size="small" />
+            <el-avatar :src="this.blog_info.UserProfile" size="small" />
           </el-col>
           <el-col :span="12" style="text-align: left">
-            <span class="user_name"> {{ this.user_info.user_name }} </span>
+            <span class="user_name"> {{ this.blog_info.UserName }} </span>
           </el-col>
           <el-col :span="5">
             <like-button
@@ -87,8 +85,8 @@ export default {
       return this.blog_info.BlogDate.replace("T", " ");
     },
     blogSummary() {
-      if(this.blog_info.BlogSummary==null){
-        return ""
+      if (this.blog_info.BlogSummary == null) {
+        return "";
       }
       if (this.blog_info.BlogSummary.length < 12) {
         return this.blog_info.BlogSummary;
@@ -99,7 +97,6 @@ export default {
   },
   data() {
     return {
-      user_info: "",
       blog_image: "",
       img_ready: false,
     };
@@ -151,33 +148,23 @@ export default {
     },
     goDetail() {
       this.$router.push({
-        path:"/blog_detail",
-        query:{
-          blog_id:this.blog_info.BlogId,
-          blog_tag:this.blog_info.BlogTag,
-          user_id:this.user_info.user_id
-        }
-        });
+        path: "/blog_detail",
+        query: {
+          blog_id: this.blog_info.BlogId,
+          blog_tag: this.blog_info.BlogTag[0],
+          user_id: this.blog_info.UserId,
+        },
+      });
     },
   },
   created() {
-    axios.get(
-      "userinfo?user_id=" + this.blog_info.BlogUserId,
-
-    )
-      .then((res) => {
-        this.user_info = res.data.data;
-        if (this.blog_info.BlogImage == null) {
-          this.blog_image = this.user_info.user_profile;
-          this.img_ready = true;
-        } else {
-          this.blog_image = this.blog_info.BlogImage;
-          this.img_ready = true;
-        }
-      })
-      .catch((errMsg) => {
-        console.log(errMsg);
-      });
+    if (this.blog_info.BlogImage == null) {
+      this.blog_image = this.blog_info.UserProfile;
+      this.img_ready = true;
+    } else {
+      this.blog_image = this.blog_info.BlogImage;
+      this.img_ready = true;
+    }
   },
 };
 </script>
