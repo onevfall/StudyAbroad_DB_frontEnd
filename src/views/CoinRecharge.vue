@@ -56,47 +56,57 @@
           <pay-view></pay-view>
         </div>
       </div>
+      <div id="divwapform" >
+        <!--网页端测试代码-->
+        
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import RechargeCoinCard from "../components/RechargeCoinCard.vue";
-import PayView from "../views/PayView.vue"
+import PayView from "../views/PayView.vue";
 export default {
   components: {
     RechargeCoinCard,
-    PayView
+    PayView,
   },
   data() {
     return {
-      coin_num:0,
-      money_num:0,
+      coin_num: 0,
+      money_num: 0,
     };
   },
-  watch:{
-    coin_num(newVal,oldVal){
-      if(newVal>0) {  //当改变的值合法时
-        this.money_num = newVal/10; //更新对应金币数
-        this.goPay()
+  watch: {
+    coin_num(newVal, oldVal) {
+      if (newVal > 0) {
+        //当改变的值合法时
+        this.money_num = newVal / 10; //更新对应金币数
+        this.goPay();
       }
-    }
+    },
   },
   methods: {
     childByValue: function (coin_num) {
       // coin_num就是子组件传过来的值
       this.coin_num = coin_num;
-      console.log('this.coin_num:'+this.coin_num)
+      console.log("this.coin_num:" + this.coin_num);
     },
-    goPay(){
-      console.log("11")
+    goPay() {
+      console.log("已调用goPay")
+
+      ;
     },
   },
-  
 };
 </script>
 
 <style scoped>
+#divwapform{
+  height: 200px;
+  width: 100%;
+}
 .floor {
   margin: 8px auto;
   width: 80%;
@@ -159,19 +169,19 @@ export default {
   justify-content: flex-start;
   margin-bottom: 16px;
 }
-.pay-info{
-    height: 229px;
-    background: #f8f8f8;
-    border-radius: 8px;
-    padding: 16px;
-    font-size: 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: start;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-    position: relative;
+.pay-info {
+  height: 229px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  position: relative;
 }
 </style>
 
