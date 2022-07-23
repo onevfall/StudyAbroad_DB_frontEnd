@@ -1,5 +1,5 @@
 <!--
-描述：动态发布页面
+描述：问题发布页面
 作者：焦佳宇
 -->
 <template>
@@ -18,24 +18,55 @@
             {{ this.$store.state.user_info.user_name }}
           </el-col>
           <el-col :span="15" style="margin-top: 5px; font-size: 1.8em">
-            <strong>动态发布</strong>
+            <strong>提问</strong>
           </el-col>
         </el-row>
         <el-row :gutter="30" style="margin-top: 5px">
-          <el-col span="3" style="margin-top: 5px"> <strong>动态话题:</strong> </el-col>
+          <el-col span="3" style="margin-top: 5px">
+            <strong>话题:</strong>
+          </el-col>
           <el-col span="3">
             <el-checkbox-group v-model="tagList">
               <el-checkbox label="生活" />
-              <el-checkbox label="娱乐" />
+              <el-checkbox label="考试" />
               <el-checkbox label="学习" />
               <el-checkbox label="科研" />
             </el-checkbox-group>
           </el-col>
         </el-row>
+        <el-row gutter="5" style="margin-top: 5px">
+          <el-col span="3">
+            <strong>悬赏金额: </strong>{{ coin_in_num }}
+          </el-col>
+          <el-col :span="2">
+            <el-button
+              type="primary"
+              plain
+              size="small"
+              @click="this.input_nums = true"
+            >
+              修改
+            </el-button>
+          </el-col>
+        </el-row>
       </el-header>
       <el-main class="card content_field"
         ><div class="input_field">
-          <editor ref="text_editor"  @editorSubmit="upLoad" />
+          <div style="text-align: left; margin-bottom: 10px">
+            <strong> 问题: </strong>
+          </div>
+          <el-input
+            v-model="title"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            type="textarea"
+            placeholder="在这里输入"
+            style="margin-bottom: 10px"
+          />
+          <div style="text-align: left; margin-bottom: 10px">
+            <strong> 补充说明(可选): </strong>
+          </div>
+
+          <editor ref="text_editor" @editorSubmit="upLoad" />
           <button
             @click="callEditor"
             class="mine_button"
@@ -60,8 +91,20 @@
             </div>
             <span>发布</span>
           </button>
-        </div></el-main
-      >
+        </div>
+        <el-dialog v-model="input_nums" title="请设置悬赏金额">
+          <el-input-number
+            min="0"
+            v-model="this.coin_in_num"
+            :precision="0"
+          ></el-input-number>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button type="primary" @click="coinConfirm">确认</el-button>
+            </span>
+          </template>
+        </el-dialog>
+      </el-main>
     </el-container>
   </div>
 </template>
@@ -77,12 +120,51 @@ export default {
   },
   data() {
     return {
+      title: "",
+
       tagList: [],
       fullscreenLoading: false,
+      input_nums: false,
+      coin_in_num: 0,
     };
   },
   methods: {
+    coinConfirm() {
+      //判断输入是否为合法类型-number
+      if (typeof this.coin_in_num != "number") {
+        ElMessage({
+          type: "error",
+          message: "请输入合法值",
+          duration: 2000,
+          showClose: true,
+        });
+        return;
+      }
+
+      if (this.coin_in_num > this.$store.state.user_info.user_coin) {
+        ElMessage({
+          type: "warning",
+          message:
+            "鸟币不足,当前余额为 " +
+            this.$store.state.user_info.user_coin +
+            " 枚",
+          duration: 2000,
+          showClose: true,
+        });
+        return;
+      }
+      this.input_nums = false;
+    },
     callEditor() {
+      if (this.title.length == 0) {
+        ElMessage({
+          message: "请输入问题",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
+        });
+        return;
+      }
       if (this.tagList.length == 0) {
         ElMessage({
           message: "请选择至少一个关键词",
@@ -99,12 +181,7 @@ export default {
       //处理summary
       var summary = "";
       if (args.text_content.length == 0) {
-        ElMessage({
-          message: "请输入有效内容",
-          type: "warning",
-          showClose: true,
-          duration: 2000,
-        });
+        summary="如题"
         return;
       } else if (args.text_content.length < 15) {
         summary = args.text_content;
@@ -117,20 +194,17 @@ export default {
         tag += this.tagList[i] + "-";
       }
       tag = tag.slice(0, tag.length - 1);
-      //处理图片
-      var image_url = "";
-      if (args.image_array.length != 0) {
-        image_url = args.image_array[0]; //选第一张图片
-      }
       this.axios
-        .post("blog", {
-          user_id: this.$store.state.user_info.user_id,
-          summary: summary,
-          content: args.base64_content,
-          tag: tag,
-          image_url: image_url,
+        .post("question", {
+          question_user_id: this.$store.state.user_info.user_id,
+          question_title: this.title,
+          question_description:summary,
+          question_reward:this.coin_in_num,
+          question_tag:tag
         })
         .then((res) => {
+            console.log(99451295761927);
+            console.log(res);
           if (res.data.status == true) {
             this.fullscreenLoading = false;
             ElMessage({
@@ -154,11 +228,11 @@ export default {
         .catch((errMsg) => {
           this.fullscreenLoading = false;
           ElMessage({
-              type: "warning",
-              message: "提交失败，请检查网络连接",
-              duration: 2000,
-              showClose: true,
-            });
+            type: "warning",
+            message: "提交失败，请检查网络连接",
+            duration: 2000,
+            showClose: true,
+          });
           console.log(errMsg);
         });
     },
@@ -184,7 +258,7 @@ export default {
 }
 .header_field {
   margin-top: 1vh;
-  min-height: 100px;
+  min-height: 150px;
 }
 .content_field {
   margin-top: 2vh;
