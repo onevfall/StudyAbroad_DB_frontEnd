@@ -71,20 +71,13 @@ export default {
       return arr;
     },
     submit() {
+      var image_array=this.getImage()
       var args = {
         base64_content: encode(this.content), //富文本内容——经过base64编码
         text_content: this.getContent(), //纯文本
-        image_array: this.getImage(), //包含图片url数组
+        image_array: image_array, //包含图片url数组
       };
       this.$emit("editorSubmit", args);
-      //   //转回 字符串
-      //   var reader = new FileReader();
-      //   reader.readAsText(blob, "utf-8");
-      //   reader.onload = (e) => {
-      //     console.log("转回字符串：");
-      //     console.info(reader.result);
-      //     console.log(this.content);
-      //   };
     },
   },
 };
