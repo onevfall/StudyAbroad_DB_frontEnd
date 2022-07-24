@@ -15,7 +15,7 @@
         <span v-for="(card, index) in this.card_info" :key="card">
           <question-side-card
             class="SideCard"
-            :card_info="this.card_info[index]"
+            :card_info="card"
           >
           </question-side-card>
         </span>
@@ -55,8 +55,9 @@
               }}</el-tag>
             </el-header>
             <el-main>
-              <div class="content_main">
-                {{ this.answer_infor.answer_content }}
+              <div class="content_main" >
+                <p v-html="this.answer_infor.answer_content"></p>
+                <!-- {{ this.answer_infor.answer_content }} -->
               </div>
               <!-- <img :src="this.answer_infor.answer_contentpic" class="content_image" v-if="this.answer_infor.answer_contentpic"/> -->
               <!-- <div style="float: left; margin-left: 3%"> 事件穿透想不通 直接换文字了
@@ -85,7 +86,7 @@
                 </el-button>
               </div> -->
               <div style="float: left; margin-left: 3%; display: flex">
-                <div style="margin-right: 5px">赞同</div>
+                <div style="margin-right: 5px">{{this.answer_infor.answer_like}}</div>
                 <like-button
                   content_type="2"
                   :content_id="this.answer_id"
@@ -94,7 +95,7 @@
                   @giveLike="like"
                   @cancelLike="unlike"
                 />
-                <div style="margin-left: 5px; margin-right: 5px">投币</div>
+                <div style="margin-left: 5px; margin-right: 5px">{{this.answer_infor.answer_coin}}</div>
                 <coin-button
                   content_type="1"
                   :content_id="this.answer_id"
@@ -168,46 +169,6 @@ export default {
     //在此处向服务器请求数据，初始化所需变量
     this.initPage();
   },
-  // beforeRouteEnter(to, from, next) {
-  //   console.log("qqqqqq");
-  //   console.log(to);
-  //   console.log(from);
-  //   console.log(to.query.answer_id);
-  //   axios
-  //     .get("/answer", {
-  //       params: {
-  //         answer_id: to.query.answer_id,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       if (res.data.status === true) {
-  //         console.log(res.data.data.answer_user_id);
-  //         axios
-  //           .get("/userinfo", {
-  //             params: {
-  //               user_id: res.data.data.answer_user_id,
-  //             },
-  //           })
-  //           .then((res) => {
-  //             if (res.data.status === true) {
-  //               console.log(res.data.data);
-  //               const store = from.matched[0].instances.default.$store;
-  //               console.log(store);
-  //               store.commit("ChangeAnswerUserInfo", res.data.data);
-  //               next(true); //获取answer_user_info全部内容 未验证过
-  //             } else {
-  //               console.log(res);
-  //               console.log("11内容获取失败");
-  //             }
-  //           })
-  //           .catch((err) => {
-  //             console.log(err);
-  //           });
-  //       } else {
-  //         console.log("内容获取失败");
-  //       }
-  //     });
-  // },
   methods: {
     async reloadAnswer() {
       axios
@@ -220,6 +181,14 @@ export default {
           if (res.data.status === true) {
             // console.log(res.data.data);
             this.answer_infor = res.data.data; //获取answer全部内容
+            if (this.answer_infor.answer_content.substr(0, 4) == "http") {
+            const xhrFile = new XMLHttpRequest();
+            xhrFile.open("GET", this.answer_infor.answer_content, true);
+            xhrFile.send();
+            xhrFile.onload = () => {
+              this.answer_infor.answer_content = xhrFile.response;
+            };
+          }
           } else {
             console.log("内容获取失败");
           }
@@ -314,7 +283,7 @@ export default {
             var tem_info = {
               essence: "问题",
               content: this.question_relevant[i].QuestionTitle,
-              keyword: res.data.data.tag.split(","),
+              keyword: res.data.data.tag,
               id: this.question_relevant[i].QuestionId,
             };
             this.card_info[i] = tem_info;
@@ -337,6 +306,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
+        this.answer_infor.answer_like +=1
       } else {
         ElMessage({
           type: "error",
@@ -346,7 +316,7 @@ export default {
         });
       }
     },
-    unLike(res) {
+    unlike(res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -354,6 +324,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
+        this.answer_infor.answer_like -=1
       } else {
         ElMessage({
           type: "error",
@@ -371,6 +342,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
+        this.answer_infor.answer_coin +=1
       }
     },
   },

@@ -11,18 +11,29 @@
             <el-col :span="1"></el-col>
             <el-col :span="19">
               <el-row type="flex" align="middle">
-                <el-col :span="2" v-if="this.question_info.user_university != 'null'">
+                <el-col
+                  :span="2"
+                  v-if="this.question_info.user_university != 'null'"
+                >
                   <el-tag size="middle">{{
                     this.question_info.user_university
                   }}</el-tag>
                 </el-col>
-                <el-col :span="2" v-if="this.question_info.user_university != 'null'">
+                <el-col
+                  :span="2"
+                  v-if="this.question_info.user_university != 'null'"
+                >
                   <el-tag size="middle">{{
                     this.question_info.university_country
                   }}</el-tag>
                 </el-col>
-                <el-col :span="2" v-for="tag in this.question_info.question_tag" :key="tag">
-                  <el-tag size="middle">{{
+                <el-col
+                  :span="2"
+                  v-for="tag in this.question_info.question_tag"
+                  :key="tag"
+                  style="margin-right:-7px;"
+                >
+                  <el-tag size="middle" >{{
                     tag
                   }}</el-tag>
                 </el-col>
@@ -40,7 +51,7 @@
                 </span>
                 <el-col id="user_identify" :span="2">
                   <el-tag
-                    v-if="this.question_info.user_qualification != 'null' "
+                    v-if="this.question_info.user_qualification != 'null'"
                     type="warning"
                     size="large"
                     >已认证:{{ this.question_info.user_university }}
@@ -59,11 +70,12 @@
           <el-row>
             <el-col :span="1"></el-col>
             <el-col id="question_details" :span="20">
-              <div v-if="isFull" style="text-align: left">
-                详细阐释：{{ this.question_info.question_des }}
+              <div v-if="notFull" style="text-align: left">
+                问题摘要：{{ this.question_info.question_summary }}
               </div>
-              <div v-if="!isFull" style="text-align: left">
-                详细阐释：{{ this.question_info.question_description }}
+              <div v-if="!notFull" style="text-align: left">
+                问题详情：
+                <p v-html="this.question_info.question_description"></p>
               </div>
             </el-col>
             <el-col class="expand" :span="3">
@@ -151,7 +163,7 @@ export default {
       question_id: -1,
       answer_num: 0,
       related_question_tag: "",
-      isFull: true,
+      notFull: true,
       textStatus: "展开全文↓",
     };
   },
@@ -160,8 +172,8 @@ export default {
       alert("跳转至写回答页面");
     },
     expandToFull: function () {
-      this.isFull = !this.isFull;
-      if (this.isFull) {
+      this.notFull = !this.notFull;
+      if (this.notFull) {
         this.textStatus = "展开全文↓";
       } else {
         this.textStatus = "收起";
@@ -185,17 +197,14 @@ export default {
         .then((res) => {
           console.log(res.data.data);
           this.question_info = res.data.data;
-          if (this.question_info.question_description.length > 100)
-            this.question_info.question_des =
-              this.question_info.question_description.slice(0, 100) + "...";
-          else
-            this.question_info.question_des =
-              this.question_info.question_description;
-          this.question_info.question_tag = this.question_info.question_tag.split(",")
-          // if(this.question_info.user_qualification == "null")
-          //   this.question_info.user_qualification == null;
-          // if(this.question_info.user_university == "null")
-          //   this.question_info.user_university == null;
+          if (this.question_info.question_description.substr(0, 4) == "http") {
+            const xhrFile = new XMLHttpRequest();
+            xhrFile.open("GET", this.question_info.question_description, true);
+            xhrFile.send();
+            xhrFile.onload = () => {
+              this.question_info.question_description = xhrFile.response;
+            };
+          }
           console.log(89);
           console.log(this.question_info);
         })
@@ -232,17 +241,17 @@ export default {
           this.related_question_tag = res.data.data.tag;
           this.question_relevant = res.data.data.related_questions;
           for (let i = 0; i < this.question_relevant.length; i++) {
-            console.log("xiangguan")
+            console.log("xiangguan");
             console.log(this.question_relevant[i]);
             var tem_info = {
               essence: "问题",
               content: this.question_relevant[i].QuestionTitle,
-              keyword: res.data.data.tag.split(","),
+              keyword: res.data.data.tag,
               id: this.question_relevant[i].QuestionId,
             };
-            this.card_info[i]=tem_info;
-            //this.card_info.push(tem_info);
+            this.card_info[i] = tem_info;
           }
+          console.log("related que");
           console.log(this.card_info);
         })
         .catch((err) => {
