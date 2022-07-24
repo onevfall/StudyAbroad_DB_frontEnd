@@ -6,8 +6,7 @@
   <div class="total-layout">
     <el-container>
       <el-header height="300px">
-        <el-carousel indicator-position="outside">
-        </el-carousel>
+        <el-carousel indicator-position="outside"> </el-carousel>
       </el-header>
       <el-main
         ><div class="partial-layout">
@@ -46,7 +45,6 @@
                   <div class="latestNews">快讯摘要</div>
                   <div>
                     <div class="infinite-list-wrapper" style="overflow: auto">
-                      
                       <ul
                         v-infinite-scroll="load"
                         class="list"
@@ -61,30 +59,42 @@
                             <el-container>
                               <el-aside width="200px">
                                 <el-image
-                                  style="width: 200px"
+                                  style="width: 198px; height: 183px"
                                   :src="news.NewsFlashImage"
                                   :fit="fit"
+                                  class="imgBorder"
                                 />
                               </el-aside>
-                              <el-main style="width: 600px" class="mainColor">
-                                <el-card>
+                              <el-main
+                                style="width: 600px; height: 185px"
+                                class="mainColor"
+                              >
+                                <el-card
+                                  style="height: 183px; background: aliceblue"
+                                >
                                   <template #header>
                                     <div class="card-header2">
-                                      <span
-                                        >{{ news.NewsFlashTitle }} <br /><br />
+                                      <span style="width: 40%">
+                                        {{ news.NewsFlashTitle }}
+
+                                        <br />
                                       </span>
                                       <el-tag
                                         class="ml-2"
                                         type="primary"
                                         size="small"
-                                        >{{ news.NewsFlashDate }}</el-tag
                                       >
+                                        {{
+                                          news.NewsFlashDate.replace("T", " ")
+                                        }}
+                                      </el-tag>
                                       <el-tag
                                         class="ml-2"
                                         type="success"
                                         size="small"
-                                        >{{ news.NewsFlashRegion }}</el-tag
                                       >
+                                        {{ news.NewsFlashRegion }}
+                                      </el-tag>
                                       <el-tag
                                         class="ml-2"
                                         type="warning"
@@ -96,23 +106,14 @@
                                   <div class="content_main">
                                     {{ news.NewsFlashSummary }}
                                   </div>
-
-                                  <div class="moreInfo">
-                                    <el-button
-                                      type="primary"
-                                      class="button3"
-                                      @click="jumpToNewsPage(news)"
-                                      >查看详情</el-button
-                                    >
-                                  </div>
                                 </el-card>
                               </el-main>
                             </el-container>
                           </div>
                         </li>
                       </ul>
-                      <p v-if="loading">Loading...</p>
-                      <p v-if="noMore">No more</p>
+                      <p v-if="loading" style="margin-top: 10%">Loading...</p>
+                      <p v-if="noMore" style="margin-top: 10%">No more</p>
                     </div>
                   </div>
                 </div>
@@ -121,7 +122,7 @@
           </el-container>
         </div></el-main
       >
-      <el-footer>Footer</el-footer>
+      
     </el-container>
   </div>
 </template>
@@ -211,7 +212,13 @@ export default {
   padding-left: 5px;
   border-left: 10px rgb(33, 33, 126) solid;
 }
-
+.card-header2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  color: rgb(30, 23, 118);
+}
 .text {
   font-size: 14px;
   text-align: left;
@@ -268,14 +275,18 @@ export default {
 }
 .content_main {
   text-align: left;
+  font-size:16px;
 }
 .common-layout2 {
-  margin-bottom: 5%;
+  margin-bottom: 0%;
 }
-
 .mainColor {
   background-color: aliceblue;
   color: aliceblue;
+  padding: 0px;
+  /* border-top: 1px grey solid;
+  border-bottom: 1px grey solid;
+  border-right: 1px grey solid; */
 }
 
 .dateAuthor {
@@ -284,7 +295,6 @@ export default {
 }
 
 .infinite-list-wrapper {
-  
   text-align: center;
 }
 
@@ -292,7 +302,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 250px;
+  height: auto;
   background: white;
+   margin-bottom: 3%;
 }
 </style>
