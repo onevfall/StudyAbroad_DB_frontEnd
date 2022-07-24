@@ -4,7 +4,7 @@
 -->
 <template>
   <page-loading v-if="blog_user_info == ''" />
-  <div class="common-layout">
+  <div class="common-layout" id="top">
     <el-container>
       <el-aside width="400px">
         <user-info-board
@@ -12,13 +12,8 @@
           :blog_user_info="this.blog_user_info"
           v-if="blog_user_info != ''"
         ></user-info-board>
-        <!-- <el-scrollbar max-height="75%" style="height:75%;margin-top:5%"  >
-          <div v-for="blog in this.blog_relevant" :key="blog">
-            <blog-info-board :blog_info="blog" class="BlogCard" />
-          </div>
-        </el-scrollbar> -->
 
-        <div v-for="blog in this.blog_relevant" :key="blog">
+        <div v-for="blog in this.blog_relevant.slice(0, 2)" :key="blog">
           <blog-info-board :blog_info="blog" class="BlogCard" />
         </div>
       </el-aside>
@@ -36,29 +31,13 @@
                         {{ BlogTime }}
                       </el-tag>
                     </el-col>
-                    <el-col span="1">
+                    <el-col
+                      span="1"
+                      v-for="tag in blog_detail.blog_tag"
+                      :key="tag"
+                    >
                       <el-tag class="ml-2" type="success" size="large">
-                        {{ blog_detail.blog_tag }}
-                      </el-tag>
-                    </el-col>
-                    <el-col span="1">
-                      <el-tag class="ml-2" type="error" size="large">
-                        <like-button
-                          :content_id="this.$route.query.blog_id"
-                          content_type="0"
-                          :show_num="true"
-                          size="large"
-                        />
-                      </el-tag>
-                    </el-col>
-                    <el-col span="1">
-                      <el-tag class="ml-2" type="warning" size="large">
-                        <coin-button
-                          :content_id="this.$route.query.blog_id"
-                          content_type="0"
-                          :show_num="true"
-                          size="large"
-                        />
+                        {{ tag }}
                       </el-tag>
                     </el-col>
                   </el-row>
@@ -70,8 +49,71 @@
             </el-container>
           </div>
           <el-divider />
-          <div class="content_main">
-            <p v-html="this.blog_detail.blog_content"></p>
+          <div class="main_field">
+            <div class="content_main">
+              <p v-html="this.blog_detail.blog_content"></p>
+            </div>
+            <el-affix target=".main_field" position="bottom" :offset="0">
+              <div class="option_bar">
+                <el-row gutter="10">
+                  <el-col :span="2">
+                    <!-- <el-tag class="ml-2" type="info" size="large"> -->
+                    <like-button
+                      :content_id="this.$route.query.blog_id"
+                      content_type="0"
+                      :show_num="true"
+                      size="large"
+                    />
+                    <!-- </el-tag> -->
+                  </el-col>
+                  <el-col :span="2">
+                    <!-- <el-tag class="ml-2" type="warning" size="large"> -->
+                    <coin-button
+                      :content_id="this.$route.query.blog_id"
+                      content_type="0"
+                      :show_num="true"
+                      size="large"
+                    />
+                    <!-- </el-tag> -->
+                  </el-col>
+                  <el-col :span="2">
+                    <!-- <el-tag class="ml-2" type="info" size="large"> -->
+                    <like-button
+                      :content_id="this.$route.query.blog_id"
+                      content_type="0"
+                      :show_num="true"
+                      size="large"
+                    />
+                    <!-- </el-tag> -->
+                  </el-col>
+                  <el-col :span="2">
+                    <!-- <el-tag class="ml-2" type="warning" size="large"> -->
+                    <coin-button
+                      :content_id="this.$route.query.blog_id"
+                      content_type="0"
+                      :show_num="true"
+                      size="large"
+                    />
+                    <!-- </el-tag> -->
+                  </el-col>
+                  <el-col :span="14" style="text-align: right">
+                    <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      content="回到顶部"
+                      placement="top"
+                    >
+                      <el-button
+                        type="primary"
+                        circle
+                        size="small"
+                        @click="goTop"
+                        ><el-icon><ArrowUpBold /></el-icon></el-button
+                    ></el-tooltip>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-affix>
           </div>
           <el-divider />
           <div>
@@ -112,12 +154,15 @@ export default {
   },
   methods: {
     getData() {
+      console.log(999);
+      console.log(this.$route.query.blog_tag);
       /*在此处向服务器请求数据，初始化所需变量*/
       //博客用户
       axios.get("userinfo?user_id=" + this.$route.query.user_id).then((res) => {
         this.blog_user_info = res.data.data;
       });
       //相关博客
+      console.log(this.$route.query.blog_tag);
       axios
         .get("/blog/tag?num=3&tag=" + this.$route.query.blog_tag)
         .then((res) => {
@@ -134,12 +179,26 @@ export default {
       axios
         .get("/blog?blog_id=" + this.$route.query.blog_id)
         .then((res) => {
+          console.log("res");
+          console.log(res);
           this.blog_detail = res.data.data;
-          this.blog_detail.blog_content = decode(this.blog_detail.blog_content);
+          const xhrFile = new XMLHttpRequest();
+          xhrFile.open("GET", this.blog_detail.blog_content, true);
+          xhrFile.send();
+
+          xhrFile.onload = () => {
+            //res.data.data.blog_content=xhrFile.response;
+            this.blog_detail.blog_content = xhrFile.response;
+          };
+
+          // this.blog_detail.blog_content = decode(this.blog_detail.blog_content);
         })
         .catch((errMsg) => {
           console.log(errMsg);
         });
+    },
+    goTop() {
+      window.scrollTo(0, 0);
     },
   },
   watch: {
@@ -155,10 +214,13 @@ export default {
       if (this.blog_detail == "") {
         return "";
       }
-      if (this.blog_detail.blog_content.length < 12) {
-        return this.blog_detail.blog_content;
+      if (this.blog_detail.blog_summary == "") {
+        return "";
+      }
+      if (this.blog_detail.blog_summary.length < 12) {
+        return this.blog_detail.blog_summary;
       } else {
-        return this.blog_detail.blog_content.slice(0, 12) + "...";
+        return this.blog_detail.blog_summary.slice(0, 12) + "...";
       }
     },
     BlogTime() {
@@ -201,7 +263,6 @@ export default {
   width: 80%;
   margin-left: 10%;
   text-align: left;
-  margin-bottom: 10%;
   white-space: pre-line;
   min-height: 500px;
 }
@@ -209,6 +270,16 @@ export default {
   margin-top: 2%;
   margin-bottom: 2%;
   width: 60%;
+}
+.option_bar {
+  background-color: white;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  width: 92%;
+  padding-left: 8%;
+}
+.el-divider--horizontal {
+  margin-top: 5px;
 }
 /* .comment_field {
 } */
