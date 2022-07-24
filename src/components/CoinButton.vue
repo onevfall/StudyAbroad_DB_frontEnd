@@ -116,7 +116,7 @@ export default {
             if (res.data.data.error == 2) {
               errMsg = "不能给自己投币！";
             } else {
-              errMsg = "余额不足,当前余额为";
+              errMsg = "鸟币不足,当前余额为 "+res.data.data.user_coin_left+" 枚";
             }
             ElMessage({
               type: "warning",
