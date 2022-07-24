@@ -8,7 +8,8 @@ import RegisterPage from '../views/RegisterPage.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
-import EditorPage from '../views/EditorPage.vue'
+import BlogEdit from '../views/BlogEdit'
+import QuestionEdit from '../views/QuestionEdit.vue'
 
 import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
@@ -165,14 +166,20 @@ const routes = [
       title: '充值页面'
     }
   },
-  
-  //测试
   {
-    path:'/editor',
-    name:'editor',
-    component:EditorPage,
+    path:'/blog_edit',
+    name:'blog_edit',
+    component:BlogEdit,
     meta:{
-      title:'测试文本编辑器'
+      title:'动态发布'
+    }
+  },
+  {
+    path:'/question_edit',
+    name:'question_edit',
+    component:QuestionEdit,
+    meta:{
+      title:'提问'
     }
   },
 
