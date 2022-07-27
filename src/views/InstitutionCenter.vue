@@ -3,8 +3,10 @@
 作者：蔡明宏
 -->
 <template>
-  <div class="school-center-layout">
+  <div class="school-center-layout" v-loading.fullscreen.lock="isLoading"
+          element-loading-text="正在加载">
     <!-- 上半区-->
+    <!-- <page-loading v-show="isLoading"></page-loading> -->
     <div class="upBox">
       <el-container>
         <el-aside width="65%">
@@ -65,7 +67,7 @@
                           size="large"
                         >
                           <el-option
-                            v-for="(item,index) in province"
+                            v-for="(item, index) in province"
                             :key="index"
                             :label="item.value"
                             :value="item.id"
@@ -86,7 +88,7 @@
                           size="large"
                         >
                           <el-option
-                            v-for="(item,index) in city"
+                            v-for="(item, index) in city"
                             :key="index"
                             :label="item.value"
                             :value="item.id"
@@ -138,123 +140,133 @@
       </el-container>
     </div>
 
-    <div class="left_text">
-      搜索结果如下,【<span style="color:coral;">{{this.institution_list.length}}</span>】家机构符合你的搜索
-    </div>
-    <hr/>
-    <div class="downBox">
-      <div v-for="(institution, index) in institution_list" :key="index">
-        <institution-card :institution="institution"></institution-card>
-        <br />
+    <div >
+      <div class="left_text">
+        搜索结果如下,【<span style="color: coral">{{
+          this.institution_list.length
+        }}</span
+        >】家机构符合你的搜索
+      </div>
+      <hr />
+      <div class="downBox">
+        <div v-for="(institution, index) in institution_list" :key="index">
+          <institution-card :institution="institution"></institution-card>
+          <br />
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 <script>
 import axios from "axios";
-import InstitutionCard from "../components/InstitutionCard.vue"
-
+import InstitutionCard from "../components/InstitutionCard.vue";
+import PageLoading from "../components/PageLoading.vue";
 export default {
   components: {
-    InstitutionCard
+    InstitutionCard,
+    PageLoading,
   },
   data() {
     return {
-      institution_list:[],      //经过筛选条件后下面展示的机构
-      all_institution_list:[],  //最初赋值获得的所有机构   
-      search_value:'',
+      institution_list: [], //经过筛选条件后下面展示的机构
+      all_institution_list: [], //最初赋值获得的所有机构
+      search_value: "",
+      isLoading: false,
       //以下为搜索限定词
       pname: "", //省的名字
       cname: "", //市的名字
       institution_target: "", //面向国家
-      city_data:require('../assets/city_data.json'), //加载城市json文件
+      city_data: require("../assets/city_data.json"), //加载城市json文件
       //对城市的处理
       province: [],
       shi1: [],
       city: [],
       //面向国家的选择
       country_options: [
-      {
-        value: '美国',
-        label: '美国',
-      },
-      {
-        value: '英国',
-        label: '英国',
-      },
-      {
-        value: '澳洲',
-        label: '澳洲',
-      },
-      {
-        value: '加拿大',
-        label: '加拿大',
-      },
-      {
-        value: '新西兰',
-        label: '新西兰',
-      },
-      {
-        value: '新加坡',
-        label: '新加坡',
-      },
-      {
-        value: '爱尔兰',
-        label: '爱尔兰',
-      },
-      {
-        value: '中国香港',
-        label: '中国香港',
-      },
-      {
-        value: '其他',
-        label: '其他',
-      },
+        {
+          value: "美国",
+          label: "美国",
+        },
+        {
+          value: "英国",
+          label: "英国",
+        },
+        {
+          value: "澳洲",
+          label: "澳洲",
+        },
+        {
+          value: "加拿大",
+          label: "加拿大",
+        },
+        {
+          value: "新西兰",
+          label: "新西兰",
+        },
+        {
+          value: "新加坡",
+          label: "新加坡",
+        },
+        {
+          value: "爱尔兰",
+          label: "爱尔兰",
+        },
+        {
+          value: "中国香港",
+          label: "中国香港",
+        },
+        {
+          value: "其他",
+          label: "其他",
+        },
       ],
     };
   },
-  methods:{
-    goSearch(){
+  methods: {
+    goSearch() {
       this.$router.push({
-        path:'/institution_detail',
-        query:{
-          institution_id:this.search_value
-        }
-      })
+        path: "/institution_detail",
+        query: {
+          institution_id: this.search_value,
+        },
+      });
     },
-    
-    filter(){
+
+    filter() {
+      this.isLoading = true;
       var x = ""; //需要拼接的判断
-      if(this.pname!=''){ //省份非空，就加入省份
-        x += ('institution_province=' + this.pname); 
+      if (this.pname != "") {
+        //省份非空，就加入省份
+        x += "institution_province=" + this.pname;
       }
-      if(this.cname!=''){
-        x += ('&' + 'institution_city=' + this.cname);
+      if (this.cname != "") {
+        x += "&" + "institution_city=" + this.cname;
       }
-      if(this.institution_target!=""){
-        x += ('&' + 'institution_target=' + this.institution_target);
+      if (this.institution_target != "") {
+        x += "&" + "institution_target=" + this.institution_target;
       }
       console.log(x);
       axios({
-      // 点击搜索时加载符合条件的数据
-      url:'institution/list?' + x,
-      method:'get',
-    }).then((res)=>{
-      console.log(res)
-      console.log(res.data.data.institution_list)
-      console.log("机构搜索成功")
-      console.log(this.country_value)
-      console.log(this.rank_type_value)
-      this.institution_list = res.data.data.institution_list
-    })
-    .catch((errMsg) =>{
-      console.log(errMsg)
-      console.log("机构列表信息失败")
-    })
+        // 点击搜索时加载符合条件的数据
+        url: "institution/list?" + x,
+        method: "get",
+      })
+        .then((res) => {
+          console.log(res);
+          console.log(res.data.data.institution_list);
+          console.log("机构搜索成功");
+          console.log(this.country_value);
+          console.log(this.rank_type_value);
+          this.institution_list = res.data.data.institution_list;
+          this.isLoading = false;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("机构列表信息失败");
+        });
     },
     //获取城市数据
-     getCityData: function () {
+    getCityData: function () {
       let that = this;
       that.city_data.forEach(function (item, index) {
         //省级数据
@@ -296,27 +308,29 @@ export default {
       console.log(that.cname);
     },
   },
-  mounted(){
+  mounted() {
     this.getCityData();
   },
   created() {
+    this.isLoading = true;
     /*在此处向服务器请求数据，初始化所需变量*/
     axios({
       // 最初加载时，此处不限定国家
-      url:'institution/list',
-      method:'get',
-    }).then((res)=>{
-      console.log(res)
-      console.log(res.data.data.institution_list)
-      this.institution_list = res.data.data.institution_list
-      this.all_institution_list = res.data.data.institution_list
+      url: "institution/list",
+      method: "get",
     })
-    .catch((errMsg) =>{
-      console.log(errMsg)
-      console.log("大失败")
-    })
+      .then((res) => {
+        console.log(res);
+        console.log(res.data.data.institution_list);
+        this.institution_list = res.data.data.institution_list;
+        this.all_institution_list = res.data.data.institution_list;
+        this.isLoading = false;
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+        console.log("大失败");
+      });
   },
- 
 };
 </script>
 
