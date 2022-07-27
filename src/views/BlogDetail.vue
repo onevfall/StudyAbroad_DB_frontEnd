@@ -76,14 +76,17 @@
                     />
                     <!-- </el-tag> -->
                   </el-col>
-                  <el-col :span="2">
-                    <!-- <el-tag class="ml-2" type="info" size="large"> -->
-                    <like-button
+                  <el-col :span="2" style="margin-left:10px">
+                    <el-row gutter="4">
+                      <el-col :span="2">
+                      <report-button
                       :content_id="this.$route.query.blog_id"
                       content_type="0"
-                      :show_num="true"
                       size="large"
                     />
+                      </el-col>
+                      <span style="margin-left:20px">举报</span>
+                    </el-row>
                     <!-- </el-tag> -->
                   </el-col>
                   <el-col :span="2">
@@ -133,6 +136,7 @@ import BlogInfoBoard from "../components/BlogInfoBoard.vue";
 import axios from "axios";
 import LikeButton from "../components/LikeButton.vue";
 import CoinButton from "../components/CoinButton.vue";
+import ReportButton from "../components/ReportButton.vue"
 import PageLoading from "../components/PageLoading.vue";
 import CommentZone from "../components/CommentZone.vue";
 import { decode } from "../utils/base64";
@@ -144,6 +148,7 @@ export default {
     CoinButton,
     PageLoading,
     CommentZone,
+    ReportButton
   },
   data() {
     return {

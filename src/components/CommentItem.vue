@@ -30,7 +30,7 @@
             v-else
           >
             <like-button
-              content_type="3"
+              content_type="1"
               :content_id="comment_infor.BlogCommentId"
               :show_num="true"
               size="normal"
@@ -43,6 +43,24 @@
               <el-icon class="el-icon--right"><ChatSquare /></el-icon>
             </el-button>
             <div style="display: flex; justify-content: space-around">回复</div>
+          </div>
+          <div class="report_button" v-if="this.type == '0'">
+            <report-button
+                  content_type="3"
+                  :content_id="comment_infor.AnswerCommentId"
+                  size="normal"
+                  @reportResponse="reportResponse"
+                />
+            <div style="display: flex; justify-content: space-around">举报</div>
+          </div>
+          <div class="report_button" v-else>
+            <report-button
+                  content_type="2"
+                  :content_id="comment_infor.BlogCommentId"
+                  size="normal"
+                  @reportResponse="reportResponse"
+                />
+            <div style="display: flex; justify-content: space-around">举报</div>
           </div>
         </div>
         <div class="content_main" v-if="this.type == '0'">
@@ -116,13 +134,14 @@
 
 <script>
 import LikeButton from "../components/LikeButton.vue";
+import ReportButton from "../components/ReportButton.vue"
 import { ElMessage } from "element-plus";
 import axios from "axios";
 //import { ElMessage } from "element-plus";
 export default {
   name: "CommentItem",
   props: ["comment_infor", "type"],
-  components: { LikeButton, ElMessage },
+  components: { LikeButton, ElMessage,ReportButton },
   data() {
     return {
       is_reply: false,
@@ -437,8 +456,25 @@ export default {
         });
       }
     },
-    },
-    
+    reportResponse(res){
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "举报成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+      else{
+        ElMessage({
+          type: "error",
+          message: "举报失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    }
+  }, 
 };
 </script>
 
@@ -496,6 +532,13 @@ export default {
 .self_comment .comment_header .comment_button {
   /* display: inline-block; */
   margin-top: -1.5px;
+  display: flex;
+  justify-content: space-around;
+}
+.self_comment .comment_header .report_button {
+  /* display: inline-block; */
+  margin-top: -1.5px;
+  margin-left:10px;
   display: flex;
   justify-content: space-around;
 }

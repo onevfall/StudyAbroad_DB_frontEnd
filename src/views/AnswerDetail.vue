@@ -86,7 +86,7 @@
                 </el-button>
               </div> -->
               <div style="float: left; margin-left: 3%; display: flex">
-                <div style="margin-right: 5px">{{this.answer_infor.answer_like}}</div>
+                <div style="margin-right: 5px">赞同</div>
                 <like-button
                   content_type="2"
                   :content_id="this.answer_id"
@@ -95,13 +95,20 @@
                   @giveLike="like"
                   @cancelLike="unlike"
                 />
-                <div style="margin-left: 5px; margin-right: 5px">{{this.answer_infor.answer_coin}}</div>
+                <div style="margin-left: 5px; margin-right: 6px">投币</div>
                 <coin-button
                   content_type="1"
                   :content_id="this.answer_id"
                   :show_num="false"
                   size="large"
                   @giveCoin="coinIn"
+                />
+                <div style="margin-left: 6px; margin-right: 5px">举报</div>
+                <report-button
+                  content_type="1"
+                  :content_id="this.answer_id"
+                  size="large"
+                  @reportResponse="reportResponse"
                 />
               </div>
             </el-main>
@@ -127,6 +134,7 @@ import CoinButton from "../components/CoinButton.vue";
 import CommentItem from "../components/CommentItem.vue";
 import CommentZone from "../components/CommentZone.vue"
 import axios from "axios";
+import ReportButton from "../components/ReportButton.vue"
 import { ElMessage } from "element-plus";
 import { UserFilled } from "@element-plus/icons-vue";
 export default {
@@ -139,6 +147,7 @@ export default {
     UserFilled,
     CoinButton,
     CommentZone,
+    ReportButton,
 },
   data() {
     return {
@@ -345,6 +354,24 @@ export default {
         this.answer_infor.answer_coin +=1
       }
     },
+    reportResponse(res){
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "举报成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+      else{
+        ElMessage({
+          type: "error",
+          message: "举报失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    }
   },
 };
 </script>
