@@ -163,7 +163,7 @@ const routes = [
     name: 'recharge',
     component: CoinRecharge,
     meta: {
-      title: '充值页面'
+      title: '鸟币充值'
     }
   },
   {
