@@ -5,7 +5,7 @@
 -->
 <template>
   <section >
-    <!--信息栏-->
+    <!--信息�?-->
     <div class="advise_board">
     <div class="lunbo" @mouseenter="clear" @mouseleave="run" @click="">
         <div class="intro_info">致力于提供海内外留学生有效交流的平台
@@ -40,7 +40,7 @@
     <el-container class="school_institution">
       <el-main width=50%>
           <div class="school_bg" @click="goSchoolCenter">
-              <h1 class="school_title">—— 找对学校 ——</h1>
+              <h1 class="school_title">——— 找对学校 ———</h1>
               <div class="school_img" >
                 <div class="school_text">去看看</div>
               </div>
@@ -48,10 +48,10 @@
       </el-main>
 
       <el-aside width=50%>
-        <div class="school_bg"  @click="goInstitutionCenter">
-              <h1 class="school_title">—— 留学顾问 ——</h1>
-              <div class="school_img" >
-                <div class="school_text">去看看</div>
+        <div class="institution_bg"  @click="goInstitutionCenter">
+              <h1 class="institution_title">——— 留学顾问 ———</h1>
+              <div class="institution_img" >
+                <div class="institution_text">去看看</div>
               </div>
           </div>
       </el-aside>
@@ -146,11 +146,14 @@
   <div class="QA_bg">
     <h1 class="QA_title">—— 留学问答 ——</h1>
   <div class="QA_field">
-
+      <el-row style="margin-top:20px" >
+        <el-col :span="6" class="card-field" v-for="ques in this.question_time_info" :key="ques">
+          <question-card :question_info="ques"></question-card>
+        </el-col>
+      </el-row>
     <el-button class="jump_to_detail" type="primary" @click="goQACenter" >查看详情</el-button>
   </div>
   </div>
-
 
 
 
@@ -160,26 +163,30 @@
 <script>
 import photo1 from "../assets/advisephoto1.jpg"
 import BlogInfoBoard from "@/components/BlogInfoBoard.vue";
+import QuestionCard from "../components/QuestionCard.vue";
 import axios from "axios";
 
 export default {
   components: {
     BlogInfoBoard,
+    QuestionCard
   },
   data () {
     return {
       dataList: [],
       currentIndex: 0, // 默认显示图片
-      timer: null, // 定时器
+      timer: null, // 定时 
 
       //快讯
       news_info: "",
       news_relevant: [], //存储相关快讯信息
 
       //动态
-      sort_type: 0, //0-时间，1-热度
+      sort_type: 0, //0-时间 1-热度
       blog_list: [],
-
+      
+      //问答
+      question_time_info:[],
     }
   },
   created () {
@@ -204,18 +211,33 @@ export default {
       .catch((errMsg) => {
         console.log(errMsg);
       });
-
+    //博客
     axios({
         url: "/blog/time?num=6",
         method: "get",
       })
         .then((res) => {
-          this.blog_list = [].concat(res.data.data.blog.slice(0,6));
+          this.blog_list = [].concat(res.data.data.blog.slice(0,3));
         })
         .catch((errMsg) => {
           console.log(errMsg);
         });
-
+    //问答
+    axios({
+      url: "question/time",
+      method: "get",
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        this.question_time_info=res.data.data.question.slice(0,4);
+        for(let i=0;i<this.question_time_info.length;i++)
+        {
+          this.question_time_info[i].num=i;
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
   },
   methods: {
@@ -242,13 +264,6 @@ export default {
         name: "school_center",
       });
     },
-    //测试问题
-    goQuestion() {
-      this.$router.push({
-        name: "question",
-        query: { question_id: 12 }, //模拟带参数路由
-      });
-    },
     goQACenter() {
       this.$router.push({
         name: "qa_center",
@@ -256,11 +271,11 @@ export default {
     },
 
 
-    //点击小圆圈切换图片
+    //点击小圆圈切换图�?
     gotoPage (index) {
       this.currentIndex = index
     },
-      //下一张
+      //下一副
     next () {
       if (this.currentIndex === this.dataList.length - 1) {
         this.currentIndex = 0
@@ -268,7 +283,7 @@ export default {
         this.currentIndex++
       }
     },
-      //上一张
+      //上一福
     up () {
       if (this.currentIndex === 0) {
         this.currentIndex = this.dataList.length - 1
@@ -276,11 +291,11 @@ export default {
         this.currentIndex--
       }
     },
-      //清除定时器
+      //清除定时
     clear () {
       clearInterval(this.timer)
     },
-    // 定时器
+    // 定时
     run () {
       this.timer = setInterval(() => {
         this.next()
@@ -379,15 +394,39 @@ export default {
   height: 48vw;
 }
 
+.school_bg:hover {
+  background-color: whitesmoke;
+}
+
 .school_title{
   padding-top: 30px;
   font-family: '宋体';
   font-size:xxx-large;
 }
 
+.institution_bg{
+  margin: 0 auto;
+  border-radius:5%;
+  background-color: white;
+  border: #9d9d9d73 1px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+  width: 96%;
+  height: 48vw;
+}
+
+.institution_bg:hover {
+  background-color: whitesmoke;
+}
+.institution_title{
+  padding-top: 30px;
+  font-family: '宋体';
+  font-size:xxx-large;
+}
+
 .school_bg .school_img{
-  background-image: url(../assets/advisephoto1.jpg);
-  background-size: auto;
+  background-image: url(../assets/school_main.jpeg);
+  background-size:contain;
   border-radius: 1%;
   margin: 0 auto; 
   text-align: center;
@@ -395,7 +434,26 @@ export default {
   height: 70%;
   width: 80%;
 }
+
+.institution_bg .institution_img{
+  background-image: url(../assets/institution_main.jpeg);
+  background-size:contain;
+  border-radius: 1%;
+  margin: 0 auto; 
+  text-align: center;
+  opacity: 50%;
+  height: 70%;
+  width: 80%;
+}
+
 .school_bg .school_img .school_text{
+  color: white;
+  line-height:60vh;
+  font-size:50px;
+  filter: brightness(100%);
+}
+
+.institution_bg .institution_img .institution_text{
   color: white;
   line-height:60vh;
   font-size:50px;
@@ -409,9 +467,11 @@ export default {
   border-radius:2%;
   background-color:rgb(99, 120, 217);
   border: #9d9d9d73 1px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 28px;
+  box-shadow: 34px 34px 68px rgba(255, 255, 255, 0.2), -34px -34px 68px rgba(0, 0, 0, 0.19);
   text-align: center;
   width: 100%;
+  
 }
 
 .news_title{
@@ -525,13 +585,14 @@ export default {
 
 .QA_bg{
   margin: 0 auto;
-  border-radius:5%;
-  background-color: white;
+  
+  background-color:white;
   border: #9d9d9d73 1px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+  
+  border-radius: 28px;
+  box-shadow: 34px 34px 68px rgba(255, 255, 255, 0.2), -34px -34px 68px rgba(0, 0, 0, 0.19);
   text-align: center;
-  width: 96%;
-  height: 48vw;
+  width: 100%;
 }
 
 .QA_title{
