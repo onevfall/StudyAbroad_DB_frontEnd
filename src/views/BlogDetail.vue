@@ -194,6 +194,7 @@ export default {
           xhrFile.onload = () => {
             //res.data.data.blog_content=xhrFile.response;
             this.blog_detail.blog_content = xhrFile.response;
+            console.log("test",this.blog_detail.blog_content)
           };
 
           // this.blog_detail.blog_content = decode(this.blog_detail.blog_content);

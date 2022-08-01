@@ -86,31 +86,22 @@
                       </el-row>
                     </div>
                     <el-divider></el-divider>
-                      <el-row>
-                        <el-col :span="4"
+                      <el-row >
+                        <el-col :span="5"
                           >举报时间</el-col>
-                        <el-col :span="4"
-                          >举报原因</el-col>
-                        <el-col :span="4"
+                        <el-col :span="5"
                           >被举报信息类型</el-col>
-                        <el-col :span="4"
+                        <el-col :span="5"
                           >当前状态</el-col>
-                        <el-col :span="4"
-                          >处理结果</el-col>
+                        <el-col :span="5"
+                          >查看详情</el-col>
                         <el-col :span="4"
                           >标记已读</el-col>
                       </el-row>
-                      <el-scrollbar height="550px">
-                      <div v-for="(report, index) in report_overall_list" :key="index">
-                        <report-card :report="report"></report-card>
+                      <el-scrollbar height="600px">
+                      <div v-for="(report, index) in now_list" :key="index">
+                        <report-card :report="report" @reload="reload"></report-card>
                       </div>
-
-                      <!-- <div class="new-button">
-                      <el-button type="success" round
-                        >提交新的学历认证<el-icon style="margin-left: 5px"
-                          ><Collection /></el-icon
-                      ></el-button>
-                    </div> -->
                     </el-scrollbar>
                   </div>
                 </div>
@@ -179,24 +170,8 @@ export default {
           label: "已处理但未读",
         },
       ],
-      report_overall_list:[
-        {
-          ReportDate:"2022-07-30 09:50:59",
-          ReportId:3,
-          Type:"回答评论",
-          ReportReason:"sssssssssssssssssssssssssssssssssssssssssssssssssss",
-          ReportState:false,
-          ReportAnswerResult:"123",
-        },
-        {
-          ReportDate:"2022-07-30 09:50:59",
-          ReportId:3,
-          Type:"回答评论",
-          ReportReason:"ss",
-          ReportState:false,
-          ReportAnswerResult:"123",
-        }
-      ]
+      report_overall_list:[],
+      now_list:[],
     };
   },
   created() {
@@ -213,6 +188,41 @@ export default {
         query: { redirect: this.$route.fullPath },
       });
     }
+    axios
+        .get("/report", {
+          params: {
+            user_id: this.$store.state.user_info.user_id,
+          },
+        })
+        .then((res) => {
+          if(res.data.status){
+            this.answer_report=res.data.data.answer_report
+            for(var i in this.answer_report)
+              this.answer_report[i].Type="answer";
+
+            this.blog_report=res.data.data.blog_report
+            for(var i in this.blog_report)
+              this.blog_report[i].Type="blog";
+
+            this.answercomment_report=res.data.data.answercomment_report
+            for(var i in this.answercomment_report)
+              this.answercomment_report[i].Type="answercomment";
+
+            this.blogcomment_report=res.data.data.blogcomment_report
+            for(var i in this.blogcomment_report)
+              this.blogcomment_report[i].Type="blogcomment";
+
+            this.report_overall_list=[]
+            this.report_overall_list.push.apply(this.report_overall_list,this.answer_report)
+            this.report_overall_list.push.apply(this.report_overall_list,this.blog_report)
+            this.report_overall_list.push.apply(this.report_overall_list,this.answercomment_report)
+            this.report_overall_list.push.apply(this.report_overall_list,this.blogcomment_report)
+            this.now_list=this.report_overall_list
+          } 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   },
   watch: {
     // need_refresh() {//重新申请数据 尚不确定是否成功
@@ -233,7 +243,113 @@ export default {
     //     });
     // },
   },
-  methods: {},
+  methods: {
+    goFilter(){
+      this.isLoading = true;
+      if(this.report_type !== "" )
+      {
+        if(this.report_type == "动态" )
+            this.now_list = this.blog_report
+        if(this.report_type == "回答" )
+            this.now_list = this.answer_report
+        if(this.report_type == "动态评论" )
+            this.now_list = this.blogcomment_report
+        if(this.report_type == "回答评论" )
+            this.now_list = this.answercomment_report
+        if(this.now_situation !== "")
+        {
+          var new_list=[]
+          for(var i in this.now_list)
+          {
+            if(this.now_situation === "待处理")
+            {
+              if(this.now_list[i].ReportAnswerResult == null)
+                new_list.push(this.now_list[i])
+            }
+            else{
+              if(this.now_list[i].ReportAnswerResult !== null)
+                new_list.push(this.now_list[i])
+            } 
+          }
+          this.now_list = new_list
+        }
+      }
+      else{
+        if(this.now_situation !== "")
+        {
+          var new_list=[]
+          for(var i in this.now_list)
+          {
+            if(this.now_situation === "待处理")
+            {
+              if(this.now_list[i].ReportAnswerResult == null)
+                new_list.push(this.now_list[i])
+            }
+            else{
+              if(this.now_list[i].ReportAnswerResult !== null)
+                new_list.push(this.now_list[i])
+            } 
+          }
+          this.now_list = new_list
+        }
+        else
+        {
+          this.now_list = this.report_overall_list
+        }
+      }
+      this.isLoading = false;
+    },
+    reload(res){
+      if(res){
+        this.isLoading = true;
+        this.now_situation = "";
+        this.report_type = "";
+        axios
+        .get("/report", {
+          params: {
+            user_id: this.$store.state.user_info.user_id,
+          },
+        })
+        .then((res) => {
+          if(res.data.status){
+            this.answer_report=res.data.data.answer_report
+            for(var i in this.answer_report)
+              this.answer_report[i].Type="answer";
+
+            this.blog_report=res.data.data.blog_report
+            for(var i in this.blog_report)
+              this.blog_report[i].Type="blog";
+
+            this.answercomment_report=res.data.data.answercomment_report
+            for(var i in this.answercomment_report)
+              this.answercomment_report[i].Type="answercomment";
+
+            this.blogcomment_report=res.data.data.blogcomment_report
+            for(var i in this.blogcomment_report)
+              this.blogcomment_report[i].Type="blogcomment";
+
+            this.report_overall_list=[]
+            this.report_overall_list.push.apply(this.report_overall_list,this.answer_report)
+            this.report_overall_list.push.apply(this.report_overall_list,this.blog_report)
+            this.report_overall_list.push.apply(this.report_overall_list,this.answercomment_report)
+            this.report_overall_list.push.apply(this.report_overall_list,this.blogcomment_report)
+            this.now_list=this.report_overall_list
+          } 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        this.isLoading = false;
+      }
+      else{
+        ElMessage({
+              message: "标记已读失败！",
+              grouping: true,
+              type: "warning",
+        });
+      }
+    }
+  },
 };
 </script>
 

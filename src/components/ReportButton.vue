@@ -5,7 +5,7 @@
 
 <template>
   <div>
-    <span style="text-align: left; margin-right: 8px" v-if="is_reported == false">
+    <span style="text-align: left; margin-right: 8px" v-if="!this.is_reported">
       <img
         src="../assets/warning.png"
         :style="{ height: this.icon_size + 'px' }"
@@ -75,6 +75,9 @@ export default {
     },
     reportPost() {
       this.give_report_reason = false;//关闭dialog
+      console.log(this.dynamic_type)
+      console.log(this.content_id)
+      console.log(this.report_reason)
       axios
         .post("report/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,
@@ -82,6 +85,7 @@ export default {
           report_reason: this.report_reason,
         })
         .then((res) => {
+          console.log(res.data);
           if (res.data.status) {
             this.is_reported = true;   
             this.$emit("reportResponse", true);
@@ -149,13 +153,13 @@ export default {
             this.content_id
         )
         .then((res) => {
+          console.log("try",res.data);
           this.is_reported = res.data.status;
         })
         .catch((errMsg) => {
           console.log(errMsg);
         });
     } else {
-      //查询投币个数
       this.is_reported = false;
     }
   },
