@@ -106,8 +106,8 @@ export default {
       DetailDialogVisible: false,
       TextType: "",
       BeingReportedUserName: "",
-      BeingReportedContent: "",
-      htmlText:"",
+      htmlText: "",
+      reportDetail: "",
     };
   },
   computed: {
@@ -118,9 +118,92 @@ export default {
         ? "举报成功"
         : "举报失败";
     },
+    BeingReportedContent() {
+      var temp = "11";
+      // console.log("12345", this.htmlText);
+      if (this.TextType === "回答评论") {
+        if (this.reportDetail.RepliedComment == null) {
+          temp =
+            this.reportDetail.AnswerCommentContent +
+            "（回复给 回答：" +
+            this.htmlText.substring(0, 20) +
+            "... )";
+        } else
+          temp =
+            this.reportDetail.AnswerCommentContent +
+            "（回复给 上一级评论：" +
+            this.reportDetail.RepliedComment +
+            " )";
+      }
+      if (this.TextType === "动态评论") {
+        if (this.reportDetail.RepliedComment == null) {
+          temp =
+            this.reportDetail.AnswerCommentContent +
+            "（回复给 动态：" +
+            this.htmlText.substring(0, 20) +
+            "... )";
+        } else
+          temp =
+            this.reportDetail.AnswerCommentContent +
+            "（回复给 上一级评论：" +
+            this.reportDetail.RepliedComment +
+            " )";
+      }
+      if (this.TextType === "回答") {
+        temp =
+          this.htmlText.substring(0, 20) +
+          "..." +
+          "（回答的问题为：" +
+          this.reportDetail.QuestionTitle +
+          " )";
+      }
+      if (this.TextType === "动态") {
+        temp = this.htmlText.substring(0, 20);
+        // console.log("动态", temp);
+      }
+      return temp;
+    },
   },
   created() {
-    switch (this.report.Type) {
+    this.getData();
+  },
+  methods: {
+    ToText(res) {
+      if (res.substr(0, 4) == "http") {
+        const xhrFile = new XMLHttpRequest();
+        xhrFile.open("GET", res, true);
+        xhrFile.send();
+        xhrFile.onload = () => {
+          var input = xhrFile.response;
+          this.htmlText = input
+            .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+            .replace(/<[^>]+?>/g, "")
+            .replace(/\s+/g, " ")
+            .replace(/ /g, " ")
+            .replace(/>/g, " ");
+        };
+      } else {
+        this.htmlText = res;
+      }
+    },
+    checkSeen() {
+      axios
+        .put("/report/" + this.report.Type, {
+          user_id: this.$store.state.user_info.user_id,
+          report_id: this.report.ReportId,
+        })
+        .then((res) => {
+          if (res.data.status) {
+            this.$emit("reload", true);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          alert(err);
+        });
+    },
+    getData(){
+      switch (this.report.Type) {
       case "answercomment":
         this.TextType = "回答评论";
         break;
@@ -141,108 +224,39 @@ export default {
         },
       })
       .then((res) => {
-        this.htmlText = ""
+        this.htmlText = "";
         if (res.data.status) {
           this.BeingReportedUserName = res.data.data.ReportedUserName;
-          console.log(res.data.data);
+          // console.log(res.data.data);
+          this.reportDetail = res.data.data;
           if (this.TextType === "回答评论") {
-            if (res.data.data.RepliedComment == null){
+            if (res.data.data.RepliedComment == null) {
               this.ToText(res.data.data.RepliedAnswerContent);
-              this.BeingReportedContent =
-                res.data.data.AnswerCommentContent +
-                "（回复给 回答：" +
-                this.htmlText.substring(
-                  0,
-                  20
-                ) +
-                "... )";
             }
-            else
-              this.BeingReportedContent =
-                res.data.data.AnswerCommentContent +
-                "（回复给 上一级评论：" +
-                res.data.data.RepliedComment +
-                " )";
           }
           if (this.TextType === "动态评论") {
-            if (res.data.data.RepliedComment == null){
+            if (res.data.data.RepliedComment == null) {
               this.ToText(res.data.data.RepliedBlogContent);
-              this.BeingReportedContent =
-                res.data.data.AnswerCommentContent +
-                "（回复给 动态：" +
-                this.htmlText.substring(0, 20) +
-                "... )";
             }
-            else
-              this.BeingReportedContent =
-                res.data.data.AnswerCommentContent +
-                "（回复给 上一级评论：" +
-                res.data.data.RepliedComment +
-                " )";
           }
           if (this.TextType === "回答") {
             this.ToText(res.data.data.AnswerContent);
-            this.BeingReportedContent =
-              this.htmlText.substring(0, 20) +
-              "..." +
-              "（回答的问题为：" +
-              res.data.data.QuestionTitle +
-              " )";
           }
           if (this.TextType === "动态") {
             this.ToText(res.data.data.BlogContent);
-            // console.log(this.ToText(res.data.data.BlogContent))
-            this.BeingReportedContent = this.htmlText.substring(0, 20);
-            console.log("动态",this.BeingReportedContent)
           }
-          console.log(this.BeingReportedContent);
         }
-        // console.log(this.htmlText)
       })
       .catch((err) => {
         console.log(err);
       });
+    }
   },
-  methods: {
-    ToText(res) {
-      if (res.substr(0, 4) == "http") {
-        const xhrFile = new XMLHttpRequest();
-        xhrFile.open("GET", res, true);
-        xhrFile.send();
-        xhrFile.onload = () => {
-          var input = xhrFile.response;
-          this.htmlText = input
-            .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
-            .replace(/<[^>]+?>/g, "")
-            .replace(/\s+/g, " ")
-            .replace(/ /g, " ")
-            .replace(/>/g, " ");
-          console.log("htmltext",this.htmlText)
-          return this.htmlText;
-        };
-      }
-      else{
-        this.htmlText = res;
-      }
-      // return res;
-    },
-    checkSeen() {
-      axios
-        .put("/report/" + this.report.Type, {
-          user_id: this.$store.state.user_info.user_id,
-          report_id: this.report.ReportId,
-        })
-        .then((res) => {
-          if (res.data.status) {
-            this.$emit("reload", true);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          alert(err);
-        });
-    },
-  },
+  watch:{
+    report(){
+      this.getData();
+    }
+  }
 };
 </script>
 

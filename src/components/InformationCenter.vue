@@ -98,7 +98,7 @@
                         <el-col :span="4"
                           >标记已读</el-col>
                       </el-row>
-                      <el-scrollbar height="600px">
+                      <el-scrollbar height="500px" :key="this.isLoading">
                       <div v-for="(report, index) in now_list" :key="index">
                         <report-card :report="report" @reload="reload"></report-card>
                       </div>
@@ -225,37 +225,22 @@ export default {
         });
   },
   watch: {
-    // need_refresh() {//重新申请数据 尚不确定是否成功
-    //   axios({
-    //     url: "/identity?user_id=" + this.$store.state.user_info.user_id,
-    //   })
-    //     .then((res) => {
-    //       console.log(res);
-    //       this.certification_infor = [].concat(res.data.data.identity_list);
-    //       this.certification_infor = this.sortByKey(
-    //         this.certification_infor,
-    //         "identity"
-    //       );
-    //       console.log(this.certification_infor);
-    //     })
-    //     .catch((errMsg) => {
-    //       console.log(errMsg);
-    //     });
-    // },
   },
   methods: {
     goFilter(){
       this.isLoading = true;
+      this.now_list = [];
       if(this.report_type !== "" )
       {
         if(this.report_type == "动态" )
             this.now_list = this.blog_report
-        if(this.report_type == "回答" )
+        else if(this.report_type == "回答" )
             this.now_list = this.answer_report
-        if(this.report_type == "动态评论" )
+        else if(this.report_type == "动态评论" )
             this.now_list = this.blogcomment_report
-        if(this.report_type == "回答评论" )
+        else
             this.now_list = this.answercomment_report
+        
         if(this.now_situation !== "")
         {
           var new_list=[]
