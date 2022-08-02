@@ -83,6 +83,7 @@
                       :content_id="this.$route.query.blog_id"
                       content_type="0"
                       size="large"
+                      @reportResponse="reportResponse"
                     />
                       </el-col>
                       <span style="margin-left:20px">举报</span>
@@ -139,6 +140,7 @@ import CoinButton from "../components/CoinButton.vue";
 import ReportButton from "../components/ReportButton.vue"
 import PageLoading from "../components/PageLoading.vue";
 import CommentZone from "../components/CommentZone.vue";
+import { ElMessage } from "element-plus";
 import { decode } from "../utils/base64";
 export default {
   components: {
@@ -148,7 +150,8 @@ export default {
     CoinButton,
     PageLoading,
     CommentZone,
-    ReportButton
+    ReportButton,
+    ElMessage
   },
   data() {
     return {
@@ -205,6 +208,24 @@ export default {
     },
     goTop() {
       window.scrollTo(0, 0);
+    },
+    reportResponse(res){
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "举报成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+      else{
+        ElMessage({
+          type: "error",
+          message: "举报失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
     },
   },
   watch: {
