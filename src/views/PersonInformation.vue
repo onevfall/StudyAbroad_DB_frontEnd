@@ -125,7 +125,9 @@
             <el-tab-pane label="学历认证" name="3">
               <certification-center></certification-center>
             </el-tab-pane>
-            <el-tab-pane label="消息中心（我的举报）" name="4"> </el-tab-pane>
+            <el-tab-pane label="消息中心（我的举报）">
+              <information-center></information-center>
+            </el-tab-pane>
           </el-tabs>
         </el-main>
       </el-container>
@@ -137,6 +139,9 @@
 import CertificationCenter from "../components/CertificationCenter.vue";
 import PersonInfoBox from "../components/PersonInfoBox.vue";
 import CoinCenter from "../components/CoinCenter.vue";
+
+import InformationCenter from "../components/InformationCenter.vue";
+
 import { ElMessage } from "element-plus";
 import { ref } from "vue";
 export default {
@@ -144,6 +149,7 @@ export default {
     PersonInfoBox,
     CoinCenter,
     CertificationCenter,
+    InformationCenter,
   },
   props: ["selectName"],
   data() {

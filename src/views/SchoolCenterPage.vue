@@ -3,7 +3,8 @@
 作者：蔡明宏
 -->
 <template>
-  <div class="school-center-layout">
+  <div class="school-center-layout" v-loading.fullscreen.lock="isLoading"
+          element-loading-text="正在加载">
     <!-- 上半区-->
     <div class="upBox">
       <el-container>
@@ -169,6 +170,7 @@ export default {
       school_list:[],      //经过筛选条件后下面展示的大学
       all_school_list:[],  //最初赋值获得的所有大学   
       search_value:'',
+      isLoading: false,
       //以下为搜索限定词
       rank_type_value: ref(''),
       country_value: ref(''),
@@ -256,6 +258,7 @@ export default {
 
     },
     filter(){
+      this.isLoading = true;
       var x = ""; //需要拼接的判断
       if(this.country_value==''&& this.rank_type_value==''){
         x = '?rank_year=' + this.year_value;
@@ -282,6 +285,7 @@ export default {
       console.log(this.country_value)
       console.log(this.rank_type_value)
       this.school_list = res.data.data.university_list
+      this.isLoading = false;
     })
     .catch((errMsg) =>{
       console.log(errMsg)
@@ -290,6 +294,7 @@ export default {
     },
   },
   created() {
+    this.isLoading = true;
     /*在此处向服务器请求数据，初始化所需变量*/
     axios({
       // 最初加载时，此处不限定国家
@@ -300,6 +305,7 @@ export default {
       console.log(res.data.data.university_list)
       this.school_list = res.data.data.university_list
       this.all_school_list = res.data.data.university_list
+      this.isLoading = false;
     })
     .catch((errMsg) =>{
       console.log(errMsg)

@@ -81,8 +81,8 @@
                 v-if="person_info.user_id == this.visit_id"
                 type="primary"
                 plain
-                @click="goCoinCenter"
-                >我的鸟币</el-button
+                @click="goRecharge"
+                >鸟币充值</el-button
               >
               <el-button
                 v-if="person_info.user_id == this.visit_id"
@@ -778,6 +778,11 @@ export default {
     goPersonInfo() {
       this.$router.push({
         path: "/person_info",
+      });
+    },
+    goRecharge() {
+      this.$router.push({
+        path: "/recharge",
       });
     },
     goPersonSpace(id, event) {
