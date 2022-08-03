@@ -97,6 +97,17 @@ export default createStore({
     RefreshCommitZone(state){
       state.refresh_zone = !state.refresh_zone
     },
+    changeProfile(state,img_url){
+      state.user_info.user_profile=img_url
+    },
+    changePersonInfo(state,user_info){
+      state.user_info.user_name=user_info.name;
+      state.user_info.user_gender=user_info.gender;
+      state.user_info.user_birthday=user_info.birthday;
+      state.user_info.user_signature=user_info.signature;
+      state.user_info.user_phone=user_info.phone;
+      state.user_info.user_email=user_info.email;
+    }
   },
   actions: {},
   modules: {},

@@ -93,7 +93,7 @@ export default {
     //取关
     CancelFollow() {
       axios
-        .put("follow", {
+        .put("follow/follow_user", {
           user_id: this.$store.state.user_info.user_id,
           follow_user_id: this.blog_user_info.user_id,
         })
@@ -142,7 +142,7 @@ export default {
           });
         } else {
           axios
-            .post("follow", {
+            .post("follow/follow_user", {
               user_id: this.$store.state.user_info.user_id,
               follow_user_id: this.blog_user_info.user_id,
             })
