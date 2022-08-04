@@ -4,11 +4,17 @@
       <!-- <el-header>Header</el-header> -->
       <el-container>
         <el-main>
-          <el-tabs tab-position="left" style="height: 100%" class="demo-tabs">
+          <el-tabs
+            tab-position="left"
+            style="height: 100%"
+            class="demo-tabs"
+            v-model="activeName"
+          >
             <!-- 基本信息页 -->
-            <el-tab-pane label="基本信息" class="selects">
+            <el-tab-pane label="基本信息" class="selects" name="1">
               <!-- 基本信息 -->
-              <el-card class="box-card">
+              <person-info-box></person-info-box>
+              <!-- <el-card class="box-card">
                 <template #header>
                   <div class="card-header">
                     <span style="font-size: 20px">基本信息</span>
@@ -19,7 +25,6 @@
                 <el-card class="content">
                   <div class="info_head">
                     <img src="../assets/logo.png" class="head_portrait" />
-                    <!-- <el-avatar size="large" src="../assets/logo.png" /> -->
                     <div class="top_info">
                       <div>
                         <span style="font-size: 20px; font-weight: bold">{{
@@ -73,7 +78,7 @@
                   </el-row>
                 </el-card>
               </el-card>
-              <!-- 个人资料 -->
+              
               <el-card class="box-card">
                 <template #header>
                   <div class="card-header">
@@ -111,13 +116,13 @@
                     }}</el-col>
                   </el-row>
                 </el-card>
-              </el-card>
+              </el-card> -->
             </el-tab-pane>
-          
-            <el-tab-pane label="鸟币中心">
+
+            <el-tab-pane label="鸟币中心" name="2">
               <coin-center></coin-center>
             </el-tab-pane>
-            <el-tab-pane label="学历认证">
+            <el-tab-pane label="学历认证" name="3">
               <certification-center></certification-center>
             </el-tab-pane>
             <el-tab-pane label="消息中心（我的举报）">
@@ -126,7 +131,6 @@
           </el-tabs>
         </el-main>
       </el-container>
-      <!-- <el-footer>Footer</el-footer> -->
     </el-container>
   </div>
 </template>
@@ -135,50 +139,30 @@
 import CertificationCenter from "../components/CertificationCenter.vue";
 import PersonInfoBox from "../components/PersonInfoBox.vue";
 import CoinCenter from "../components/CoinCenter.vue";
+
 import InformationCenter from "../components/InformationCenter.vue";
+
 import { ElMessage } from "element-plus";
 import { ref } from "vue";
 export default {
-  components: { 
+  components: {
     PersonInfoBox,
-    CoinCenter, 
+    CoinCenter,
     CertificationCenter,
     InformationCenter,
   },
+  props: ["selectName"],
   data() {
     return {
       person_info: "",
+      activeName: "1",
     };
   },
   created() {
-    //在此处向服务器请求数据，初始化所需变量
-    //暂时将所有数据都在页面初始化时加载完，之后将改进为点击标签页才加载相应数据
-    var tmp_person_info = {
-      person_id: 1,
-      person_nickname: "你的名字（昵称）",
-      person_level: 1,
-      person_fans_num: 1,
-      person_follow_num: 2,
-      person_birdcoin: 999,
-      person_sex: "男",
-      person_identity: "学生",
-      person_signature: "呵呵。",
-      person_phone: "114514",
-      person_email: "114514@qq.com",
-      person_chinesename: "你的中文名",
-      person_englishname: "你的英文名",
-      person_birthday: "2202.15.7",
-      preson_city: "上海",
-      person_want: "留学",
-    };
-    this.person_info = tmp_person_info;
-
-    
-    
+    if (typeof this.$route.query.selectName != "undefined")
+      this.activeName = this.$route.query.selectName;
   },
-  methods: {
-    
-  },
+  methods: {},
 };
 </script>
 
@@ -273,5 +257,4 @@ export default {
 .switch_button {
   width: 80%;
 }
-
 </style>
