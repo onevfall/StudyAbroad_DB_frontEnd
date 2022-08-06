@@ -3,7 +3,6 @@
     <template #header>
       <div class="card-header">
         <span style="font-size: 20px">基本信息</span>
-        <!-- <el-button id="change" type="success" round>修改</el-button> -->
       </div>
     </template>
 
@@ -83,7 +82,10 @@
         <el-col :span="3"></el-col>
         <el-col :span="6" style="text-align: left">性别：</el-col>
         <el-col :span="8" style="text-align: left">
-          <el-input v-model="gender" v-if="isUpdating.gender"></el-input>
+          <el-radio-group v-model="gender" v-if="isUpdating.gender">
+            <el-radio label="男">男</el-radio>
+            <el-radio label="女">女</el-radio>
+          </el-radio-group>
           <div v-else>{{ gender }}</div>
         </el-col>
         <el-col :span="2"></el-col>
@@ -110,7 +112,15 @@
         <el-col :span="3"></el-col>
         <el-col :span="6" style="text-align: left">生日：</el-col>
         <el-col :span="8" style="text-align: left">
-          <el-input v-model="birthday" v-if="isUpdating.birthday"></el-input>
+          <el-date-picker
+            v-if="isUpdating.birthday"
+            v-model="birthday"
+            type="date"
+            format="YYYY/MM/DD"
+            value-format="YYYY-MM-DD"
+            :editable="false"
+            :clearable="false"
+          ></el-date-picker>
           <div v-else>{{ birthday }}</div>
         </el-col>
         <el-col :span="2"></el-col>
@@ -241,10 +251,16 @@ export default {
       identity_info_list: [],
       name: this.$store.state.user_info.user_name,
       phone: this.$store.state.user_info.user_phone,
-      email: this.$store.state.user_info.user_email,
+      email:
+        this.$store.state.user_info.user_email == null
+          ? "暂未填写"
+          : this.$store.state.user_info.user_email,
       signature: this.$store.state.user_info.user_signature,
       gender: this.$store.state.user_info.user_gender == "m" ? "男" : "女",
-      birthday: this.$store.state.user_info.user_birthday,
+      birthday:
+        this.$store.state.user_info.user_birthday == null
+          ? "暂未填写"
+          : this.$store.state.user_info.user_birthday.slice(0, 10),
       profile: "",
       isUpdating: {
         name: false,
@@ -271,18 +287,18 @@ export default {
           user_name: this.name,
           user_gender: this.gender == "女" ? "f" : "m",
           user_phone: this.phone,
-          user_email: this.email,
+          user_email: this.email == "暂未填写" ? "" : this.email,
           user_signature: this.signature,
-          user_birthday: this.birthday.slice(0, 10),
+          user_birthday: this.birthday == "暂未填写" ? "" : this.birthday,
         })
         .then((res) => {
           var user_info = {
             name: this.name,
             phone: this.phone,
-            email: this.email,
+            email: this.email == "暂未填写" ? null : this.email,
             signature: this.signature,
             gender: this.gender == "男" ? "m" : "f",
-            birthday: this.birthday,
+            birthday: this.birthday == "暂未填写" ? null : this.birthday,
           };
           if (res.data.status == true) {
             ElMessage({
