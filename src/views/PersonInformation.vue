@@ -12,113 +12,8 @@
           >
             <!-- 基本信息页 -->
             <el-tab-pane label="基本信息" class="selects" name="1">
-              <!-- 基本信息 -->
               <person-info-box></person-info-box>
-              <!-- <el-card class="box-card">
-                <template #header>
-                  <div class="card-header">
-                    <span style="font-size: 20px">基本信息</span>
-                    <el-button id="change" type="success" round>修改</el-button>
-                  </div>
-                </template>
-
-                <el-card class="content">
-                  <div class="info_head">
-                    <img src="../assets/logo.png" class="head_portrait" />
-                    <div class="top_info">
-                      <div>
-                        <span style="font-size: 20px; font-weight: bold">{{
-                          this.person_info.person_nickname
-                        }}</span
-                        ><span style="font-size: 3px; color: gray"
-                          >用户等级{{ this.person_info.person_level }}</span
-                        >
-                      </div>
-                      <div
-                        style="font-size: 3px; text-align: left; color: gray"
-                      >
-                        <span style="margin-right: 5%"
-                          >粉丝数：{{ this.person_info.person_fans_num }}</span
-                        ><span
-                          >关注数：{{
-                            this.person_info.person_follow_num
-                          }}</span
-                        >
-                      </div>
-                      <div
-                        style="font-size: 3px; text-align: left; color: gray"
-                      >
-                        <span
-                          >鸟币数：{{ this.person_info.person_birdcoin }}</span
-                        >
-                      </div>
-                    </div>
-                  </div>
-                  <el-row class="bottom_info">
-                    <el-col class="bottom_info_attr" :span="5">性别</el-col>
-                    <el-col class="bottom_info_value" :span="5">{{
-                      this.person_info.person_sex
-                    }}</el-col>
-                    <el-col class="bottom_info_attr" :span="5">身份</el-col>
-                    <el-col class="bottom_info_value" :span="5">{{
-                      this.person_info.person_identity
-                    }}</el-col>
-                    <el-col class="bottom_info_attr" :span="5">手机号码</el-col>
-                    <el-col class="bottom_info_value" :span="5">{{
-                      this.person_info.person_phone
-                    }}</el-col>
-                    <el-col class="bottom_info_attr" :span="5">邮箱</el-col>
-                    <el-col class="bottom_info_value" :span="5">{{
-                      this.person_info.person_email
-                    }}</el-col>
-                    <el-col class="bottom_info_attr" :span="5">个性签名</el-col>
-                    <el-col class="bottom_info_value" :span="5">{{
-                      this.person_info.person_signature
-                    }}</el-col>
-                  </el-row>
-                </el-card>
-              </el-card>
-              
-              <el-card class="box-card">
-                <template #header>
-                  <div class="card-header">
-                    <span style="font-size: 20px">个人资料</span>
-                    <el-button id="change" type="success" round>修改</el-button>
-                  </div>
-                </template>
-                <el-card class="content">
-                  <el-row class="detail_info">
-                    <el-col class="detail_info_attr" :span="11">中文名</el-col>
-                    <el-col class="detail_info_value" :span="11">{{
-                      this.person_info.person_chinesename
-                    }}</el-col>
-                    <el-col class="detail_info_attr" :span="11">英文名</el-col>
-                    <el-col class="detail_info_value" :span="11">{{
-                      this.person_info.person_englishname
-                    }}</el-col>
-                    <el-col class="detail_info_attr" :span="11"
-                      >出生日期</el-col
-                    >
-                    <el-col class="detail_info_value" :span="11">{{
-                      this.person_info.person_birthday
-                    }}</el-col>
-                    <el-col class="detail_info_attr" :span="11"
-                      >目前居住城市</el-col
-                    >
-                    <el-col class="detail_info_value" :span="11">{{
-                      this.person_info.preson_city
-                    }}</el-col>
-                    <el-col class="detail_info_attr" :span="11"
-                      >个性签名</el-col
-                    >
-                    <el-col class="detail_info_value" :span="11">{{
-                      this.person_info.person_want
-                    }}</el-col>
-                  </el-row>
-                </el-card>
-              </el-card> -->
             </el-tab-pane>
-
             <el-tab-pane label="鸟币中心" name="2">
               <coin-center></coin-center>
             </el-tab-pane>
@@ -127,6 +22,9 @@
             </el-tab-pane>
             <el-tab-pane label="消息中心（我的举报）">
               <information-center></information-center>
+            </el-tab-pane>
+            <el-tab-pane label="账号管理" class="selects">
+              <account-manage></account-manage>
             </el-tab-pane>
           </el-tabs>
         </el-main>
@@ -139,7 +37,7 @@
 import CertificationCenter from "../components/CertificationCenter.vue";
 import PersonInfoBox from "../components/PersonInfoBox.vue";
 import CoinCenter from "../components/CoinCenter.vue";
-
+import AccountManage from "../components/AccountManage.vue";
 import InformationCenter from "../components/InformationCenter.vue";
 
 import { ElMessage } from "element-plus";
@@ -150,6 +48,7 @@ export default {
     CoinCenter,
     CertificationCenter,
     InformationCenter,
+    AccountManage,
   },
   props: ["selectName"],
   data() {
