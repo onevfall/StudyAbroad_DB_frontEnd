@@ -109,6 +109,48 @@ export default {
         });
     },
   },
+  updated(){
+    //查询是否点过赞
+    if (this.$store.state.is_login) {
+      axios(
+        "like/" +
+          this.dynamic_type +
+          "?user_id=" +
+          this.$store.state.user_info.user_id +
+          "&" +
+          this.dynamic_type +
+          "_id=" +
+          this.content_id
+      )
+        .then((res) => {
+          this.like_nums = res.data.data.like_times;
+          this.is_liked = res.data.status;
+          // console.log(this.is_liked);
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    } else {
+      //查询点赞个数
+      axios(
+        "like/" +
+          this.dynamic_type +
+          "?user_id=" +
+          1 +
+          "&" +
+          this.dynamic_type +
+          "_id=" +
+          this.content_id
+      )
+        .then((res) => {
+          this.like_nums = res.data.data.like_times;
+          this.is_liked = false;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    }
+  },
   created() {
     //设定大小
     switch(this.size){

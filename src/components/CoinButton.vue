@@ -139,6 +139,49 @@ export default {
         });
     },
   },
+  updated(){
+    //查询是否投过币
+    if (this.$store.state.is_login) {
+      axios
+        .get(
+          "coin/" +
+            this.dynamic_type +
+            "?user_id=" +
+            this.$store.state.user_info.user_id +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
+        )
+        .then((res) => {
+          this.coin_nums = res.data.data.blog_coin;
+          this.is_coined = res.data.status;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    } else {
+      //查询投币个数
+      axios
+        .get(
+          "coin/" +
+            this.dynamic_type +
+            "?user_id=" +
+            1 +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
+        )
+        .then((res) => {
+          this.coin_nums = res.data.data.blog_coin;
+          this.is_coined = false;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    }
+  },
   created() {
     //设定大小
     switch (this.size) {
