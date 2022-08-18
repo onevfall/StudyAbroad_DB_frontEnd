@@ -76,14 +76,18 @@
                     />
                     <!-- </el-tag> -->
                   </el-col>
-                  <el-col :span="2">
-                    <!-- <el-tag class="ml-2" type="info" size="large"> -->
-                    <like-button
+                  <el-col :span="2" style="margin-left:10px">
+                    <el-row gutter="4">
+                      <el-col :span="2">
+                      <report-button
                       :content_id="this.$route.query.blog_id"
                       content_type="0"
-                      :show_num="true"
                       size="large"
+                      @reportResponse="reportResponse"
                     />
+                      </el-col>
+                      <span style="margin-left:20px">举报</span>
+                    </el-row>
                     <!-- </el-tag> -->
                   </el-col>
                   <el-col :span="2">
@@ -133,8 +137,10 @@ import BlogInfoBoard from "../components/BlogInfoBoard.vue";
 import axios from "axios";
 import LikeButton from "../components/LikeButton.vue";
 import CoinButton from "../components/CoinButton.vue";
+import ReportButton from "../components/ReportButton.vue"
 import PageLoading from "../components/PageLoading.vue";
 import CommentZone from "../components/CommentZone.vue";
+import { ElMessage } from "element-plus";
 import { decode } from "../utils/base64";
 export default {
   components: {
@@ -144,6 +150,8 @@ export default {
     CoinButton,
     PageLoading,
     CommentZone,
+    ReportButton,
+    ElMessage
   },
   data() {
     return {
@@ -189,6 +197,7 @@ export default {
           xhrFile.onload = () => {
             //res.data.data.blog_content=xhrFile.response;
             this.blog_detail.blog_content = xhrFile.response;
+            console.log("test",this.blog_detail.blog_content)
           };
 
           // this.blog_detail.blog_content = decode(this.blog_detail.blog_content);
@@ -199,6 +208,24 @@ export default {
     },
     goTop() {
       window.scrollTo(0, 0);
+    },
+    reportResponse(res){
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "举报成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+      else{
+        ElMessage({
+          type: "error",
+          message: "举报失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
     },
   },
   watch: {
