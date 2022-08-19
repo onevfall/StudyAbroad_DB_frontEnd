@@ -19,7 +19,7 @@
                     <div class="coin-index-title">
                       <p class="coin-rest-p">
                         鸟币余额：
-                        <i class="coin-num">{{ coin_num }}</i>
+                        <span class="coin-num">{{ coin_num }}</span>
                         <a class="coin-recharge" @click="recharge">去充值</a>
                       </p>
                       <p class="coin-rest-info">
@@ -200,6 +200,7 @@ export default {
         console.log("鸟币")
         console.log(res);
         this.coin_change_list = res.data.data.record_list;
+        this.coin_num = this.$store.state.user_info.user_coin;
       })
       .catch((errMsg) => {
         console.log(errMsg);
