@@ -198,7 +198,8 @@ export default {
         .post("question", {
           question_user_id: this.$store.state.user_info.user_id,
           question_title: this.title,
-          question_description:summary,
+          question_description:args.base64_content,
+          question_summary:summary,
           question_reward:this.coin_in_num,
           question_tag:tag
         })

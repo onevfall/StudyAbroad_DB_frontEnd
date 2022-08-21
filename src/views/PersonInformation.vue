@@ -20,10 +20,10 @@
             <el-tab-pane label="学历认证" name="3">
               <certification-center></certification-center>
             </el-tab-pane>
-            <el-tab-pane label="消息中心（我的举报）">
+            <el-tab-pane label="消息中心（我的举报）" name="4">
               <information-center></information-center>
             </el-tab-pane>
-            <el-tab-pane label="账号管理" class="selects">
+            <el-tab-pane label="账号管理" class="selects" name="5">
               <account-manage></account-manage>
             </el-tab-pane>
           </el-tabs>
