@@ -185,7 +185,12 @@ export default {
   },
   methods: {
     goToWriteAnswerPage: function () {
-      alert("跳转至写回答页面");
+      this.$router.push({
+        name:'answer_edit',
+        params:{
+          question_info:encodeURIComponent(JSON.stringify(this.question_info))
+        }
+      });
     },
     expandToFull: function () {
       this.notFull = !this.notFull;

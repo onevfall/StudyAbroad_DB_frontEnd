@@ -47,7 +47,8 @@ export default {
             success(imgbase64);
           };
         },
-        //媒体上传处理函数待定
+        // image_dimensions: false,//取消默认高度
+        content_style: 'img {max-width:720px; width: 720px; height: auto;}'
       },
     };
   },

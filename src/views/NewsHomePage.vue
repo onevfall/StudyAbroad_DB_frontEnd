@@ -106,6 +106,14 @@
                                   <div class="content_main">
                                     {{ news.NewsFlashSummary }}
                                   </div>
+                                  <div class="moreInfo">
+                                    <el-button
+                                      type="primary"
+                                      class="button_moreInfo"
+                                      @click="jumpToNewsPage(news)"
+                                      >查看详情</el-button
+                                    >
+                                  </div>
                                 </el-card>
                               </el-main>
                             </el-container>
@@ -266,7 +274,7 @@ export default {
   color: rgb(30, 23, 118);
 }
 
-.button3 {
+.button_moreInfo {
   font-size: 10px;
   color: white;
 }
