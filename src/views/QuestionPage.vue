@@ -109,6 +109,22 @@
               <el-row style="margin-bottom: 30px">
                 {{ answer_num }}条回答
               </el-row>
+              <div v-if="answer_num == 0">
+                <img src="../assets/question-empty.png" style="width:40%"/>
+                <div >暂时还没有任何回答，</div>
+                <!-- <div @click="goToWriteAnswerPage" >开始写第一个回答</div> -->
+                <div>
+                <el-button
+                type="primary"
+                key="primary"
+                size="large"
+                class="buttonClass"
+                text
+                @click="goToWriteAnswerPage"
+                >开始写第一个回答</el-button
+              >
+              </div>
+              </div>
               <div class="answer" v-for="ans in this.answer_info" :key="ans">
                 <div @click="goToAnswerPage(ans.AnswerId)">
                   <el-row>
@@ -347,6 +363,18 @@ export default {
   align-items: center;
   padding-left: 10px;
 }
+
+.buttonClass {
+  width: 100px;
+  height: 40px;
+  padding: 10px;
+/* //控制字大小 */
+  /* /deep/  {
+    font-size: 20px;
+  } */
+}
+
+
 
 #expand {
   font-family: SimSun;
