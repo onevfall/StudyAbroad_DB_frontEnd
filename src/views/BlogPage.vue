@@ -124,8 +124,6 @@ export default {
   },
   mounted() {
     window.addEventListener("scroll", this.bottoomLoading);
-     
-
   },
   unmounted() {
     window.removeEventListener("scroll", this.bottoomLoading);
