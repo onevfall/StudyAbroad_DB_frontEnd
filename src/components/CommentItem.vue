@@ -402,12 +402,6 @@ export default {
                   },
                 })
                 .then((res) => {
-                  // console.log(
-                  //   "对用户id为" +
-                  //     this.comment_infor.AnswerCommentId +
-                  //     "的评论的回复请求"
-                  // );
-                  console.log("11213142")
                   console.log(res);
                   this.comment_infor.child_comments =
                     res.data.data.reply_list;
