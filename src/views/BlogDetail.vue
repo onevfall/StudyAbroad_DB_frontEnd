@@ -76,6 +76,16 @@
                     />
                     <!-- </el-tag> -->
                   </el-col>
+                   <el-col :span="2">
+                    <!-- <el-tag class="ml-2" type="warning" size="large"> -->
+                    <star-button
+                      :content_id="this.$route.query.blog_id"
+                      content_type="0"
+                      :show_num="true"
+                      size="large"
+                    />
+                    <!-- </el-tag> -->
+                  </el-col>
                   <el-col :span="2" style="margin-left:10px">
                     <el-row gutter="4">
                       <el-col :span="2">
@@ -90,16 +100,7 @@
                     </el-row>
                     <!-- </el-tag> -->
                   </el-col>
-                  <el-col :span="2">
-                    <!-- <el-tag class="ml-2" type="warning" size="large"> -->
-                    <coin-button
-                      :content_id="this.$route.query.blog_id"
-                      content_type="0"
-                      :show_num="true"
-                      size="large"
-                    />
-                    <!-- </el-tag> -->
-                  </el-col>
+                 
                   <el-col :span="14" style="text-align: right">
                     <el-tooltip
                       class="box-item"
@@ -137,6 +138,7 @@ import BlogInfoBoard from "../components/BlogInfoBoard.vue";
 import axios from "axios";
 import LikeButton from "../components/LikeButton.vue";
 import CoinButton from "../components/CoinButton.vue";
+import StarButton from "../components/StarButton.vue"
 import ReportButton from "../components/ReportButton.vue"
 import PageLoading from "../components/PageLoading.vue";
 import CommentZone from "../components/CommentZone.vue";
@@ -148,6 +150,7 @@ export default {
     BlogInfoBoard,
     LikeButton,
     CoinButton,
+    StarButton,
     PageLoading,
     CommentZone,
     ReportButton,
@@ -162,15 +165,14 @@ export default {
   },
   methods: {
     getData() {
-      console.log(999);
-      console.log(this.$route.query.blog_tag);
+      
       /*在此处向服务器请求数据，初始化所需变量*/
       //博客用户
       axios.get("userinfo?user_id=" + this.$route.query.user_id).then((res) => {
         this.blog_user_info = res.data.data;
       });
       //相关博客
-      console.log(this.$route.query.blog_tag);
+  
       axios
         .get("/blog/tag?num=3&tag=" + this.$route.query.blog_tag)
         .then((res) => {
@@ -187,8 +189,6 @@ export default {
       axios
         .get("/blog?blog_id=" + this.$route.query.blog_id)
         .then((res) => {
-          console.log("res");
-          console.log(res);
           this.blog_detail = res.data.data;
           const xhrFile = new XMLHttpRequest();
           xhrFile.open("GET", this.blog_detail.blog_content, true);
@@ -197,7 +197,6 @@ export default {
           xhrFile.onload = () => {
             //res.data.data.blog_content=xhrFile.response;
             this.blog_detail.blog_content = xhrFile.response;
-            console.log("test",this.blog_detail.blog_content)
           };
 
           // this.blog_detail.blog_content = decode(this.blog_detail.blog_content);

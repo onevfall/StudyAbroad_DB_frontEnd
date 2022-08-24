@@ -185,6 +185,9 @@ export default {
   },
   methods: {
     goToWriteAnswerPage: function () {
+
+      /*加判断，若没登陆先登录，再导回此页面*/
+
       this.$router.push({
         name:'answer_edit',
         params:{
