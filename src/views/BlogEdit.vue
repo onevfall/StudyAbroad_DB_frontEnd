@@ -99,13 +99,7 @@ export default {
       //处理summary
       var summary = "";
       if (args.text_content.length == 0) {
-        ElMessage({
-          message: "请输入有效内容",
-          type: "warning",
-          showClose: true,
-          duration: 2000,
-        });
-        return;
+        summary = "😃";
       } else if (args.text_content.length < 15) {
         summary = args.text_content;
       } else {
