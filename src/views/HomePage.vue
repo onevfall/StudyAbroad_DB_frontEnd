@@ -13,7 +13,7 @@
       <div class="img">
         <img :src="dataList[currentIndex]" alt="" />
       </div>
-        
+        <!--
       <div class="dooted" v-if="this.dataList.length">
         <ul class="doo">
           <li 
@@ -24,7 +24,7 @@
           ></li>
         </ul>
       </div>
-        
+       
       <div class="right_turn turn" @click="next()">
         <i class="el-icon-arrow-right"></i>
       </div>
@@ -32,6 +32,7 @@
       <div class="left_turn turn " @click="up()">
         <i class="el-icon-arrow-left"></i>
       </div>
+       -->
     </div>
     </div>
 
@@ -161,7 +162,7 @@
 </template>
 
 <script>
-import photo1 from "../assets/advisephoto1.jpg"
+import photo1 from "../assets/advisephoto1.png"
 import BlogInfoBoard from "@/components/BlogInfoBoard.vue";
 import QuestionCard from "../components/QuestionCard.vue";
 import axios from "axios";
