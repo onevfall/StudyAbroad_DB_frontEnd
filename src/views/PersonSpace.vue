@@ -565,7 +565,7 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane>
+            <el-tab-pane :key="need_refresh">
               <template #label>
                 <span class="first-tabs-label">
                   <span>回答 </span>
@@ -602,7 +602,18 @@
                   </div>
                 </div>
                 <div class="star_date">
-                  <div>发布于{{ answer.AnswerDate }}</div>
+                  <div>发布于{{ answer.AnswerDate.replace("T", " ") }}</div>
+                  <el-button
+                    v-if="
+                      this.$store.state.is_login &&
+                      this.$store.state.user_info.user_id == this.host_id
+                    "
+                    type="danger"
+                    style="margin-top: 10px; margin-left: 25px"
+                    @click.stop="openDeleteDia(answer.AnswerId)"
+                    ><el-icon class="el-icon--left"><Delete /></el-icon
+                    >删除</el-button
+                  >
                 </div>
               </div>
             </el-tab-pane>
@@ -658,6 +669,22 @@
       </div>
     </div>
   </div>
+  <el-dialog
+    v-model="delete_dialog_visible"
+    title="警告"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <span style="font-size: 18px"
+      >你确认要删除该回答吗? 此操作不可逆!请仔细考虑</span
+    >
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="handleClose()">取消</el-button>
+        <el-button type="primary" @click="deleteCheck">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -696,6 +723,8 @@ export default {
       blog_list: [],
       blog_count: -1,
       loading: true,
+      delete_dialog_visible: false,
+      need_refresh: false,
     };
   },
   props: ["host_id"],
@@ -1055,11 +1084,46 @@ export default {
           console.log("获取动态信息失败");
         });
     },
+    openDeleteDia(ans_id) {
+      this.to_be_killed_ansid = ans_id;
+      this.delete_dialog_visible = true;
+    },
+    handleClose() {
+      this.delete_dialog_visible = false;
+      this.to_be_killed_ansid = -1;
+    },
+    deleteCheck() {
+      axios
+        .delete("/answer", {
+          params: {
+            // 请求参数拼接在url上
+            answer_id: this.to_be_killed_ansid,
+          },
+        })
+        .then((res) => {
+          this.delete_dialog_visible = false;
+          console.log(res);
+          if (res.data.status == true) {
+            ElMessage.success("删除成功!");
+            // this.$emit("deletecheck",true);
+            this.need_refresh = !this.need_refresh;
+          } else {
+            ElMessage.error("删除失败!");
+          }
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    },
   },
   watch: {
     $route() {
       this.initPage();
     },
+    need_refresh(){
+      console.log("fresh!")
+      this.initPage();
+    }
   },
   created() {
     this.initPage();

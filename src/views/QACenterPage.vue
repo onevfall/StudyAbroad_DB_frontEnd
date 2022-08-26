@@ -3,6 +3,7 @@
 作者：王若晗
 -->
 <template>
+  <page-loading v-if="this.question_heat_info.length == 0"></page-loading>
   <el-container>
     <el-header>
       <el-row>
@@ -48,11 +49,13 @@
 
 <script>
 import QuestionCard from "../components/QuestionCard.vue";
+import PageLoading from "../components/PageLoading.vue";
 import axios from "axios";
 export default ({
   name: "QACenterPage",
   components: {
     QuestionCard,
+    PageLoading,
   },
   data() {
     return {
