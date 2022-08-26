@@ -70,10 +70,10 @@
           <el-row>
             <el-col :span="1"></el-col>
             <el-col id="question_details" :span="20">
-              <div v-if="notFull" style="text-align: left">
+              <div v-if="notFull" style="text-align: left;margin-top:5px">
                 问题摘要：{{ this.question_info.question_summary }}
               </div>
-              <div v-if="!notFull" style="text-align: left">
+              <div v-if="!notFull" style="text-align: left;margin-top:10px">
                 问题详情：
                 <p v-html="this.question_info.question_description"></p>
               </div>
@@ -106,7 +106,7 @@
         <el-row class="bottom">
           <el-col :span="16">
             <el-card id="answer_card" shadow="never">
-              <el-row style="margin-bottom: 30px">
+              <el-row style="margin-bottom: 20px;margin-top:10px">
                 {{ answer_num }}条回答
               </el-row>
               <div v-if="answer_num == 0">
@@ -131,7 +131,7 @@
                     <el-col :span="2">
                       <el-avatar
                         shape="circle"
-                        :size="50"
+                        :size="35"
                         :src="ans.UserProfile"
                       />
                     </el-col>
@@ -410,10 +410,16 @@ export default {
 .answer {
   padding-top: 20px;
   padding-bottom: 40px;
-  border-top: 0.8px solid black;
-  border-bottom: 0.8px solid black;
+  border-top: 0.8px solid rgb(183, 183, 183);
+  border-bottom: 0.8px solid rgb(183, 183, 183);
   font-size: 15px;
   color: grey;
+  border-radius: 6px;
+}
+
+.answer:hover{
+  box-shadow: 0 6px 6px 0 rgba(48, 55, 66, 0.15);/* 盒子悬浮时阴影 */
+  cursor:pointer;/* 鼠标状态 */
 }
 
 .card {

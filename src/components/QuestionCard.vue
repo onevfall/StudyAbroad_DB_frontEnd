@@ -14,10 +14,10 @@
         {{ contentShow }}
       </el-row>
       <el-row justify="end">
-        <el-button type="primary" text="primary" @click="goToQuestionDetails" style="text-align:left;margin-top:30px">
-            查看详情
-            <br>
-            >>
+        <el-button type="primary" @click="goToQuestionDetails" style="text-align:left;margin-top:30px" text>
+          查看详情
+          <br>
+          >>
         </el-button>
       </el-row>
       <el-row style="margin-top:40px">
