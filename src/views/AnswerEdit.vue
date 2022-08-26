@@ -148,10 +148,10 @@ export default {
           showClose: true,
         });
         return;
-      } else if (args.text_content.length < 15) {
+      } else if (args.text_content.length < 40) {
         summary = args.text_content;
       } else {
-        summary = args.text_content.slice(0, 15);
+        summary = args.text_content.slice(0, 40) + "...";
       }
       //处理图片
       var image_url = "";
