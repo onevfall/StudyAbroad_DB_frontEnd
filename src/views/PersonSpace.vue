@@ -418,8 +418,14 @@
                       </div>
                     </div>
                     <div class="star_date">
-                      <div>发布于{{ star_question.question_date }}</div>
-                      <div>收藏于{{ star_question.star_time }}</div>
+                      <div>
+                        发布于{{
+                          star_question.question_date.replace("T", " ")
+                        }}
+                      </div>
+                      <div>
+                        收藏于{{ star_question.star_time.replace("T", " ") }}
+                      </div>
                     </div>
                   </div>
                 </el-tab-pane>
@@ -464,8 +470,12 @@
                       </div>
                     </div>
                     <div class="star_date">
-                      <div>发布于{{ star_answer.answer_date }}</div>
-                      <div>收藏于{{ star_answer.star_time }}</div>
+                      <div>
+                        发布于{{ star_answer.answer_date.replace("T", " ") }}
+                      </div>
+                      <div>
+                        收藏于{{ star_answer.star_time.replace("T", " ") }}
+                      </div>
                     </div>
                   </div>
                 </el-tab-pane>
@@ -515,14 +525,18 @@
                       </div>
                     </div>
                     <div class="star_date">
-                      <div>发布于{{ star_blog.blog_date }}</div>
-                      <div>收藏于{{ star_blog.star_date }}</div>
+                      <div>
+                        发布于{{ star_blog.blog_date.replace("T", " ") }}
+                      </div>
+                      <div>
+                        收藏于{{ star_blog.star_date.replace("T", " ") }}
+                      </div>
                     </div>
                   </div>
                 </el-tab-pane>
               </el-tabs>
             </el-tab-pane>
-            <el-tab-pane>
+            <el-tab-pane :key="need_refresh">
               <template #label>
                 <span class="first-tabs-label">
                   <span>问题 </span>
@@ -561,7 +575,18 @@
                   </div>
                 </div>
                 <div class="star_date">
-                  <div>发布于{{ question.QuestionDate }}</div>
+                  <div>发布于{{ question.QuestionDate.replace("T", " ") }}</div>
+                  <el-button
+                    v-if="
+                      this.$store.state.is_login &&
+                      this.$store.state.user_info.user_id == this.host_id
+                    "
+                    type="danger"
+                    style="margin-top: 10px; margin-left: 25px"
+                    @click.stop="openDeleteDia(question.QuestionId,'question')"
+                    ><el-icon class="el-icon--left"><Delete /></el-icon
+                    >删除</el-button
+                  >
                 </div>
               </div>
             </el-tab-pane>
@@ -610,7 +635,7 @@
                     "
                     type="danger"
                     style="margin-top: 10px; margin-left: 25px"
-                    @click.stop="openDeleteDia(answer.AnswerId)"
+                    @click.stop="openDeleteDia(answer.AnswerId,'answer')"
                     ><el-icon class="el-icon--left"><Delete /></el-icon
                     >删除</el-button
                   >
@@ -628,7 +653,7 @@
                 class="blog_list"
                 v-for="(blog, index) in blog_list"
                 :key="blog.BlogId"
-                @click="goBlogDetail(star_blog.BlogId, index, $event)"
+                @click="goBlogDetail(blog.BlogId, index, $event)"
               >
                 <div style="display: block; width: 100%">
                   <div
@@ -660,7 +685,18 @@
                   </div>
                 </div>
                 <div class="star_date">
-                  <div>发布于{{ blog.BlogDate }}</div>
+                  <div>发布于{{ blog.BlogDate.replace("T", " ") }}</div>
+                  <el-button
+                    v-if="
+                      this.$store.state.is_login &&
+                      this.$store.state.user_info.user_id == this.host_id
+                    "
+                    type="danger"
+                    style="margin-top: 10px; margin-left: 25px"
+                    @click.stop="openDeleteDia(blog.BlogId,'blog')"
+                    ><el-icon class="el-icon--left"><Delete /></el-icon
+                    >删除</el-button
+                  >
                 </div>
               </div>
             </el-tab-pane>
@@ -675,12 +711,10 @@
     width="30%"
     :before-close="handleClose"
   >
-    <span style="font-size: 18px"
-      >你确认要删除该回答吗? 此操作不可逆!请仔细考虑</span
-    >
+    <span style="font-size: 18px">你确认要删除吗? 此操作不可逆!请仔细考虑</span>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="handleClose()">取消</el-button>
+        <el-button @click="handleClose">取消</el-button>
         <el-button type="primary" @click="deleteCheck">确认</el-button>
       </span>
     </template>
@@ -725,6 +759,8 @@ export default {
       loading: true,
       delete_dialog_visible: false,
       need_refresh: false,
+      to_be_killed_type: "",
+      to_be_killed_id: -1,
     };
   },
   props: ["host_id"],
@@ -1084,24 +1120,28 @@ export default {
           console.log("获取动态信息失败");
         });
     },
-    openDeleteDia(ans_id) {
-      this.to_be_killed_ansid = ans_id;
+    openDeleteDia(id, type_name) {
+      this.to_be_killed_id = id;
+      this.to_be_killed_type = type_name;
       this.delete_dialog_visible = true;
     },
     handleClose() {
       this.delete_dialog_visible = false;
-      this.to_be_killed_ansid = -1;
+      this.to_be_killed_type = "";
+      this.to_be_killed_id = -1;
     },
     deleteCheck() {
       axios
-        .delete("/answer", {
+        .delete("/" + this.to_be_killed_type, {
           params: {
             // 请求参数拼接在url上
-            answer_id: this.to_be_killed_ansid,
+            [this.to_be_killed_type + "_id"]: this.to_be_killed_id,
           },
         })
         .then((res) => {
           this.delete_dialog_visible = false;
+          this.to_be_killed_type = "";
+          this.to_be_killed_id = -1;
           console.log(res);
           if (res.data.status == true) {
             ElMessage.success("删除成功!");
@@ -1112,7 +1152,11 @@ export default {
           }
         })
         .catch((errMsg) => {
+          this.delete_dialog_visible = false;
+          this.to_be_killed_type = "";
+          this.to_be_killed_id = -1;
           console.log(errMsg);
+          ElMessage.error("删除失败!");
         });
     },
   },
@@ -1120,10 +1164,10 @@ export default {
     $route() {
       this.initPage();
     },
-    need_refresh(){
-      console.log("fresh!")
+    need_refresh() {
+      console.log("fresh!");
       this.initPage();
-    }
+    },
   },
   created() {
     this.initPage();

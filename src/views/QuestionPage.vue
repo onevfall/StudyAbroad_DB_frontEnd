@@ -12,6 +12,11 @@
             <el-col :span="1"></el-col>
             <el-col :span="19">
               <el-row type="flex" align="middle">
+                <el-col :span="2" style="margin-right: 7px">
+                  <el-tag size="middle" class="ml-2" type="warning"
+                    >悬赏金额：{{ this.question_info.question_reward }}</el-tag
+                  >
+                </el-col>
                 <el-col
                   :span="2"
                   v-if="this.question_info.user_university != 'null'"
@@ -252,20 +257,22 @@
       </el-main>
       <el-footer> </el-footer>
     </el-container>
-    <!-- <el-dialog
+    <el-dialog
       v-model="adopt_dialog_visible"
-      title="确认"
+      title="采纳回答确认"
       width="30%"
       :before-close="handleClose"
     >
-      <span style="font-size:18px">你确认要删除该认证信息吗? 此操作不可逆!</span>
+      <span style="font-size: 18px"
+        >你确认要采纳此回答吗?一经采纳，无法撤销，且悬赏鸟币金额将直接送达被采纳用户账号</span
+      >
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="delete_dialog_visible = false">取消</el-button>
-          <el-button type="primary" @click="deleteCheck">确认</el-button>
+          <el-button @click="handleClose">取消</el-button>
+          <el-button type="primary" @click="adoptCheck">确认</el-button>
         </span>
       </template>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -301,6 +308,8 @@ export default {
       answer_num: 0,
       related_question_tag: "",
       notFull: true,
+      applied_answer_id: -1,
+      adopt_dialog_visible: false,
       textStatus: "展开全文↓",
     };
   },
@@ -344,7 +353,10 @@ export default {
         query: { answer_id: ans_id, question_id: this.question_id },
       });
     },
-    adoptAnswer: function (ans_id) {},
+    adoptAnswer: function (ans_id) {
+      this.applied_answer_id = ans_id;
+      this.adopt_dialog_visible = true;
+    },
     initPage: function () {
       this.question_id = this.$route.query.question_id;
       axios({
@@ -399,7 +411,7 @@ export default {
           console.log(res.data.data);
           this.related_question_tag = res.data.data.tag;
           this.question_relevant = res.data.data.related_questions;
-          
+
           for (let i = 0; i < this.question_relevant.length; i++) {
             console.log("xiangguan");
             console.log(this.question_relevant[i]);
@@ -417,6 +429,28 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    adoptCheck() {
+      axios
+        .put("question/apply", {
+          question_id: this.question_id,
+          answer_id: this.applied_answer_id,
+        })
+        .then((res) => {
+          if (res.data.status) {
+            ElMessage.success("采纳此回答成功！");
+            this.adopt_dialog_visible = false;
+            this.initPage();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          ElMessage.error("采纳此回答失败！");
+        });
+    },
+    handleClose() {
+      this.applied_answer_id = -1;
+      this.adopt_dialog_visible = false;
     },
   },
   computed: {
@@ -500,6 +534,7 @@ export default {
   font-weight: bolder;
   font-size: 20px;
   padding-left: 10px;
+  margin-top: 20px;
 }
 
 .expand {
