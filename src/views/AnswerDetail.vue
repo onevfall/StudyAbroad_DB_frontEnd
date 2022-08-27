@@ -3,7 +3,7 @@
 作者：方新宇
 -->
 <template>
-  <page-loading v-if="this.card_info.length == 0"></page-loading>
+  <page-loading v-if="this.card_info.length == 0 || !this.finish_load_html"></page-loading>
   <div class="common-layout">
     <el-container>
       <el-aside width="400px" style="top: 0px">
@@ -209,7 +209,7 @@ export default {
       card_info: [],
       comment_now: "", //当前正在输入的comment
       comments: [], //这个回答对应的下面的comment的全部信息
-      // comment_change: false,
+      finish_load_html: false,
     };
   },
   watch: {
@@ -247,6 +247,7 @@ export default {
             xhrFile.send();
             xhrFile.onload = () => {
               this.answer_infor.answer_content = xhrFile.response;
+              this.finish_load_html = true;
             };
           }
           } else {
