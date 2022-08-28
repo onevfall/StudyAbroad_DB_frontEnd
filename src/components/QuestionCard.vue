@@ -23,7 +23,7 @@
       <el-row style="margin-top:40px">
         <el-col :span="8" class="display-num">
             <!-- <el-icon :size="18"><Chicken /></el-icon> {{ this.question_info.QuestionReward }} -->
-            <img src="../assets/favorite.png" style="height:16px"/> {{ this.question_info.QuestionReward }}
+            <img src="../assets/dollar.png" style="height:16px"/> {{ this.question_info.QuestionReward }}
         </el-col>
         <el-col :span="8" class="display-num">
             <el-icon :size="18"><FolderRemove /></el-icon> {{ this.question_info.Count }}
