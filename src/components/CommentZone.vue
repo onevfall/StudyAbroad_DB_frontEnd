@@ -3,7 +3,7 @@
 作者：方新宇
 -->
 <template>
-  <el-container class="comment_zone">
+  <el-container class="comment_zone" :key="this.$route.query">
     <el-header class="header_comment">
       <el-col :span="1">
         <div v-if="this.$store.state.is_login">
@@ -43,13 +43,13 @@
     </el-header>
     <el-main :key="this.commentChange">
       <div v-if="this.comments.length == 0">
-        <img src="../assets/question-empty.png" style="width: 40%" />
+        <img src="../assets/question-empty.png" style="width: 30%" />
         <div style="font-weight: bold">暂时还没有任何评论，赶紧去评论吧！</div>
         <!-- <div @click="goToWriteAnswerPage" >开始写第一个回答</div> -->
       </div>
       <el-scrollbar v-if="this.comments.length !== 0" height="400px">
         <!-- <el-collapse accordion @change="handleChange"> -->
-        <el-collapse accordion :key="this.$store.state.refresh_zone">
+        <el-collapse accordion :key="this.$store.state.refresh_zone ">
           <div v-for="(item, i) in this.comments" :key="i">
             <comment-item :comment_infor="this.comments[i]" :type="this.type">
             </comment-item>
