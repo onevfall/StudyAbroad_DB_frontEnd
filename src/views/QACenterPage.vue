@@ -3,7 +3,7 @@
 作者：王若晗
 -->
 <template>
-  <page-loading v-if="this.question_heat_info.length == 0"></page-loading>
+  <page-loading v-if="this.loading"></page-loading>
   <el-container>
     <el-header>
       <el-row>
@@ -55,13 +55,14 @@ export default ({
   name: "QACenterPage",
   components: {
     QuestionCard,
-    PageLoading,
+    PageLoading
   },
   data() {
     return {
       question_time_info:[],
       question_heat_info:[],
       display_status:true,
+      loading:true
     };
   },
   methods:{
@@ -84,6 +85,7 @@ export default ({
         {
           this.question_time_info[i].num=i;
         };
+        this.loading=false;
       })
       .catch((err) => {
         console.log(err);
