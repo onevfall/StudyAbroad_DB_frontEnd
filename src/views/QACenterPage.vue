@@ -55,6 +55,7 @@ export default ({
   name: "QACenterPage",
   components: {
     QuestionCard,
+    PageLoading
   },
   data() {
     return {
