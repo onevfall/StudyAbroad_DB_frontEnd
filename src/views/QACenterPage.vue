@@ -3,6 +3,7 @@
 作者：王若晗
 -->
 <template>
+  <page-loading v-if="this.loading"></page-loading>
   <el-container>
     <el-header>
       <el-row>
@@ -48,17 +49,20 @@
 
 <script>
 import QuestionCard from "../components/QuestionCard.vue";
+import PageLoading from "../components/PageLoading.vue";
 import axios from "axios";
 export default ({
   name: "QACenterPage",
   components: {
     QuestionCard,
+    PageLoading
   },
   data() {
     return {
       question_time_info:[],
       question_heat_info:[],
       display_status:true,
+      loading:true
     };
   },
   methods:{
@@ -81,6 +85,7 @@ export default ({
         {
           this.question_time_info[i].num=i;
         };
+        this.loading=false;
       })
       .catch((err) => {
         console.log(err);

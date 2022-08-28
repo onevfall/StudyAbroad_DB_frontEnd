@@ -3,22 +3,24 @@
 作者：方新宇
 -->
 <template>
+  <page-loading
+    v-if="this.card_info.length == 0 || !this.finish_load_html"
+  ></page-loading>
   <div class="common-layout">
     <el-container>
-      <el-aside width="400px" style="top: 0px">
+      <el-aside width="400px" style="top: 0px" class="aside_field">
         <img src="../assets/question.png" style="height: 200px" />
-        <user-info-board
-          class="UserInfo"
-          :blog_user_info="this.answer_user_info"
-          v-if="answer_user_info != ''"
-        ></user-info-board>
-        <span v-for="(card, index) in this.card_info" :key="card">
-          <question-side-card
-            class="SideCard"
-            :card_info="card"
-          >
-          </question-side-card>
-        </span>
+        <el-affix :offset="5" target=".aside_field">
+          <user-info-board
+            class="UserInfo"
+            :blog_user_info="this.answer_user_info"
+            v-if="answer_user_info != ''"
+          ></user-info-board>
+          <span v-for="(card, index) in this.card_info.slice(0, 2)" :key="card">
+            <question-side-card class="SideCard" :card_info="card">
+            </question-side-card>
+          </span>
+        </el-affix>
       </el-aside>
       <el-main width="main" style="margin-left: 10px">
         <div class="content_field">
@@ -50,42 +52,20 @@
               <span class="user_name"
                 ><b>{{ this.answer_user_info.user_name }}</b></span
               >
-              <el-tag class="ml-2" type="primary" size="large">{{
-                "该问题已被题主采纳"
-              }}</el-tag>
+              <el-tag
+                class="ml-2"
+                type="primary"
+                size="large"
+                v-if="this.answer_infor.apply_flag"
+                >{{ "该问题已被题主采纳" }}</el-tag
+              >
             </el-header>
             <el-main>
-              <div class="content_main" >
+              <div class="content_main">
                 <p v-html="this.answer_infor.answer_content"></p>
                 <!-- {{ this.answer_infor.answer_content }} -->
               </div>
-              <!-- <img :src="this.answer_infor.answer_contentpic" class="content_image" v-if="this.answer_infor.answer_contentpic"/> -->
-              <!-- <div style="float: left; margin-left: 3%"> 事件穿透想不通 直接换文字了
-                <el-button type="" link style="pointer-events: none">
-                  <div style="margin-right: 5px">赞同</div>
-                  <like-button
-                    content_type="2"
-                    :content_id="this.answer_id"
-                    :show_num="false"
-                    size="large"
-                    @giveLike="like"
-                    @cancelLike="unlike"
-                    style="pointer-events: auto"
-                  />
-                </el-button>
-                <el-button type="" link style="pointer-events: none">
-                  <div style="margin-right: 5px">投币</div>
-                  <coin-button
-                    content_type="1"
-                    :content_id="this.answer_id"
-                    :show_num="false"
-                    size="large"
-                    @giveCoin="coinIn"
-                    style="pointer-events: auto"
-                  />
-                </el-button>
-              </div> -->
-              <div style="float: left; margin-left: 3%; display: flex">
+              <!-- <div style="float: left; margin-left: 3%; display: flex">
                 <div style="margin-right: 5px">赞同</div>
                 <like-button
                   content_type="2"
@@ -110,15 +90,82 @@
                   size="large"
                   @reportResponse="reportResponse"
                 />
-              </div>
+              </div> -->
+
+              <el-affix target=".content_main" position="bottom" :offset="0">
+                <div class="option_bar">
+                  <el-row gutter="10">
+                    <el-col :span="2">
+                      <!-- <el-tag class="ml-2" type="info" size="large"> -->
+                      <like-button
+                        :content_id="this.answer_id"
+                        content_type="2"
+                        :show_num="true"
+                        size="large"
+                        @giveLike="like"
+                        @cancelLike="unlike"
+                      />
+                      <!-- </el-tag> -->
+                    </el-col>
+                    <el-col :span="2">
+                      <!-- <el-tag class="ml-2" type="warning" size="large"> -->
+                      <coin-button
+                        :content_id="this.answer_id"
+                        content_type="1"
+                        :show_num="true"
+                        size="large"
+                        @giveCoin="coinIn"
+                      />
+                      <!-- </el-tag> -->
+                    </el-col>
+                    <el-col :span="2">
+                      <!-- <el-tag class="ml-2" type="warning" size="large"> -->
+                      <star-button
+                        :content_id="this.answer_id"
+                        content_type="1"
+                        :show_num="true"
+                        size="large"
+                      />
+                      <!-- </el-tag> -->
+                    </el-col>
+                    <el-col :span="2" style="margin-left: 10px">
+                      <el-row gutter="4">
+                        <el-col :span="2">
+                          <report-button
+                            :content_id="this.answer_id"
+                            content_type="1"
+                            size="large"
+                            @reportResponse="reportResponse"
+                          />
+                        </el-col>
+                        <span style="margin-left: 20px">举报</span>
+                      </el-row>
+                      <!-- </el-tag> -->
+                    </el-col>
+
+                    <el-col :span="14" style="text-align: right">
+                      <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        content="回到顶部"
+                        placement="top"
+                      >
+                        <el-button
+                          type="primary"
+                          circle
+                          size="small"
+                          @click="goTop"
+                          ><el-icon><ArrowUpBold /></el-icon></el-button
+                      ></el-tooltip>
+                    </el-col>
+                  </el-row>
+                </div>
+              </el-affix>
             </el-main>
           </el-container>
           <el-divider />
           <div>
-            <comment-zone
-            type="0"
-            :id="this.answer_id">
-            </comment-zone>
+            <comment-zone type="0" :id="this.answer_id"> </comment-zone>
           </div>
         </div>
       </el-main>
@@ -131,10 +178,12 @@ import UserInfoBoard from "../components/UserInfoBoard.vue";
 import QuestionSideCard from "../components/QuestionSideCard.vue";
 import LikeButton from "../components/LikeButton.vue";
 import CoinButton from "../components/CoinButton.vue";
+import StarButton from "../components/StarButton.vue";
 import CommentItem from "../components/CommentItem.vue";
-import CommentZone from "../components/CommentZone.vue"
+import CommentZone from "../components/CommentZone.vue";
 import axios from "axios";
-import ReportButton from "../components/ReportButton.vue"
+import ReportButton from "../components/ReportButton.vue";
+import PageLoading from "../components/PageLoading.vue";
 import { ElMessage } from "element-plus";
 import { UserFilled } from "@element-plus/icons-vue";
 export default {
@@ -148,7 +197,9 @@ export default {
     CoinButton,
     CommentZone,
     ReportButton,
-},
+    PageLoading,
+    StarButton,
+  },
   data() {
     return {
       answer_user_info: "",
@@ -159,7 +210,7 @@ export default {
       card_info: [],
       comment_now: "", //当前正在输入的comment
       comments: [], //这个回答对应的下面的comment的全部信息
-      // comment_change: false,
+      finish_load_html: false,
     };
   },
   watch: {
@@ -188,16 +239,18 @@ export default {
         })
         .then((res) => {
           if (res.data.status === true) {
-            // console.log(res.data.data);
+            console.log(res.data.data);
             this.answer_infor = res.data.data; //获取answer全部内容
             if (this.answer_infor.answer_content.substr(0, 4) == "http") {
-            const xhrFile = new XMLHttpRequest();
-            xhrFile.open("GET", this.answer_infor.answer_content, true);
-            xhrFile.send();
-            xhrFile.onload = () => {
-              this.answer_infor.answer_content = xhrFile.response;
-            };
-          }
+              console.log("11");
+              const xhrFile = new XMLHttpRequest();
+              xhrFile.open("GET", this.answer_infor.answer_content, true);
+              xhrFile.send();
+              xhrFile.onload = () => {
+                this.answer_infor.answer_content = xhrFile.response;
+                this.finish_load_html = true;
+              };
+            }
           } else {
             console.log("内容获取失败");
           }
@@ -212,7 +265,7 @@ export default {
       // console.log(this.$store.state.answer_user_info);
       // console.log(this.answer_user_info);
       console.log("00");
-      //await this.reloadAnswer();//先获取answer infor
+
       await axios
         .get("/answer", {
           params: {
@@ -221,7 +274,7 @@ export default {
         })
         .then((res) => {
           if (res.data.status === true) {
-            // console.log(res.data.data);
+            console.log(res.data.data);
             this.answer_infor = res.data.data; //获取answer全部内容
           } else {
             console.log("内容获取失败");
@@ -232,6 +285,7 @@ export default {
         });
       // await console.log(this.answer_info)
       // console.log("获取答案信息")
+      await this.reloadAnswer(); //先获取answer infor
       axios
         .get("/userinfo", {
           params: {
@@ -256,8 +310,8 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      console.log("体外");
-      console.log(this.answer_user_info);
+      // console.log("体外");
+      // console.log(this.answer_user_info);
       this.question_id = this.$route.query.question_id;
       axios
         .get("/question", {
@@ -303,7 +357,9 @@ export default {
           console.log(err);
         });
     },
-    
+    goTop() {
+      window.scrollTo(0, 0);
+    },
     handleChange(val) {
       console.log(val);
     },
@@ -315,7 +371,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
-        this.answer_infor.answer_like +=1
+        this.answer_infor.answer_like += 1;
       } else {
         ElMessage({
           type: "error",
@@ -333,7 +389,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
-        this.answer_infor.answer_like -=1
+        this.answer_infor.answer_like -= 1;
       } else {
         ElMessage({
           type: "error",
@@ -351,10 +407,10 @@ export default {
           duration: 2000,
           showClose: true,
         });
-        this.answer_infor.answer_coin +=1
+        this.answer_infor.answer_coin += 1;
       }
     },
-    reportResponse(res){
+    reportResponse(res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -362,8 +418,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
-      }
-      else{
+      } else {
         ElMessage({
           type: "error",
           message: "举报失败！",
@@ -371,7 +426,7 @@ export default {
           showClose: true,
         });
       }
-    }
+    },
   },
 };
 </script>
@@ -460,5 +515,15 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+.option_bar {
+  background-color: white;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  width: 92%;
+  padding-left: 2%;
+}
+.aside_field {
+  margin-bottom: 50px;
 }
 </style>

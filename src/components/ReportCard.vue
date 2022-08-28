@@ -98,8 +98,11 @@
 
 <script>
 import axios from "axios";
+import { ElMessage } from 'element-plus';
 export default {
-  components: {},
+  components: {
+    ElMessage
+  },
   props: ["report"],
   data() {
     return {
@@ -194,6 +197,7 @@ export default {
         })
         .then((res) => {
           if (res.data.status) {
+            ElMessage.success("标记已读成功！此消息将不会再被显示");
             this.$emit("reload", true);
           }
         })
