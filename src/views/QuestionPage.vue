@@ -248,10 +248,16 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8">
-            <div class="card" v-for="ques in this.card_info" :key="ques">
-              <question-side-card :card_info="ques"></question-side-card>
-            </div>
+          <el-col :span="8" class="aside_field">
+            <el-affix :offset="5" target=".aside_field">
+              <div
+                class="card"
+                v-for="ques in this.card_info.slice(0, 3)"
+                :key="ques"
+              >
+                <question-side-card :card_info="ques"></question-side-card>
+              </div>
+            </el-affix>
           </el-col>
         </el-row>
       </el-main>
@@ -308,7 +314,7 @@ export default {
       answer_num: 0,
       related_question_tag: "",
       notFull: true,
-      applied_answer_id: -1,
+      apply_answer_id: -1,
       adopt_dialog_visible: false,
       textStatus: "展开全文↓",
     };
@@ -394,7 +400,20 @@ export default {
           this.answer_num = res.data.data.count;
           this.answer_info = res.data.data.answers;
           this.apply_id = res.data.data.apply;
-          console.log(this.answer_info);
+          console.log("哇哈哈哈哈哈");
+          console.log(res.data.data.apply);
+          console.log(this.apply_id);
+          for (let i = 0; i < this.answer_info.length; ++i) {
+            console.log("为什么不行呢？");
+            if (this.answer_info[i].AnswerId == this.apply_id) {
+              console.log("找到了");
+
+              let tmp = this.answer_info[0];
+              this.answer_info[0] = this.answer_info[i];
+              this.answer_info[i] = tmp;
+              break;
+            }
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -611,6 +630,7 @@ export default {
 .answer_item {
   margin-bottom: 15px;
 }
+.aside_field {
+  margin-bottom: 100px;
+}
 </style>
-
-

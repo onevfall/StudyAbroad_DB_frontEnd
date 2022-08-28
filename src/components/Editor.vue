@@ -48,7 +48,7 @@ export default {
           };
         },
         // image_dimensions: false,//取消默认高度
-        content_style: 'img {max-width:720px; width: 720px; height: auto;}'
+        //content_style: 'img {max-width:720px; width: 720px; height: auto;}'
       },
     };
   },
