@@ -36,20 +36,25 @@
       <el-menu-item index="register" @click="goRegister">注册</el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="7" v-else>
-      <template #title>个人中心</template>
-      <el-menu-item index="7-1">我的信息</el-menu-item>
-      <el-menu-item index="blog_edit" @click="goBlogEdit">动态发布</el-menu-item>
-      <el-menu-item index="question_edit" @click="goQuestionEdit">我要提问</el-menu-item>
-      <el-menu-item index="7-3">关注/收藏</el-menu-item>
-      <el-menu-item index="7-4">财务管理</el-menu-item>
+      <template #title>
+        <el-avatar shape="square" :size="30" :src="this.$store.state.user_info.user_profile" />
+        <span style="margin-left:10px">{{ this.$store.state.user_info.user_name }}</span>
+      </template>
+
+      <el-menu-item index="person_space" @click="goPersonSpace"
+        >个人空间</el-menu-item
+      >
+      <el-menu-item index="blog_edit" @click="goBlogEdit"
+        >动态发布</el-menu-item
+      >
+      <el-menu-item index="question_edit" @click="goQuestionEdit"
+        >我要提问</el-menu-item
+      >
+      <el-menu-item index="person_info" @click="goPersonInformation"
+        >账户设置</el-menu-item
+      >
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="person_info" @click="goPersonInformation"
-      >个人信息</el-menu-item
-    >
-    <el-menu-item index="person_space" @click="goPersonSpace"
-      >个人空间</el-menu-item
-    >
   </el-menu>
 </template>
 
