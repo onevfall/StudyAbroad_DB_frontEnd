@@ -174,7 +174,7 @@ export default {
       //以下为搜索限定词
       rank_type_value: ref(''),
       country_value: ref(''),
-      year_value: ref('2021'),
+      year_value: ref('2022'),
       country_options: [
       {
         value: '美国',
@@ -320,6 +320,7 @@ export default {
   background-image: linear-gradient(#a6c1ee, #d3afa5);
   height: 275px;
   width: 100%;
+  /* padding: 20px; */
 }
 .my_top_layout {
   height:70px;
@@ -390,4 +391,5 @@ p.QS_rank_test {
   margin-left: 35%;
   margin-top: 2.8%;
 }
+
 </style>

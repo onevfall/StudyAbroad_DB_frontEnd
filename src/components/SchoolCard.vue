@@ -13,7 +13,7 @@
       </div>
     </el-card>
 
-    <el-card class="two_block">
+    <el-card class="two_block hover_card" >
       <div class="two_block_hori">
         <div>
           <div class="avatar_text">
@@ -91,6 +91,9 @@ export default {
 </script>
 
 <style>
+.hover_card:hover{
+  border: #61acf6 0.2em solid;
+}
 .school_card {
   margin: 20px;
   width: 90%;
