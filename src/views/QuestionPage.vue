@@ -12,7 +12,7 @@
             <el-col :span="1"></el-col>
             <el-col :span="19">
               <el-row type="flex" align="middle">
-                <el-col :span="2" style="margin-right: 7px">
+                <el-col :span="3">
                   <el-tag size="middle" class="ml-2" type="warning"
                     >悬赏金额：{{ this.question_info.question_reward }}</el-tag
                   >
@@ -37,7 +37,6 @@
                   :span="2"
                   v-for="tag in this.question_info.question_tag"
                   :key="tag"
-                  style="margin-right: -7px"
                 >
                   <el-tag size="middle">{{ tag }}</el-tag>
                 </el-col>
@@ -169,6 +168,8 @@
                         ><el-icon class="icon"><View /></el-icon>
                         查看详情>></el-button
                       >
+                    </el-col>
+                    <el-col :span="1">
                     </el-col>
                     <el-col
                       :span="2"
@@ -599,20 +600,13 @@ export default {
 }
 
 .answer {
-  margin-top: -20px;
+  margin-top:-20px;
   padding-bottom: 5px;
-  padding-top: 20px;
-  padding-bottom: 40px;
-  border-top: 0.8px solid rgb(183, 183, 183);
-  border-bottom: 0.8px solid rgb(183, 183, 183);
+  /*border-top: 0.8px solid rgb(183, 183, 183);*/
+  /*border-bottom: 0.8px solid rgb(183, 183, 183);*/
   font-size: 15px;
   color: grey;
   border-radius: 6px;
-}
-
-.answer:hover{
-  box-shadow: 0 6px 6px 0 rgba(48, 55, 66, 0.15);/* 盒子悬浮时阴影 */
-  cursor:pointer;/* 鼠标状态 */
 }
 
 .card {
