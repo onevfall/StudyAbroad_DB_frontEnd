@@ -53,7 +53,7 @@
           </div>
           <el-divider />
           <div class="main_field">
-            <div class="content_main">
+            <div class="content_main" v-loading="oss_loading">
               <p v-html="this.blog_detail.blog_content"></p>
             </div>
             <el-affix target=".main_field" position="bottom" :offset="0">
@@ -168,6 +168,7 @@ export default {
       blog_user_info: "",
       blog_relevant: [],
       blog_detail: "",
+      oss_loading:true
     };
   },
   methods: {
@@ -192,7 +193,6 @@ export default {
             let index_random=Math.floor(Math.random()*this.blog_relevant.length);
             this.blog_relevant[0] =this.blog_relevant[index_random];
           }
-
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -203,12 +203,14 @@ export default {
         .then((res) => {
           this.blog_detail = res.data.data;
           const xhrFile = new XMLHttpRequest();
+          console.log('开始解析oss');
           xhrFile.open("GET", this.blog_detail.blog_content, true);
           xhrFile.send();
-
           xhrFile.onload = () => {
             //res.data.data.blog_content=xhrFile.response;
             this.blog_detail.blog_content = xhrFile.response;
+            console.log('oss解析完成');
+            this.oss_loading=false;
           };
 
           // this.blog_detail.blog_content = decode(this.blog_detail.blog_content);
