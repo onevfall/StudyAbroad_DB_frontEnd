@@ -79,6 +79,7 @@
                     />
                     <!-- </el-tag> -->
                   </el-col>
+
                   <el-col :span="2">
                     <!-- <el-tag class="ml-2" type="warning" size="large"> -->
                     <star-button
@@ -209,6 +210,7 @@ export default {
           xhrFile.onload = () => {
             //res.data.data.blog_content=xhrFile.response;
             this.blog_detail.blog_content = xhrFile.response;
+
             console.log('oss解析完成');
             this.oss_loading=false;
           };
