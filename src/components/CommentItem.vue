@@ -231,7 +231,7 @@ export default {
           })
           .then((res) => {
             console.log("11213142");
-            console.log(res);
+            console.log(res.data);
             this.comment_infor.child_comments = res.data.data.reply_list;
             this.$store.commit("RefreshCommitZone");
           })
@@ -287,7 +287,6 @@ export default {
             }) //待修改
             .then((res) => {
               console.log(res.data);
-
               ElMessage({
                 type: "success",
                 message: "评论成功！",
@@ -310,6 +309,7 @@ export default {
               reply_content: this.comment_now,
             })
             .then((res) => {
+              console.log("更改！");
               console.log(res.data);
               ElMessage({
                 type: "success",
@@ -320,7 +320,7 @@ export default {
               this.is_reply = false;
               this.comment_now = "";
               this.comment_ischange = !this.comment_ischange;
-              console.log("更改！");
+              
             })
             .catch((err) => {
               console.log(err);
@@ -362,66 +362,60 @@ export default {
         });
       }
     },
-    sendComment() {
-      if (this.$store.state.is_login == false) {
-        //若未登录
-        ElMessage({
-          message: "请先登录",
-          type: "warning",
-          showClose: true,
-          duration: 2000,
-        });
-        this.comment_now = "";
-        this.$router.push({
-          path: "/login",
-          query: { redirect: this.$route.fullPath },
-        });
-      } else {
-          axios
-            .post("/answer/reply", {
-              comment_id: this.comment_infor.AnswerCommentId,
-              // comment_id: this.$store.state.reply_to.AnswerCommentId,
-              reply_user_id: this.$store.state.user_info.user_id,
-              reply_content: this.comment_now,
-            }) //待修改
-            .then((res) => {
-              console.log(res.data);
-              this.comment_ischange = !this.comment_ischange//此处需修改
-              ElMessage({
-                type: "success",
-                message: "评论成功！",
-                duration: 2000,
-                showClose: true,
-              });
-              this.is_reply = false;
-              this.comment_now = "";
-              axios
-                .get("/answer/reply", {
-                  params: {
-                    answer_comment_id : this.comment_infor.AnswerCommentId,
-                  },
-                })
-                .then((res) => {
-                  // console.log(
-                  //   "对用户id为" +
-                  //     this.comment_infor.AnswerCommentId +
-                  //     "的评论的回复请求"
-                  // );
-                  console.log("11213142")
-                  console.log(res);
-                  this.comment_infor.child_comments =
-                    res.data.data.reply_list;
-                  this.comment_ischange_1 = !this.comment_ischange_1;
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } 
-      },
+    // sendComment() {
+    //   if (this.$store.state.is_login == false) {
+    //     //若未登录
+    //     ElMessage({
+    //       message: "请先登录",
+    //       type: "warning",
+    //       showClose: true,
+    //       duration: 2000,
+    //     });
+    //     this.comment_now = "";
+    //     this.$router.push({
+    //       path: "/login",
+    //       query: { redirect: this.$route.fullPath },
+    //     });
+    //   } else {
+    //       axios
+    //         .post("/answer/reply", {
+    //           comment_id: this.comment_infor.AnswerCommentId,
+    //           // comment_id: this.$store.state.reply_to.AnswerCommentId,
+    //           reply_user_id: this.$store.state.user_info.user_id,
+    //           reply_content: this.comment_now,
+    //         }) //待修改
+    //         .then((res) => {
+    //           console.log(res.data);
+    //           this.comment_ischange = !this.comment_ischange//此处需修改
+    //           ElMessage({
+    //             type: "success",
+    //             message: "评论成功！",
+    //             duration: 2000,
+    //             showClose: true,
+    //           });
+    //           this.is_reply = false;
+    //           this.comment_now = "";
+    //           axios
+    //             .get("/answer/reply", {
+    //               params: {
+    //                 answer_comment_id : this.comment_infor.AnswerCommentId,
+    //               },
+    //             })
+    //             .then((res) => {
+    //               console.log(res);
+    //               this.comment_infor.child_comments =
+    //                 res.data.data.reply_list;
+    //               this.comment_ischange_1 = !this.comment_ischange_1;
+    //             })
+    //             .catch((err) => {
+    //               console.log(err);
+    //             });
+    //         })
+    //         .catch((err) => {
+    //           console.log(err);
+    //         });
+    //     } 
+    //   },
       like(res) {
       if (res) {
         ElMessage({

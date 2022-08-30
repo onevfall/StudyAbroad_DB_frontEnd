@@ -200,7 +200,8 @@ export default {
         console.log("鸟币")
         console.log(res);
         this.coin_change_list = res.data.data.record_list;
-        this.coin_num = this.$store.state.user_info.user_coin;
+        //this.coin_num = this.$store.state.user_info.user_coin;
+        this.coin_num = res.data.data.coin
       })
       .catch((errMsg) => {
         console.log(errMsg);

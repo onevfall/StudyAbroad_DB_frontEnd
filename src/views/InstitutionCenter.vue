@@ -3,8 +3,11 @@
 作者：蔡明宏
 -->
 <template>
-  <div class="school-center-layout" v-loading.fullscreen.lock="isLoading"
-          element-loading-text="正在加载">
+  <div
+    class="school-center-layout"
+    v-loading.fullscreen.lock="isLoading"
+    element-loading-text="正在加载"
+  >
     <!-- 上半区-->
     <!-- <page-loading v-show="isLoading"></page-loading> -->
     <div class="upBox">
@@ -134,13 +137,17 @@
             </el-container>
           </el-container>
         </el-aside>
-        <el-main>
-          <img src="../assets/school_center.jpg" class="drawing" />
+        <el-main class="cover_up">
+          <div>
+            <div class="cover">
+              <img src="../assets/institution_center.jpg" class="drawing" />
+            </div>
+          </div>
         </el-main>
       </el-container>
     </div>
 
-    <div >
+    <div>
       <div class="left_text">
         搜索结果如下,【<span style="color: coral">{{
           this.institution_list.length
@@ -366,9 +373,32 @@ export default {
   opacity: 0.6;
   background-blend-mode: overlay;
 }
+.cover_up{
+  padding-left: 8%;
+}
+.cover {
+  width: 300px;
+  height: 230px;
+  position: relative;
+}
+.cover:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  box-shadow: 0 0 10px 10px #ffffff inset;
+}
 .drawing {
-  height: 90%;
-  object-fit: cover; /*图片缩放自适应原图的比例 */
+  /* height: 220px; */
+  /* height: 90%;
+  object-fit: cover; 图片缩放自适应原图的比例 */
+   width: 300px;
+  height: 230px;
+  display: block;
+  margin-bottom: 20px;
+  /* margin-left: 20px; */
 }
 .el-row {
   margin-bottom: 20px;

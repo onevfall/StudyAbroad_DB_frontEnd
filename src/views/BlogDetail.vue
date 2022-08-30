@@ -6,16 +6,19 @@
   <page-loading v-if="blog_user_info == ''" />
   <div class="common-layout" id="top">
     <el-container>
-      <el-aside width="400px">
-        <user-info-board
-          class="UserInfo"
-          :blog_user_info="this.blog_user_info"
-          v-if="blog_user_info != ''"
-        ></user-info-board>
+      <el-aside width="400px" class="aside_field">
+        <el-affix :offset="5" target=".aside_field">
+          <user-info-board
+            class="UserInfo"
+            :blog_user_info="this.blog_user_info"
+            v-if="blog_user_info != ''"
+          ></user-info-board>
 
-        <div v-for="blog in this.blog_relevant.slice(0, 2)" :key="blog">
-          <blog-info-board :blog_info="blog" class="BlogCard" />
-        </div>
+          <!-- <div v-for="blog in this.blog_relevant.slice(0, 2)" :key="blog">
+            <blog-info-board :blog_info="blog" class="BlogCard" />
+          </div> -->
+          <blog-info-board :blog_info="this.blog_relevant[0]" v-if="this.blog_relevant.length!=0" class="BlogCard" />
+        </el-affix>
       </el-aside>
       <el-main>
         <div class="content_field">
@@ -50,7 +53,7 @@
           </div>
           <el-divider />
           <div class="main_field">
-            <div class="content_main">
+            <div class="content_main" v-loading="oss_loading">
               <p v-html="this.blog_detail.blog_content"></p>
             </div>
             <el-affix target=".main_field" position="bottom" :offset="0">
@@ -76,6 +79,17 @@
                     />
                     <!-- </el-tag> -->
                   </el-col>
+
+                  <el-col :span="2">
+                    <!-- <el-tag class="ml-2" type="warning" size="large"> -->
+                    <star-button
+                      :content_id="this.$route.query.blog_id"
+                      content_type="0"
+                      :show_num="true"
+                      size="large"
+                    />
+                    <!-- </el-tag> -->
+                  </el-col>
                   <el-col :span="2" style="margin-left: 10px">
                     <el-row gutter="4">
                       <el-col :span="2">
@@ -90,16 +104,7 @@
                     </el-row>
                     <!-- </el-tag> -->
                   </el-col>
-                  <el-col :span="2">
-                    <!-- <el-tag class="ml-2" type="warning" size="large"> -->
-                    <coin-button
-                      :content_id="this.$route.query.blog_id"
-                      content_type="0"
-                      :show_num="true"
-                      size="large"
-                    />
-                    <!-- </el-tag> -->
-                  </el-col>
+
                   <el-col :span="14" style="text-align: right">
                     <el-tooltip
                       class="box-item"
@@ -121,7 +126,11 @@
           </div>
           <el-divider />
           <div>
-            <comment-zone type="1" :id="this.$route.query.blog_id">
+            <comment-zone
+              type="1"
+              :id="this.$route.query.blog_id"
+              :key="this.$route.query.blog_id"
+            >
             </comment-zone>
           </div>
           <!-- <div class="comment_field"></div> -->
@@ -137,6 +146,7 @@ import BlogInfoBoard from "../components/BlogInfoBoard.vue";
 import axios from "axios";
 import LikeButton from "../components/LikeButton.vue";
 import CoinButton from "../components/CoinButton.vue";
+import StarButton from "../components/StarButton.vue";
 import ReportButton from "../components/ReportButton.vue";
 import PageLoading from "../components/PageLoading.vue";
 import CommentZone from "../components/CommentZone.vue";
@@ -148,6 +158,7 @@ export default {
     BlogInfoBoard,
     LikeButton,
     CoinButton,
+    StarButton,
     PageLoading,
     CommentZone,
     ReportButton,
@@ -158,19 +169,18 @@ export default {
       blog_user_info: "",
       blog_relevant: [],
       blog_detail: "",
+      oss_loading:true
     };
   },
   methods: {
     getData() {
-      console.log(999);
-      console.log(this.$route.query.blog_tag);
       /*在此处向服务器请求数据，初始化所需变量*/
       //博客用户
       axios.get("userinfo?user_id=" + this.$route.query.user_id).then((res) => {
         this.blog_user_info = res.data.data;
       });
       //相关博客
-      console.log(this.$route.query.blog_tag);
+
       axios
         .get("/blog/tag?num=3&tag=" + this.$route.query.blog_tag)
         .then((res) => {
@@ -179,6 +189,11 @@ export default {
               (blog) => blog.BlogId != this.$route.query.blog_id
             )
           );
+          if(this.blog_relevant.length!=0){
+            //生成0-数组长度的随机数
+            let index_random=Math.floor(Math.random()*this.blog_relevant.length);
+            this.blog_relevant[0] =this.blog_relevant[index_random];
+          }
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -187,17 +202,17 @@ export default {
       axios
         .get("/blog?blog_id=" + this.$route.query.blog_id)
         .then((res) => {
-          console.log("res");
-          console.log(res);
           this.blog_detail = res.data.data;
           const xhrFile = new XMLHttpRequest();
+          console.log('开始解析oss');
           xhrFile.open("GET", this.blog_detail.blog_content, true);
           xhrFile.send();
-
           xhrFile.onload = () => {
             //res.data.data.blog_content=xhrFile.response;
             this.blog_detail.blog_content = xhrFile.response;
-            console.log("test", this.blog_detail.blog_content);
+
+            console.log('oss解析完成');
+            this.oss_loading=false;
           };
 
           // this.blog_detail.blog_content = decode(this.blog_detail.blog_content);
@@ -309,4 +324,7 @@ export default {
 }
 /* .comment_field {
 } */
+.aside_field{
+  margin-bottom: 100px;
+}
 </style>

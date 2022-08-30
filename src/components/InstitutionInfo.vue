@@ -7,14 +7,22 @@
   <el-container class="info_table">
       <el-aside width=60% class="left">
           <div class="con1"  style="width:100%;float:left;" >
-          <img :src="this.institution.insitution_profile"  class="insitution_profile">
+          <img :src="this.institution.institution_profile"  class="institution_profile">
            <div style="float:left;text-align:left;">
             <p class="p1" style="font-size:30px">{{institution.institution_name}}</p>
             <p class="p1">{{institution.institution_name}}</p>
             <p class="p1">{{institution.institution_abbreviation}}</p>
            </div>
+           <span style="float:right;margin-top: 50px;margin-right: 50px;">
+            <follow-button
+                        object_type="2"
+                        :object_id=" this.$route.query.institution_id "
+                        @giveFollow="follow"
+                        @cancelFollow="unFollow"
+                        
+            ></follow-button></span>
           </div> 
-          <p style="float:left;">
+          <p style="float:left;padding:20px;">
             <span class="con2_span" style="float:left;text-align:left;">{{institution.institution_introduction}}</span> 
             <span class="show" style="float:right;text-align:right;">[更多]</span> <!---->
           </p>
@@ -58,8 +66,10 @@
 <script>
 //到时候传入一个
 import Loading from "../components/Loading.vue"
+import FollowButton from "../components/FollowButton.vue";
 export default {
   components:{
+    FollowButton,
     Loading
   },
   props: ["institution"],
@@ -127,7 +137,7 @@ export default {
   z-index: -1;
 }
 
-.institution_badge{
+.institution_profile{
   background:white;
   margin:30px;
   margin-bottom: 0;

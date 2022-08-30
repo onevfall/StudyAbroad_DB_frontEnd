@@ -106,7 +106,7 @@
                   </div>
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="其它通知" name="2">
+              <!-- <el-tab-pane label="其它通知" name="2">
                 <div
                   style="padding: 20px 20px; min-height: 550px; display: flex"
                 >
@@ -118,7 +118,7 @@
                     />
                   </div>
                 </div>
-              </el-tab-pane>
+              </el-tab-pane> -->
             </el-tabs>
           </div>
         </div>
@@ -175,19 +175,19 @@ export default {
     };
   },
   created() {
-    if (!this.$store.state.is_login) {
-      ElMessage({
-        message: "请先登录",
-        type: "warning",
-        showClose: true,
-        duration: 2000,
-      });
-      /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
-      this.$router.push({
-        path: "/login",
-        query: { redirect: this.$route.fullPath },
-      });
-    }
+    // if (!this.$store.state.is_login) {
+    //   ElMessage({
+    //     message: "请先登录",
+    //     type: "warning",
+    //     showClose: true,
+    //     duration: 2000,
+    //   });
+    //   /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
+    //   this.$router.push({
+    //     path: "/login",
+    //     query: { redirect: this.$route.fullPath },
+    //   });
+    // }
     axios
         .get("/report", {
           params: {
