@@ -43,6 +43,15 @@
           <question-card :question_info="ques"></question-card>
         </el-col>
       </el-row>
+      <el-row style="text-align:center">
+        <div id="go-ask" style="margin-left:36%;">
+          <span>没找到想看的问题？</span>
+          <el-link type="primary" :underline="false" @click="goToAskPage" 
+          style="font-size:29px;padding-bottom:6px;font-weight:500">
+          去提问
+          </el-link>
+        </div>
+      </el-row>
     </el-main>
   </el-container>
 </template>
@@ -71,6 +80,11 @@ export default ({
     },
     heatStatus:function(){
       this.display_status=false;
+    },
+    goToAskPage:function(){
+      this.$router.push({
+        name: "question_edit",
+      });
     }
   },
   created(){
@@ -119,5 +133,12 @@ export default ({
 
   .el-main{
     padding-bottom:50px;
+  }
+
+  #go-ask{
+    margin-top:20px;
+    font-size:30px;
+    color:rgb(37, 37, 37);
+    font-weight:300;
   }
 </style>

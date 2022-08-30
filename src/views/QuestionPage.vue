@@ -12,7 +12,7 @@
             <el-col :span="1"></el-col>
             <el-col :span="19">
               <el-row type="flex" align="middle">
-                <el-col :span="2" style="margin-right: 7px">
+                <el-col :span="3">
                   <el-tag size="middle" class="ml-2" type="warning"
                     >悬赏金额：{{ this.question_info.question_reward }}</el-tag
                   >
@@ -37,7 +37,6 @@
                   :span="2"
                   v-for="tag in this.question_info.question_tag"
                   :key="tag"
-                  style="margin-right: -7px"
                 >
                   <el-tag size="middle">{{ tag }}</el-tag>
                 </el-col>
@@ -74,10 +73,10 @@
           <el-row>
             <el-col :span="1"></el-col>
             <el-col id="question_details" :span="20">
-              <div v-if="notFull" style="text-align: left">
+              <div v-if="notFull" style="text-align: left;margin-top:5px">
                 问题摘要：{{ this.question_info.question_summary }}
               </div>
-              <div v-if="!notFull" style="text-align: left">
+              <div v-if="!notFull" style="text-align: left;margin-top:10px">
                 问题详情：
                 <p v-html="this.question_info.question_description"></p>
               </div>
@@ -110,7 +109,7 @@
         <el-row class="bottom">
           <el-col :span="16">
             <el-card id="answer_card" shadow="never">
-              <el-row style="margin-bottom: 30px">
+              <el-row style="margin-bottom: 20px;margin-top:10px">
                 {{ answer_num }}条回答
               </el-row>
               <el-divider />
@@ -152,6 +151,12 @@
                       v-if="this.apply_id == ans.AnswerId"
                       >该问题已被题主采纳</el-tag
                     >
+                    <el-tag
+                      type="success"
+                      size="normal"
+                      style="margin-top: 5px; margin-left: 7px"
+                      >{{ans.AnswerDate.replace("T", " ")}}</el-tag
+                    >
                   </el-row>
                   <el-row id="answer_content">
                     {{ ans.AnswerSummary }}
@@ -169,6 +174,8 @@
                         ><el-icon class="icon"><View /></el-icon>
                         查看详情>></el-button
                       >
+                    </el-col>
+                    <el-col :span="1">
                     </el-col>
                     <el-col
                       :span="2"
@@ -396,18 +403,11 @@ export default {
         },
       })
         .then((res) => {
-          // console.log("1234511", res.data.data);
           this.answer_num = res.data.data.count;
           this.answer_info = res.data.data.answers;
           this.apply_id = res.data.data.apply;
-          console.log("哇哈哈哈哈哈");
-          console.log(res.data.data.apply);
-          console.log(this.apply_id);
           for (let i = 0; i < this.answer_info.length; ++i) {
-            console.log("为什么不行呢？");
             if (this.answer_info[i].AnswerId == this.apply_id) {
-              console.log("找到了");
-
               let tmp = this.answer_info[0];
               this.answer_info[0] = this.answer_info[i];
               this.answer_info[i] = tmp;
@@ -599,13 +599,13 @@ export default {
 }
 
 .answer {
-  /* padding-top: 5px; */
-  margin-top: -20px;
+  margin-top:-20px;
   padding-bottom: 5px;
-  /* border-top: 0.8px solid black;
-  border-bottom: 0.8px solid black; */
+  /*border-top: 0.8px solid rgb(183, 183, 183);*/
+  /*border-bottom: 0.8px solid rgb(183, 183, 183);*/
   font-size: 15px;
   color: grey;
+  border-radius: 6px;
 }
 
 .card {
