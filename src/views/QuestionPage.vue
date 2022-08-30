@@ -152,6 +152,12 @@
                       v-if="this.apply_id == ans.AnswerId"
                       >该问题已被题主采纳</el-tag
                     >
+                    <el-tag
+                      type="success"
+                      size="normal"
+                      style="margin-top: 5px; margin-left: 7px"
+                      >{{ans.AnswerDate.replace("T", " ")}}</el-tag
+                    >
                   </el-row>
                   <el-row id="answer_content">
                     {{ ans.AnswerSummary }}
@@ -396,18 +402,11 @@ export default {
         },
       })
         .then((res) => {
-          // console.log("1234511", res.data.data);
           this.answer_num = res.data.data.count;
           this.answer_info = res.data.data.answers;
           this.apply_id = res.data.data.apply;
-          console.log("哇哈哈哈哈哈");
-          console.log(res.data.data.apply);
-          console.log(this.apply_id);
           for (let i = 0; i < this.answer_info.length; ++i) {
-            console.log("为什么不行呢？");
             if (this.answer_info[i].AnswerId == this.apply_id) {
-              console.log("找到了");
-
               let tmp = this.answer_info[0];
               this.answer_info[0] = this.answer_info[i];
               this.answer_info[i] = tmp;
