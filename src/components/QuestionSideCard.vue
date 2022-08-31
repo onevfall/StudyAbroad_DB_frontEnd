@@ -4,7 +4,7 @@
 -->
 <template>
   <!-- 用户信息展示卡片的封装，需传入用户信息对象 -->
-  <el-card class="box-card" :body-style="this.body_style">
+  <el-card class="box-card" :body-style="this.body_style" shadow="hover">
     <template #header>
       <div class="card-header">
         <span
