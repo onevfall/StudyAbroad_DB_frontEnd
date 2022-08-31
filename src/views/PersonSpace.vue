@@ -60,11 +60,6 @@
               <div>个性签名：{{ person_info.user_signature }}</div>
             </div>
             <div class="user_profile_head_control">
-              <!-- <el-button
-                v-if="person_info.user_id != this.visit_id"
-                type="primary"
-                >关注 +
-              </el-button> -->
               <follow-button
                 class="follow_button"
                 v-if="person_info.user_id != this.visit_id"
@@ -134,13 +129,22 @@
             </div>
           </template>
           <div class="achievement_content">
-            获得{{ achieve_info.like_times }}次点赞
+            <img src="../assets/like_ex.png" style="height: 30px" />
+            <span style="margin-left: 5%"
+              >获得{{ achieve_info.like_times }}次点赞</span
+            >
           </div>
           <div class="achievement_content">
-            内容获得{{ achieve_info.comment_times }}次评论
+            <img src="../assets/comment_ex.png" style="height: 30px" />
+            <span style="margin-left: 5%"
+              >内容获得{{ achieve_info.comment_times }}次评论</span
+            >
           </div>
           <div class="achievement_content">
-            获得{{ achieve_info.star_times }}次收藏
+            <img src="../assets/star_ex.png" style="height: 30px" />
+            <span style="margin-left: 5%"
+              >获得{{ achieve_info.star_times }}次收藏</span
+            >
           </div>
         </el-card>
         <el-card
@@ -205,8 +209,10 @@
                       <follow-button
                         object_type="0"
                         :object_id="follow_person.user_id"
+                        :key="fresh_userlist_button"
                         @giveFollow="follow"
                         @cancelFollow="unFollow"
+                        @click="freshButton($event, 0)"
                       ></follow-button>
                     </div>
                   </div>
@@ -371,8 +377,10 @@
                   <follow-button
                     object_type="0"
                     :object_id="follower_person.user_id"
+                    :key="fresh_followerlist_button"
                     @giveFollow="follow"
                     @cancelFollow="unFollow"
+                    @click="freshButton($event, 1)"
                   ></follow-button>
                 </div>
               </div>
@@ -759,6 +767,9 @@ export default {
       loading: true,
       delete_dialog_visible: false,
       need_refresh: false,
+      fresh_followerlist_button: 1,
+      fresh_userlist_button: 1,
+      follow_or_follower: 0, //0-follow
       to_be_killed_type: "",
       to_be_killed_id: -1,
     };
@@ -782,7 +793,12 @@ export default {
           })
             .then((res) => {
               this.user_follow_list = res.data.data.follows;
-              this.user_follow_count = res.data.data.count;
+              // this.user_follow_count = res.data.data.count;
+              this.user_follow_count++;
+              this.person_info.user_follows++;
+              if (this.follow_or_follower == 0)
+                this.fresh_followerlist_button++;
+              else this.fresh_userlist_button++;
             })
             .catch((errMsg) => {
               console.log(errMsg);
@@ -795,7 +811,9 @@ export default {
           })
             .then((res) => {
               this.follow_university_list = res.data.data.follows;
-              this.follow_university_count = res.data.data.count;
+              // this.follow_university_count = res.data.data.count;
+              this.follow_university_count++;
+              this.person_info.user_follows++;
             })
             .catch((errMsg) => {
               console.log(errMsg);
@@ -808,7 +826,9 @@ export default {
           })
             .then((res) => {
               this.follow_institution_list = res.data.data.follows;
-              this.follow_institution_count = res.data.data.count;
+              // this.follow_institution_count = res.data.data.count;
+              this.follow_institution_count++;
+              this.person_info.user_follows++;
             })
             .catch((errMsg) => {
               console.log(errMsg);
@@ -823,7 +843,8 @@ export default {
         });
       }
     },
-    unFollow(res) {
+    unFollow(res, ob_type) {
+      console.log("执行unfollow");
       if (res) {
         ElMessage({
           type: "success",
@@ -831,6 +852,17 @@ export default {
           duration: 2000,
           showClose: true,
         });
+        this.person_info.user_follows--;
+        console.log(ob_type);
+        if (ob_type == 0) {
+          this.user_follow_count--;
+          if (this.follow_or_follower == 0) this.fresh_followerlist_button++;
+          else this.fresh_userlist_button++;
+        } else if (ob_type == 1) {
+          this.follow_university_count--;
+        } else {
+          this.follow_institution_count--;
+        }
       } else {
         ElMessage({
           type: "error",
@@ -839,6 +871,9 @@ export default {
           showClose: true,
         });
       }
+    },
+    freshButton(event, type) {
+      this.follow_or_follower = type;
     },
     goPersonInfo() {
       this.$router.push({

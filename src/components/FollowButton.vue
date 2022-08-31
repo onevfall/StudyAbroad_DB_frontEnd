@@ -131,9 +131,9 @@ export default {
           if (res.data.status) {
             this.is_followed = false;
             this.follow_num--;
-            this.$emit("cancelFollow", true);
+            this.$emit("cancelFollow", true, this.object_type);
           } else {
-            this.$emit("cancelFollow", false);
+            this.$emit("cancelFollow", false, this.object_type);
           }
         })
         .catch((errMsg) => {
