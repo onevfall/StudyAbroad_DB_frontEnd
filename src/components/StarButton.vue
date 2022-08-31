@@ -50,6 +50,11 @@ export default {
       star_nums: 0
     };
   },
+  watch:{
+    is_stared(){
+      this.$emit("starChange", this.is_stared);
+    },
+  },
   methods: {
     star() {
       //判断是否登录
@@ -67,7 +72,6 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
-      console.log("star!!");
         axios
           .post("star/" + this.dynamic_type, {
             user_id: this.$store.state.user_info.user_id,
@@ -80,7 +84,7 @@ export default {
               this.star_nums++;
               this.$emit("giveStar", true);
             } else {
-              this.$emit("giveStar", false);
+              // this.$emit("giveStar", false);
             }
           })
           .catch((errMsg) => {
@@ -96,7 +100,6 @@ export default {
       }
     },
     unStar() {
-      console.log("unstar!!");
       axios
         .put("star/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,
@@ -106,9 +109,9 @@ export default {
           if (res.data.status) {
             this.is_stared = false;
             this.star_nums--;
-            this.$emit("cancelStar", true);
+            this.$emit("giveStar", false);
           } else {
-            this.$emit("cancelStar", false);
+            // this.$emit("cancelStar", false);
           }
         })
         .catch((errMsg) => {
