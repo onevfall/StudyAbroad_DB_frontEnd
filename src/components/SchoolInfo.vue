@@ -1,6 +1,6 @@
 <!--
 高校信息
-描述：展示高校具体各板块信息
+描述：展示高校信息卡（详情页最上）
 作者：张子涵
 -->
 <template>
@@ -9,12 +9,23 @@
           <div class="con1"  style="width:100%;float:left;" >
           <img :src="this.school.university_badge"  class="school_badge">
            <div style="float:left;text-align:left;">
-            <p class="p1" style="font-size:30px">{{school.university_enname}}</p>
+            <p class="p1" style="font-size:30px">{{school.university_enname}}
+              </p>
+              
             <p class="p1">{{school.university_chname}}</p>
             <p class="p1">{{school.university_abbreviation}}</p>
+
            </div>
+           <span style="float:right;margin-top: 50px;margin-right: 50px;">
+                <follow-button
+                        object_type="1"
+                        :object_id=" this.$route.query.school_id "
+                        @giveFollow="follow"
+                        @cancelFollow="unFollow"
+                        
+            ></follow-button></span>
           </div> 
-          <p style="float:left; padding:20px">
+          <p style="float:left; padding:20px;">
             <span class="con2_span" style="float:left;text-align:left;">{{school.university_introduction}}</span> 
             <span class="show" style="float:right;text-align:right;">[更多]</span> <!---->
           </p>
@@ -57,14 +68,18 @@
 
 <script>
 //到时候传入一个
+import FollowButton from "../components/FollowButton.vue";
 import Loading from "../components/Loading.vue"
+import axios from "axios";
 export default {
   components:{
+    FollowButton,
     Loading
   },
   props: ["school"],
   data () {
     return {
+      is_followed:false,
       dataList: [],
       currentIndex: 0, // 默认显示图片
       timer: null // 定时器
@@ -72,9 +87,11 @@ export default {
   },
   created () {
     this.run()
+  
   },
   updated(){
     this.dataList=this.school.university_photo;
+
   },
   methods: {
       //点击小圆圈切换图片

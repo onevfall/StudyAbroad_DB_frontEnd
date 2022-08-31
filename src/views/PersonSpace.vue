@@ -490,7 +490,7 @@
                     class="star_blog_list"
                     v-for="(star_blog, index) in star_blog_list"
                     :key="star_blog.blog_id"
-                    @click="goBlogDetail(star_blog.blog_id, index, $event)"
+                    @click="goBlogDetail(star_blog.blog_id, index, 0, $event)"
                   >
                     <div style="display: block; width: 100%">
                       <div
@@ -583,7 +583,7 @@
                     "
                     type="danger"
                     style="margin-top: 10px; margin-left: 25px"
-                    @click.stop="openDeleteDia(question.QuestionId,'question')"
+                    @click.stop="openDeleteDia(question.QuestionId, 'question')"
                     ><el-icon class="el-icon--left"><Delete /></el-icon
                     >删除</el-button
                   >
@@ -635,7 +635,7 @@
                     "
                     type="danger"
                     style="margin-top: 10px; margin-left: 25px"
-                    @click.stop="openDeleteDia(answer.AnswerId,'answer')"
+                    @click.stop="openDeleteDia(answer.AnswerId, 'answer')"
                     ><el-icon class="el-icon--left"><Delete /></el-icon
                     >删除</el-button
                   >
@@ -653,7 +653,7 @@
                 class="blog_list"
                 v-for="(blog, index) in blog_list"
                 :key="blog.BlogId"
-                @click="goBlogDetail(blog.BlogId, index, $event)"
+                @click="goBlogDetail(blog.BlogId, index, 1, $event)"
               >
                 <div style="display: block; width: 100%">
                   <div
@@ -665,7 +665,7 @@
                       text-align: left;
                     "
                   >
-                    {{ this.$store.state.user_info.user_name }}：
+                    {{ blog.BlogUserId }}：
                   </div>
                   <div
                     style="
@@ -693,7 +693,7 @@
                     "
                     type="danger"
                     style="margin-top: 10px; margin-left: 25px"
-                    @click.stop="openDeleteDia(blog.BlogId,'blog')"
+                    @click.stop="openDeleteDia(blog.BlogId, 'blog')"
                     ><el-icon class="el-icon--left"><Delete /></el-icon
                     >删除</el-button
                   >
@@ -906,15 +906,26 @@ export default {
         },
       });
     },
-    goBlogDetail(id, index, event) {
-      this.$router.push({
-        path: "/blog_detail",
-        query: {
-          blog_id: id,
-          blog_tag: this.star_blog_list[index].blog_tag,
-          user_id: this.star_blog_list[index].blog_user_id,
-        },
-      });
+    goBlogDetail(id, index, flag, event) {
+      if (flag == 0) {
+        this.$router.push({
+          path: "/blog_detail",
+          query: {
+            blog_id: id,
+            blog_tag: this.star_blog_list[index].blog_tag,
+            user_id: this.star_blog_list[index].blog_user_id,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: "/blog_detail",
+          query: {
+            blog_id: id,
+            blog_tag: this.blog_list[index].BlogTag,
+            user_id: this.blog_list[index].BlogUserId,
+          },
+        });
+      }
     },
     goBlogEdit() {
       this.$router.push({
