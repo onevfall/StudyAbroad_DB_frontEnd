@@ -12,7 +12,7 @@
             <el-col :span="1"></el-col>
             <el-col :span="19">
               <el-row type="flex" align="middle">
-                <el-col :span="2" style="margin-right: 7px">
+                <el-col :span="3">
                   <el-tag size="middle" class="ml-2" type="warning"
                     >悬赏金额：{{ this.question_info.question_reward }}</el-tag
                   >
@@ -34,12 +34,16 @@
                   }}</el-tag>
                 </el-col>
                 <el-col
-                  :span="2"
+                  span="1"
                   v-for="tag in this.question_info.question_tag"
                   :key="tag"
-                  style="margin-right: -7px"
                 >
-                  <el-tag size="middle">{{ tag }}</el-tag>
+                  <el-tag
+                    type="success"
+                    size="middle"
+                    style="margin-right: 15px"
+                    >{{ tag }}</el-tag
+                  >
                 </el-col>
               </el-row>
               <el-row class="user_info">
@@ -74,10 +78,10 @@
           <el-row>
             <el-col :span="1"></el-col>
             <el-col id="question_details" :span="20">
-              <div v-if="notFull" style="text-align: left">
+              <div v-if="notFull" style="text-align: left; margin-top: 5px">
                 问题摘要：{{ this.question_info.question_summary }}
               </div>
-              <div v-if="!notFull" style="text-align: left">
+              <div v-if="!notFull" style="text-align: left; margin-top: 10px">
                 问题详情：
                 <p v-html="this.question_info.question_description"></p>
               </div>
@@ -95,22 +99,47 @@
           </el-row>
           <el-row class="question_tools">
             <el-col :span="1"></el-col>
-            <el-col :span="2">
+            <el-col :span="2" style="margin-top: 3px">
+              <!-- <star-button
+                :content_id="this.question_info.question_id"
+                content_type="2"
+                :show_num="false"
+                size="x-large"
+              /> -->
+              <button id="star" @click="changeStarStatus">
+                <span style="font-weight: lighter">
+                  {{ starQuestionMsg }}
+                </span>
+                <star-button
+                  :content_id="this.question_info.question_id"
+                  content_type="2"
+                  :show_num="false"
+                  size="x-large"
+                  @giveStar="starResult"
+                  @starChange="getStarStatus"
+                  v-show="false"
+                  ref="star_button"
+                />
+              </button>
+            </el-col>
+            <el-col :span="2" style="margin-top: 3.5px">
               <el-button
                 type="primary"
                 size="large"
                 @click="goToWriteAnswerPage"
+                plain
                 >写回答</el-button
               >
             </el-col>
-            <el-col :span="6"> </el-col>
+
+            <el-col :span="4"> </el-col>
             <el-col :span="4"> </el-col>
           </el-row>
         </el-card>
         <el-row class="bottom">
           <el-col :span="16">
-            <el-card id="answer_card" shadow="never">
-              <el-row style="margin-bottom: 30px">
+            <el-card id="answer_card" shadow="never" style="min-height: 635px">
+              <el-row style="margin-bottom: 20px; margin-top: 10px">
                 {{ answer_num }}条回答
               </el-row>
               <el-divider />
@@ -152,6 +181,12 @@
                       v-if="this.apply_id == ans.AnswerId"
                       >该问题已被题主采纳</el-tag
                     >
+                    <el-tag
+                      type="success"
+                      size="normal"
+                      style="margin-top: 5px; margin-left: 7px"
+                      >{{ ans.AnswerDate.replace("T", " ") }}</el-tag
+                    >
                   </el-row>
                   <el-row id="answer_content">
                     {{ ans.AnswerSummary }}
@@ -170,6 +205,7 @@
                         查看详情>></el-button
                       >
                     </el-col>
+                    <!-- <el-col :span="1"> </el-col> -->
                     <el-col
                       :span="2"
                       style="margin-top: -5px; margin-left: 70px"
@@ -248,10 +284,16 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8">
-            <div class="card" v-for="ques in this.card_info" :key="ques">
-              <question-side-card :card_info="ques"></question-side-card>
-            </div>
+          <el-col :span="8" class="aside_field">
+            <el-affix :offset="5" target=".aside_field">
+              <div
+                class="card"
+                v-for="ques in this.card_info.slice(0, 3)"
+                :key="ques"
+              >
+                <question-side-card :card_info="ques"></question-side-card>
+              </div>
+            </el-affix>
           </el-col>
         </el-row>
       </el-main>
@@ -308,12 +350,67 @@ export default {
       answer_num: 0,
       related_question_tag: "",
       notFull: true,
-      applied_answer_id: -1,
+      apply_answer_id: -1,
       adopt_dialog_visible: false,
       textStatus: "展开全文↓",
+      is_stared: "",
     };
   },
   methods: {
+    starResult(result) {
+      if (result) {
+        ElMessage({
+          message: "关注问题成功",
+          type: "success",
+        });
+        this.is_stared = true;
+      }else{
+        ElMessage({
+          message: "取消关注问题成功",
+          type: "success",
+        });
+        this.is_stared = false;
+      }
+    },
+    // 用于改变关注状态
+    changeStarStatus() {
+      if (this.is_stared == false) {
+        this.$refs.star_button.star();
+      } else {
+        this.$refs.star_button.unStar();
+      }
+    },
+    // // 接收关注状态的改变的结果
+    // resultOfStar(status) {
+    //   if (status) {
+    //     ElMessage({
+    //       message: "关注问题成功",
+    //       type: "success",
+    //     });
+    //     this.is_stared = true;
+    //   } else {
+    //     ElMessage({
+    //       message: "关注问题失败",
+    //       type: "warning",
+    //     });
+    //   }
+    // },
+    // resultOfUnstar(status) {
+    //   alert(123123123)
+    //   if (status) {
+    //     ElMessage({
+    //       message: "已取消关注问题",
+    //       type: "success",
+    //     });
+       
+    //     this.is_stared = false;
+    //   } else {
+    //     ElMessage({
+    //       message: "取消关注失败",
+    //       type: "warning",
+    //     });
+    //   }
+    // },
     goToWriteAnswerPage: function () {
       /*加判断，若没登陆先登录，再导回此页面*/
       if (!this.$store.state.is_login) {
@@ -367,7 +464,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log("que", res.data.data);
           this.question_info = res.data.data;
           if (this.question_info.question_description.substr(0, 4) == "http") {
             const xhrFile = new XMLHttpRequest();
@@ -390,11 +486,17 @@ export default {
         },
       })
         .then((res) => {
-          // console.log("1234511", res.data.data);
           this.answer_num = res.data.data.count;
           this.answer_info = res.data.data.answers;
           this.apply_id = res.data.data.apply;
-          console.log(this.answer_info);
+          for (let i = 0; i < this.answer_info.length; ++i) {
+            if (this.answer_info[i].AnswerId == this.apply_id) {
+              let tmp = this.answer_info[0];
+              this.answer_info[0] = this.answer_info[i];
+              this.answer_info[i] = tmp;
+              break;
+            }
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -408,13 +510,9 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res.data.data);
           this.related_question_tag = res.data.data.tag;
           this.question_relevant = res.data.data.related_questions;
-
           for (let i = 0; i < this.question_relevant.length; i++) {
-            console.log("xiangguan");
-            console.log(this.question_relevant[i]);
             var tem_info = {
               essence: "问题",
               content: this.question_relevant[i].QuestionTitle,
@@ -423,8 +521,6 @@ export default {
             };
             this.card_info[i] = tem_info;
           }
-          console.log("related que");
-          console.log(this.card_info);
         })
         .catch((err) => {
           console.log(err);
@@ -452,6 +548,10 @@ export default {
       this.applied_answer_id = -1;
       this.adopt_dialog_visible = false;
     },
+    // 相应更改问题关注状态
+    getStarStatus(status) {
+      this.is_stared = status;
+    },
   },
   computed: {
     answerShow: function () {
@@ -459,6 +559,15 @@ export default {
         return this.answer_info.answer_content;
       } else {
         return this.answer_info.answer_content.slice(0, 40) + "...";
+      }
+    },
+    starQuestionMsg() {
+      if (this.is_stared == false) {
+        return "关注问题";
+      } else if (this.is_stared == true) {
+        return "取消关注";
+      } else {
+        return "Loading";
       }
     },
   },
@@ -580,13 +689,13 @@ export default {
 }
 
 .answer {
-  /* padding-top: 5px; */
   margin-top: -20px;
   padding-bottom: 5px;
-  /* border-top: 0.8px solid black;
-  border-bottom: 0.8px solid black; */
+  /*border-top: 0.8px solid rgb(183, 183, 183);*/
+  /*border-bottom: 0.8px solid rgb(183, 183, 183);*/
   font-size: 15px;
   color: grey;
+  border-radius: 6px;
 }
 
 .card {
@@ -611,6 +720,28 @@ export default {
 .answer_item {
   margin-bottom: 15px;
 }
+.aside_field {
+  margin-bottom: 100px;
+}
+
+#star {
+  border: 2px solid #24b4fb;
+  background-color: #24b4fb;
+  border-radius: 0.4em;
+  padding: 0.4em 0.9em 0.5em 0.9em;
+  transition: all ease-in-out 0.2s;
+  font-size: 16px;
+}
+
+#star span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+#star:hover {
+  background-color: #0071e2;
+}
 </style>
-
-

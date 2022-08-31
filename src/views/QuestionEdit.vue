@@ -182,7 +182,6 @@ export default {
       var summary = "";
       if (args.text_content.length == 0) {
         summary="如题"
-        return;
       } else if (args.text_content.length < 15) {
         summary = args.text_content;
       } else {
