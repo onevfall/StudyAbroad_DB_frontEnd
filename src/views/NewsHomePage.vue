@@ -6,26 +6,29 @@
   <div class="total-layout">
     <el-container>
       <el-header height="300px">
-        <el-carousel indicator-position="outside"> </el-carousel>
+        
+        <carousel
+    type="card"
+    indicator-position="none"
+    style="margin-top: 10px"
+  ></carousel>
       </el-header>
       <el-main
         ><div class="partial-layout">
           <el-container>
             <el-header>
               <div class="news">留学快讯</div>
-
-              <div class="heatOrLatest">
-                <el-button text size="large"
-                  ><img src="../assets/sort_desc.png" />按最新话题</el-button
-                >
-
-                <el-button text size="large"
-                  ><img src="../assets/sort_asc.png" />按最热话题
-                </el-button>
+              <el-divider>
+                <div
+                class="el-divider__text is-center"
+                style="background-color: aliceblue"
+              >
+              <el-icon><star-filled /></el-icon>
               </div>
+              </el-divider>
             </el-header>
             <el-container>
-              <el-aside width="300px">
+              <el-aside width="300px" style="margin-top:3%">
                 <el-card
                   :body-style="{ background: 'aliceblue' }"
                   shadow="always"
@@ -40,7 +43,7 @@
                   </div>
                 </el-card>
               </el-aside>
-              <el-main>
+              <el-main style="margin-top:3%">
                 <div class="abstract">
                   <div class="latestNews">快讯摘要</div>
                   <div>
@@ -111,7 +114,7 @@
                                       type="primary"
                                       class="button_moreInfo"
                                       @click="jumpToNewsPage(news)"
-                                      >查看详情</el-button
+                                      >去看看</el-button
                                     >
                                   </div>
                                 </el-card>
@@ -139,8 +142,12 @@
 import { computed, ref } from "vue";
 
 import axios from "axios";
+
 import Carousel from "../components/Carousel.vue";
 export default {
+  components: {
+    Carousel,
+  },
   data() {
     return {
       count: ref(10),
@@ -288,13 +295,13 @@ export default {
 .common-layout2 {
   margin-bottom: 0%;
 }
+.common-layout2:hover {
+  box-shadow: 0 8px 36px 0 rgba(0, 0, 0, 0.25);
+}
 .mainColor {
   background-color: aliceblue;
   color: aliceblue;
   padding: 0px;
-  /* border-top: 1px grey solid;
-  border-bottom: 1px grey solid;
-  border-right: 1px grey solid; */
 }
 
 .dateAuthor {
