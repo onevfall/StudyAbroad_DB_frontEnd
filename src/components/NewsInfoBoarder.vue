@@ -6,7 +6,7 @@
 <template>
   <el-card
     class="box-card news_card"
-    shadow="hover"
+    
     @click="goNewsDetail(new_info)"
   >
     <template #header>
@@ -16,7 +16,7 @@
       <el-row gutter="10" justify="left">
         <el-col span="30">
           <el-tag class="ml-2" type="primary" size="small">{{
-            new_info.NewsFlashDate
+            new_info.NewsFlashDate.replace("T", " ")
           }}</el-tag>
         </el-col>
         <el-col span="30">
@@ -32,7 +32,7 @@
       </el-row>
     </template>
     <div class="content">
-      {{ new_info.NewsFlashSummary }}
+      点击查看更多
     </div>
   </el-card>
 </template>
@@ -77,8 +77,19 @@ export default {
 }
 .news_card {
   width: 350px;
+  height:250px;
+  min-height:0px
+}
+.news_card:hover{
+  box-shadow: 0 8px 36px 0 rgba(0, 0, 0, 0.25);
 }
 .content {
   font-size: small;
+  color:rgb(6, 6, 155);
+  height: 1%;
+  min-height:0px
+}
+.el-card{
+  height:10%
 }
 </style>
