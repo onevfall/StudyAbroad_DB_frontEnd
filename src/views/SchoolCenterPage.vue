@@ -3,8 +3,11 @@
 作者：蔡明宏
 -->
 <template>
-  <div class="school-center-layout" v-loading.fullscreen.lock="isLoading"
-          element-loading-text="正在加载">
+  <div
+    class="school-center-layout"
+    v-loading.fullscreen.lock="isLoading"
+    element-loading-text="正在加载"
+  >
     <!-- 上半区-->
     <div class="upBox">
       <el-container>
@@ -138,7 +141,10 @@
     </div>
 
     <div class="left_text">
-      搜索结果如下,【<span style="color:coral;">{{this.school_list.length}}</span>】所学校符合你的搜索
+      搜索结果如下,【<span style="color: coral">{{
+        this.all_num
+      }}</span
+      >】所学校符合你的搜索
     </div>
     <hr />
     <!-- 三个排名的罗列 -->
@@ -154,163 +160,201 @@
       </div>
     </div>
   </div>
+  <div>
+    <el-row justify="center">
+      <el-pagination background layout="prev, pager, next" :page-size="PAGESIZE" :total="all_num" @current-change="curChange"/>
+    </el-row>
+  </div>
 </template>
 <script>
 import axios from "axios";
 import { onMounted, ref } from "vue";
-import SchoolCard from "../components/SchoolCard.vue"
+import SchoolCard from "../components/SchoolCard.vue";
 
 export default {
   components: {
-    SchoolCard
+    SchoolCard,
   },
   data() {
-    SchoolCard
     return {
-      school_list:[],      //经过筛选条件后下面展示的大学
-      all_school_list:[],  //最初赋值获得的所有大学   
-      search_value:'',
+      cur_page: 1,
+      page_num: 90,
+      PAGESIZE: 5,
+      all_num:0,
+      school_list: [], //经过筛选条件后下面展示的大学
+      all_school_list: [], //最初赋值获得的所有大学
+      search_value: "",
       isLoading: false,
       //以下为搜索限定词
-      rank_type_value: ref(''),
-      country_value: ref(''),
-      year_value: ref('2022'),
+      rank_type_value: ref(""),
+      country_value: ref(""),
+      year_value: ref("2022"),
       country_options: [
-      {
-        value: '美国',
-        label: '美国',
-      },
-      {
-        value: '英国',
-        label: '英国',
-      },
-      {
-        value: '澳洲',
-        label: '澳洲',
-      },
-      {
-        value: '加拿大',
-        label: '加拿大',
-      },
-      {
-        value: '新西兰',
-        label: '新西兰',
-      },
-      {
-        value: '新加坡',
-        label: '新加坡',
-      },
-      {
-        value: '爱尔兰',
-        label: '爱尔兰',
-      },
-      {
-        value: '中国香港',
-        label: '中国香港',
-      },
-      {
-        value: '其他',
-        label: '其他',
-      },
-      ],
-      rank_type_options:[
         {
-          value:'QS_rank',
-          label:'QS排名',
+          value: "美国",
+          label: "美国",
         },
         {
-          value:'THE_rank',
-          label:'THE排名',
+          value: "英国",
+          label: "英国",
         },
         {
-          value:'USNews_rank',
-          label:'USNews排名',
+          value: "澳洲",
+          label: "澳洲",
+        },
+        {
+          value: "加拿大",
+          label: "加拿大",
+        },
+        {
+          value: "新西兰",
+          label: "新西兰",
+        },
+        {
+          value: "新加坡",
+          label: "新加坡",
+        },
+        {
+          value: "爱尔兰",
+          label: "爱尔兰",
+        },
+        {
+          value: "中国香港",
+          label: "中国香港",
+        },
+        {
+          value: "其他",
+          label: "其他",
         },
       ],
-      year_options:[
+      rank_type_options: [
         {
-          value:'2022',
-          label:'2022',
+          value: "QS_rank",
+          label: "QS排名",
         },
         {
-          value:'2021',
-          label:'2021',
+          value: "THE_rank",
+          label: "THE排名",
         },
         {
-          value:'2020',
-          label:'2020',
+          value: "USNews_rank",
+          label: "USNews排名",
+        },
+      ],
+      year_options: [
+        {
+          value: "2022",
+          label: "2022",
         },
         {
-          value:'2019',
-          label:'2019',
-        }
-      ]
+          value: "2021",
+          label: "2021",
+        },
+        {
+          value: "2020",
+          label: "2020",
+        },
+        {
+          value: "2019",
+          label: "2019",
+        },
+      ],
     };
   },
-  methods:{
-    goSearch(){
-      this.$router.push({
-        path:'/school_detail',
-        query:{
-          school_id:this.search_value
-        }
-      })
-
+  methods: {
+    curChange(res){
+      this.cur_page = res
+      this.filter()
     },
-    filter(){
+    goSearch() {
+      this.$router.push({
+        path: "/school_detail",
+        query: {
+          school_id: this.search_value,
+        },
+      });
+    },
+    filter() {
       this.isLoading = true;
       var x = ""; //需要拼接的判断
-      if(this.country_value==''&& this.rank_type_value==''){
-        x = '?rank_year=' + this.year_value;
-      }
-      else if(this.country_value==''&& this.rank_type_value!=''){
-        x = '?rank_year=' + this.year_value +'&' + 'tag=' + this.rank_type_value;
-      }
-      else if(this.country_value!=''&& this.rank_type_value==''){
-        x = '?rank_year=' + this.year_value + '&' + 'university_country=' + this.country_value;
-      }
-      else{
-        x = '?rank_year=' + this.year_value +
-           '&' + 'tag=' + this.rank_type_value +
-           '&' + 'university_country=' + this.country_value ;
+      if (this.country_value == "" && this.rank_type_value == "") {
+        x = "?rank_year=" + this.year_value + "&" + "page=" + this.cur_page + "&" + "page_size=" + this.PAGESIZE;
+      } else if (this.country_value == "" && this.rank_type_value != "") {
+        x =
+          "?rank_year=" + this.year_value + "&" + "page=" + this.cur_page 
+          + "&" + "page_size=" + this.PAGESIZE
+          +"&" + "tag=" + this.rank_type_value;
+      } else if (this.country_value != "" && this.rank_type_value == "") {
+        x =
+          "?rank_year=" +
+          this.year_value +
+           "&" + "page=" + this.cur_page + "&" + "page_size=" + this.PAGESIZE+
+          "&" +
+          "university_country=" +
+          this.country_value;
+      } else {
+        x =
+          "?rank_year=" +
+          this.year_value +
+          "&" + "page=" + this.cur_page + "&" + "page_size=" + this.PAGESIZE+
+          "&" +
+          "tag=" +
+          this.rank_type_value +
+          "&" +
+          "university_country=" +
+          this.country_value;
       }
       axios({
-      // 点击搜索时加载符合条件的数据
-      url:'university/rank' + x,
-      method:'get',
-    }).then((res)=>{
-      console.log(res)
-      console.log(res.data.data.university_list)
-      console.log("搜索成功")
-      console.log(this.country_value)
-      console.log(this.rank_type_value)
-      this.school_list = res.data.data.university_list
-      this.isLoading = false;
-    })
-    .catch((errMsg) =>{
-      console.log(errMsg)
-      console.log("大失败")
-    })
+        // 点击搜索时加载符合条件的数据
+        url: "university/rank" + x,
+        method: "get",
+      })
+        .then((res) => {
+          console.log(res);
+          console.log(res.data.data.university_list);
+          console.log("搜索成功");
+          console.log(this.country_value);
+          console.log(this.rank_type_value);
+          this.school_list = res.data.data.university_list;
+          this.isLoading = false;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("大失败");
+        });
     },
   },
   created() {
     this.isLoading = true;
-    /*在此处向服务器请求数据，初始化所需变量*/
     axios({
-      // 最初加载时，此处不限定国家
-      url:'university/rank' + '?rank_year=' + this.year_value,
-      method:'get',
-    }).then((res)=>{
-      console.log(res)
-      console.log(res.data.data.university_list)
-      this.school_list = res.data.data.university_list
-      this.all_school_list = res.data.data.university_list
-      this.isLoading = false;
+      url: "university/num" + "?rank_year=" + this.year_value,
+      method: "get",
     })
-    .catch((errMsg) =>{
-      console.log(errMsg)
-      console.log("大失败")
-    })
+      .then((res) => {
+        this.all_num = res.data.data.num
+        this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
+        
+        //进行当页数据检索
+        axios({
+          url: "university/rank" + "?rank_year=" + this.year_value +
+          "&" + "page_size=" + this.PAGESIZE,
+          method: "get",
+        })
+          .then((res) => {
+            this.school_list = res.data.data.university_list;
+            this.all_school_list = res.data.data.university_list;
+            this.isLoading = false;
+          })
+          .catch((errMsg) => {
+            console.log(errMsg);
+            console.log("第二层初始化大失败");
+          });
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+        console.log("第一层初始化大失败");
+      });
+    /*在此处向服务器请求数据，初始化所需变量*/
   },
 };
 </script>
@@ -323,7 +367,7 @@ export default {
   /* padding: 20px; */
 }
 .my_top_layout {
-  height:70px;
+  height: 70px;
   display: flex;
   position: relative;
   /* justify-content: space-around; */
@@ -345,7 +389,7 @@ export default {
 }
 .searchBox {
   background-color: #969393; /*;*/
-  opacity: 0.6;  /*不透明度*/ 
+  opacity: 0.6; /*不透明度*/
   background-blend-mode: overlay;
 }
 .drawing {
@@ -391,5 +435,4 @@ p.QS_rank_test {
   margin-left: 35%;
   margin-top: 2.8%;
 }
-
 </style>
