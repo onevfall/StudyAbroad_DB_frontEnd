@@ -39,7 +39,6 @@ const routes = [
     component: NewsHomePage,
     meta: {
       title: '留学快讯首页',
-      requireAuth: true
     }
   },
   {
@@ -48,7 +47,6 @@ const routes = [
     component: NewsPage,
     meta: {
       title: '留学快讯',
-      requireAuth: true
     }
   },
   {
