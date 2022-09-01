@@ -145,13 +145,8 @@
       </el-main>
 
       <el-aside width=50%>
-      <div><img src="../assets/location.png"><br>
-        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institution_province}} </span><br>
-        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institution_city}}</span><br>
-        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
-        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institution_name}}</span><br>
-
-        </div>
+        <div><img src="../assets/navigator.png" style="margin-top:20px">
+            学生招生处联系电话：<a :href=this.institution.institution_website target="_blank">{{institution.institution_phone}}</a></div>
       </el-aside>
     </el-container>
   </div>
@@ -164,14 +159,14 @@
         <el-main>
           <div><img src="../assets/navigator.png">
             机构资质证书：{{institution.institution_qualify}}</div>
+            <div>是不是没有？是不是没有？速速打电话举报吧！</div>
       </el-main>
 
       <el-aside width=50%>
       <div><img src="../assets/location.png"><br>
-        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institution_province}} </span><br>
-        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institution_city}}</span><br>
-        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
+        
         <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institution_name}}</span><br>
+        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
 
         </div>
       </el-aside>

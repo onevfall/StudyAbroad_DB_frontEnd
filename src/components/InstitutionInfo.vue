@@ -24,7 +24,7 @@
           </div> 
           <p style="float:left;padding:20px;">
             <span class="con2_span" style="float:left;text-align:left;">{{institution.institution_introduction}}</span> 
-            <span class="show" style="float:right;text-align:right;">[更多]</span> <!---->
+            <span class="show" style="float:right;text-align:right;"></span> <!---->
           </p>
   </el-aside>
 
