@@ -1,22 +1,28 @@
 <!--
 快讯详情：点击左侧卡片选择不同快讯可以重新渲染快讯内容
-作者：ym
+作者：ym jjy
 -->
 <template>
   <div class="common-layout">
-    <el-container>
-      <el-aside width="400px">
-        <div class="logo_field">
-          <div class="label">发布单位</div>
-          <div class="logo">
-            <img src="../assets/logo.png" style="height: 90px" />
+    <el-container >
+      <el-aside width="400px" class="aside_field">
+        <el-affix :offset="1" target=".aside_field">
+          <div class="logo_field">
+            <div class="label">发布单位</div>
+            <div class="logo">
+              <img src="../assets/logo.png" style="height: 90px" />
+            </div>
           </div>
-        </div>
-        <div class="card_field">
-          <div class="card" v-for="news in this.news_relevant" :key="news">
-            <news-info-board :new_info="news"></news-info-board>
+          <div class="card_field">
+            <div
+              class="card"
+              v-for="news in this.news_relevant.slice(0, 3)"
+              :key="news"
+            >
+              <news-info-board :new_info="news"></news-info-board>
+            </div>
           </div>
-        </div>
+        </el-affix>
       </el-aside>
       <el-main>
         <div class="content_field">
@@ -25,17 +31,13 @@
               <el-aside width="75%">
                 <div class="content_header">
                   <p class="title">
-                    {{ this.news_info.NewsFlashTitle}}
+                    {{ this.news_info.NewsFlashTitle }}
                   </p>
 
                   <el-row gutter="10" justify="center" style="width: 100%">
                     <el-col span="1">
                       <el-tag class="ml-2" type="primary" size="large">
-                      <!-- {{"12345".replace('5','T')}} -->
-                     
-                        {{
-                        newsTime
-                      }}
+                        {{ this.news_info.NewsFlashDate }}
                       </el-tag>
                     </el-col>
                     <el-col span="1">
@@ -43,9 +45,9 @@
                         this.news_info.NewsFlashRegion
                       }}</el-tag>
                     </el-col>
-                    <el-col span="1">
+                    <el-col span="1" v-for="tag in new_tags" :key="tag">
                       <el-tag class="ml-2" type="warning" size="large">{{
-                        this.news_info.NewsFlashTag
+                        tag
                       }}</el-tag>
                     </el-col>
                   </el-row>
@@ -57,9 +59,8 @@
             </el-container>
           </div>
           <el-divider />
-          <div class="content_main">
-            <p v-html="news_info.NewsFlashContent"></p>
-          
+          <div class="content_main" v-loading.fullscreen.lock="oss_loading">
+            <p v-html="this.news_info.NewsFlashContent"></p>
           </div>
         </div>
       </el-main>
@@ -79,103 +80,56 @@ export default {
       news_info: "",
       news_relevant: [], //存储相关快讯信息
       news_id: "",
+      new_tags: [],
+      oss_loading: false,
     };
   },
 
   methods: {
     getParams() {
       this.news_id = this.$route.query.news_id;
-      console.log("又回来了");
-      console.log(this.$route.query.news_id);
-    },
-  },
-  watch: {
-    $route(to, from) {
-      console.log(to.path);
-      this.getParams();
       //在此处向服务器请求数据，给所需变量重新赋值
-      axios({
-        url: "newsflash/single" + "?newsflash_id=" + this.news_id,
-
-        method: "get",
-      })
+      this.oss_loading=true;
+      axios
+        .get("newsflash/single" + "?newsflash_id=" + this.news_id)
         .then((res) => {
-          console.log(res);
-          console.log(res.data);
-          console.log(res.data.data);
-
           this.news_info = res.data.data;
-          console.log(this.news_info);
-
+          this.new_tags = [].concat(res.data.data.NewsFlashTag.split("-"));
+          this.news_info.NewsFlashDate = this.news_info.NewsFlashDate.substring(
+            0,
+            this.news_info.NewsFlashDate.indexOf("T")
+          );
           const xhrFile = new XMLHttpRequest();
+          console.log("开始解析oss");
           xhrFile.open("GET", this.news_info.NewsFlashContent, true);
           xhrFile.send();
-
           xhrFile.onload = () => {
             //res.data.data.blog_content=xhrFile.response;
             this.news_info.NewsFlashContent = xhrFile.response;
+            console.log("oss解析完成");
+            this.oss_loading=false;
           };
-          //this.news_info.NewsFlashDate.replace("T", " ");
         })
         .catch((errMsg) => {
           console.log(errMsg);
         });
     },
   },
-  computed:{
-    newsTime() {
-      if (this.news_info.NewsFlashDate == "") {
-        return "";
-      } else {
-        return this.news_info.NewsFlashDate;
-      }
+  watch: {
+    $route(to, from) {
+      this.getParams();
     },
   },
   created() {
     //在此处向服务器请求数据，初始化所需变量
-
     this.getParams();
 
-    axios({
-      url: "newsflash/single" + "?newsflash_id=" + this.news_id,
-
-      method: "get",
-    })
+    axios
+      .get("newsflash/all")
       .then((res) => {
-        console.log(res);
-        this.news_info = res.data.data;
-        console.log(this.news_info);
-        const xhrFile = new XMLHttpRequest();
-          xhrFile.open("GET", this.news_info.NewsFlashContent, true);
-          xhrFile.send();
-
-          xhrFile.onload = () => {
-            //res.data.data.blog_content=xhrFile.response;
-            this.news_info.NewsFlashContent = xhrFile.response;
-          };
-          //this.news_info.NewsFlashDate.replace("T", " ");
-        console.log("打印一下时间");
-        console.log(typeof(this.news_info.NewsFlashDate)=='string');
-        console.log(this.news_info.NewsFlashDate);
-      })
-      .catch((errMsg) => {
-        console.log(errMsg);
-      });
-     
-    axios({
-      url: "newsflash/all",
-
-      method: "get",
-    })
-      .then((res) => {
-        console.log("test");
-        console.log(res);
-
-        console.log(res.data);
-        console.log(res.data.data);
-        console.log(res.data.data.newsflashs);
-        this.news_relevant = res.data.data.newsflashs;
-        console.log(this.news_relevant);
+        this.news_relevant = [].concat(res.data.data.newsflashs.filter(
+          (news) => news.NewsFlashId != this.news_id
+        ));
       })
       .catch((errMsg) => {
         console.log(errMsg);
@@ -208,7 +162,7 @@ export default {
 }
 .content_field {
   background-color: white;
-  min-height: 720px;
+  min-height: 760px;
   border-radius: 10px;
 }
 .title {
@@ -222,7 +176,10 @@ export default {
   width: 80%;
   margin-left: 10%;
   text-align: left;
+  padding-bottom: 50px;
   white-space: pre-line;
-  min-height: 500px;
+}
+.aside_field{
+  margin-bottom:40px
 }
 </style>
