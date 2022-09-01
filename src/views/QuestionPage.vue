@@ -205,7 +205,7 @@
                         查看详情>></el-button
                       >
                     </el-col>
-                    <el-col :span="1"> </el-col>
+                    <!-- <el-col :span="1"> </el-col> -->
                     <el-col
                       :span="2"
                       style="margin-top: -5px; margin-left: 70px"

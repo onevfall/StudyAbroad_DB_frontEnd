@@ -49,9 +49,9 @@
       </div>
       <el-scrollbar v-if="this.comments.length !== 0" height="400px">
         <!-- <el-collapse accordion @change="handleChange"> -->
-        <el-collapse accordion :key="this.$store.state.refresh_zone ">
+        <el-collapse accordion :key="this.comments ">
           <div v-for="(item, i) in this.comments" :key="i">
-            <comment-item :comment_infor="this.comments[i]" :type="this.type">
+            <comment-item :comment_infor="this.comments[i]" :type="this.type" @refreshZone="initZone">
             </comment-item>
           </div>
         </el-collapse>
@@ -87,25 +87,7 @@ export default {
         this.dynamic_type = "blog";
         break;
     }
-    axios
-      .get("/" + this.dynamic_type + "/comment", {
-        params: {
-          [this.dynamic_type + "_id"]: this.id,
-        },
-      })
-      .then((res) => {
-        for (let i = 0; i < res.data.data.comment_list.length; ++i) {
-          console.log("123测试评论");
-          console.log(this.id);
-          console.log(res.data.data);
-          this.comments[i] = res.data.data.comment_list[i];
-          this.comments[i].reply_num = 0;
-          this.comments[i].child_comments = [];
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.initZone();
   },
   methods: {
     sendComment() {
@@ -163,6 +145,30 @@ export default {
           });
       }
     },
+    initZone(){
+      axios
+      .get("/" + this.dynamic_type + "/comment", {
+        params: {
+          [this.dynamic_type + "_id"]: this.id,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        this.comments = [];
+        for (let i = 0; i < res.data.data.comment_list.length; ++i) {
+          this.comments[i] = res.data.data.comment_list[i];
+          this.comments[i].reply_num = 0;
+          this.comments[i].child_comments = [];
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+  },
+  watch:{
+
+
   },
 };
 </script>
