@@ -5,7 +5,7 @@
 <template>
   <el-card
     class="box-card news_card"
-    
+    shadow="hover"
     @click="goNewsDetail(new_info)"
   >
     <template #header>
@@ -15,7 +15,7 @@
       <el-row gutter="10" justify="left">
         <el-col span="30">
           <el-tag class="ml-2" type="primary" size="small">{{
-           new_info.NewsFlashDate.substring(
+            new_info.NewsFlashDate.substring(
                 0,
                 new_info.NewsFlashDate.indexOf("T")
               )
@@ -34,7 +34,7 @@
       </el-row>
     </template>
     <div class="content">
-      点击查看更多
+      {{ new_info.NewsFlashSummary }}
     </div>
   </el-card>
 </template>
@@ -60,6 +60,7 @@ export default {
   },
   created(){
     this.new_tags=[].concat(this.new_info.NewsFlashTag.split("-"));
+    this.new_info.NewsFlashSummary=this.new_info.NewsFlashSummary.slice(0,75)+'...';
   }
 };
 </script>
@@ -75,14 +76,9 @@ export default {
 }
 .news_card {
   width: 350px;
+  height: 190px;
 }
 .content {
   font-size: small;
-  color:rgb(6, 6, 155);
-  height: 1%;
-  min-height:0px
-}
-.el-card{
-  height:10%
 }
 </style>

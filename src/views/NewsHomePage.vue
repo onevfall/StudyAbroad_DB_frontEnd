@@ -3,14 +3,14 @@
 作者：ym jjy
 -->
 <template>
-   <carousel
+  <carousel
     type="card"
     indicator-position="none"
     style="margin-top: 10px"
   ></carousel>
-  <div v-loading.fullscreen.lock="isLoading" style="margin-top:30px">
+  <div v-loading.fullscreen.lock="isLoading" style="margin-top: 30px">
     <div class="list_field" v-if="this.news_list.length != 0">
-      <div v-for="news in this.news_list" :key="news" >
+      <div v-for="news in this.news_list" :key="news">
         <news-entry
           :news_flash_date="news.NewsFlashDate"
           :news_flash_title="news.NewsFlashTitle"
@@ -23,6 +23,17 @@
         ></news-entry>
       </div>
     </div>
+  </div>
+  <div>
+    <el-row justify="center">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="PAGESIZE"
+        :total="total_num"
+        @current-change="curChange"
+      />
+    </el-row>
   </div>
 </template>
 
@@ -41,21 +52,32 @@ export default {
       news_list: [],
       news_num_total: 0,
       isLoading: true,
+      PAGESIZE: 10,
     };
   },
 
   created() {
     //在此处向服务器请求数据，初始化所需变量
-    axios
-      .get("newsflash/all")
+    let get_news_list = axios
+      .get("newsflash/all?page=1&page_size=" + this.PAGESIZE)
       .then((res) => {
-        this.news_num_total = res.data.data.count;
         this.news_list = [].concat(res.data.data.newsflashs);
-        this.isLoading = false;
       })
       .catch((err) => {
         console.log(err);
       });
+    let get_news_num=axios.get("newsflash/num").then((res)=>{
+      console.log("asdasdadasdadasdasd");
+      console.log(res);
+      this.news_num_total=res.data.data.num;
+    }).catch((err)=>{
+      console.log(err);
+    });
+    Promise.all([get_news_list,get_news_num]).then(()=>{
+      this.isLoading=false; 
+    }).catch((err)=>{
+      console.log(err);
+    })
   },
   methods: {},
 };

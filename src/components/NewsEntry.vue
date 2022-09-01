@@ -50,7 +50,7 @@
         </el-row>
         <el-row gutter="10">
           <el-col :span="20" style="text-align: left" class="summary_field">
-            {{ this.news_flash_summary }}
+            {{ this.news_flash_summary.slice(0,250)+"..." }}
           </el-col>
           <el-col :span="4" style="margin-top: 20px">
             <el-button type="warning" plain @click="goDetail">

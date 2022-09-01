@@ -4,7 +4,7 @@
 -->
 <template>
   <div class="common-layout">
-    <el-container>
+    <el-container >
       <el-aside width="400px" class="aside_field">
         <el-affix :offset="1" target=".aside_field">
           <div class="logo_field">
@@ -59,7 +59,7 @@
             </el-container>
           </div>
           <el-divider />
-          <div class="content_main" v-loading="this.oss_loading">
+          <div class="content_main" v-loading.fullscreen.lock="oss_loading">
             <p v-html="this.news_info.NewsFlashContent"></p>
           </div>
         </div>
@@ -89,6 +89,7 @@ export default {
     getParams() {
       this.news_id = this.$route.query.news_id;
       //在此处向服务器请求数据，给所需变量重新赋值
+      this.oss_loading=true;
       axios
         .get("newsflash/single" + "?newsflash_id=" + this.news_id)
         .then((res) => {
@@ -99,7 +100,6 @@ export default {
             this.news_info.NewsFlashDate.indexOf("T")
           );
           const xhrFile = new XMLHttpRequest();
-          this.oss_loading=true;
           console.log("开始解析oss");
           xhrFile.open("GET", this.news_info.NewsFlashContent, true);
           xhrFile.send();
@@ -127,7 +127,9 @@ export default {
     axios
       .get("newsflash/all")
       .then((res) => {
-        this.news_relevant = res.data.data.newsflashs;
+        this.news_relevant = [].concat(res.data.data.newsflashs.filter(
+          (news) => news.NewsFlashId != this.news_id
+        ));
       })
       .catch((errMsg) => {
         console.log(errMsg);
@@ -160,7 +162,7 @@ export default {
 }
 .content_field {
   background-color: white;
-  min-height: 720px;
+  min-height: 760px;
   border-radius: 10px;
 }
 .title {
@@ -176,5 +178,8 @@ export default {
   text-align: left;
   padding-bottom: 50px;
   white-space: pre-line;
+}
+.aside_field{
+  margin-bottom:40px
 }
 </style>
