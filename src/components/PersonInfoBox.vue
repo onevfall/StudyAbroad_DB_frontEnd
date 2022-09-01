@@ -15,20 +15,28 @@
               style="font-size: 20px; font-weight: bold; margin-right: 1%"
               >{{ this.$store.state.user_info.user_name }}</span
             ><span style="font-size: 3px; color: gray"
-              >用户等级{{ this.$store.state.user_info.user_level }}</span
+              >用户等级{{ this.person_info.user_level }}</span
             >
           </div>
           <div style="font-size: 3px; text-align: left; color: gray">
             <span style="margin-right: 5%"
-              >粉丝数：{{ this.$store.state.user_info.user_follower }}</span
-            ><span>关注数：{{ this.$store.state.user_info.user_follows }}</span>
+              >粉丝数：{{ this.person_info.user_follower }}</span
+            ><span>关注数：{{ this.person_info.user_follows }}</span>
           </div>
           <div style="font-size: 3px; text-align: left; color: gray">
-            <span>鸟币数：{{ this.$store.state.user_info.user_coin }}</span>
+            <span>鸟币数：{{ this.coin }}</span>
           </div>
         </div>
         <div style="display: flex; padding-top: 0">
+          <el-button
+            v-if="change_profile"
+            type="primary"
+            text="primary"
+            @click="changeProfileButton(0)"
+            >更改头像</el-button
+          >
           <el-upload
+            v-else
             ref="upload"
             accept="image/jpeg,image/png"
             :on-change="onUploadChange"
@@ -37,7 +45,7 @@
             action="#"
           >
             <template #trigger>
-              <el-button text="primary" type="primary">更改头像</el-button>
+              <el-button text="primary" type="primary">选择图片</el-button>
             </template>
             <el-button
               text="primary"
@@ -45,6 +53,13 @@
               style="margin-left: 20px"
               @click="submit"
               >确认</el-button
+            >
+            <el-button
+              text="primary"
+              type="primary"
+              style="margin-left: 20px"
+              @click="changeProfileButton(1)"
+              >取消</el-button
             >
           </el-upload>
         </div>
@@ -152,7 +167,7 @@
         </el-col>
         <el-col :span="2"></el-col>
         <el-col :span="3" style="text-align: left">
-          <el-button
+          <!-- <el-button
             text="primary"
             type="primary"
             v-if="!isUpdating.phone"
@@ -165,7 +180,7 @@
             v-else
             @click="confirm('phone')"
             >确认</el-button
-          >
+          > -->
         </el-col>
         <el-col :span="2"></el-col>
       </el-row>
@@ -249,6 +264,7 @@ export default {
   data() {
     return {
       identity_info_list: [],
+      person_info: "",
       name: this.$store.state.user_info.user_name,
       phone: this.$store.state.user_info.user_phone,
       email:
@@ -270,6 +286,8 @@ export default {
         signature: false,
         profile: false,
       },
+      coin: 0,
+      change_profile: true,
     };
   },
   components: {
@@ -278,6 +296,10 @@ export default {
   methods: {
     update(key) {
       this.isUpdating[key] = true;
+    },
+    changeProfileButton(e) {
+      if (e == 0) this.change_profile = false;
+      else this.change_profile = true;
     },
     confirm(key) {
       this.isUpdating[key] = false;
@@ -353,17 +375,31 @@ export default {
             this.profile = res.data.data.img_url + "?t=" + Math.random();
             store.commit("changeProfile", this.profile);
             this.$refs.upload.clearFiles();
+            this.change_profile = true;
           } else {
-            ElMessage.error("更改失败1！");
+            ElMessage.error("更改失败！");
           }
         })
         .catch((err) => {
           console.log(err);
-          ElMessage.error("更改失败2！");
+          ElMessage.error("更改失败！");
         });
     },
   },
   created() {
+    //个人信息
+    axios({
+      url: "userinfo",
+      params: { user_id: this.$store.state.user_info.user_id },
+      method: "get",
+    })
+      .then((res) => {
+        this.person_info = res.data.data;
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+        console.log("获取用户信息失败");
+      });
     //学历认证信息
     axios({
       url: "userinfo/identity",
@@ -372,6 +408,7 @@ export default {
     })
       .then((res) => {
         this.identity_info_list = res.data.data.identity_info;
+        this.coin = res.data.data.coin;
         if (res.data.data.identity_info.length == 0) {
           this.identity_info_list.push({
             identity: "本科",

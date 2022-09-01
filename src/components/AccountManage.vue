@@ -76,6 +76,15 @@ export default {
   },
   methods: {
     submit() {
+      if (this.$store.state.user_info.user_password != this.old_password) {
+        ElMessage({
+          type: "false",
+          message: "原密码错误，请重新输入！",
+          showClose: true,
+        });
+        this.old_password = "";
+        return;
+      }
       if (this.new_password != this.new_password_confirm) {
         ElMessage({
           type: "false",
@@ -83,6 +92,7 @@ export default {
           showClose: true,
         });
         this.new_password_confirm = "";
+        return;
       }
       console.log("id" + this.old_password);
       axios

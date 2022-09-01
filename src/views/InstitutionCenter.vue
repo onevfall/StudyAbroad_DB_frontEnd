@@ -150,7 +150,7 @@
     <div>
       <div class="left_text">
         搜索结果如下,【<span style="color: coral">{{
-          this.institution_list.length
+          this.all_num
         }}</span
         >】家机构符合你的搜索
       </div>
@@ -162,6 +162,17 @@
         </div>
       </div>
     </div>
+  </div>
+  <div>
+    <el-row justify="center">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="PAGESIZE"
+        :total="all_num"
+        @current-change="curChange"
+      />
+    </el-row>
   </div>
 </template>
 <script>
@@ -175,6 +186,10 @@ export default {
   },
   data() {
     return {
+      cur_page: 1,
+      page_num: 90,
+      PAGESIZE: 5,
+      all_num: 0,
       institution_list: [], //经过筛选条件后下面展示的机构
       all_institution_list: [], //最初赋值获得的所有机构
       search_value: "",
@@ -230,6 +245,10 @@ export default {
     };
   },
   methods: {
+    curChange(res) {
+      this.cur_page = res;
+      this.filter();
+    },
     goSearch() {
       this.$router.push({
         path: "/institution_detail",
@@ -252,6 +271,7 @@ export default {
       if (this.institution_target != "") {
         x += "&" + "institution_target=" + this.institution_target;
       }
+      x += "&" + "page=" + this.cur_page + "&" + "page_size=" + this.PAGESIZE;
       console.log(x);
       axios({
         // 点击搜索时加载符合条件的数据
@@ -320,22 +340,35 @@ export default {
   },
   created() {
     this.isLoading = true;
-    /*在此处向服务器请求数据，初始化所需变量*/
     axios({
-      // 最初加载时，此处不限定国家
-      url: "institution/list",
+      url: "institution/num",
       method: "get",
     })
       .then((res) => {
-        console.log(res);
-        console.log(res.data.data.institution_list);
-        this.institution_list = res.data.data.institution_list;
-        this.all_institution_list = res.data.data.institution_list;
-        this.isLoading = false;
+        this.all_num = res.data.data.num;
+        this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
+        console.log(this.all_num)
+        //进行当页数据检索
+        axios({
+          url:
+            "institution/list?" +
+            "page_size=" +
+            this.PAGESIZE,
+          method: "get",
+        })
+          .then((res) => {
+            this.institution_list = res.data.data.institution_list;
+            this.all_institution_list = res.data.data.institution_list;
+            this.isLoading = false;
+          })
+          .catch((errMsg) => {
+            console.log(errMsg);
+            console.log("第二层初始化大失败");
+          });
       })
       .catch((errMsg) => {
         console.log(errMsg);
-        console.log("大失败");
+        console.log("第一层初始化大失败");
       });
   },
 };
@@ -373,7 +406,7 @@ export default {
   opacity: 0.6;
   background-blend-mode: overlay;
 }
-.cover_up{
+.cover_up {
   padding-left: 8%;
 }
 .cover {
@@ -394,7 +427,7 @@ export default {
   /* height: 220px; */
   /* height: 90%;
   object-fit: cover; 图片缩放自适应原图的比例 */
-   width: 300px;
+  width: 300px;
   height: 230px;
   display: block;
   margin-bottom: 20px;

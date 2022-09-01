@@ -25,14 +25,18 @@
               <el-aside width="75%">
                 <div class="content_header">
                   <p class="title">
-                    {{ this.news_info.NewsFlashTitle }}
+                    {{ this.news_info.NewsFlashTitle}}
                   </p>
 
                   <el-row gutter="10" justify="center" style="width: 100%">
                     <el-col span="1">
-                      <el-tag class="ml-2" type="primary" size="large">{{
-                        this.news_info.NewsFlashDate
-                      }}</el-tag>
+                      <el-tag class="ml-2" type="primary" size="large">
+                      <!-- {{"12345".replace('5','T')}} -->
+                     
+                        {{
+                        newsTime
+                      }}
+                      </el-tag>
                     </el-col>
                     <el-col span="1">
                       <el-tag class="ml-2" type="success" size="large">{{
@@ -54,7 +58,8 @@
           </div>
           <el-divider />
           <div class="content_main">
-            {{ this.news_info.NewsFlashContent }}
+            <p v-html="news_info.NewsFlashContent"></p>
+          
           </div>
         </div>
       </el-main>
@@ -101,10 +106,29 @@ export default {
 
           this.news_info = res.data.data;
           console.log(this.news_info);
+
+          const xhrFile = new XMLHttpRequest();
+          xhrFile.open("GET", this.news_info.NewsFlashContent, true);
+          xhrFile.send();
+
+          xhrFile.onload = () => {
+            //res.data.data.blog_content=xhrFile.response;
+            this.news_info.NewsFlashContent = xhrFile.response;
+          };
+          //this.news_info.NewsFlashDate.replace("T", " ");
         })
         .catch((errMsg) => {
           console.log(errMsg);
         });
+    },
+  },
+  computed:{
+    newsTime() {
+      if (this.news_info.NewsFlashDate == "") {
+        return "";
+      } else {
+        return this.news_info.NewsFlashDate;
+      }
     },
   },
   created() {
@@ -119,15 +143,25 @@ export default {
     })
       .then((res) => {
         console.log(res);
-        console.log(res.data);
-        console.log(res.data.data);
-
         this.news_info = res.data.data;
         console.log(this.news_info);
+        const xhrFile = new XMLHttpRequest();
+          xhrFile.open("GET", this.news_info.NewsFlashContent, true);
+          xhrFile.send();
+
+          xhrFile.onload = () => {
+            //res.data.data.blog_content=xhrFile.response;
+            this.news_info.NewsFlashContent = xhrFile.response;
+          };
+          //this.news_info.NewsFlashDate.replace("T", " ");
+        console.log("打印一下时间");
+        console.log(typeof(this.news_info.NewsFlashDate)=='string');
+        console.log(this.news_info.NewsFlashDate);
       })
       .catch((errMsg) => {
         console.log(errMsg);
       });
+     
     axios({
       url: "newsflash/all",
 
@@ -188,7 +222,7 @@ export default {
   width: 80%;
   margin-left: 10%;
   text-align: left;
-  margin-bottom: 10px;
   white-space: pre-line;
+  min-height: 500px;
 }
 </style>
