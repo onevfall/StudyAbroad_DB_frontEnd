@@ -12,9 +12,13 @@
             <div class="logo">
               <img src="../assets/logo.png" style="height: 90px" />
             </div>
-          </div> 
+          </div>
           <div class="card_field">
-            <div class="card" v-for="news in this.news_relevant.slice(0,3)" :key="news">
+            <div
+              class="card"
+              v-for="news in this.news_relevant.slice(0, 3)"
+              :key="news"
+            >
               <news-info-board :new_info="news"></news-info-board>
             </div>
           </div>
@@ -27,17 +31,13 @@
               <el-aside width="75%">
                 <div class="content_header">
                   <p class="title">
-                    {{ this.news_info.NewsFlashTitle}}
+                    {{ this.news_info.NewsFlashTitle }}
                   </p>
 
                   <el-row gutter="10" justify="center" style="width: 100%">
                     <el-col span="1">
                       <el-tag class="ml-2" type="primary" size="large">
-                      <!-- {{"12345".replace('5','T')}} -->
-                     
-                        {{
-                        newsTime
-                      }}
+                        {{ this.news_info.NewsFlashDate }}
                       </el-tag>
                     </el-col>
                     <el-col span="1">
@@ -59,7 +59,7 @@
             </el-container>
           </div>
           <el-divider />
-          <div class="content_main">
+          <div class="content_main" v-loading="this.oss_loading">
             <p v-html="this.news_info.NewsFlashContent"></p>
           </div>
         </div>
@@ -81,6 +81,7 @@ export default {
       news_relevant: [], //存储相关快讯信息
       news_id: "",
       new_tags: [],
+      oss_loading: false,
     };
   },
 
@@ -98,15 +99,15 @@ export default {
             this.news_info.NewsFlashDate.indexOf("T")
           );
           const xhrFile = new XMLHttpRequest();
+          this.oss_loading=true;
           console.log("开始解析oss");
           xhrFile.open("GET", this.news_info.NewsFlashContent, true);
           xhrFile.send();
           xhrFile.onload = () => {
             //res.data.data.blog_content=xhrFile.response;
             this.news_info.NewsFlashContent = xhrFile.response;
-
             console.log("oss解析完成");
-            // this.oss_loading=false;
+            this.oss_loading=false;
           };
         })
         .catch((errMsg) => {
@@ -126,7 +127,6 @@ export default {
     axios
       .get("newsflash/all")
       .then((res) => {
-
         this.news_relevant = res.data.data.newsflashs;
       })
       .catch((errMsg) => {
