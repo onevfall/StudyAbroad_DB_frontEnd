@@ -1,7 +1,6 @@
 <!--
 描述：相关快讯卡片组件
 作者：焦佳宇 
-7.13修改：ym 添加了和页面重新渲染相关的函数
 -->
 <template>
   <el-card
@@ -11,12 +10,15 @@
   >
     <template #header>
       <div class="card-header">
-        <span>{{ new_info.NewsFlashTitle }}</span>
+        <span>{{ new_info.NewsFlashTitle.length>18?new_info.NewsFlashTitle.slice(0,18)+'...': new_info.NewsFlashTitle}}</span>
       </div>
       <el-row gutter="10" justify="left">
         <el-col span="30">
           <el-tag class="ml-2" type="primary" size="small">{{
-            new_info.NewsFlashDate
+            new_info.NewsFlashDate.substring(
+                0,
+                new_info.NewsFlashDate.indexOf("T")
+              )
           }}</el-tag>
         </el-col>
         <el-col span="30">
@@ -24,9 +26,9 @@
             new_info.NewsFlashRegion
           }}</el-tag>
         </el-col>
-        <el-col span="30">
+        <el-col span="30" v-for="tag in this.new_tags.slice(0,3)" :key="tag">
           <el-tag class="ml-2" type="warning" size="small">{{
-            new_info.NewsFlashTag
+            tag
           }}</el-tag>
         </el-col>
       </el-row>
@@ -41,20 +43,13 @@
 //到时候传入一个
 export default {
   props: ["new_info"],
-  // computed: {
-  //   contentShow() {
-  //     if (this.new_info.NewsFlashContent.length < 60) {
-  //       return this.new_info.NewsFlashContent;
-  //     } else {
-  //       return this.new_info.NewsFlashContent.slice(0, 60) + "...";
-  //     }
-  //   },
-  // },
+  data(){
+    return{
+      new_tags: [],
+    }
+  },
   methods: {
     goNewsDetail(new_info) {
-      // alert("跳转至id为"+ this.new_info.NewsFlashId+"的快讯详情页面")
-      console.log("开始跳");
-      console.log(new_info.NewsFlashId);
       this.$router.push({
         path: "news",
         query: {
@@ -63,6 +58,9 @@ export default {
       });
     },
   },
+  created(){
+    this.new_tags=[].concat(this.new_info.NewsFlashTag.split("-"));
+  }
 };
 </script>
 
@@ -77,6 +75,7 @@ export default {
 }
 .news_card {
   width: 350px;
+  height: 190px;
 }
 .content {
   font-size: small;
