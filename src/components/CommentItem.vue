@@ -7,7 +7,12 @@
     <template #title>
       <div class="self_comment">
         <div class="comment_header">
-          <el-avatar :src="comment_infor.UserProfile" size="xx-small" />
+          <el-avatar
+            :src="comment_infor.UserProfile"
+            size="xx-small"
+            @click="goPersonSpace(comment_infor.UserId, $event)"
+            class="reviewer_profile"
+          />
           <span class="comment_name"
             ><b>{{ comment_infor.UserName }}</b></span
           ><br />
@@ -306,6 +311,7 @@ export default {
               });
               this.is_reply = false;
               this.comment_now = "";
+
               this.$emit("refreshZone", true);
             })
             .catch((err) => {
@@ -406,6 +412,14 @@ export default {
           showClose: true,
         });
       }
+    },
+    goPersonSpace(id, event) {
+      this.$router.push({
+        path: "/person_space",
+        query: {
+          host_id: id,
+        },
+      });
     },
     reportResponse(res) {
       if (res) {
@@ -517,6 +531,10 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.reviewer_profile:hover {
+  box-shadow: 0 0 15px 10px #00000020;
 }
 .main:hover .self_comment .comment_header .delete_button {
   opacity: 1;

@@ -109,6 +109,7 @@
               type="primary"
               icon="Edit"
               style="width: 50%; height: 40px; font-size: 16px"
+              @click="goAskPage"
               >提问</el-button
             >
           </div>
@@ -173,49 +174,60 @@
                       <span style="color: gray">{{ user_follow_count }}</span>
                     </span>
                   </template>
-                  <div
-                    class="user_follow_list"
-                    v-for="follow_person in user_follow_list"
-                    :key="follow_person.user_id"
-                  >
-                    <el-avatar :size="70" :src="follow_person.user_profile" />
+                  <el-scrollbar height="610px">
+                    <div v-if="user_follow_count == 0">
+                      <img
+                        src="../assets/question-empty.png"
+                        style="width: 40%; margin-top: 5%; margin-bottom: 1%"
+                      />
+                      <div style="font-size: 30px; color: #c6c6c9">
+                        还没有关注的人哦~
+                      </div>
+                    </div>
                     <div
-                      style="display: block; width: 85%"
-                      @click="goPersonSpace(follow_person.user_id, $event)"
+                      class="user_follow_list"
+                      v-for="follow_person in user_follow_list"
+                      :key="follow_person.user_id"
                     >
+                      <el-avatar :size="70" :src="follow_person.user_profile" />
                       <div
-                        style="
-                          font-size: 20px;
-                          font-weight: bold;
-                          margin-left: 2%;
-                          margin-bottom: 2%;
-                          text-align: left;
-                        "
+                        style="display: block; width: 85%"
+                        @click="goPersonSpace(follow_person.user_id, $event)"
                       >
-                        {{ follow_person.user_name }}
+                        <div
+                          style="
+                            font-size: 20px;
+                            font-weight: bold;
+                            margin-left: 2%;
+                            margin-bottom: 2%;
+                            text-align: left;
+                          "
+                        >
+                          {{ follow_person.user_name }}
+                        </div>
+                        <div
+                          style="
+                            font-size: 15px;
+                            font-weight: normal;
+                            margin-left: 2%;
+                            text-align: left;
+                          "
+                        >
+                          个性签名：{{ follow_person.user_signature }}
+                        </div>
                       </div>
-                      <div
-                        style="
-                          font-size: 15px;
-                          font-weight: normal;
-                          margin-left: 2%;
-                          text-align: left;
-                        "
-                      >
-                        个性签名：{{ follow_person.user_signature }}
+                      <div style="padding-top: 3%; padding-right: 2%">
+                        <follow-button
+                          object_type="0"
+                          :object_id="follow_person.user_id"
+                          :key="fresh_userlist_button"
+                          @giveFollow="follow"
+                          @cancelFollow="unFollow"
+                          @click="freshButton($event, 0)"
+                        ></follow-button>
                       </div>
                     </div>
-                    <div style="padding-top: 3%; padding-right: 2%">
-                      <follow-button
-                        object_type="0"
-                        :object_id="follow_person.user_id"
-                        :key="fresh_userlist_button"
-                        @giveFollow="follow"
-                        @cancelFollow="unFollow"
-                        @click="freshButton($event, 0)"
-                      ></follow-button>
-                    </div>
-                  </div>
+                  </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane>
                   <template #label>
@@ -226,52 +238,78 @@
                       }}</span>
                     </span>
                   </template>
-                  <div
-                    class="follow_university_list"
-                    v-for="follow_university in follow_university_list"
-                    :key="follow_university.university_id"
-                  >
-                    <el-avatar
-                      :size="70"
-                      :src="follow_university.university_badge"
-                    />
-                    <div
-                      style="display: block; width: 85%"
-                      @click="
-                        goSchoolDetail(follow_university.university_id, $event)
-                      "
-                    >
-                      <div
+                  <el-scrollbar height="610px">
+                    <div v-if="follow_university_count == 0">
+                      <img
+                        src="../assets/school_empty.png"
+                        style="width: 30%; margin-top: 10%; margin-bottom: 5%"
+                      />
+                      <div style="font-size: 30px; color: #c6c6c9">
+                        还没有关注高校哦~
+                      </div>
+                      <el-link
+                        type="primary"
+                        :underline="false"
+                        @click="goSchoolCenter"
                         style="
                           font-size: 20px;
-                          font-weight: bold;
-                          margin-left: 2%;
-                          margin-bottom: 2%;
-                          text-align: left;
+                          font-weight: 500;
+                          margin-top: 3%;
                         "
                       >
-                        {{ follow_university.university_chname }}
-                      </div>
+                        去看看
+                      </el-link>
+                    </div>
+                    <div
+                      class="follow_university_list"
+                      v-for="follow_university in follow_university_list"
+                      :key="follow_university.university_id"
+                    >
+                      <el-avatar
+                        :size="70"
+                        :src="follow_university.university_badge"
+                      />
                       <div
-                        style="
-                          font-size: 15px;
-                          font-weight: normal;
-                          margin-left: 2%;
-                          text-align: left;
+                        style="display: block; width: 85%"
+                        @click="
+                          goSchoolDetail(
+                            follow_university.university_id,
+                            $event
+                          )
                         "
                       >
-                        国家：{{ follow_university.university_country }}
+                        <div
+                          style="
+                            font-size: 20px;
+                            font-weight: bold;
+                            margin-left: 2%;
+                            margin-bottom: 2%;
+                            text-align: left;
+                          "
+                        >
+                          {{ follow_university.university_chname }}
+                        </div>
+                        <div
+                          style="
+                            font-size: 15px;
+                            font-weight: normal;
+                            margin-left: 2%;
+                            text-align: left;
+                          "
+                        >
+                          国家：{{ follow_university.university_country }}
+                        </div>
+                      </div>
+                      <div style="padding-top: 3%; padding-right: 2%">
+                        <follow-button
+                          object_type="1"
+                          :object_id="follow_university.university_id"
+                          @giveFollow="follow"
+                          @cancelFollow="unFollow"
+                        ></follow-button>
                       </div>
                     </div>
-                    <div style="padding-top: 3%; padding-right: 2%">
-                      <follow-button
-                        object_type="1"
-                        :object_id="follow_university.university_id"
-                        @giveFollow="follow"
-                        @cancelFollow="unFollow"
-                      ></follow-button>
-                    </div>
-                  </div>
+                  </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane>
                   <template #label>
@@ -282,55 +320,78 @@
                       }}</span>
                     </span>
                   </template>
-                  <div
-                    class="follow_institution_list"
-                    v-for="follow_institution in follow_institution_list"
-                    :key="follow_institution.institution_id"
-                  >
-                    <el-avatar
-                      :size="70"
-                      :src="follow_institution.institution_profile"
-                    />
-                    <div
-                      style="display: block; width: 85%"
-                      @click="
-                        goInstitutionDetail(
-                          follow_institution.institution_id,
-                          $event
-                        )
-                      "
-                    >
-                      <div
+                  <el-scrollbar height="610px">
+                    <div v-if="follow_institution_count == 0">
+                      <img
+                        src="../assets/institution_empty.png"
+                        style="width: 25%; margin-top: 10%; margin-bottom: 5%"
+                      />
+                      <div style="font-size: 30px; color: #c6c6c9">
+                        还没有关注机构哦~
+                      </div>
+                      <el-link
+                        type="primary"
+                        :underline="false"
+                        @click="goInstitutionCenter"
                         style="
                           font-size: 20px;
-                          font-weight: bold;
-                          margin-left: 2%;
-                          margin-bottom: 2%;
-                          text-align: left;
+                          font-weight: 500;
+                          margin-top: 3%;
                         "
                       >
-                        {{ follow_institution.institution_name }}
-                      </div>
+                        去看看
+                      </el-link>
+                    </div>
+                    <div
+                      class="follow_institution_list"
+                      v-for="follow_institution in follow_institution_list"
+                      :key="follow_institution.institution_id"
+                    >
+                      <el-avatar
+                        :size="70"
+                        :src="follow_institution.institution_profile"
+                      />
                       <div
-                        style="
-                          font-size: 15px;
-                          font-weight: normal;
-                          margin-left: 2%;
-                          text-align: left;
+                        style="display: block; width: 85%"
+                        @click="
+                          goInstitutionDetail(
+                            follow_institution.institution_id,
+                            $event
+                          )
                         "
                       >
-                        服务范围：{{ follow_institution.institution_target }}
+                        <div
+                          style="
+                            font-size: 20px;
+                            font-weight: bold;
+                            margin-left: 2%;
+                            margin-bottom: 2%;
+                            text-align: left;
+                          "
+                        >
+                          {{ follow_institution.institution_name }}
+                        </div>
+                        <div
+                          style="
+                            font-size: 15px;
+                            font-weight: normal;
+                            margin-left: 2%;
+                            text-align: left;
+                          "
+                        >
+                          服务范围：{{ follow_institution.institution_target }}
+                        </div>
+                      </div>
+                      <div style="padding-top: 3%; padding-right: 2%">
+                        <follow-button
+                          object_type="2"
+                          :object_id="follow_institution.institution_id"
+                          @giveFollow="follow"
+                          @cancelFollow="unFollow"
+                        ></follow-button>
                       </div>
                     </div>
-                    <div style="padding-top: 3%; padding-right: 2%">
-                      <follow-button
-                        object_type="2"
-                        :object_id="follow_institution.institution_id"
-                        @giveFollow="follow"
-                        @cancelFollow="unFollow"
-                      ></follow-button>
-                    </div>
-                  </div>
+                  </el-scrollbar>
                 </el-tab-pane>
               </el-tabs>
             </el-tab-pane>
@@ -341,49 +402,60 @@
                   <span style="color: gray">{{ user_follower_count }}</span>
                 </span>
               </template>
-              <div
-                class="user_follower_list"
-                v-for="follower_person in user_follower_list"
-                :key="follower_person.user_id"
-              >
-                <el-avatar :size="70" :src="follower_person.user_profile" />
+              <el-scrollbar height="654px">
+                <div v-if="user_follower_count == 0">
+                  <img
+                    src="../assets/question-empty.png"
+                    style="width: 40%; margin-top: 5%; margin-bottom: 5%"
+                  />
+                  <div style="font-size: 30px; color: #c6c6c9">
+                    还没有粉丝哦~
+                  </div>
+                </div>
                 <div
-                  style="display: block; width: 85%"
-                  @click="goPersonSpace(follower_person.user_id, $event)"
+                  class="user_follower_list"
+                  v-for="follower_person in user_follower_list"
+                  :key="follower_person.user_id"
                 >
+                  <el-avatar :size="70" :src="follower_person.user_profile" />
                   <div
-                    style="
-                      font-size: 20px;
-                      font-weight: bold;
-                      margin-left: 2%;
-                      margin-bottom: 2%;
-                      text-align: left;
-                    "
+                    style="display: block; width: 85%"
+                    @click="goPersonSpace(follower_person.user_id, $event)"
                   >
-                    {{ follower_person.user_name }}
+                    <div
+                      style="
+                        font-size: 20px;
+                        font-weight: bold;
+                        margin-left: 2%;
+                        margin-bottom: 2%;
+                        text-align: left;
+                      "
+                    >
+                      {{ follower_person.user_name }}
+                    </div>
+                    <div
+                      style="
+                        font-size: 15px;
+                        font-weight: normal;
+                        margin-left: 2%;
+                        text-align: left;
+                      "
+                    >
+                      个性签名：{{ follower_person.user_signature }}
+                    </div>
                   </div>
-                  <div
-                    style="
-                      font-size: 15px;
-                      font-weight: normal;
-                      margin-left: 2%;
-                      text-align: left;
-                    "
-                  >
-                    个性签名：{{ follower_person.user_signature }}
+                  <div style="padding-top: 3%; padding-right: 2%">
+                    <follow-button
+                      object_type="0"
+                      :object_id="follower_person.user_id"
+                      :key="fresh_followerlist_button"
+                      @giveFollow="follow"
+                      @cancelFollow="unFollow"
+                      @click="freshButton($event, 1)"
+                    ></follow-button>
                   </div>
                 </div>
-                <div style="padding-top: 3%; padding-right: 2%">
-                  <follow-button
-                    object_type="0"
-                    :object_id="follower_person.user_id"
-                    :key="fresh_followerlist_button"
-                    @giveFollow="follow"
-                    @cancelFollow="unFollow"
-                    @click="freshButton($event, 1)"
-                  ></follow-button>
-                </div>
-              </div>
+              </el-scrollbar>
             </el-tab-pane>
             <el-tab-pane label="收藏" class="user_profile_follow_tabs">
               <el-tabs class="user_profile_star_tabs">
@@ -394,48 +466,85 @@
                       <span style="color: gray">{{ star_question_count }}</span>
                     </span>
                   </template>
-                  <div
-                    class="star_question_list"
-                    v-for="star_question in star_question_list"
-                    :key="star_question.question_id"
-                    @click="goQuestionPage(star_question.question_id, $event)"
-                  >
-                    <div style="display: block; width: 100%">
-                      <div
+                  <el-scrollbar height="610px">
+                    <div v-if="star_question_count == 0">
+                      <img
+                        src="../assets/QA_empty.png"
+                        style="width: 30%; margin-top: 5%; margin-bottom: 5%"
+                      />
+                      <div style="font-size: 30px; color: #c6c6c9">
+                        还没有收藏问题哦~
+                      </div>
+                      <el-link
+                        type="primary"
+                        :underline="false"
+                        @click="goQACenter"
                         style="
                           font-size: 20px;
-                          font-weight: bold;
-                          margin-left: 2%;
-                          margin-bottom: 2%;
-                          text-align: left;
+                          font-weight: 500;
+                          margin-top: 3%;
                         "
                       >
-                        {{ star_question.question_title }}
+                        去看看
+                      </el-link>
+                    </div>
+                    <div
+                      class="star_question_list"
+                      v-for="star_question in star_question_list"
+                      :key="star_question.question_id"
+                      @click="goQuestionPage(star_question.question_id, $event)"
+                    >
+                      <div style="display: block; width: 100%">
+                        <div
+                          style="
+                            font-size: 20px;
+                            font-weight: bold;
+                            margin-left: 2%;
+                            margin-bottom: 2%;
+                            text-align: left;
+                          "
+                        >
+                          {{ star_question.question_title }}
+                        </div>
+                        <div
+                          style="
+                            font-size: 15px;
+                            font-weight: normal;
+                            margin-left: 2%;
+                            text-align: left;
+                          "
+                        >
+                          {{ star_question.user_name }}：{{
+                            star_question.question_summary
+                          }}
+                        </div>
                       </div>
-                      <div
-                        style="
-                          font-size: 15px;
-                          font-weight: normal;
-                          margin-left: 2%;
-                          text-align: left;
-                        "
-                      >
-                        {{ star_question.user_name }}：{{
-                          star_question.question_summary
-                        }}
+                      <div class="star_date">
+                        <div>
+                          发布于{{
+                            star_question.question_date.replace("T", " ")
+                          }}
+                        </div>
+                        <div>
+                          收藏于{{ star_question.star_time.replace("T", " ") }}
+                        </div>
+                        <div
+                          style="margin-top: 5%; margin-right: 10%"
+                          @click.stop=""
+                          :key="fresh_star"
+                        >
+                          <star-button
+                            :content_id="star_question.question_id"
+                            content_type="2"
+                            :show_num="true"
+                            size="large"
+                            @click="freshStarOwn($event, 0, 1)"
+                            @giveStar="star"
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div class="star_date">
-                      <div>
-                        发布于{{
-                          star_question.question_date.replace("T", " ")
-                        }}
-                      </div>
-                      <div>
-                        收藏于{{ star_question.star_time.replace("T", " ") }}
-                      </div>
-                    </div>
-                  </div>
+                  </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane>
                   <template #label>
@@ -444,48 +553,115 @@
                       <span style="color: gray">{{ star_answer_count }}</span>
                     </span>
                   </template>
-                  <div
-                    class="star_answer_list"
-                    v-for="(star_answer, index) in star_answer_list"
-                    :key="star_answer"
-                    @click="
-                      goAnswerDetail1(star_answer.question_id, index, $event)
-                    "
-                  >
-                    <div style="display: block; width: 100%">
-                      <div
+                  <el-scrollbar height="610px">
+                    <div v-if="star_answer_count == 0">
+                      <img
+                        src="../assets/QA_empty.png"
+                        style="width: 30%; margin-top: 5%; margin-bottom: 5%"
+                      />
+                      <div style="font-size: 30px; color: #c6c6c9">
+                        还没有收藏回答哦~
+                      </div>
+                      <el-link
+                        type="primary"
+                        :underline="false"
+                        @click="goQACenter"
                         style="
                           font-size: 20px;
-                          font-weight: bold;
-                          margin-left: 2%;
-                          margin-bottom: 2%;
-                          text-align: left;
+                          font-weight: 500;
+                          margin-top: 3%;
                         "
                       >
-                        {{ star_answer.question_title }}
+                        去看看
+                      </el-link>
+                    </div>
+                    <div
+                      class="star_answer_list"
+                      v-for="(star_answer, index) in star_answer_list"
+                      :key="star_answer"
+                      @click="
+                        goAnswerDetail1(star_answer.question_id, index, $event)
+                      "
+                    >
+                      <div style="display: block; width: 100%">
+                        <div
+                          style="
+                            font-size: 20px;
+                            font-weight: bold;
+                            margin-left: 2%;
+                            margin-bottom: 2%;
+                            text-align: left;
+                          "
+                        >
+                          {{ star_answer.question_title }}
+                        </div>
+                        <div
+                          style="
+                            font-size: 15px;
+                            font-weight: normal;
+                            margin-left: 2%;
+                            text-align: left;
+                          "
+                        >
+                          {{ star_answer.answer_user_name }}：{{
+                            star_answer.answer_summary
+                          }}
+                        </div>
                       </div>
-                      <div
-                        style="
-                          font-size: 15px;
-                          font-weight: normal;
-                          margin-left: 2%;
-                          text-align: left;
-                        "
-                      >
-                        {{ star_answer.answer_user_name }}：{{
-                          star_answer.answer_summary
-                        }}
+                      <div class="star_date">
+                        <div>
+                          发布于{{ star_answer.answer_date.replace("T", " ") }}
+                        </div>
+                        <div>
+                          收藏于{{ star_answer.star_time.replace("T", " ") }}
+                        </div>
+                        <div style="margin-top: 20%">
+                          <el-row>
+                            <el-col :span="5" @click.stop="">
+                              <like-button
+                                :content_id="star_answer.answer_id"
+                                content_type="2"
+                                :show_num="true"
+                                size="large"
+                              />
+                            </el-col>
+                            <el-col :span="5" @click.stop="">
+                              <coin-button
+                                :content_id="star_answer.answer_id"
+                                content_type="1"
+                                :show_num="true"
+                                size="large"
+                              />
+                            </el-col>
+                            <el-col :span="5" @click.stop="">
+                              <star-button
+                                :content_id="star_answer.answer_id"
+                                content_type="1"
+                                :show_num="true"
+                                size="large"
+                              />
+                            </el-col>
+                            <el-col :span="2"></el-col>
+                            <el-col :span="3" @click.stop="">
+                              <report-button
+                                :content_id="star_answer.answer_id"
+                                content_type="1"
+                                size="large"
+                                @reportResponse="reportResponse"
+                              />
+                            </el-col>
+                            <el-col
+                              :span="4"
+                              style="text-align: left"
+                              @click.stop=""
+                            >
+                              <span>举报</span>
+                            </el-col>
+                          </el-row>
+                        </div>
                       </div>
                     </div>
-                    <div class="star_date">
-                      <div>
-                        发布于{{ star_answer.answer_date.replace("T", " ") }}
-                      </div>
-                      <div>
-                        收藏于{{ star_answer.star_time.replace("T", " ") }}
-                      </div>
-                    </div>
-                  </div>
+                  </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane>
                   <template #label>
@@ -494,53 +670,137 @@
                       <span style="color: gray">{{ star_blog_count }}</span>
                     </span>
                   </template>
-                  <div
-                    class="star_blog_list"
-                    v-for="(star_blog, index) in star_blog_list"
-                    :key="star_blog.blog_id"
-                    @click="goBlogDetail(star_blog.blog_id, index, 0, $event)"
-                  >
-                    <div style="display: block; width: 100%">
-                      <div
+                  <el-scrollbar height="610px">
+                    <div v-if="star_blog_count == 0">
+                      <img
+                        src="../assets/blog_empty.png"
+                        style="width: 30%; margin-top: 10%; margin-bottom: 5%"
+                      />
+                      <div style="font-size: 30px; color: #c6c6c9">
+                        还没有收藏动态哦~
+                      </div>
+                      <el-link
+                        type="primary"
+                        :underline="false"
+                        @click="goBlogPage"
                         style="
                           font-size: 20px;
-                          font-weight: bold;
-                          margin-left: 2%;
-                          margin-bottom: 2%;
-                          text-align: left;
+                          font-weight: 500;
+                          margin-top: 3%;
                         "
                       >
-                        {{ star_blog.blog_user_name }}：
+                        去看看
+                      </el-link>
+                    </div>
+                    <div
+                      class="star_blog_list"
+                      v-for="(star_blog, index) in star_blog_list"
+                      :key="star_blog.blog_id"
+                      @click="goBlogDetail(star_blog.blog_id, index, 0, $event)"
+                    >
+                      <div style="display: block; width: 100%">
+                        <div
+                          style="
+                            font-size: 20px;
+                            font-weight: bold;
+                            margin-left: 2%;
+                            margin-bottom: 2%;
+                            text-align: left;
+                          "
+                        >
+                          {{ star_blog.blog_user_name }}：
+                        </div>
+                        <!-- <div
+                          style="
+                            font-size: 15px;
+                            font-weight: normal;
+                            margin-left: 2%;
+                            text-align: left;
+                          "
+                        >
+                          {{ star_blog.blog_summary }}
+                        </div> -->
+                        <div style="display: flex">
+                          <div
+                            v-if="star_blog.image_url != null"
+                            style="text-align: left; padding: 2%"
+                          >
+                            <img
+                              style="
+                                height: 100px;
+                                width: 100px;
+                                object-fit: cover;
+                              "
+                              :src="star_blog.image_url"
+                            />
+                          </div>
+                          <div
+                            style="
+                              font-size: 17px;
+                              font-weight: normal;
+                              margin-left: 2%;
+                              text-align: left;
+                              margin-top: 2%;
+                            "
+                          >
+                            {{ star_blog.blog_summary }}
+                          </div>
+                        </div>
                       </div>
-                      <div
-                        style="
-                          font-size: 15px;
-                          font-weight: normal;
-                          margin-left: 2%;
-                          text-align: left;
-                        "
-                      >
-                        {{ star_blog.blog_summary }}
-                      </div>
-                      <div
-                        v-if="star_blog.image_url != null"
-                        style="text-align: left; padding: 2%"
-                      >
-                        <img
-                          style="height: 100px; width: 100px; object-fit: cover"
-                          :src="star_blog.image_url"
-                        />
+                      <div class="star_date">
+                        <div>
+                          发布于{{ star_blog.blog_date.replace("T", " ") }}
+                        </div>
+                        <div>
+                          收藏于{{ star_blog.star_date.replace("T", " ") }}
+                        </div>
+                        <div style="margin-top: 30%">
+                          <el-row>
+                            <el-col :span="5" @click.stop="">
+                              <like-button
+                                :content_id="star_blog.blog_id"
+                                content_type="0"
+                                :show_num="true"
+                                size="large"
+                              />
+                            </el-col>
+                            <el-col :span="5" @click.stop="">
+                              <coin-button
+                                :content_id="star_blog.blog_id"
+                                content_type="0"
+                                :show_num="true"
+                                size="large"
+                              />
+                            </el-col>
+                            <el-col :span="5" @click.stop="">
+                              <star-button
+                                :content_id="star_blog.blog_id"
+                                content_type="0"
+                                :show_num="true"
+                                size="large"
+                              />
+                            </el-col>
+                            <el-col :span="2"></el-col>
+                            <el-col :span="3" @click.stop="">
+                              <report-button
+                                :content_id="star_blog.blog_id"
+                                content_type="0"
+                                size="large"
+                                @reportResponse="reportResponse"
+                              />
+                            </el-col>
+                            <el-col
+                              :span="4"
+                              style="text-align: left"
+                              @click.stop=""
+                            >
+                              <span>举报</span>
+                            </el-col>
+                          </el-row>
+                        </div>
                       </div>
                     </div>
-                    <div class="star_date">
-                      <div>
-                        发布于{{ star_blog.blog_date.replace("T", " ") }}
-                      </div>
-                      <div>
-                        收藏于{{ star_blog.star_date.replace("T", " ") }}
-                      </div>
-                    </div>
-                  </div>
+                  </el-scrollbar>
                 </el-tab-pane>
               </el-tabs>
             </el-tab-pane>
@@ -551,52 +811,89 @@
                   <span style="color: gray">{{ question_count }}</span>
                 </span>
               </template>
-              <div
-                class="question_list"
-                v-for="question in question_list"
-                :key="question.QuestionId"
-                @click="goQuestionPage(question.QuestionId, $event)"
-              >
-                <div style="display: block; width: 100%">
-                  <div
-                    style="
-                      font-size: 20px;
-                      font-weight: bold;
-                      margin-left: 2%;
-                      margin-bottom: 2%;
-                      text-align: left;
-                    "
-                  >
-                    {{ question.QuestionTitle }}
+              <el-scrollbar height="654px">
+                <div v-if="question_count == 0">
+                  <img
+                    src="../assets/QA_empty.png"
+                    style="width: 30%; margin-top: 5%; margin-bottom: 5%"
+                  />
+                  <div style="font-size: 30px; color: #c6c6c9">
+                    还没有发布问题哦~
                   </div>
-                  <div
-                    style="
-                      font-size: 15px;
-                      font-weight: normal;
-                      margin-left: 2%;
-                      text-align: left;
-                    "
+                  <el-link
+                    type="primary"
+                    :underline="false"
+                    @click="goAskPage"
+                    style="font-size: 20px; font-weight: 500; margin-top: 3%"
                   >
-                    {{ this.$store.state.user_info.user_name }}：{{
-                      question.QuestionSummary
-                    }}
+                    现在就提问
+                  </el-link>
+                </div>
+                <div
+                  class="question_list"
+                  v-for="question in question_list"
+                  :key="question.QuestionId"
+                  @click="goQuestionPage(question.QuestionId, $event)"
+                >
+                  <div style="display: block; width: 100%">
+                    <div
+                      style="
+                        font-size: 20px;
+                        font-weight: bold;
+                        margin-left: 2%;
+                        margin-bottom: 2%;
+                        text-align: left;
+                      "
+                    >
+                      {{ question.QuestionTitle }}
+                    </div>
+                    <div
+                      style="
+                        font-size: 15px;
+                        font-weight: normal;
+                        margin-left: 2%;
+                        text-align: left;
+                      "
+                    >
+                      {{ this.person_info.user_name }}：{{
+                        question.QuestionSummary
+                      }}
+                    </div>
+                  </div>
+                  <div class="star_date">
+                    <div>
+                      发布于{{ question.QuestionDate.replace("T", " ") }}
+                    </div>
+                    <el-button
+                      v-if="
+                        this.$store.state.is_login &&
+                        this.$store.state.user_info.user_id == this.host_id
+                      "
+                      type="danger"
+                      style="margin-top: 10px; margin-left: 25px"
+                      @click.stop="
+                        openDeleteDia(question.QuestionId, 'question')
+                      "
+                      ><el-icon class="el-icon--left"><Delete /></el-icon
+                      >删除</el-button
+                    >
+                    <div
+                      style="margin-top: 5%; margin-right: 10%"
+                      @click.stop=""
+                      :key="fresh_own"
+                    >
+                      <star-button
+                        :content_id="question.QuestionId"
+                        content_type="2"
+                        :show_num="true"
+                        size="large"
+                        @click="freshStarOwn($event, 1, 1)"
+                        @giveStar="star"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div class="star_date">
-                  <div>发布于{{ question.QuestionDate.replace("T", " ") }}</div>
-                  <el-button
-                    v-if="
-                      this.$store.state.is_login &&
-                      this.$store.state.user_info.user_id == this.host_id
-                    "
-                    type="danger"
-                    style="margin-top: 10px; margin-left: 25px"
-                    @click.stop="openDeleteDia(question.QuestionId, 'question')"
-                    ><el-icon class="el-icon--left"><Delete /></el-icon
-                    >删除</el-button
-                  >
-                </div>
-              </div>
+              </el-scrollbar>
             </el-tab-pane>
             <el-tab-pane :key="need_refresh">
               <template #label>
@@ -605,50 +902,113 @@
                   <span style="color: gray">{{ answer_count }}</span>
                 </span>
               </template>
-              <div
-                class="answer_list"
-                v-for="(answer, index) in answer_list"
-                :key="answer"
-                @click="goAnswerDetail(answer.question_id, index, $event)"
-              >
-                <div style="display: block; width: 100%">
-                  <div
-                    style="
-                      font-size: 20px;
-                      font-weight: bold;
-                      margin-left: 2%;
-                      margin-bottom: 2%;
-                      text-align: left;
-                    "
-                  >
-                    {{ answer.QuestionTitle }}
+              <el-scrollbar height="654px">
+                <div v-if="answer_count == 0">
+                  <img
+                    src="../assets/QA_empty.png"
+                    style="width: 30%; margin-top: 5%; margin-bottom: 5%"
+                  />
+                  <div style="font-size: 30px; color: #c6c6c9">
+                    还没有发布回答哦~
                   </div>
-                  <div
-                    style="
-                      font-size: 15px;
-                      font-weight: normal;
-                      margin-left: 2%;
-                      text-align: left;
-                    "
+                  <el-link
+                    type="primary"
+                    :underline="false"
+                    @click="goQACenter"
+                    style="font-size: 20px; font-weight: 500; margin-top: 3%"
                   >
-                    {{ answer.UserName }}：{{ answer.AnswerSummary }}
+                    看看问题
+                  </el-link>
+                </div>
+                <div
+                  class="answer_list"
+                  v-for="(answer, index) in answer_list"
+                  :key="answer"
+                  @click="goAnswerDetail(answer.question_id, index, $event)"
+                >
+                  <div style="display: block; width: 100%">
+                    <div
+                      style="
+                        font-size: 20px;
+                        font-weight: bold;
+                        margin-left: 2%;
+                        margin-bottom: 2%;
+                        text-align: left;
+                      "
+                    >
+                      {{ answer.QuestionTitle }}
+                    </div>
+                    <div
+                      style="
+                        font-size: 15px;
+                        font-weight: normal;
+                        margin-left: 2%;
+                        text-align: left;
+                      "
+                    >
+                      {{ answer.UserName }}：{{ answer.AnswerSummary }}
+                    </div>
+                  </div>
+                  <div class="star_date">
+                    <div>发布于{{ answer.AnswerDate.replace("T", " ") }}</div>
+                    <el-button
+                      v-if="
+                        this.$store.state.is_login &&
+                        this.$store.state.user_info.user_id == this.host_id
+                      "
+                      type="danger"
+                      style="margin-top: 10px; margin-left: 25px"
+                      @click.stop="openDeleteDia(answer.AnswerId, 'answer')"
+                      ><el-icon class="el-icon--left"><Delete /></el-icon
+                      >删除</el-button
+                    >
+                    <div style="margin-top: 20%">
+                      <el-row>
+                        <el-col :span="5" @click.stop="">
+                          <like-button
+                            :content_id="answer.AnswerId"
+                            content_type="2"
+                            :show_num="true"
+                            size="large"
+                          />
+                        </el-col>
+                        <el-col :span="5" @click.stop="">
+                          <coin-button
+                            :content_id="answer.AnswerId"
+                            content_type="1"
+                            :show_num="true"
+                            size="large"
+                          />
+                        </el-col>
+                        <el-col :span="5" @click.stop="">
+                          <star-button
+                            :content_id="answer.AnswerId"
+                            content_type="1"
+                            :show_num="true"
+                            size="large"
+                          />
+                        </el-col>
+                        <el-col :span="2"></el-col>
+                        <el-col :span="3" @click.stop="">
+                          <report-button
+                            :content_id="answer.AnswerId"
+                            content_type="1"
+                            size="large"
+                            @reportResponse="reportResponse"
+                          />
+                        </el-col>
+                        <el-col
+                          :span="4"
+                          style="text-align: left"
+                          @click.stop=""
+                        >
+                          <span>举报</span>
+                        </el-col>
+                      </el-row>
+                    </div>
                   </div>
                 </div>
-                <div class="star_date">
-                  <div>发布于{{ answer.AnswerDate.replace("T", " ") }}</div>
-                  <el-button
-                    v-if="
-                      this.$store.state.is_login &&
-                      this.$store.state.user_info.user_id == this.host_id
-                    "
-                    type="danger"
-                    style="margin-top: 10px; margin-left: 25px"
-                    @click.stop="openDeleteDia(answer.AnswerId, 'answer')"
-                    ><el-icon class="el-icon--left"><Delete /></el-icon
-                    >删除</el-button
-                  >
-                </div>
-              </div>
+              </el-scrollbar>
             </el-tab-pane>
             <el-tab-pane>
               <template #label>
@@ -657,56 +1017,132 @@
                   <span style="color: gray">{{ blog_count }}</span>
                 </span>
               </template>
-              <div
-                class="blog_list"
-                v-for="(blog, index) in blog_list"
-                :key="blog.BlogId"
-                @click="goBlogDetail(blog.BlogId, index, 1, $event)"
-              >
-                <div style="display: block; width: 100%">
-                  <div
-                    style="
-                      font-size: 20px;
-                      font-weight: bold;
-                      margin-left: 2%;
-                      margin-bottom: 2%;
-                      text-align: left;
-                    "
-                  >
-                    {{ blog.UserName }}：
+              <el-scrollbar height="654px">
+                <div v-if="blog_count == 0">
+                  <img
+                    src="../assets/blog_empty.png"
+                    style="width: 30%; margin-top: 10%; margin-bottom: 5%"
+                  />
+                  <div style="font-size: 30px; color: #c6c6c9">
+                    还没有发布动态哦~
                   </div>
-                  <div
-                    style="
-                      font-size: 15px;
-                      font-weight: normal;
-                      margin-left: 2%;
-                      text-align: left;
-                    "
+                  <el-link
+                    type="primary"
+                    :underline="false"
+                    @click="goBlogEdit"
+                    style="font-size: 20px; font-weight: 500; margin-top: 3%"
                   >
-                    {{ blog.BlogSummary }}
+                    现在就发动态
+                  </el-link>
+                </div>
+                <div
+                  class="blog_list"
+                  v-for="(blog, index) in blog_list"
+                  :key="blog.BlogId"
+                  @click="goBlogDetail(blog.BlogId, index, 1, $event)"
+                >
+                  <div style="display: block; width: 100%">
+                    <div
+                      style="
+                        font-size: 20px;
+                        font-weight: bold;
+                        margin-left: 2%;
+                        margin-bottom: 2%;
+                        text-align: left;
+                      "
+                    >
+                      {{ this.person_info.user_name }}：
+                    </div>
+                    <!-- <div
+                      style="
+                        font-size: 15px;
+                        font-weight: normal;
+                        margin-left: 2%;
+                        text-align: left;
+                      "
+                    >
+                      {{ blog.BlogSummary }}
+                    </div> -->
+                    <div style="display: flex">
+                      <div style="text-align: left; padding: 2%">
+                        <img
+                          style="height: 100px; width: 100px; object-fit: cover"
+                          :src="blog.BlogImage"
+                        />
+                      </div>
+                      <div
+                        style="
+                          font-size: 17px;
+                          font-weight: normal;
+                          margin-left: 2%;
+                          text-align: left;
+                          margin-top: 2%;
+                        "
+                      >
+                        {{ blog.BlogSummary }}
+                      </div>
+                    </div>
                   </div>
-                  <div style="text-align: left; padding: 2%">
-                    <img
-                      style="height: 100px; width: 100px; object-fit: cover"
-                      :src="blog.BlogImage"
-                    />
+                  <div class="star_date">
+                    <div>发布于{{ blog.BlogDate.replace("T", " ") }}</div>
+                    <el-button
+                      v-if="
+                        this.$store.state.is_login &&
+                        this.$store.state.user_info.user_id == this.host_id
+                      "
+                      type="danger"
+                      style="margin-top: 10px; margin-left: 25px"
+                      @click.stop="openDeleteDia(blog.BlogId, 'blog')"
+                      ><el-icon class="el-icon--left"><Delete /></el-icon
+                      >删除</el-button
+                    >
+                    <div style="margin-top: 25%">
+                      <el-row>
+                        <el-col :span="5" @click.stop="">
+                          <like-button
+                            :content_id="blog.BlogId"
+                            content_type="0"
+                            :show_num="true"
+                            size="large"
+                          />
+                        </el-col>
+                        <el-col :span="5" @click.stop="">
+                          <coin-button
+                            :content_id="blog.BlogId"
+                            content_type="0"
+                            :show_num="true"
+                            size="large"
+                          />
+                        </el-col>
+                        <el-col :span="5" @click.stop="">
+                          <star-button
+                            :content_id="blog.BlogId"
+                            content_type="0"
+                            :show_num="true"
+                            size="large"
+                          />
+                        </el-col>
+                        <el-col :span="2"></el-col>
+                        <el-col :span="3" @click.stop="">
+                          <report-button
+                            :content_id="blog.BlogId"
+                            content_type="0"
+                            size="large"
+                            @reportResponse="reportResponse"
+                          />
+                        </el-col>
+                        <el-col
+                          :span="4"
+                          style="text-align: left"
+                          @click.stop=""
+                        >
+                          <span>举报</span>
+                        </el-col>
+                      </el-row>
+                    </div>
                   </div>
                 </div>
-                <div class="star_date">
-                  <div>发布于{{ blog.BlogDate.replace("T", " ") }}</div>
-                  <el-button
-                    v-if="
-                      this.$store.state.is_login &&
-                      this.$store.state.user_info.user_id == this.host_id
-                    "
-                    type="danger"
-                    style="margin-top: 10px; margin-left: 25px"
-                    @click.stop="openDeleteDia(blog.BlogId, 'blog')"
-                    ><el-icon class="el-icon--left"><Delete /></el-icon
-                    >删除</el-button
-                  >
-                </div>
-              </div>
+              </el-scrollbar>
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -734,9 +1170,20 @@ import { Delete, Edit, Search, Share, Upload } from "@element-plus/icons-vue";
 import axios from "axios";
 import FollowButton from "../components/FollowButton.vue";
 import PageLoading from "../components/PageLoading.vue";
+import LikeButton from "../components/LikeButton.vue";
+import CoinButton from "../components/CoinButton.vue";
+import StarButton from "../components/StarButton.vue";
+import ReportButton from "../components/ReportButton.vue";
 import { ElMessage } from "element-plus";
 export default {
-  components: { FollowButton, PageLoading },
+  components: {
+    FollowButton,
+    PageLoading,
+    LikeButton,
+    CoinButton,
+    StarButton,
+    ReportButton,
+  },
   data() {
     return {
       person_info: {},
@@ -770,12 +1217,34 @@ export default {
       fresh_followerlist_button: 1,
       fresh_userlist_button: 1,
       follow_or_follower: 0, //0-follow
+      fresh_own: 0,
+      fresh_star: 0,
+      star_or_own: 0, //0-star
+      fresh_type: 0, //0-动态，1-问题，2回答
       to_be_killed_type: "",
       to_be_killed_id: -1,
     };
   },
   props: ["host_id"],
   methods: {
+    star(res) {
+      if (res) {
+        if (this.fresh_type == 0) this.star_blog_count++;
+        else if (this.fresh_type == 1) this.star_question_count++;
+        else if (this.fresh_type == 2) this.star_answer_count++;
+        else;
+      } else {
+        if (this.fresh_type == 0) this.star_blog_count--;
+        else if (this.fresh_type == 1) this.star_question_count--;
+        else if (this.fresh_type == 2) this.star_answer_count--;
+        else;
+      }
+      if (this.star_or_own == 0) {
+        this.fresh_own++;
+      } else {
+        this.fresh_star++;
+      }
+    },
     follow(res, ob_type) {
       if (res) {
         ElMessage({
@@ -871,6 +1340,10 @@ export default {
           showClose: true,
         });
       }
+    },
+    freshStarOwn(event, type, type2) {
+      this.star_or_own = type;
+      this.fresh_type = type2;
     },
     freshButton(event, type) {
       this.follow_or_follower = type;
@@ -975,9 +1448,51 @@ export default {
         },
       });
     },
+    goAskPage() {
+      this.$router.push({
+        name: "question_edit",
+      });
+    },
+    goQACenter() {
+      this.$router.push({
+        name: "qa_center",
+      });
+    },
+    goBlogPage() {
+      this.$router.push({
+        name: "blog",
+      });
+    },
+    goSchoolCenter() {
+      this.$router.push({
+        name: "school_center",
+      });
+    },
+    goInstitutionCenter() {
+      this.$router.push({
+        name: "institution_center",
+      });
+    },
     getParams() {
       this.host_id = this.$route.query.host_id;
       console.log("h" + this.host_id);
+    },
+    reportResponse(res) {
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "举报成功！",
+          duration: 2000,
+          showClose: true,
+        });
+      } else {
+        ElMessage({
+          type: "error",
+          message: "举报失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
     },
     initPage: function () {
       this.visit_id = this.$store.state.user_info.user_id;
@@ -1158,7 +1673,7 @@ export default {
         method: "get",
       })
         .then((res) => {
-          console.log("23450",res.data.data)
+          console.log("23450", res.data.data);
           this.blog_list = res.data.data.blog_list;
           this.blog_count = res.data.data.count;
         })
@@ -1297,6 +1812,7 @@ body {
 .user_profile_body_right {
   width: 69.1%;
   margin-left: 1%;
+  margin-bottom: 1%;
 }
 ::v-deep .user_profile_tabs .el-tabs__item {
   font-size: 20px;
@@ -1382,7 +1898,7 @@ body {
 .star_date {
   font-size: 3px;
   color: gray;
-  width: 100%;
+  width: 50%;
   text-align: right;
 }
 </style>
