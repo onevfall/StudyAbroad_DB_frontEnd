@@ -7,7 +7,8 @@
     <el-card class="question-card" shadow="hover">
       <template #header>
         <div id="card-header">
-          <span>{{"0"+(this.question_info.num+1)}}</span>
+          <div v-if="this.question_num<9"><span >{{"0"+(this.question_num+1)}}</span></div>
+          <div v-else><span >{{this.question_num+1}}</span></div>
         </div>
       </template>
       <el-row id="card-body">
@@ -36,7 +37,7 @@
 <script>
 export default {
   name: 'QuestionCard',
-  props: ["question_info"],
+  props: ["question_info","question_num"],
   computed: {
     contentShow() {
       if (this.question_info.QuestionTitle.length < 19) {
