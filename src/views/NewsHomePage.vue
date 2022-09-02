@@ -84,8 +84,6 @@ export default {
     let get_news_num = axios
       .get("newsflash/num")
       .then((res) => {
-        console.log("asdasdadasdadasdasd");
-        console.log(res);
         this.news_num_total = res.data.data.num;
       })
       .catch((err) => {
