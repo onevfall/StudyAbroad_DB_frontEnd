@@ -42,7 +42,7 @@
         </el-row>
       </span>
     </section>
-    <section class="content_field">
+    <section class="content_field" v-loading="this.loading">
       <el-space warp :size="40">
         <div class="blog_card" v-for="blog in this.blog_list" :key="blog">
           <blog-info-board :blog_info="blog"></blog-info-board>
@@ -67,6 +67,7 @@ export default {
     return {
       sort_type: 0, //0-时间，1-热度
       blog_list: [],
+      loading:false,
     };
   },
 
@@ -75,7 +76,7 @@ export default {
       if (this.sort_type == 0) {
         return;
       }
-  
+      this.loading = true;
       this.sort_type = 0;
       axios({
         url: "/blog/time?num=100",
@@ -83,23 +84,28 @@ export default {
       })
         .then((res) => {
           this.blog_list = [].concat(res.data.data.blog);
+          this.loading = false;
         })
         .catch((errMsg) => {
           console.log(errMsg);
+          this.loading = false;
         });
     },
     sortByHeat() {
       if (this.sort_type == 1) {
         return;
       }
+      this.loading = true;
       this.sort_type = 1;
       axios
         .get("/blog/heat?num=100")
         .then((res) => {
           this.blog_list = [].concat(res.data.data.blog);
+          this.loading = false;
         })
         .catch((errMsg) => {
           console.log(errMsg);
+          this.loading = false;
         });
     },
     bottoomLoading() {
@@ -124,8 +130,6 @@ export default {
   },
   mounted() {
     window.addEventListener("scroll", this.bottoomLoading);
-     
-
   },
   unmounted() {
     window.removeEventListener("scroll", this.bottoomLoading);

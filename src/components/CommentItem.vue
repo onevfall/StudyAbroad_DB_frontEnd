@@ -3,8 +3,7 @@
 作者：方新宇
 -->
 <template>
-  <!-- <el-collapse-item :key="this.comment_ischange"> -->
-    <el-collapse-item >
+  <el-collapse-item class="main">
     <template #title>
       <div class="self_comment">
         <div class="comment_header">
@@ -22,7 +21,7 @@
               :show_num="true"
               size="normal"
               @giveLike="like"
-              @cancelLike="unlike"
+              @cancelLike="unLike"
             />
           </div>
           <div
@@ -30,12 +29,12 @@
             v-else
           >
             <like-button
-              content_type="3"
+              content_type="1"
               :content_id="comment_infor.BlogCommentId"
               :show_num="true"
               size="normal"
               @giveLike="like"
-              @cancelLike="unlike"
+              @cancelLike="unLike"
             />
           </div>
           <div class="comment_button">
@@ -43,6 +42,32 @@
               <el-icon class="el-icon--right"><ChatSquare /></el-icon>
             </el-button>
             <div style="display: flex; justify-content: space-around">回复</div>
+          </div>
+          <div class="report_button" v-if="this.type == '0'">
+            <report-button
+              content_type="3"
+              :content_id="comment_infor.AnswerCommentId"
+              size="normal"
+              @reportResponse="reportResponse"
+            />
+            <div style="display: flex; justify-content: space-around">举报</div>
+          </div>
+          <div class="report_button" v-else>
+            <report-button
+              content_type="2"
+              :content_id="comment_infor.BlogCommentId"
+              size="normal"
+              @reportResponse="reportResponse"
+            />
+            <div style="display: flex; justify-content: space-around">举报</div>
+          </div>
+          <div class="delete_button">
+            <el-button type="" @click.stop="deleteComment" link>
+              <el-icon class="el-icon--right" style="color: red"
+                ><Delete
+              /></el-icon>
+            </el-button>
+            <div style="display: flex; justify-content: space-around">删除</div>
           </div>
         </div>
         <div class="content_main" v-if="this.type == '0'">
@@ -106,29 +131,46 @@
           <comment-item
             :comment_infor="this.comment_infor.child_comments[i]"
             :type="this.type"
+            @refreshZone="init"
           >
           </comment-item>
         </div>
       </el-collapse>
     </div>
   </el-collapse-item>
+  <el-dialog
+    v-model="delete_dialog_visible"
+    title="警告"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <span style="font-size: 18px">你确认要删除该评论吗? 此操作不可逆!</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click.stop="handleClose">取消</el-button>
+        <el-button type="primary" @click.stop="deleteCheck">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
 import LikeButton from "../components/LikeButton.vue";
+import ReportButton from "../components/ReportButton.vue";
 import { ElMessage } from "element-plus";
 import axios from "axios";
 //import { ElMessage } from "element-plus";
 export default {
   name: "CommentItem",
   props: ["comment_infor", "type"],
-  components: { LikeButton, ElMessage },
+  components: { LikeButton, ElMessage, ReportButton },
   data() {
     return {
       is_reply: false,
       comment_now: "",
-      comment_ischange: false,
       dynamic_type: "",
+      delete_dialog_visible: false,
+      now_delete_id: -1,
     };
   },
   created() {
@@ -142,37 +184,7 @@ export default {
         this.dynamic_type = "blog";
         break;
     }
-    if (this.dynamic_type == "answer") {
-      axios
-        .get("/" + this.dynamic_type + "/reply", {
-          params: {
-            answer_comment_id: this.comment_infor.AnswerCommentId,
-          },
-        })
-        .then((res) => {
-          this.comment_infor.reply_num = res.data.data.reply_num;
-          this.comment_infor.child_comments = res.data.data.reply_list;
-          console.log(this.comment_infor.child_comments);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      axios
-        .get("/" + this.dynamic_type + "/reply", {
-          params: {
-            blog_comment_id: this.comment_infor.BlogCommentId,
-          },
-        })
-        .then((res) => {
-          this.comment_infor.reply_num = res.data.data.reply_num;
-          this.comment_infor.child_comments = res.data.data.reply_list;
-          console.log(this.comment_infor.child_comments);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    this.init();
   },
   computed: {
     nowplaceholder() {
@@ -184,45 +196,40 @@ export default {
       }
     },
   },
-  watch: {
-    comment_ischange() {
+  methods: {
+    init() {
       if (this.dynamic_type == "answer") {
         axios
-          .get("/answer/reply", {
+          .get("/" + this.dynamic_type + "/reply", {
             params: {
               answer_comment_id: this.comment_infor.AnswerCommentId,
             },
           })
           .then((res) => {
-            console.log("发出子评论了,再次请求子评论数据");
-            console.log(res);
+            this.comment_infor.reply_num = res.data.data.reply_num;
             this.comment_infor.child_comments = res.data.data.reply_list;
             console.log(this.comment_infor.child_comments);
-            this.$store.commit("RefreshCommitZone");
           })
           .catch((err) => {
             console.log(err);
           });
       } else {
         axios
-          .get("/blog/reply", {
+          .get("/" + this.dynamic_type + "/reply", {
             params: {
               blog_comment_id: this.comment_infor.BlogCommentId,
             },
           })
           .then((res) => {
-            console.log("11213142");
-            console.log(res);
+            this.comment_infor.reply_num = res.data.data.reply_num;
             this.comment_infor.child_comments = res.data.data.reply_list;
-            this.$store.commit("RefreshCommitZone");
+            console.log(this.comment_infor.child_comments);
           })
           .catch((err) => {
             console.log(err);
           });
       }
     },
-  },
-  methods: {
     reply() {
       if (this.$store.state.is_login == false) {
         //若未登录
@@ -268,7 +275,6 @@ export default {
             }) //待修改
             .then((res) => {
               console.log(res.data);
-
               ElMessage({
                 type: "success",
                 message: "评论成功！",
@@ -277,8 +283,7 @@ export default {
               });
               this.is_reply = false;
               this.comment_now = "";
-              this.comment_ischange = !this.comment_ischange;
-              console.log("更改！");
+              this.$emit("refreshZone", true);
             })
             .catch((err) => {
               console.log(err);
@@ -291,6 +296,7 @@ export default {
               reply_content: this.comment_now,
             })
             .then((res) => {
+              console.log("更改！");
               console.log(res.data);
               ElMessage({
                 type: "success",
@@ -300,14 +306,72 @@ export default {
               });
               this.is_reply = false;
               this.comment_now = "";
-              this.comment_ischange = !this.comment_ischange;
-              console.log("更改！");
+              this.$emit("refreshZone", true);
             })
             .catch((err) => {
               console.log(err);
             });
         }
       }
+    },
+    deleteComment() {
+      if (this.$store.state.is_login == false) {
+        //若未登录
+        ElMessage({
+          message: "请先登录",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
+        });
+        this.$router.push({
+          path: "/login",
+          query: { redirect: this.$route.fullPath },
+        });
+      } else {
+        if (this.comment_infor.UserId == this.$store.state.user_info.user_id) {
+          //发comment的用户和当前登录的用户id是相同的id
+          this.delete_dialog_visible = true;
+          if (this.dynamic_type == "answer")
+            this.now_delete_id = this.comment_infor.AnswerCommentId;
+          else this.now_delete_id = this.comment_infor.BlogCommentId;
+        } else {
+          ElMessage({
+            message: "您不具有对这条评论的删除权限！",
+            type: "warning",
+            showClose: true,
+            duration: 2000,
+          });
+        }
+      }
+    },
+    handleClose() {
+      this.now_delete_id = -1;
+      this.delete_dialog_visible = false;
+    },
+    deleteCheck() {
+      axios
+        .delete("/" + this.dynamic_type + "/comment", {
+          params: {
+            // 请求参数拼接在url上
+            [this.dynamic_type + "comment_id"]: this.now_delete_id,
+          },
+        })
+        .then((res) => {
+          this.delete_dialog_visible = false;
+          this.now_delete_id = -1;
+          if (res.data.status == true) {
+            ElMessage.success("删除成功!");
+            this.$emit("refreshZone", true);
+          } else {
+            ElMessage.error("删除失败!");
+          }
+        })
+        .catch((errMsg) => {
+          this.delete_dialog_visible = false;
+          this.now_delete_id = -1;
+          console.log(errMsg);
+          ElMessage.error("删除失败!");
+        });
     },
     like(res) {
       if (res) {
@@ -343,102 +407,24 @@ export default {
         });
       }
     },
-    sendComment() {
-      if (this.$store.state.is_login == false) {
-        //若未登录
-        ElMessage({
-          message: "请先登录",
-          type: "warning",
-          showClose: true,
-          duration: 2000,
-        });
-        this.comment_now = "";
-        this.$router.push({
-          path: "/login",
-          query: { redirect: this.$route.fullPath },
-        });
-      } else {
-          axios
-            .post("/answer/reply", {
-              comment_id: this.comment_infor.AnswerCommentId,
-              // comment_id: this.$store.state.reply_to.AnswerCommentId,
-              reply_user_id: this.$store.state.user_info.user_id,
-              reply_content: this.comment_now,
-            }) //待修改
-            .then((res) => {
-              console.log(res.data);
-              this.comment_ischange = !this.comment_ischange//此处需修改
-              ElMessage({
-                type: "success",
-                message: "评论成功！",
-                duration: 2000,
-                showClose: true,
-              });
-              this.is_reply = false;
-              this.comment_now = "";
-              axios
-                .get("/answer/reply", {
-                  params: {
-                    answer_comment_id : this.comment_infor.AnswerCommentId,
-                  },
-                })
-                .then((res) => {
-                  // console.log(
-                  //   "对用户id为" +
-                  //     this.comment_infor.AnswerCommentId +
-                  //     "的评论的回复请求"
-                  // );
-                  console.log("11213142")
-                  console.log(res);
-                  this.comment_infor.child_comments =
-                    res.data.data.reply_list;
-                  this.comment_ischange_1 = !this.comment_ischange_1;
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } 
-      },
-      like(res) {
+    reportResponse(res) {
       if (res) {
         ElMessage({
           type: "success",
-          message: "点赞成功！",
+          message: "举报成功！",
           duration: 2000,
           showClose: true,
         });
       } else {
         ElMessage({
           type: "error",
-          message: "点赞失败！",
+          message: "举报失败！",
           duration: 2000,
           showClose: true,
         });
       }
     },
-    unLike(res) {
-      if (res) {
-        ElMessage({
-          type: "success",
-          message: "取消点赞成功！",
-          duration: 2000,
-          showClose: true,
-        });
-      } else {
-        ElMessage({
-          type: "error",
-          message: "取消点赞失败！",
-          duration: 2000,
-          showClose: true,
-        });
-      }
-    },
-    },
-    
+  },
 };
 </script>
 
@@ -499,9 +485,25 @@ export default {
   display: flex;
   justify-content: space-around;
 }
-/* .self_comment .comment_header .comment_button >>> .el-button--primary {
-  border: none;
-} */
+.self_comment .comment_header .report_button {
+  /* display: inline-block; */
+  margin-top: -1.5px;
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.self_comment .comment_header .delete_button {
+  /* display: inline-block; */
+  /* transform: translate(-50%, 125%); */
+  margin-top: -1.5px;
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-around;
+  color: red;
+  opacity: 0;
+  transition: 0.3s ease-out;
+}
 
 .self_comment .content_main {
   text-align: left;
@@ -515,5 +517,8 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+.main:hover .self_comment .comment_header .delete_button {
+  opacity: 1;
 }
 </style>

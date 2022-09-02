@@ -47,7 +47,8 @@ export default {
             success(imgbase64);
           };
         },
-        //媒体上传处理函数待定
+        // image_dimensions: false,//取消默认高度
+        //content_style: 'img {max-width:720px; width: 720px; height: auto;}'
       },
     };
   },
@@ -73,7 +74,7 @@ export default {
     submit() {
       var image_array=this.getImage()
       var args = {
-        base64_content: encode(this.content), //富文本内容——经过base64编码
+        base64_content:this.content, //富文本内容
         text_content: this.getContent(), //纯文本
         image_array: image_array, //包含图片url数组
       };

@@ -5,10 +5,10 @@ footer
 -->
 <template>
   <section class="footer">
-    <div>这是footer，这里可以存放我们网站的基础注册信息</div>
-    <div>这一行应该存放一个横向列表</div>
-    <div>这一行可以放几个图标</div>
-    <div>这里一行再放我们的备案号</div>
+    <div>候鸟留学</div>
+    <div>蜀ICP备2022018954号-1</div>
+    <div>公安备案号：51162302000180</div>
+    <div></div>
   </section>
   
 </template>

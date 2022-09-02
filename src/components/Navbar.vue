@@ -15,6 +15,7 @@
     <el-menu-item index="0"
       ><img src="../assets/logo.png" class="logo"
     /></el-menu-item>
+    <div class="flex-grow" />
     <el-menu-item index="home" @click="goHome">首页</el-menu-item>
     <el-menu-item index="school_center" @click="goSchoolCenter"
       >找对学校</el-menu-item
@@ -24,10 +25,10 @@
     >
     <el-sub-menu index="3">
       <template #title>说说留学</template>
-      <el-menu-item index="question" @click="goQACenter">留学问答</el-menu-item>
+      <el-menu-item index="qa_center" @click="goQACenter">留学问答</el-menu-item>
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
+    <el-menu-item index="newsHome" @click="goNewsHome">留学快讯</el-menu-item>
 
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
@@ -35,19 +36,25 @@
       <el-menu-item index="register" @click="goRegister">注册</el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="7" v-else>
-      <template #title>个人中心</template>
-      <el-menu-item index="7-1">我的信息</el-menu-item>
-      <el-menu-item index="blog_edit" @click="goEditor">动态发布</el-menu-item>
-      <el-menu-item index="7-3">关注/收藏</el-menu-item>
-      <el-menu-item index="7-4">财务管理</el-menu-item>
+      <template #title>
+        <el-avatar shape="square" :size="30" :src="this.$store.state.user_info.user_profile" />
+        <span style="margin-left:10px">{{ this.$store.state.user_info.user_name }}</span>
+      </template>
+
+      <el-menu-item index="person_space" @click="goPersonSpace"
+        >个人空间</el-menu-item
+      >
+      <el-menu-item index="blog_edit" @click="goBlogEdit"
+        >动态发布</el-menu-item
+      >
+      <el-menu-item index="question_edit" @click="goQuestionEdit"
+        >我要提问</el-menu-item
+      >
+      <el-menu-item index="person_info" @click="goPersonInformation"
+        >账户设置</el-menu-item
+      >
       <el-menu-item index="7-5" @click="loginOut">退出登录</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="person_info" @click="goPersonInformation"
-      >个人信息</el-menu-item
-    >
-    <el-menu-item index="person_space" @click="goPersonSpace"
-      >个人空间</el-menu-item
-    >
   </el-menu>
 </template>
 
@@ -140,11 +147,14 @@ export default {
         name: "qa_center",
       });
     },
-
-    //测试
-    goEditor() {
+    goBlogEdit() {
       router.push({
         name: "blog_edit",
+      });
+    },
+    goQuestionEdit() {
+      router.push({
+        name: "question_edit",
       });
     },
     //退出账号并跳转至首页
@@ -170,5 +180,8 @@ export default {
 <style scoped>
 .logo {
   height: 56px;
+}
+.flex-grow {
+  flex-grow: 0.89;
 }
 </style>

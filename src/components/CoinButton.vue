@@ -116,7 +116,8 @@ export default {
             if (res.data.data.error == 2) {
               errMsg = "不能给自己投币！";
             } else {
-              errMsg = "余额不足,当前余额为";
+              errMsg =
+                "鸟币不足,当前余额为 " + res.data.data.user_coin_left + " 枚";
             }
             ElMessage({
               type: "warning",
@@ -138,6 +139,57 @@ export default {
           console.log(errMsg);
         });
     },
+  },
+  updated() {
+    //查询是否投过币
+    if (this.$store.state.is_login) {
+      axios
+        .get(
+          "coin/" +
+            this.dynamic_type +
+            "?user_id=" +
+            this.$store.state.user_info.user_id +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
+        )
+        .then((res) => {
+          if (this.dynamic_type == "blog") {
+            this.coin_nums = res.data.data.blog_coin;
+          } else {
+            this.coin_nums = res.data.data.answer_coin;
+          }
+          this.is_coined = res.data.status;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    } else {
+      //查询投币个数
+      axios
+        .get(
+          "coin/" +
+            this.dynamic_type +
+            "?user_id=" +
+            1 +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
+        )
+        .then((res) => {
+          if (this.dynamic_type == "blog") {
+            this.coin_nums = res.data.data.blog_coin;
+          } else {
+            this.coin_nums = res.data.data.answer_coin;
+          }
+          this.is_coined = false;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    }
   },
   created() {
     //设定大小
@@ -173,6 +225,7 @@ export default {
         this.dynamic_type = "answer";
         break;
     }
+    console.log("11111", this.dynamic_type);
     //查询是否投过币
     if (this.$store.state.is_login) {
       axios
@@ -187,7 +240,11 @@ export default {
             this.content_id
         )
         .then((res) => {
-          this.coin_nums = res.data.data.blog_coin;
+          if (this.dynamic_type == "blog") {
+            this.coin_nums = res.data.data.blog_coin;
+          } else {
+            this.coin_nums = res.data.data.answer_coin;
+          }
           this.is_coined = res.data.status;
         })
         .catch((errMsg) => {
@@ -207,7 +264,11 @@ export default {
             this.content_id
         )
         .then((res) => {
-          this.coin_nums = res.data.data.blog_coin;
+          if (this.dynamic_type == "blog") {
+            this.coin_nums = res.data.data.blog_coin;
+          } else {
+            this.coin_nums = res.data.data.answer_coin;
+          }
           this.is_coined = false;
         })
         .catch((errMsg) => {

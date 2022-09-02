@@ -18,11 +18,11 @@
             {{ this.$store.state.user_info.user_name }}
           </el-col>
           <el-col :span="15" style="margin-top: 5px; font-size: 1.8em">
-            <strong>动态</strong>
+            <strong>动态发布</strong>
           </el-col>
         </el-row>
         <el-row :gutter="30" style="margin-top: 5px">
-          <el-col span="3" style="margin-top: 5px"> 动态话题: </el-col>
+          <el-col span="3" style="margin-top: 5px"> <strong>动态话题:</strong> </el-col>
           <el-col span="3">
             <el-checkbox-group v-model="tagList">
               <el-checkbox label="生活" />
@@ -35,7 +35,7 @@
       </el-header>
       <el-main class="card content_field"
         ><div class="input_field">
-          <editor ref="text_editor" v-model="content" @editorSubmit="upLoad" />
+          <editor ref="text_editor"  @editorSubmit="upLoad" />
           <button
             @click="callEditor"
             class="mine_button"
@@ -99,13 +99,7 @@ export default {
       //处理summary
       var summary = "";
       if (args.text_content.length == 0) {
-        ElMessage({
-          message: "请输入有效内容",
-          type: "warning",
-          showClose: true,
-          duration: 2000,
-        });
-        return;
+        summary = "😃";
       } else if (args.text_content.length < 15) {
         summary = args.text_content;
       } else {

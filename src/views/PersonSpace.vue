@@ -1,11 +1,15 @@
 <template>
+  <page-loading v-if="blog_count == -1"></page-loading>
   <div class="user_profile">
     <div class="user_profile_head">
       <div class="user_profile_banner"></div>
       <el-card class="user_profile_info_box">
         <div class="user_profile_info">
           <div class="head_img_border">
-            <el-avatar :src="person_info.user_profile" :size="100" />
+            <el-avatar
+              :src="person_info.user_profile + '?t=' + Math.random()"
+              :size="100"
+            />
           </div>
 
           <div class="user_profile_info_right">
@@ -56,16 +60,24 @@
               <div>个性签名：{{ person_info.user_signature }}</div>
             </div>
             <div class="user_profile_head_control">
-              <el-button
+              <follow-button
+                class="follow_button"
                 v-if="person_info.user_id != this.visit_id"
-                type="primary"
-                >关注 +
-              </el-button>
+                object_type="0"
+                :object_id="this.host_id"
+                :button_fontsize="14"
+                :button_height="31"
+                :button_width="80"
+                :show_num="true"
+                @giveFollow="follow"
+                @cancelFollow="unFollow"
+              ></follow-button>
               <el-button
                 v-if="person_info.user_id == this.visit_id"
                 type="primary"
                 plain
-                >我的鸟币</el-button
+                @click="goRecharge"
+                >鸟币充值</el-button
               >
               <el-button
                 v-if="person_info.user_id == this.visit_id"
@@ -105,6 +117,7 @@
               type="primary"
               icon="Share"
               style="width: 50%; height: 40px; font-size: 16px"
+              @click="goBlogEdit"
               >发动态</el-button
             >
           </div>
@@ -116,13 +129,22 @@
             </div>
           </template>
           <div class="achievement_content">
-            获得{{ achieve_info.like_times }}次点赞
+            <img src="../assets/like_ex.png" style="height: 30px" />
+            <span style="margin-left: 5%"
+              >获得{{ achieve_info.like_times }}次点赞</span
+            >
           </div>
           <div class="achievement_content">
-            内容获得{{ achieve_info.comment_times }}次评论
+            <img src="../assets/comment_ex.png" style="height: 30px" />
+            <span style="margin-left: 5%"
+              >内容获得{{ achieve_info.comment_times }}次评论</span
+            >
           </div>
           <div class="achievement_content">
-            获得{{ achieve_info.star_times }}次收藏
+            <img src="../assets/star_ex.png" style="height: 30px" />
+            <span style="margin-left: 5%"
+              >获得{{ achieve_info.star_times }}次收藏</span
+            >
           </div>
         </el-card>
         <el-card
@@ -144,15 +166,23 @@
           <el-tabs class="user_profile_tabs">
             <el-tab-pane label="关注">
               <el-tabs class="user_profile_follow_tabs">
-                <el-tab-pane label="用户">
+                <el-tab-pane>
+                  <template #label>
+                    <span class="second-tabs-label">
+                      <span>用户 </span>
+                      <span style="color: gray">{{ user_follow_count }}</span>
+                    </span>
+                  </template>
                   <div
                     class="user_follow_list"
                     v-for="follow_person in user_follow_list"
                     :key="follow_person.user_id"
-                    @click="goPersonSpace(follow_person.user_id, $event)"
                   >
                     <el-avatar :size="70" :src="follow_person.user_profile" />
-                    <div style="display: block; width: 100%">
+                    <div
+                      style="display: block; width: 85%"
+                      @click="goPersonSpace(follow_person.user_id, $event)"
+                    >
                       <div
                         style="
                           font-size: 20px;
@@ -175,22 +205,42 @@
                         个性签名：{{ follow_person.user_signature }}
                       </div>
                     </div>
+                    <div style="padding-top: 3%; padding-right: 2%">
+                      <follow-button
+                        object_type="0"
+                        :object_id="follow_person.user_id"
+                        :key="fresh_userlist_button"
+                        @giveFollow="follow"
+                        @cancelFollow="unFollow"
+                        @click="freshButton($event, 0)"
+                      ></follow-button>
+                    </div>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="高校">
+                <el-tab-pane>
+                  <template #label>
+                    <span class="second-tabs-label">
+                      <span>高校 </span>
+                      <span style="color: gray">{{
+                        follow_university_count
+                      }}</span>
+                    </span>
+                  </template>
                   <div
                     class="follow_university_list"
                     v-for="follow_university in follow_university_list"
                     :key="follow_university.university_id"
-                    @click="
-                      goSchoolDetail(follow_university.university_id, $event)
-                    "
                   >
                     <el-avatar
                       :size="70"
                       :src="follow_university.university_badge"
                     />
-                    <div style="display: block; width: 100%">
+                    <div
+                      style="display: block; width: 85%"
+                      @click="
+                        goSchoolDetail(follow_university.university_id, $event)
+                      "
+                    >
                       <div
                         style="
                           font-size: 20px;
@@ -213,25 +263,43 @@
                         国家：{{ follow_university.university_country }}
                       </div>
                     </div>
+                    <div style="padding-top: 3%; padding-right: 2%">
+                      <follow-button
+                        object_type="1"
+                        :object_id="follow_university.university_id"
+                        @giveFollow="follow"
+                        @cancelFollow="unFollow"
+                      ></follow-button>
+                    </div>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="机构">
+                <el-tab-pane>
+                  <template #label>
+                    <span class="second-tabs-label">
+                      <span>机构 </span>
+                      <span style="color: gray">{{
+                        follow_institution_count
+                      }}</span>
+                    </span>
+                  </template>
                   <div
                     class="follow_institution_list"
                     v-for="follow_institution in follow_institution_list"
                     :key="follow_institution.institution_id"
-                    @click="
-                      goInstitutionDetail(
-                        follow_institution.institution_id,
-                        $event
-                      )
-                    "
                   >
                     <el-avatar
                       :size="70"
                       :src="follow_institution.institution_profile"
                     />
-                    <div style="display: block; width: 100%">
+                    <div
+                      style="display: block; width: 85%"
+                      @click="
+                        goInstitutionDetail(
+                          follow_institution.institution_id,
+                          $event
+                        )
+                      "
+                    >
                       <div
                         style="
                           font-size: 20px;
@@ -254,19 +322,35 @@
                         服务范围：{{ follow_institution.institution_target }}
                       </div>
                     </div>
+                    <div style="padding-top: 3%; padding-right: 2%">
+                      <follow-button
+                        object_type="2"
+                        :object_id="follow_institution.institution_id"
+                        @giveFollow="follow"
+                        @cancelFollow="unFollow"
+                      ></follow-button>
+                    </div>
                   </div>
                 </el-tab-pane>
               </el-tabs>
             </el-tab-pane>
-            <el-tab-pane label="粉丝">
+            <el-tab-pane>
+              <template #label>
+                <span class="first-tabs-label">
+                  <span>粉丝 </span>
+                  <span style="color: gray">{{ user_follower_count }}</span>
+                </span>
+              </template>
               <div
                 class="user_follower_list"
                 v-for="follower_person in user_follower_list"
                 :key="follower_person.user_id"
-                @click="goPersonSpace(follower_person.user_id, $event)"
               >
                 <el-avatar :size="70" :src="follower_person.user_profile" />
-                <div style="display: block; width: 100%">
+                <div
+                  style="display: block; width: 85%"
+                  @click="goPersonSpace(follower_person.user_id, $event)"
+                >
                   <div
                     style="
                       font-size: 20px;
@@ -289,11 +373,27 @@
                     个性签名：{{ follower_person.user_signature }}
                   </div>
                 </div>
+                <div style="padding-top: 3%; padding-right: 2%">
+                  <follow-button
+                    object_type="0"
+                    :object_id="follower_person.user_id"
+                    :key="fresh_followerlist_button"
+                    @giveFollow="follow"
+                    @cancelFollow="unFollow"
+                    @click="freshButton($event, 1)"
+                  ></follow-button>
+                </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="收藏">
+            <el-tab-pane label="收藏" class="user_profile_follow_tabs">
               <el-tabs class="user_profile_star_tabs">
-                <el-tab-pane label="问题">
+                <el-tab-pane>
+                  <template #label>
+                    <span class="second-tabs-label">
+                      <span>问题 </span>
+                      <span style="color: gray">{{ star_question_count }}</span>
+                    </span>
+                  </template>
                   <div
                     class="star_question_list"
                     v-for="star_question in star_question_list"
@@ -320,16 +420,30 @@
                           text-align: left;
                         "
                       >
-                        问题描述：{{ star_question.question_summary }}
+                        {{ star_question.user_name }}：{{
+                          star_question.question_summary
+                        }}
                       </div>
                     </div>
                     <div class="star_date">
-                      <div>发布于{{ star_question.question_date }}</div>
-                      <div>收藏于{{ star_question.star_time }}</div>
+                      <div>
+                        发布于{{
+                          star_question.question_date.replace("T", " ")
+                        }}
+                      </div>
+                      <div>
+                        收藏于{{ star_question.star_time.replace("T", " ") }}
+                      </div>
                     </div>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="回答">
+                <el-tab-pane>
+                  <template #label>
+                    <span class="second-tabs-label">
+                      <span>回答 </span>
+                      <span style="color: gray">{{ star_answer_count }}</span>
+                    </span>
+                  </template>
                   <div
                     class="star_answer_list"
                     v-for="(star_answer, index) in star_answer_list"
@@ -358,21 +472,33 @@
                           text-align: left;
                         "
                       >
-                        xxx：{{ star_answer.answer_summary }}
+                        {{ star_answer.answer_user_name }}：{{
+                          star_answer.answer_summary
+                        }}
                       </div>
                     </div>
                     <div class="star_date">
-                      <div>发布于{{ star_answer.answer_date }}</div>
-                      <div>收藏于{{ star_answer.star_time }}</div>
+                      <div>
+                        发布于{{ star_answer.answer_date.replace("T", " ") }}
+                      </div>
+                      <div>
+                        收藏于{{ star_answer.star_time.replace("T", " ") }}
+                      </div>
                     </div>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="动态">
+                <el-tab-pane>
+                  <template #label>
+                    <span class="second-tabs-label">
+                      <span>动态 </span>
+                      <span style="color: gray">{{ star_blog_count }}</span>
+                    </span>
+                  </template>
                   <div
                     class="star_blog_list"
                     v-for="(star_blog, index) in star_blog_list"
                     :key="star_blog.blog_id"
-                    @click="goBlogDetail(star_blog.blog_id, index, $event)"
+                    @click="goBlogDetail(star_blog.blog_id, index, 0, $event)"
                   >
                     <div style="display: block; width: 100%">
                       <div
@@ -396,16 +522,35 @@
                       >
                         {{ star_blog.blog_summary }}
                       </div>
+                      <div
+                        v-if="star_blog.image_url != null"
+                        style="text-align: left; padding: 2%"
+                      >
+                        <img
+                          style="height: 100px; width: 100px; object-fit: cover"
+                          :src="star_blog.image_url"
+                        />
+                      </div>
                     </div>
                     <div class="star_date">
-                      <div>发布于{{ star_blog.blog_date }}</div>
-                      <div>收藏于{{ star_blog.star_date }}</div>
+                      <div>
+                        发布于{{ star_blog.blog_date.replace("T", " ") }}
+                      </div>
+                      <div>
+                        收藏于{{ star_blog.star_date.replace("T", " ") }}
+                      </div>
                     </div>
                   </div>
                 </el-tab-pane>
               </el-tabs>
             </el-tab-pane>
-            <el-tab-pane label="问题">
+            <el-tab-pane :key="need_refresh">
+              <template #label>
+                <span class="first-tabs-label">
+                  <span>问题 </span>
+                  <span style="color: gray">{{ question_count }}</span>
+                </span>
+              </template>
               <div
                 class="question_list"
                 v-for="question in question_list"
@@ -432,15 +577,34 @@
                       text-align: left;
                     "
                   >
-                    问题描述：{{ question.QuestionSummary }}
+                    {{ this.$store.state.user_info.user_name }}：{{
+                      question.QuestionSummary
+                    }}
                   </div>
                 </div>
                 <div class="star_date">
-                  <div>发布于{{ question.QuestionDate }}</div>
+                  <div>发布于{{ question.QuestionDate.replace("T", " ") }}</div>
+                  <el-button
+                    v-if="
+                      this.$store.state.is_login &&
+                      this.$store.state.user_info.user_id == this.host_id
+                    "
+                    type="danger"
+                    style="margin-top: 10px; margin-left: 25px"
+                    @click.stop="openDeleteDia(question.QuestionId, 'question')"
+                    ><el-icon class="el-icon--left"><Delete /></el-icon
+                    >删除</el-button
+                  >
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="回答">
+            <el-tab-pane :key="need_refresh">
+              <template #label>
+                <span class="first-tabs-label">
+                  <span>回答 </span>
+                  <span style="color: gray">{{ answer_count }}</span>
+                </span>
+              </template>
               <div
                 class="answer_list"
                 v-for="(answer, index) in answer_list"
@@ -457,7 +621,7 @@
                       text-align: left;
                     "
                   >
-                    {{ person_info.user_name }}
+                    {{ answer.QuestionTitle }}
                   </div>
                   <div
                     style="
@@ -467,20 +631,37 @@
                       text-align: left;
                     "
                   >
-                    {{ answer.AnswerSummary }}
+                    {{ answer.UserName }}：{{ answer.AnswerSummary }}
                   </div>
                 </div>
                 <div class="star_date">
-                  <div>发布于{{ answer.AnswerDate }}</div>
+                  <div>发布于{{ answer.AnswerDate.replace("T", " ") }}</div>
+                  <el-button
+                    v-if="
+                      this.$store.state.is_login &&
+                      this.$store.state.user_info.user_id == this.host_id
+                    "
+                    type="danger"
+                    style="margin-top: 10px; margin-left: 25px"
+                    @click.stop="openDeleteDia(answer.AnswerId, 'answer')"
+                    ><el-icon class="el-icon--left"><Delete /></el-icon
+                    >删除</el-button
+                  >
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="动态">
+            <el-tab-pane>
+              <template #label>
+                <span class="first-tabs-label">
+                  <span>动态 </span>
+                  <span style="color: gray">{{ blog_count }}</span>
+                </span>
+              </template>
               <div
                 class="blog_list"
                 v-for="(blog, index) in blog_list"
                 :key="blog.BlogId"
-                @click="goBlogDetail(star_blog.BlogId, index, $event)"
+                @click="goBlogDetail(blog.BlogId, index, 1, $event)"
               >
                 <div style="display: block; width: 100%">
                   <div
@@ -492,7 +673,7 @@
                       text-align: left;
                     "
                   >
-                    XXX：
+                    {{ blog.UserName }}：
                   </div>
                   <div
                     style="
@@ -504,9 +685,26 @@
                   >
                     {{ blog.BlogSummary }}
                   </div>
+                  <div style="text-align: left; padding: 2%">
+                    <img
+                      style="height: 100px; width: 100px; object-fit: cover"
+                      :src="blog.BlogImage"
+                    />
+                  </div>
                 </div>
                 <div class="star_date">
-                  <div>发布于{{ blog.BlogDate }}</div>
+                  <div>发布于{{ blog.BlogDate.replace("T", " ") }}</div>
+                  <el-button
+                    v-if="
+                      this.$store.state.is_login &&
+                      this.$store.state.user_info.user_id == this.host_id
+                    "
+                    type="danger"
+                    style="margin-top: 10px; margin-left: 25px"
+                    @click.stop="openDeleteDia(blog.BlogId, 'blog')"
+                    ><el-icon class="el-icon--left"><Delete /></el-icon
+                    >删除</el-button
+                  >
                 </div>
               </div>
             </el-tab-pane>
@@ -515,12 +713,30 @@
       </div>
     </div>
   </div>
+  <el-dialog
+    v-model="delete_dialog_visible"
+    title="警告"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <span style="font-size: 18px">你确认要删除吗? 此操作不可逆!请仔细考虑</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="handleClose">取消</el-button>
+        <el-button type="primary" @click="deleteCheck">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
 import { Delete, Edit, Search, Share, Upload } from "@element-plus/icons-vue";
 import axios from "axios";
+import FollowButton from "../components/FollowButton.vue";
+import PageLoading from "../components/PageLoading.vue";
+import { ElMessage } from "element-plus";
 export default {
+  components: { FollowButton, PageLoading },
   data() {
     return {
       person_info: {},
@@ -529,22 +745,144 @@ export default {
       visit_id: -1,
       host_id: -1,
       user_follow_list: [],
+      user_follow_count: 0,
       user_follower_list: [],
+      user_follower_count: 0,
       follow_university_list: [],
+      follow_university_count: 0,
       follow_institution_list: [],
+      follow_institution_count: 0,
       star_question_list: [],
+      star_question_count: 0,
       star_answer_list: [],
+      star_answer_count: 0,
       star_blog_list: [],
+      star_blog_count: 0,
       question_list: [],
+      question_count: 0,
       answer_list: [],
+      answer_count: 0,
       blog_list: [],
+      blog_count: -1,
+      loading: true,
+      delete_dialog_visible: false,
+      need_refresh: false,
+      fresh_followerlist_button: 1,
+      fresh_userlist_button: 1,
+      follow_or_follower: 0, //0-follow
+      to_be_killed_type: "",
+      to_be_killed_id: -1,
     };
   },
   props: ["host_id"],
   methods: {
+    follow(res, ob_type) {
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "关注成功！",
+          duration: 2000,
+          showClose: true,
+        });
+        console.log(res);
+        if (ob_type == "0") {
+          axios({
+            url: "follow/follows",
+            params: { user_id: this.host_id },
+            method: "get",
+          })
+            .then((res) => {
+              this.user_follow_list = res.data.data.follows;
+              // this.user_follow_count = res.data.data.count;
+              this.user_follow_count++;
+              this.person_info.user_follows++;
+              if (this.follow_or_follower == 0)
+                this.fresh_followerlist_button++;
+              else this.fresh_userlist_button++;
+            })
+            .catch((errMsg) => {
+              console.log(errMsg);
+            });
+        } else if (ob_type == "1") {
+          axios({
+            url: "follow/universities",
+            params: { user_id: this.host_id },
+            method: "get",
+          })
+            .then((res) => {
+              this.follow_university_list = res.data.data.follows;
+              // this.follow_university_count = res.data.data.count;
+              this.follow_university_count++;
+              this.person_info.user_follows++;
+            })
+            .catch((errMsg) => {
+              console.log(errMsg);
+            });
+        } else {
+          axios({
+            url: "follow/institutions",
+            params: { user_id: this.host_id },
+            method: "get",
+          })
+            .then((res) => {
+              this.follow_institution_list = res.data.data.follows;
+              // this.follow_institution_count = res.data.data.count;
+              this.follow_institution_count++;
+              this.person_info.user_follows++;
+            })
+            .catch((errMsg) => {
+              console.log(errMsg);
+            });
+        }
+      } else {
+        ElMessage({
+          type: "error",
+          message: "关注失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    },
+    unFollow(res, ob_type) {
+      console.log("执行unfollow");
+      if (res) {
+        ElMessage({
+          type: "success",
+          message: "取消关注成功！",
+          duration: 2000,
+          showClose: true,
+        });
+        this.person_info.user_follows--;
+        console.log(ob_type);
+        if (ob_type == 0) {
+          this.user_follow_count--;
+          if (this.follow_or_follower == 0) this.fresh_followerlist_button++;
+          else this.fresh_userlist_button++;
+        } else if (ob_type == 1) {
+          this.follow_university_count--;
+        } else {
+          this.follow_institution_count--;
+        }
+      } else {
+        ElMessage({
+          type: "error",
+          message: "取消关注失败！",
+          duration: 2000,
+          showClose: true,
+        });
+      }
+    },
+    freshButton(event, type) {
+      this.follow_or_follower = type;
+    },
     goPersonInfo() {
       this.$router.push({
         path: "/person_info",
+      });
+    },
+    goRecharge() {
+      this.$router.push({
+        path: "/recharge",
       });
     },
     goPersonSpace(id, event) {
@@ -603,13 +941,37 @@ export default {
         },
       });
     },
-    goBlogDetail(id, index, event) {
+    goBlogDetail(id, index, flag, event) {
+      if (flag == 0) {
+        this.$router.push({
+          path: "/blog_detail",
+          query: {
+            blog_id: id,
+            blog_tag: this.star_blog_list[index].blog_tag,
+            user_id: this.star_blog_list[index].blog_user_id,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: "/blog_detail",
+          query: {
+            blog_id: id,
+            blog_tag: this.blog_list[index].BlogTag,
+            user_id: this.blog_list[index].BlogUserId,
+          },
+        });
+      }
+    },
+    goBlogEdit() {
       this.$router.push({
-        path: "/blog_detail",
+        path: "/blog_edit",
+      });
+    },
+    goCoinCenter() {
+      this.$router.push({
+        path: "/person_info",
         query: {
-          blog_id: id,
-          blog_tag: this.star_blog_list[index].blog_tag,
-          user_id: this.star_blog_list[index].blog_user_id,
+          selectName: "2",
         },
       });
     },
@@ -634,6 +996,7 @@ export default {
           console.log(errMsg);
           console.log("获取用户信息失败");
         });
+      // this.person_info = this.$store.state.user_info;
       //学历认证
       axios({
         url: "userinfo/identity",
@@ -670,6 +1033,7 @@ export default {
           console.log(res);
           console.log(res.data.data);
           this.user_follower_list = res.data.data.follows;
+          this.user_follower_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -683,6 +1047,7 @@ export default {
       })
         .then((res) => {
           this.user_follow_list = res.data.data.follows;
+          this.user_follow_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -696,6 +1061,7 @@ export default {
       })
         .then((res) => {
           this.follow_university_list = res.data.data.follows;
+          this.follow_university_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -709,6 +1075,7 @@ export default {
       })
         .then((res) => {
           this.follow_institution_list = res.data.data.follows;
+          this.follow_institution_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -722,6 +1089,7 @@ export default {
       })
         .then((res) => {
           this.star_question_list = res.data.data.stars;
+          this.star_question_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -735,6 +1103,7 @@ export default {
       })
         .then((res) => {
           this.star_answer_list = res.data.data.stars;
+          this.star_answer_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -748,6 +1117,7 @@ export default {
       })
         .then((res) => {
           this.star_blog_list = res.data.data.stars;
+          this.star_blog_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -761,6 +1131,7 @@ export default {
       })
         .then((res) => {
           this.question_list = res.data.data.question_list;
+          this.question_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -774,6 +1145,7 @@ export default {
       })
         .then((res) => {
           this.answer_list = res.data.data.answer_list;
+          this.answer_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -786,16 +1158,61 @@ export default {
         method: "get",
       })
         .then((res) => {
+          console.log("23450",res.data.data)
           this.blog_list = res.data.data.blog_list;
+          this.blog_count = res.data.data.count;
         })
         .catch((errMsg) => {
           console.log(errMsg);
           console.log("获取动态信息失败");
         });
     },
+    openDeleteDia(id, type_name) {
+      this.to_be_killed_id = id;
+      this.to_be_killed_type = type_name;
+      this.delete_dialog_visible = true;
+    },
+    handleClose() {
+      this.delete_dialog_visible = false;
+      this.to_be_killed_type = "";
+      this.to_be_killed_id = -1;
+    },
+    deleteCheck() {
+      axios
+        .delete("/" + this.to_be_killed_type, {
+          params: {
+            // 请求参数拼接在url上
+            [this.to_be_killed_type + "_id"]: this.to_be_killed_id,
+          },
+        })
+        .then((res) => {
+          this.delete_dialog_visible = false;
+          this.to_be_killed_type = "";
+          this.to_be_killed_id = -1;
+          console.log(res);
+          if (res.data.status == true) {
+            ElMessage.success("删除成功!");
+            // this.$emit("deletecheck",true);
+            this.need_refresh = !this.need_refresh;
+          } else {
+            ElMessage.error("删除失败!");
+          }
+        })
+        .catch((errMsg) => {
+          this.delete_dialog_visible = false;
+          this.to_be_killed_type = "";
+          this.to_be_killed_id = -1;
+          console.log(errMsg);
+          ElMessage.error("删除失败!");
+        });
+    },
   },
   watch: {
     $route() {
+      this.initPage();
+    },
+    need_refresh() {
+      console.log("fresh!");
       this.initPage();
     },
   },
@@ -891,6 +1308,7 @@ body {
   font-size: 16px;
   line-height: 10px;
 }
+
 .user_follow_list,
 .user_follower_list,
 .follow_university_list,
@@ -899,8 +1317,27 @@ body {
   display: flex;
   padding-bottom: 1%;
   margin-bottom: 1%;
+  padding-top: 1%;
   padding-left: 10%;
+  transition: background-color 0.1s ease;
 }
+.user_follow_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+.user_follower_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+.follow_university_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+.follow_institution_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+
 .achievement_content {
   text-align: left;
   margin: 4%;
@@ -913,9 +1350,35 @@ body {
 .blog_list {
   border-bottom: 1px solid #f0f0f2;
   display: flex;
-  padding-bottom: 1%;
+  padding: 1%;
   margin-bottom: 1%;
+  transition: background-color 0.1s ease;
 }
+.star_question_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+.star_answer_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+.star_blog_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+.question_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+.answer_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+.blog_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
+}
+
 .star_date {
   font-size: 3px;
   color: gray;

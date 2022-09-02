@@ -1,6 +1,6 @@
 <!--
 高校信息卡
-描述：展示高校信息卡（详情页最上）
+描述：展示高校具体各板块信息
 作者：张子涵
 -->
 <template >
@@ -119,14 +119,9 @@
             </div>
       </el-main>
 
-      <el-aside width=25%>
-        <div><img src="../assets/location.png"><br>
-        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
-        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
-        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
-        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
-        </div>
-        
+      <el-aside width=30%>
+        <div style="margin-top:20px"><img src="../assets/message.png">
+            国际学生招生处联系邮箱：<a href="#" target="_blank">{{school.university_email}}</a></div>
       </el-aside>
     </el-container>
   </div>
@@ -152,11 +147,8 @@
       </el-main>
 
       <el-aside width=25%>
-        <div><img src="../assets/location.png"><br>
-        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
-        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
-        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
-        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
+        <div>
+          
         </div>
       </el-aside>
     </el-container>
@@ -166,19 +158,55 @@
     <div class="tips_bar" ></div>
     <span style="font-size:30px;line-height: 60px;">校友圈</span>
 
-      <el-container class="info_table">
+      <el-container class="info_table"  style="max-height:800px">
         <el-main>
           <div><img src="../assets/cup.png">
             让大家找到同校用户，交个朋友</div>
+            <div
+                class="user_list"
+                v-for="follower_person in user_list"
+                :key="follower_person.user_id"
+              >
+                <el-avatar :size="70" :src="follower_person.user_profile"/>
+                <div
+                  style="display: block; width: 85%"
+                  @click="goPersonSpace(follower_person.user_id, $event)"
+                >
+                  <div
+                    style="
+                      font-size: 20px;
+                      font-weight: bold;
+                      margin-left: 2%;
+                      margin-bottom: 2%;
+                      text-align: left;
+                    "
+                  >
+                    {{ follower_person.user_name }}
+                  </div>
+                  <div
+                    style="
+                      font-size: 15px;
+                      font-weight: normal;
+                      margin-left: 2%;
+                      text-align: left;
+                    "
+                  >
+                    个性签名：{{ follower_person.user_signature }}
+                  </div>
+                </div>
+                <span style="padding-top: 3%; padding-right: 2%">
+                  <follow-button
+                    object_type="0"
+                    :object_id="follower_person.user_id"
+                    @giveFollow="follow"
+                    @cancelFollow="unFollow"
+                  ></follow-button>
+                </span>
+              </div>
       </el-main>
 
       <el-aside width=25%>
-        <div><img src="../assets/location.png"><br>
-        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
-        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
-        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
-        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
-        </div> 
+
       </el-aside>
     </el-container>
   </div>
@@ -190,12 +218,40 @@
 //到时候传入一个
 import Loading from "../components/Loading.vue"
 import BmapDemo from "../components/Map.vue"
+import FollowButton from "../components/FollowButton.vue";
+import axios from "axios";
 export default {
   components:{
+    FollowButton,
     Loading,
     BmapDemo
   },
   props: ["school"],
+  data(){
+    return {
+      user_list: []
+    }
+  },
+  updated() {
+    //在此处向服务器请求数据，初始化所需变量
+    axios({
+        url: "university/get_oldboy?university_id="+this.school.university_id,
+        method: "get",
+      })
+        .then((res) => {
+          console.log(res.data);
+          var response=res.data
+          //console.log(response.state);
+          if (response.status == true) {
+            this.user_list = response.data.user_info;
+            console.log(this.school.university_id);
+            console.log(this.user_list);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  },
   computed: {
     contentShow() {
       
@@ -205,6 +261,15 @@ export default {
      //goNewsDetail(){
        //   alert("跳转至id为"+ this.new_info.news_flash_id+"的快讯详情页面")
       //}
+      goPersonSpace(id, event) {
+      console.log(id);
+      this.$router.push({
+        path: "/person_space",
+        query: {
+          host_id: id,
+        },
+      });
+    },
   }
 };
 </script>
@@ -259,6 +324,20 @@ export default {
 .score_content{
   color: coral;
   font-size: larger;
+}
+
+.user_list {
+  border-bottom: 1px solid #f0f0f2;
+  display: flex;
+  padding-bottom: 1%;
+  margin-bottom: 1%;
+  padding-top: 1%;
+  padding-left: 10%;
+  transition: background-color 0.1s ease;
+}
+.user_list:hover {
+  background-color: rgb(243, 242, 242);
+  box-shadow: 0.3em 0.3em 0.7em #00000015;
 }
 
 </style>

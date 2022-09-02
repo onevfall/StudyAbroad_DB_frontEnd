@@ -62,27 +62,29 @@ export default {
   },
   data() {
     return {
+      user_follower:this.blog_user_info.user_follower,
+      user_follows:this.blog_user_info.user_follows,
       identity_info: [],
       is_follow: false, //当前登录用户是否关注此用户
     };
   },
   computed: {
     followerNum() {
-      if (this.blog_user_info.user_follower >= 10000) {
-        return (this.blog_user_info.user_follower / 10000).toFixed(1) + "w+";
+      if (this.user_follower >= 10000) {
+        return (this.user_follower / 10000).toFixed(1) + "w+";
       } else {
-        return this.blog_user_info.user_follower;
+        return this.user_follower;
       }
     },
     followsNum() {
-      if (this.blog_user_info.user_follows >= 10000) {
-        return (this.blog_user_info.user_follows / 10000).toFixed(1) + "w+";
+      if (this.user_follows >= 10000) {
+        return (this.user_follows / 10000).toFixed(1) + "w+";
       } else {
-        return this.blog_user_info.user_follows;
+        return this.user_follows;
       }
     },
     userSignature() {
-      if (this.blog_user_info.user_signature >= 1) {
+      if (this.blog_user_info.user_signature != 'none') {
         return this.blog_user_info.user_signature;
       } else {
         return "该用户尚未编写个性签名";
@@ -93,7 +95,7 @@ export default {
     //取关
     CancelFollow() {
       axios
-        .put("follow", {
+        .put("follow/follow_user", {
           user_id: this.$store.state.user_info.user_id,
           follow_user_id: this.blog_user_info.user_id,
         })
@@ -101,6 +103,7 @@ export default {
           console.log(res.data.status);
           if (res.data.status == true) {
             this.is_follow = false;
+            this.user_follower--;
             ElMessage({
               message: "成功取关！",
               type: "success",
@@ -142,7 +145,7 @@ export default {
           });
         } else {
           axios
-            .post("follow", {
+            .post("follow/follow_user", {
               user_id: this.$store.state.user_info.user_id,
               follow_user_id: this.blog_user_info.user_id,
             })
@@ -156,6 +159,7 @@ export default {
                 });
               } else {
                 this.is_follow = true;
+                this.user_follower++;
                 ElMessage({
                   message: "成功关注！",
                   type: "success",

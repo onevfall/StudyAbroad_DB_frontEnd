@@ -43,7 +43,7 @@
                 <el-col :span="10">
                   <el-input
                     v-model="iden_code"
-                    class="w-50 m-2"
+                    style="width:235px"
                     :input-style="this.input_style"
                     v-on:input="validateCAPTCHA()"
                   >
@@ -173,6 +173,7 @@ export default {
           .post("/register", {
             user_phone: this.user_phone,
             user_password: this.user_password,
+            code:this.iden_code,
           })
           .then((res) => {
             console.log(res);
@@ -189,7 +190,7 @@ export default {
               this.dialogVisible = true;
             } else {
               //若注册失败
-              ElMessage.error("该手机号已有账号，注册失败！");
+              ElMessage.error("该手机号已有账号或验证码输入错误，注册失败！");
               (this.user_phone = ""),
                 (this.user_password = ""),
                 (this.iden_code = ""),
@@ -275,10 +276,35 @@ export default {
         this.user_phone = "";
         return;
       }
-      console.log("验证码发送成功！");
-      this.isDisposed = true;
-      this.handleTimeChange();
-    },
+      axios
+        .post("/register/verifycode",{
+          user_phone:this.user_phone,
+        })
+        .then((res) => {
+          console.log(res);
+          console.log(res.data);
+          if(res.data.status == true){
+            console.log("验证码发送成功！");
+            ElMessage({
+              message: "验证码发送成功！",
+              grouping: true,
+              type: "success",
+            });
+            this.isDisposed = true;
+            this.handleTimeChange();
+          }
+          else{
+            ElMessage({
+              message: "验证码发送失败！",
+              grouping: true,
+              type: "error",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      },
     handleClose() {
       ElMessageBox.confirm("确认关闭此对话框吗?")
         .then(() => {

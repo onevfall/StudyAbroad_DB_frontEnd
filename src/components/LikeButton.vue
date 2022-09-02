@@ -6,10 +6,10 @@
   <div>
     <span style="text-align: left; margin-right: 8px" v-if="is_liked == false">
       <!-- <el-icon :size="this.size" @click="like"><Chicken /></el-icon> -->
-      <img src="../assets/favorite.png" :style="{height:this.icon_size+'px'}" @click="like">
+      <img src="../assets/favorite.png" :style="{height:this.icon_size+'px'}" @click.stop="like">
     </span>
     <span style="text-align: left; margin-right: 8px" v-else>
-      <img src="../assets/favorite_solid.png" :style="{height:this.icon_size+'px'}" @click="unLike">
+      <img src="../assets/favorite_solid.png" :style="{height:this.icon_size+'px'}" @click.stop="unLike">
     </span>
     <span
       :style="{ 'text-align': 'left', 'font-size': this.size }"
@@ -108,6 +108,48 @@ export default {
           console.log(errMsg);
         });
     },
+  },
+  updated(){
+    //查询是否点过赞
+    if (this.$store.state.is_login) {
+      axios(
+        "like/" +
+          this.dynamic_type +
+          "?user_id=" +
+          this.$store.state.user_info.user_id +
+          "&" +
+          this.dynamic_type +
+          "_id=" +
+          this.content_id
+      )
+        .then((res) => {
+          this.like_nums = res.data.data.like_times;
+          this.is_liked = res.data.status;
+          // console.log(this.is_liked);
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    } else {
+      //查询点赞个数
+      axios(
+        "like/" +
+          this.dynamic_type +
+          "?user_id=" +
+          1 +
+          "&" +
+          this.dynamic_type +
+          "_id=" +
+          this.content_id
+      )
+        .then((res) => {
+          this.like_nums = res.data.data.like_times;
+          this.is_liked = false;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    }
   },
   created() {
     //设定大小

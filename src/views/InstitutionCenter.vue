@@ -3,8 +3,13 @@
 作者：蔡明宏
 -->
 <template>
-  <div class="school-center-layout">
+  <div
+    class="school-center-layout"
+    v-loading.fullscreen.lock="isLoading"
+    element-loading-text="正在加载"
+  >
     <!-- 上半区-->
+    <!-- <page-loading v-show="isLoading"></page-loading> -->
     <div class="upBox">
       <el-container>
         <el-aside width="65%">
@@ -65,7 +70,7 @@
                           size="large"
                         >
                           <el-option
-                            v-for="(item,index) in province"
+                            v-for="(item, index) in province"
                             :key="index"
                             :label="item.value"
                             :value="item.id"
@@ -86,7 +91,7 @@
                           size="large"
                         >
                           <el-option
-                            v-for="(item,index) in city"
+                            v-for="(item, index) in city"
                             :key="index"
                             :label="item.value"
                             :value="item.id"
@@ -132,129 +137,164 @@
             </el-container>
           </el-container>
         </el-aside>
-        <el-main>
-          <img src="../assets/school_center.jpg" class="drawing" />
+        <el-main class="cover_up">
+          <div>
+            <div class="cover">
+              <img src="../assets/institution_center.jpg" class="drawing" />
+            </div>
+          </div>
         </el-main>
       </el-container>
     </div>
 
-    <div class="left_text">
-      搜索结果如下,【<span style="color:coral;">{{this.institution_list.length}}</span>】家机构符合你的搜索
-    </div>
-    <hr/>
-    <div class="downBox">
-      <div v-for="(institution, index) in institution_list" :key="index">
-        <institution-card :institution="institution"></institution-card>
-        <br />
+    <div>
+      <div class="left_text">
+        搜索结果如下,【<span style="color: coral">{{
+          this.all_num
+        }}</span
+        >】家机构符合你的搜索
+      </div>
+      <hr />
+      <div class="downBox">
+        <div v-for="(institution, index) in institution_list" :key="index">
+          <institution-card :institution="institution"></institution-card>
+          <br />
+        </div>
       </div>
     </div>
-
+  </div>
+  <div class="pagination_field">
+    <el-row justify="center">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="PAGESIZE"
+        :total="all_num"
+        @current-change="curChange"
+      />
+    </el-row>
   </div>
 </template>
 <script>
 import axios from "axios";
-import InstitutionCard from "../components/InstitutionCard.vue"
-
+import InstitutionCard from "../components/InstitutionCard.vue";
+import PageLoading from "../components/PageLoading.vue";
 export default {
   components: {
-    InstitutionCard
+    InstitutionCard,
+    PageLoading,
   },
   data() {
     return {
-      institution_list:[],      //经过筛选条件后下面展示的机构
-      all_institution_list:[],  //最初赋值获得的所有机构   
-      search_value:'',
+      cur_page: 1,
+      page_num: 90,
+      PAGESIZE: 5,
+      all_num: 0,
+      institution_list: [], //经过筛选条件后下面展示的机构
+      all_institution_list: [], //最初赋值获得的所有机构
+      search_value: "",
+      isLoading: false,
       //以下为搜索限定词
       pname: "", //省的名字
       cname: "", //市的名字
       institution_target: "", //面向国家
-      city_data:require('../assets/city_data.json'), //加载城市json文件
+      city_data: require("../assets/city_data.json"), //加载城市json文件
       //对城市的处理
       province: [],
       shi1: [],
       city: [],
       //面向国家的选择
       country_options: [
-      {
-        value: '美国',
-        label: '美国',
-      },
-      {
-        value: '英国',
-        label: '英国',
-      },
-      {
-        value: '澳洲',
-        label: '澳洲',
-      },
-      {
-        value: '加拿大',
-        label: '加拿大',
-      },
-      {
-        value: '新西兰',
-        label: '新西兰',
-      },
-      {
-        value: '新加坡',
-        label: '新加坡',
-      },
-      {
-        value: '爱尔兰',
-        label: '爱尔兰',
-      },
-      {
-        value: '中国香港',
-        label: '中国香港',
-      },
-      {
-        value: '其他',
-        label: '其他',
-      },
+        {
+          value: "美国",
+          label: "美国",
+        },
+        {
+          value: "英国",
+          label: "英国",
+        },
+        {
+          value: "澳洲",
+          label: "澳洲",
+        },
+        {
+          value: "加拿大",
+          label: "加拿大",
+        },
+        {
+          value: "新西兰",
+          label: "新西兰",
+        },
+        {
+          value: "新加坡",
+          label: "新加坡",
+        },
+        {
+          value: "爱尔兰",
+          label: "爱尔兰",
+        },
+        {
+          value: "中国香港",
+          label: "中国香港",
+        },
+        {
+          value: "其他",
+          label: "其他",
+        },
       ],
     };
   },
-  methods:{
-    goSearch(){
-      this.$router.push({
-        path:'/institution_detail',
-        query:{
-          institution_id:this.search_value
-        }
-      })
+  methods: {
+    curChange(res) {
+      this.cur_page = res;
+      this.filter();
     },
-    
-    filter(){
+    goSearch() {
+      this.$router.push({
+        path: "/institution_detail",
+        query: {
+          institution_id: this.search_value,
+        },
+      });
+    },
+
+    filter() {
+      this.isLoading = true;
       var x = ""; //需要拼接的判断
-      if(this.pname!=''){ //省份非空，就加入省份
-        x += ('institution_province=' + this.pname); 
+      if (this.pname != "") {
+        //省份非空，就加入省份
+        x += "institution_province=" + this.pname;
       }
-      if(this.cname!=''){
-        x += ('&' + 'institution_city=' + this.cname);
+      if (this.cname != "") {
+        x += "&" + "institution_city=" + this.cname;
       }
-      if(this.institution_target!=""){
-        x += ('&' + 'institution_target=' + this.institution_target);
+      if (this.institution_target != "") {
+        x += "&" + "institution_target=" + this.institution_target;
       }
+      x += "&" + "page=" + this.cur_page + "&" + "page_size=" + this.PAGESIZE;
       console.log(x);
       axios({
-      // 点击搜索时加载符合条件的数据
-      url:'institution/list?' + x,
-      method:'get',
-    }).then((res)=>{
-      console.log(res)
-      console.log(res.data.data.institution_list)
-      console.log("机构搜索成功")
-      console.log(this.country_value)
-      console.log(this.rank_type_value)
-      this.institution_list = res.data.data.institution_list
-    })
-    .catch((errMsg) =>{
-      console.log(errMsg)
-      console.log("机构列表信息失败")
-    })
+        // 点击搜索时加载符合条件的数据
+        url: "institution/list?" + x,
+        method: "get",
+      })
+        .then((res) => {
+          console.log(res);
+          console.log(res.data.data.institution_list);
+          console.log("机构搜索成功");
+          console.log(this.country_value);
+          console.log(this.rank_type_value);
+          this.institution_list = res.data.data.institution_list;
+          this.isLoading = false;
+          window.scrollTo(0,0);//将滚动条回滚至最顶端
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("机构列表信息失败");
+        });
     },
     //获取城市数据
-     getCityData: function () {
+    getCityData: function () {
       let that = this;
       that.city_data.forEach(function (item, index) {
         //省级数据
@@ -296,27 +336,42 @@ export default {
       console.log(that.cname);
     },
   },
-  mounted(){
+  mounted() {
     this.getCityData();
   },
   created() {
-    /*在此处向服务器请求数据，初始化所需变量*/
+    this.isLoading = true;
     axios({
-      // 最初加载时，此处不限定国家
-      url:'institution/list',
-      method:'get',
-    }).then((res)=>{
-      console.log(res)
-      console.log(res.data.data.institution_list)
-      this.institution_list = res.data.data.institution_list
-      this.all_institution_list = res.data.data.institution_list
+      url: "institution/num",
+      method: "get",
     })
-    .catch((errMsg) =>{
-      console.log(errMsg)
-      console.log("大失败")
-    })
+      .then((res) => {
+        this.all_num = res.data.data.num;
+        this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
+        console.log(this.all_num)
+        //进行当页数据检索
+        axios({
+          url:
+            "institution/list?" +
+            "page_size=" +
+            this.PAGESIZE,
+          method: "get",
+        })
+          .then((res) => {
+            this.institution_list = res.data.data.institution_list;
+            this.all_institution_list = res.data.data.institution_list;
+            this.isLoading = false;
+          })
+          .catch((errMsg) => {
+            console.log(errMsg);
+            console.log("第二层初始化大失败");
+          });
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+        console.log("第一层初始化大失败");
+      });
   },
- 
 };
 </script>
 
@@ -352,9 +407,32 @@ export default {
   opacity: 0.6;
   background-blend-mode: overlay;
 }
+.cover_up {
+  padding-left: 8%;
+}
+.cover {
+  width: 300px;
+  height: 230px;
+  position: relative;
+}
+.cover:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  box-shadow: 0 0 10px 10px #ffffff inset;
+}
 .drawing {
-  height: 90%;
-  object-fit: cover; /*图片缩放自适应原图的比例 */
+  /* height: 220px; */
+  /* height: 90%;
+  object-fit: cover; 图片缩放自适应原图的比例 */
+  width: 300px;
+  height: 230px;
+  display: block;
+  margin-bottom: 20px;
+  /* margin-left: 20px; */
 }
 .el-row {
   margin-bottom: 20px;
@@ -393,5 +471,9 @@ p.QS_rank_test {
 .search_component {
   margin-left: 35%;
   margin-top: 2.8%;
+}
+.pagination_field {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>

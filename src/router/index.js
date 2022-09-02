@@ -9,6 +9,8 @@ import BlogDetail from '../views/BlogDetail.vue'
 import AnswerDetail from '../views/AnswerDetail.vue'
 import SchoolDetail from '../views/SchoolDetail.vue'
 import BlogEdit from '../views/BlogEdit'
+import QuestionEdit from '../views/QuestionEdit.vue'
+import AnswerEdit from '../views/AnswerEdit.vue'
 
 import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
@@ -37,7 +39,6 @@ const routes = [
     component: NewsHomePage,
     meta: {
       title: '留学快讯首页',
-      requireAuth: true
     }
   },
   {
@@ -46,7 +47,6 @@ const routes = [
     component: NewsPage,
     meta: {
       title: '留学快讯',
-      requireAuth: true
     }
   },
   {
@@ -162,19 +162,36 @@ const routes = [
     name: 'recharge',
     component: CoinRecharge,
     meta: {
-      title: '充值页面'
+      title: '鸟币充值'
     }
   },
-  
-  //测试
   {
     path:'/blog_edit',
     name:'blog_edit',
     component:BlogEdit,
     meta:{
-      title:'动态发布'
+      title:'动态发布',
+      requireAuth:true
     }
   },
+  {
+    path:'/question_edit',
+    name:'question_edit',
+    component:QuestionEdit,
+    meta:{
+      title:'提问',
+      requireAuth:true
+    }
+  },
+  {
+    path:'/answer_edit',
+    name:'answer_edit',
+    component:AnswerEdit,
+    meta:{
+      title:'编辑回答',
+      requireAuth:true
+    }
+  }
 
 ]
 
