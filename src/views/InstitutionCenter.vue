@@ -348,6 +348,7 @@ export default {
       .then((res) => {
         this.all_num = res.data.data.num;
         this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
+        this.all_institution_list = res.data.data.institution_list;
         console.log(this.all_num)
         //进行当页数据检索
         axios({
@@ -359,7 +360,6 @@ export default {
         })
           .then((res) => {
             this.institution_list = res.data.data.institution_list;
-            this.all_institution_list = res.data.data.institution_list;
             this.isLoading = false;
           })
           .catch((errMsg) => {
