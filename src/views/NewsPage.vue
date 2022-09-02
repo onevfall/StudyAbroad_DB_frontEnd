@@ -1,6 +1,6 @@
 <!--
 快讯详情：点击左侧卡片选择不同快讯可以重新渲染快讯内容
-作者：ym jjy
+作者：焦佳宇
 -->
 <template>
   <div class="common-layout">
