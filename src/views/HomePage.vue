@@ -70,55 +70,16 @@
         class="list-item"
       >
         <div class="common-layout2">
-          <el-container>
-            <el-aside width="25%">
-              <el-image
-                style="width: 100%;"
-                :src="news.NewsFlashImage"
-              />
-            </el-aside>
-            <el-main style="width: 75%">
-              <el-card>
-                <template #header>
-                  <div class="card-header2" >
-                    <span
-                      >{{ news.NewsFlashTitle }} <br /><br />
-                    </span>
-                    <el-tag
-                      class="ml-2"
-                      type="primary"
-                      size="small"
-                      >{{ news.NewsFlashDate }}</el-tag
-                    >
-                    <el-tag
-                      class="ml-2"
-                      type="success"
-                      size="small"
-                      >{{ news.NewsFlashRegion }}</el-tag
-                    >
-                    <el-tag
-                      class="ml-2"
-                      type="warning"
-                      size="small"
-                      >{{ news.NewsFlashTag }}</el-tag
-                    >
-                  </div>
-                </template>
-                <div class="content_main">
-                  {{ news.NewsFlashSummary }}
-                </div>
-
-                <div class="moreInfo">
-                  <el-button
-                    type="primary"
-                    class="button3"
-                    @click="jumpToNewsPage(news)"
-                    >查看详情</el-button
-                  >
-                </div>
-              </el-card>
-            </el-main>
-          </el-container>
+          <news-entry
+            :news_flash_date="news.NewsFlashDate"
+            :news_flash_title="news.NewsFlashTitle"
+            :news_flash_region="news.NewsFlashRegion"
+            :news_flash_tag="news.NewsFlashTag"
+            :news_flash_summary="news.NewsFlashSummary"
+            :news_flash_id="news.NewsFlashId"
+            :news_flash_image="news.NewsFlashImage"
+            style="margin-bottom: 5px"
+          ></news-entry>
         </div>
       </li>
     </ul>
@@ -165,12 +126,14 @@
 import photo1 from "../assets/advisephoto1.png"
 import BlogInfoBoard from "@/components/BlogInfoBoard.vue";
 import QuestionCard from "../components/QuestionCard.vue";
+import NewsEntry from "@/components/NewsEntry.vue";
 import axios from "axios";
 
 export default {
   components: {
     BlogInfoBoard,
-    QuestionCard
+    QuestionCard,
+    NewsEntry
   },
   data () {
     return {

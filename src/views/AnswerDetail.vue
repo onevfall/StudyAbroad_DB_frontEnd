@@ -52,13 +52,9 @@
               <span class="user_name"
                 ><b>{{ this.answer_user_info.user_name }}</b></span
               >
-              <el-tag
-                class="ml-2"
-                type="primary"
-                size="large"
-                v-if="this.answer_infor.apply_flag"
-                >{{ "该问题已被题主采纳" }}</el-tag
-              >
+              <el-tag class="ml-2" type="primary" size="large" v-if="this.answer_infor.apply_flag">{{
+                "该问题已被题主采纳"
+              }}</el-tag>
             </el-header>
             <el-main>
               <div class="content_main">
@@ -91,7 +87,6 @@
                   @reportResponse="reportResponse"
                 />
               </div> -->
-
               <el-affix target=".content_main" position="bottom" :offset="0">
                 <div class="option_bar">
                   <el-row gutter="10">
@@ -199,7 +194,7 @@ export default {
     ReportButton,
     PageLoading,
     StarButton,
-  },
+},
   data() {
     return {
       answer_user_info: "",
@@ -242,15 +237,14 @@ export default {
             console.log(res.data.data);
             this.answer_infor = res.data.data; //获取answer全部内容
             if (this.answer_infor.answer_content.substr(0, 4) == "http") {
-              console.log("11");
-              const xhrFile = new XMLHttpRequest();
-              xhrFile.open("GET", this.answer_infor.answer_content, true);
-              xhrFile.send();
-              xhrFile.onload = () => {
-                this.answer_infor.answer_content = xhrFile.response;
-                this.finish_load_html = true;
-              };
-            }
+            const xhrFile = new XMLHttpRequest();
+            xhrFile.open("GET", this.answer_infor.answer_content, true);
+            xhrFile.send();
+            xhrFile.onload = () => {
+              this.answer_infor.answer_content = xhrFile.response;
+              this.finish_load_html = true;
+            };
+          }
           } else {
             console.log("内容获取失败");
           }

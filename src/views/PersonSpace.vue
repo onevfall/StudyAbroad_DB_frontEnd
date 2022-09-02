@@ -1673,6 +1673,7 @@ export default {
         method: "get",
       })
         .then((res) => {
+          console.log("23450", res.data.data);
           this.blog_list = res.data.data.blog_list;
           this.blog_count = res.data.data.count;
         })

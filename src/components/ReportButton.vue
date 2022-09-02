@@ -9,7 +9,7 @@
       <img
         src="../assets/warning.png"
         :style="{ height: this.icon_size + 'px' }"
-        @click="reportConfirm"
+        @click.stop="reportConfirm"
       />
     </span>
     <span style="text-align: left; margin-right: 8px" v-else>

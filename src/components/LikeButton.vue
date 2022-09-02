@@ -6,10 +6,10 @@
   <div>
     <span style="text-align: left; margin-right: 8px" v-if="is_liked == false">
       <!-- <el-icon :size="this.size" @click="like"><Chicken /></el-icon> -->
-      <img src="../assets/favorite.png" :style="{height:this.icon_size+'px'}" @click="like">
+      <img src="../assets/favorite.png" :style="{height:this.icon_size+'px'}" @click.stop="like">
     </span>
     <span style="text-align: left; margin-right: 8px" v-else>
-      <img src="../assets/favorite_solid.png" :style="{height:this.icon_size+'px'}" @click="unLike">
+      <img src="../assets/favorite_solid.png" :style="{height:this.icon_size+'px'}" @click.stop="unLike">
     </span>
     <span
       :style="{ 'text-align': 'left', 'font-size': this.size }"

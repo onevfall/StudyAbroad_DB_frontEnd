@@ -209,7 +209,7 @@
                         查看详情>></el-button
                       >
                     </el-col>
-                    <el-col :span="1"> </el-col>
+                    <!-- <el-col :span="1"> </el-col> -->
                     <el-col
                       :span="2"
                       style="margin-top: -5px; margin-left: 70px"
@@ -372,13 +372,13 @@ export default {
     starResult(result) {
       if (result) {
         ElMessage({
-          message: "关注问题成功",
+          message: "收藏问题成功",
           type: "success",
         });
         this.is_stared = true;
       } else {
         ElMessage({
-          message: "取消关注问题成功",
+          message: "取消收藏问题成功",
           type: "success",
         });
         this.is_stared = false;
@@ -575,9 +575,9 @@ export default {
     },
     starQuestionMsg() {
       if (this.is_stared == false) {
-        return "关注问题";
+        return "收藏问题";
       } else if (this.is_stared == true) {
-        return "取消关注";
+        return "取消收藏";
       } else {
         return "Loading";
       }

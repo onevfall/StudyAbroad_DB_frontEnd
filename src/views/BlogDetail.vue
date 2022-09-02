@@ -126,11 +126,7 @@
           </div>
           <el-divider />
           <div>
-            <comment-zone
-              type="1"
-              :id="this.$route.query.blog_id"
-              :key="this.$route.query.blog_id"
-            >
+            <comment-zone type="1" :id="this.$route.query.blog_id" :key="this.$route.query.blog_id">
             </comment-zone>
           </div>
           <!-- <div class="comment_field"></div> -->
