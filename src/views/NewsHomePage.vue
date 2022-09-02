@@ -1,6 +1,6 @@
 <!--
 快讯首页
-作者：ym jjy
+作者：焦佳宇
 -->
 <template>
   <carousel
@@ -24,13 +24,13 @@
       </div>
     </div>
   </div>
-  <div>
-    <el-row justify="center">
+  <div class="pagination_field">
+    <el-row justify="center" >
       <el-pagination
         background
         layout="prev, pager, next"
         :page-size="PAGESIZE"
-        :total="total_num"
+        :total="news_num_total"
         @current-change="curChange"
       />
     </el-row>
@@ -52,10 +52,25 @@ export default {
       news_list: [],
       news_num_total: 0,
       isLoading: true,
-      PAGESIZE: 10,
+      PAGESIZE: 5,
     };
   },
-
+  methods: {
+    curChange(res) {
+      this.isLoading = true;
+      axios
+        .get("newsflash/all?page=" + res + "&page_size=" + this.PAGESIZE)
+        .then((res) => {
+          this.news_list = [].concat(res.data.data.newsflashs);
+          this.isLoading = false;
+          window.scrollTo(0,0);//将滚动条回滚至最顶端
+        })
+        .catch((err) => {
+          console.log(err);
+          this.isLoading = false;
+        });
+    },
+  },
   created() {
     //在此处向服务器请求数据，初始化所需变量
     let get_news_list = axios
@@ -67,8 +82,6 @@ export default {
         console.log(err);
       });
     let get_news_num=axios.get("newsflash/num").then((res)=>{
-      console.log("asdasdadasdadasdasd");
-      console.log(res);
       this.news_num_total=res.data.data.num;
     }).catch((err)=>{
       console.log(err);
@@ -79,7 +92,6 @@ export default {
       console.log(err);
     })
   },
-  methods: {},
 };
 </script>
 
@@ -88,5 +100,9 @@ export default {
   margin-top: 10px;
   width: 96%;
   margin-left: 2%;
+}
+.pagination_field {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>
