@@ -7,7 +7,12 @@
   <el-card class="box-card" :body-style="this.body_style">
     <template #header>
       <div class="card-header">
-        <el-avatar :src="this.blog_user_info.user_profile" size="large" />
+        <el-avatar
+          :src="this.blog_user_info.user_profile"
+          size="large"
+          @click="goPersonSpace(this.blog_user_info.user_id, $event)"
+          class="owner_profile"
+        />
         <span
           ><b>{{ blog_user_info.user_name }}</b></span
         >
@@ -62,8 +67,8 @@ export default {
   },
   data() {
     return {
-      user_follower:this.blog_user_info.user_follower,
-      user_follows:this.blog_user_info.user_follows,
+      user_follower: this.blog_user_info.user_follower,
+      user_follows: this.blog_user_info.user_follows,
       identity_info: [],
       is_follow: false, //当前登录用户是否关注此用户
     };
@@ -174,6 +179,14 @@ export default {
         }
       }
     },
+    goPersonSpace(id, event) {
+      this.$router.push({
+        path: "/person_space",
+        query: {
+          host_id: id,
+        },
+      });
+    },
   },
   // onMounted(){
   beforeMount() {
@@ -188,7 +201,6 @@ export default {
       .catch((errMsg) => {
         console.log(errMsg);
       });
-    
 
     //当前用户是否关注
     axios({
@@ -205,9 +217,7 @@ export default {
       .catch((errMsg) => {
         console.log(errMsg);
       });
-    
   },
-  
 };
 </script>
 
@@ -240,5 +250,9 @@ export default {
 .user_signature {
   font-size: small;
   margin-top: 10px;
+}
+
+.owner_profile:hover {
+  box-shadow: 0 0 15px 10px #00000020;
 }
 </style>
