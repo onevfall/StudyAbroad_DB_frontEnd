@@ -81,23 +81,16 @@ export default {
       .catch((err) => {
         console.log(err);
       });
-    let get_news_num = axios
-      .get("newsflash/num")
-      .then((res) => {
-        console.log("asdasdadasdadasdasd");
-        console.log(res);
-        this.news_num_total = res.data.data.num;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    Promise.all([get_news_list, get_news_num])
-      .then(() => {
-        this.isLoading = false;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    let get_news_num=axios.get("newsflash/num").then((res)=>{
+      this.news_num_total=res.data.data.num;
+    }).catch((err)=>{
+      console.log(err);
+    });
+    Promise.all([get_news_list,get_news_num]).then(()=>{
+      this.isLoading=false; 
+    }).catch((err)=>{
+      console.log(err);
+    })
   },
 };
 </script>
