@@ -70,6 +70,7 @@
         class="list-item"
       >
         <div class="common-layout2">
+
           <news-entry
             :news_flash_date="news.NewsFlashDate"
             :news_flash_title="news.NewsFlashTitle"
@@ -80,6 +81,7 @@
             :news_flash_image="news.NewsFlashImage"
             style="margin-bottom: 5px"
           ></news-entry>
+
         </div>
       </li>
     </ul>
@@ -158,7 +160,7 @@ export default {
     this.run(),
 
     //快讯
-    axios({
+ /*   axios({
       url: "newsflash/all",
 
       method: "get",
@@ -170,11 +172,23 @@ export default {
         console.log(res.data.data);
         console.log(res.data.data.newsflashs);
         this.news_relevant = res.data.data.newsflashs.slice(0,3);
+        
         console.log(this.news_relevant);
+        for ( var i=0;i<3;i++){
+            if( this.news_relevant[i].NewsFlashImage == null){
+              this.news_relevant[i].NewsFlashImage="https://houniaoliuxue.oss-cn-shanghai.aliyuncs.com/blog/44.jpeg";
+              console.log("test pic");
+            }
+            else{
+              
+            }
+        }
+
+        
       })
       .catch((errMsg) => {
         console.log(errMsg);
-      });
+      });*/
     //博客
     axios({
         url: "/blog/time?num=6",
@@ -429,12 +443,12 @@ export default {
 .news_bg{
   margin: 0 auto;
   border-radius:2%;
-  background-color:rgb(99, 120, 217);
+  background-image: linear-gradient(rgb(99, 120, 217), #d3afa5);
   border: #9d9d9d73 1px;
   border-radius: 28px;
   box-shadow: 34px 34px 68px rgba(255, 255, 255, 0.2), -34px -34px 68px rgba(0, 0, 0, 0.19);
   text-align: center;
-  width: 100%;
+  width: 98%;
   
 }
 
@@ -507,7 +521,7 @@ export default {
   border: #9d9d9d73 1px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
   text-align: center;
-  width: 100%;
+  width: 98%;
 }
 
 .blog_title{
@@ -556,7 +570,7 @@ export default {
   border-radius: 28px;
   box-shadow: 34px 34px 68px rgba(255, 255, 255, 0.2), -34px -34px 68px rgba(0, 0, 0, 0.19);
   text-align: center;
-  width: 100%;
+  width: 98%;
 }
 
 .QA_title{
