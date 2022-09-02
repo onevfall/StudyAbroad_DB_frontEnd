@@ -7,20 +7,12 @@
   <div>
     <institution-info :institution ="this.institution_info"></institution-info>
     <el-container>
-      <el-aside width="300px">
-        <el-card
-                  :body-style="{ background: 'aliceblue' }"
-                  shadow="always"
-                >
-                  <template #header>
-                    <div class="card-header">广告栏</div>
-                  </template>
-                  <div v-for="link in links" :key="link.text" class="text">
-                    <el-link href="https://sse.tongji.edu.cn">
-                      {{ link.text }}</el-link
-                    >
-                  </div>
-        </el-card>
+      <el-aside width=25% style="overflow:visible">
+        <div  style="position:sticky;top:0px;">
+          <nav-list></nav-list>
+          <div style="height:10px"></div>
+          <Advertisement></Advertisement>
+        </div>
       </el-aside>
       <el-main>
         <div class="info_detail">
@@ -37,24 +29,22 @@ import BmapDemo from "../components/Map.vue"
 import axios from "axios";
 import InstitutionInfo from "../components/InstitutionInfo.vue";
 import InstitutionInfoCard from "../components/InstitutionInfoCard.vue";
+import NavList from "../components/NavList.vue";
+import Advertisement from "../components/Advertisement.vue";
 export default {
   components: {
     InstitutionInfo,
     InstitutionInfoCard,
-    BmapDemo
-  },
+    BmapDemo,
+    NavList,
+    Advertisement,
+    Advertisement
+},
   data() {
     return {
       institution_info: "",
       institution_id:"",
-      links: [
-        { text: "同济软院招聘信息" },
-        { text: "同济经管学院招聘信息" },
-        { text: "同济电院招聘信息" },
-        { text: "同济土木学院招聘信息" },
-        { text: "同济数院招聘信息" },
-        { text: "同济物院招聘信息" },
-      ],
+
     };
   },
   props:["institution_id"],

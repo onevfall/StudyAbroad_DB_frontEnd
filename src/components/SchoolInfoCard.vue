@@ -119,14 +119,9 @@
             </div>
       </el-main>
 
-      <el-aside width=25%>
-        <div><img src="../assets/location.png"><br>
-        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
-        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
-        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
-        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
-        </div>
-        
+      <el-aside width=30%>
+        <div style="margin-top:20px"><img src="../assets/message.png">
+            国际学生招生处联系邮箱：<a href="#" target="_blank">{{school.university_email}}</a></div>
       </el-aside>
     </el-container>
   </div>
@@ -152,11 +147,8 @@
       </el-main>
 
       <el-aside width=25%>
-        <div><img src="../assets/location.png"><br>
-        <span  class="info_tag">国家</span>：<span class="info_content">{{school.university_country}} </span><br>
-        <span  class="info_tag">省份</span>：<span class="info_content">{{school.university_location}}</span><br>
-        <span  class="info_tag">学校</span>：<span class="info_content">{{school.university_chname}}</span><br>
-        <span  class="info_tag">名称</span>：<span class="info_content">{{school.university_enname}}</span>
+        <div>
+          
         </div>
       </el-aside>
     </el-container>
