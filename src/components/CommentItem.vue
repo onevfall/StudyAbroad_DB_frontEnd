@@ -4,11 +4,16 @@
 -->
 <template>
   <!-- <el-collapse-item :key="this.comment_ischange"> -->
-    <el-collapse-item >
+  <el-collapse-item>
     <template #title>
       <div class="self_comment">
         <div class="comment_header">
-          <el-avatar :src="comment_infor.UserProfile" size="xx-small" />
+          <el-avatar
+            :src="comment_infor.UserProfile"
+            size="xx-small"
+            @click="goPersonSpace(comment_infor.UserId, $event)"
+            class="reviewer_profile"
+          />
           <span class="comment_name"
             ><b>{{ comment_infor.UserName }}</b></span
           ><br />
@@ -46,20 +51,20 @@
           </div>
           <div class="report_button" v-if="this.type == '0'">
             <report-button
-                  content_type="3"
-                  :content_id="comment_infor.AnswerCommentId"
-                  size="normal"
-                  @reportResponse="reportResponse"
-                />
+              content_type="3"
+              :content_id="comment_infor.AnswerCommentId"
+              size="normal"
+              @reportResponse="reportResponse"
+            />
             <div style="display: flex; justify-content: space-around">举报</div>
           </div>
           <div class="report_button" v-else>
             <report-button
-                  content_type="2"
-                  :content_id="comment_infor.BlogCommentId"
-                  size="normal"
-                  @reportResponse="reportResponse"
-                />
+              content_type="2"
+              :content_id="comment_infor.BlogCommentId"
+              size="normal"
+              @reportResponse="reportResponse"
+            />
             <div style="display: flex; justify-content: space-around">举报</div>
           </div>
         </div>
@@ -134,14 +139,14 @@
 
 <script>
 import LikeButton from "../components/LikeButton.vue";
-import ReportButton from "../components/ReportButton.vue"
+import ReportButton from "../components/ReportButton.vue";
 import { ElMessage } from "element-plus";
 import axios from "axios";
 //import { ElMessage } from "element-plus";
 export default {
   name: "CommentItem",
   props: ["comment_infor", "type"],
-  components: { LikeButton, ElMessage,ReportButton },
+  components: { LikeButton, ElMessage, ReportButton },
   data() {
     return {
       is_reply: false,
@@ -320,7 +325,6 @@ export default {
               this.is_reply = false;
               this.comment_now = "";
               this.comment_ischange = !this.comment_ischange;
-              
             })
             .catch((err) => {
               console.log(err);
@@ -361,6 +365,14 @@ export default {
           showClose: true,
         });
       }
+    },
+    goPersonSpace(id, event) {
+      this.$router.push({
+        path: "/person_space",
+        query: {
+          host_id: id,
+        },
+      });
     },
     // sendComment() {
     //   if (this.$store.state.is_login == false) {
@@ -414,9 +426,9 @@ export default {
     //         .catch((err) => {
     //           console.log(err);
     //         });
-    //     } 
+    //     }
     //   },
-      like(res) {
+    like(res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -450,7 +462,7 @@ export default {
         });
       }
     },
-    reportResponse(res){
+    reportResponse(res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -458,8 +470,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
-      }
-      else{
+      } else {
         ElMessage({
           type: "error",
           message: "举报失败！",
@@ -467,8 +478,8 @@ export default {
           showClose: true,
         });
       }
-    }
-  }, 
+    },
+  },
 };
 </script>
 
@@ -532,7 +543,7 @@ export default {
 .self_comment .comment_header .report_button {
   /* display: inline-block; */
   margin-top: -1.5px;
-  margin-left:10px;
+  margin-left: 10px;
   display: flex;
   justify-content: space-around;
 }
@@ -552,5 +563,9 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.reviewer_profile:hover {
+  box-shadow: 0 0 15px 10px #00000020;
 }
 </style>
