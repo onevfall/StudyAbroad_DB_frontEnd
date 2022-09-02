@@ -1,324 +1,108 @@
 <!--
 快讯首页
-作者：ym
+作者：焦佳宇
 -->
 <template>
-  <div class="total-layout">
-    <el-container>
-      <el-header height="300px">
-        
-        <carousel
+  <carousel
     type="card"
     indicator-position="none"
     style="margin-top: 10px"
   ></carousel>
-      </el-header>
-      <el-main
-        ><div class="partial-layout">
-          <el-container>
-            <el-header>
-              <div class="news">留学快讯</div>
-              <el-divider>
-                <div
-                class="el-divider__text is-center"
-                style="background-color: aliceblue"
-              >
-              <el-icon><star-filled /></el-icon>
-              </div>
-              </el-divider>
-            </el-header>
-            <el-container>
-              <el-aside width="300px" style="margin-top:3%">
-                <el-card
-                  :body-style="{ background: 'aliceblue' }"
-                  shadow="always"
-                >
-                  <template #header>
-                    <div class="card-header">广告栏</div>
-                  </template>
-                  <div v-for="link in links" :key="link.text" class="text">
-                    <el-link href="https://sse.tongji.edu.cn">
-                      {{ link.text }}</el-link
-                    >
-                  </div>
-                </el-card>
-              </el-aside>
-              <el-main style="margin-top:3%">
-                <div class="abstract">
-                  <div class="latestNews">快讯摘要</div>
-                  <div>
-                    <div class="infinite-list-wrapper" style="overflow: auto">
-                      <ul
-                        v-infinite-scroll="load"
-                        class="list"
-                        :infinite-scroll-disabled="disabled"
-                      >
-                        <li
-                          v-for="news in this.news_relevant"
-                          :key="news"
-                          class="list-item"
-                        >
-                          <div class="common-layout2">
-                            <el-container>
-                              <el-aside width="200px">
-                                <el-image
-                                  style="width: 198px; height: 183px"
-                                  :src="news.NewsFlashImage"
-                                  :fit="fit"
-                                  class="imgBorder"
-                                />
-                              </el-aside>
-                              <el-main
-                                style="width: 600px; height: 185px"
-                                class="mainColor"
-                              >
-                                <el-card
-                                  style="height: 183px; background: aliceblue"
-                                >
-                                  <template #header>
-                                    <div class="card-header2">
-                                      <span style="width: 40%">
-                                        {{ news.NewsFlashTitle }}
-
-                                        <br />
-                                      </span>
-                                      <el-tag
-                                        class="ml-2"
-                                        type="primary"
-                                        size="small"
-                                      >
-                                        {{
-                                          news.NewsFlashDate.replace("T", " ")
-                                        }}
-                                      </el-tag>
-                                      <el-tag
-                                        class="ml-2"
-                                        type="success"
-                                        size="small"
-                                      >
-                                        {{ news.NewsFlashRegion }}
-                                      </el-tag>
-                                      <el-tag
-                                        class="ml-2"
-                                        type="warning"
-                                        size="small"
-                                        >{{ news.NewsFlashTag }}</el-tag
-                                      >
-                                    </div>
-                                  </template>
-                                  <div class="content_main">
-                                    {{ news.NewsFlashSummary }}
-                                  </div>
-                                  <div class="moreInfo">
-                                    <el-button
-                                      type="primary"
-                                      class="button_moreInfo"
-                                      @click="jumpToNewsPage(news)"
-                                      >去看看</el-button
-                                    >
-                                  </div>
-                                </el-card>
-                              </el-main>
-                            </el-container>
-                          </div>
-                        </li>
-                      </ul>
-                      <p v-if="loading" style="margin-top: 10%">Loading...</p>
-                      <p v-if="noMore" style="margin-top: 10%">No more</p>
-                    </div>
-                  </div>
-                </div>
-              </el-main>
-            </el-container>
-          </el-container>
-        </div></el-main
-      >
-      
-    </el-container>
+  <div v-loading.fullscreen.lock="isLoading" style="margin-top: 30px">
+    <div class="list_field" v-if="this.news_list.length != 0">
+      <div v-for="news in this.news_list" :key="news">
+        <news-entry
+          :news_flash_date="news.NewsFlashDate"
+          :news_flash_title="news.NewsFlashTitle"
+          :news_flash_region="news.NewsFlashRegion"
+          :news_flash_tag="news.NewsFlashTag"
+          :news_flash_summary="news.NewsFlashSummary"
+          :news_flash_id="news.NewsFlashId"
+          :news_flash_image="news.NewsFlashImage"
+          style="margin-bottom: 5px"
+        ></news-entry>
+      </div>
+    </div>
+  </div>
+  <div class="pagination_field">
+    <el-row justify="center" >
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="PAGESIZE"
+        :total="news_num_total"
+        @current-change="curChange"
+      />
+    </el-row>
   </div>
 </template>
 
 <script>
-import { computed, ref } from "vue";
-
 import axios from "axios";
 
 import Carousel from "../components/Carousel.vue";
+import NewsEntry from "../components/NewsEntry.vue";
 export default {
   components: {
     Carousel,
+    NewsEntry,
   },
   data() {
     return {
-      count: ref(10),
-      loading: ref(false),
-      noMore: computed(() => this.count >= 20),
-      disabled: computed(() => this.loading || this.noMore),
-      news_info: "",
-      news_relevant: [], //存储相关快讯信息
-      links: [
-        { text: "同济软院招聘信息" },
-        { text: "同济经管学院招聘信息" },
-        { text: "同济电院招聘信息" },
-        { text: "同济土木学院招聘信息" },
-        { text: "同济数院招聘信息" },
-        { text: "同济物院招聘信息" },
-      ],
+      news_list: [],
+      news_num_total: 0,
+      isLoading: true,
+      PAGESIZE: 5,
     };
   },
-
+  methods: {
+    curChange(res) {
+      this.isLoading = true;
+      axios
+        .get("newsflash/all?page=" + res + "&page_size=" + this.PAGESIZE)
+        .then((res) => {
+          this.news_list = [].concat(res.data.data.newsflashs);
+          this.isLoading = false;
+          window.scrollTo(0,0);//将滚动条回滚至最顶端
+        })
+        .catch((err) => {
+          console.log(err);
+          this.isLoading = false;
+        });
+    },
+  },
   created() {
     //在此处向服务器请求数据，初始化所需变量
-    axios({
-      url: "newsflash/all",
-
-      method: "get",
-    })
+    let get_news_list = axios
+      .get("newsflash/all?page=1&page_size=" + this.PAGESIZE)
       .then((res) => {
-        console.log(res);
-
-        console.log(res.data);
-        console.log(res.data.data);
-        console.log(res.data.data.newsflashs);
-        this.news_relevant = res.data.data.newsflashs;
-        console.log(this.news_relevant);
+        this.news_list = [].concat(res.data.data.newsflashs);
       })
-      .catch((errMsg) => {
-        console.log(errMsg);
+      .catch((err) => {
+        console.log(err);
       });
-  },
-  methods: {
-    load() {
-      this.loading = true;
-      setTimeout(() => {
-        this.count += 2;
-        this.loading = false;
-      }, 2000);
-    },
-    jumpToNewsPage(news) {
-      this.$router.push({
-        path: "news",
-        query: {
-          news_id: news.NewsFlashId,
-        },
-      });
-    },
+    let get_news_num=axios.get("newsflash/num").then((res)=>{
+      this.news_num_total=res.data.data.num;
+    }).catch((err)=>{
+      console.log(err);
+    });
+    Promise.all([get_news_list,get_news_num]).then(()=>{
+      this.isLoading=false; 
+    }).catch((err)=>{
+      console.log(err);
+    })
   },
 };
 </script>
 
-
 <style scoped>
-.heatOrLatest {
-  margin-left: -5%;
-  margin-top: -3%;
-  width: 400px;
+.list_field {
+  margin-top: 10px;
+  width: 96%;
+  margin-left: 2%;
 }
-.news {
-  font-weight: bolder;
-  font-family: SimSun;
-  font-size: 40px;
-}
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  text-align: left;
-  font-size: 28px;
-  padding-left: 5px;
-  border-left: 10px rgb(33, 33, 126) solid;
-}
-.card-header2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 15px;
-  color: rgb(30, 23, 118);
-}
-.text {
-  font-size: 14px;
-  text-align: left;
-
-  margin-bottom: 18px;
-}
-
-.abstract {
-  text-align: left;
-  font-size: 10px;
-  background-color: white;
-  padding-top: 3%;
-  margin-top: -3%;
-}
-.latestNews {
-  margin-left: 3%;
-  text-align: left;
-  font-size: 28px;
-  padding-left: 5px;
-  border-left: 10px rgb(172, 210, 34) solid;
-  margin-bottom: 3%;
-}
-.card_field {
-  margin-top: 20px;
-  margin-left: 15%;
-  width: 500px;
-}
-.card {
+.pagination_field {
+  margin-top: 10px;
   margin-bottom: 10px;
-  margin-left: 0px;
-  width: 40px;
-}
-.el-button {
-  color: #2277aa;
-
-  font-weight: 500;
-  font-size: 20px;
-  border-radius: 4px;
-}
-.card-header2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 15px;
-  color: rgb(30, 23, 118);
-}
-
-.button_moreInfo {
-  font-size: 10px;
-  color: white;
-}
-.moreInfo {
-  margin-left: 80%;
-}
-.content_main {
-  text-align: left;
-  font-size:16px;
-}
-.common-layout2 {
-  margin-bottom: 0%;
-}
-.common-layout2:hover {
-  box-shadow: 0 8px 36px 0 rgba(0, 0, 0, 0.25);
-}
-.mainColor {
-  background-color: aliceblue;
-  color: aliceblue;
-  padding: 0px;
-}
-
-.dateAuthor {
-  font-size: 10px;
-  margin-left: -10%;
-}
-
-.infinite-list-wrapper {
-  text-align: center;
-}
-
-.infinite-list-wrapper .list-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: auto;
-  background: white;
-   margin-bottom: 3%;
 }
 </style>

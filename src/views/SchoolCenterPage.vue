@@ -160,7 +160,7 @@
       </div>
     </div>
   </div>
-  <div>
+  <div class="pagination_field">
     <el-row justify="center">
       <el-pagination background layout="prev, pager, next" :page-size="PAGESIZE" :total="all_num" @current-change="curChange"/>
     </el-row>
@@ -317,6 +317,7 @@ export default {
           console.log(this.rank_type_value);
           this.school_list = res.data.data.university_list;
           this.isLoading = false;
+          window.scrollTo(0,0);//将滚动条回滚至最顶端
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -333,7 +334,7 @@ export default {
       .then((res) => {
         this.all_num = res.data.data.num
         this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
-        
+        this.all_school_list = res.data.data.university_list;
         //进行当页数据检索
         axios({
           url: "university/rank" + "?rank_year=" + this.year_value +
@@ -342,7 +343,6 @@ export default {
         })
           .then((res) => {
             this.school_list = res.data.data.university_list;
-            this.all_school_list = res.data.data.university_list;
             this.isLoading = false;
           })
           .catch((errMsg) => {
@@ -434,5 +434,9 @@ p.QS_rank_test {
 .search_component {
   margin-left: 35%;
   margin-top: 2.8%;
+}
+.pagination_field {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>

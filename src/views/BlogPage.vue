@@ -4,14 +4,31 @@
 -->
 <template>
   <page-loading v-if="blog_list.length == 0"></page-loading>
-  <carousel
-    type="card"
-    indicator-position="none"
-    style="margin-top: 10px"
-  ></carousel>
+  <div class="header_field">
+    <el-row>
+      <el-col
+        :span="9"
+        style="text-align: left; padding-left: 220px; padding-top: 55px"
+      >
+        <img src="../assets/drawing_blog1.png" style="height: 200px" />
+      </el-col>
+      <el-col
+        :span="7"
+        style="text-align: left; padding-top: 90px; padding-left: 20px"
+      >
+        动态分享
+      </el-col>
+      <el-col
+        :span="8"
+        style="text-align: left; padding-top: 20px; padding-left: 35px"
+      >
+        <img src="../assets/drawing_blog2.png" style="height: 250px" />
+      </el-col>
+    </el-row>
+  </div>
   <div class="blog_field">
     <section class="select_field">
-      <span>
+      <!-- <span>
         <el-row gutter="10">
           <el-col span="1" @click="sortByTime">
             <img src="../assets/sort_desc.png" />
@@ -40,66 +57,140 @@
             </div>
           </el-col>
         </el-row>
-      </span>
+      </span> -->
+      <el-tabs v-model="sort_type" class="demo-tabs" @tab-click="sortSwitcher">
+        <el-tab-pane name="0">
+          <template #label>
+            <span class="custom-tabs-label">
+              <el-icon :size="20"><Star /></el-icon>
+              <span style="font-size: large">最新动态</span>
+            </span>
+          </template>
+          <section class="content_field" v-loading="this.loading">
+            <el-space warp :size="40">
+              <div class="blog_card" v-for="blog in this.blog_list" :key="blog">
+                <blog-info-board :blog_info="blog"></blog-info-board>
+              </div>
+            </el-space>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane name="1">
+          <template #label>
+            <span class="custom-tabs-label">
+              <el-icon :size="20"><Sunny /></el-icon>
+              <span style="font-size: large">热门动态</span>
+            </span>
+          </template>
+          <section class="content_field" v-loading="this.loading">
+            <el-space warp :size="40">
+              <div class="blog_card" v-for="blog in this.blog_list" :key="blog">
+                <blog-info-board :blog_info="blog"></blog-info-board>
+              </div>
+            </el-space>
+          </section>
+        </el-tab-pane>
+      </el-tabs>
     </section>
-    <section class="content_field">
-      <el-space warp :size="40">
-        <div class="blog_card" v-for="blog in this.blog_list" :key="blog">
-          <blog-info-board :blog_info="blog"></blog-info-board>
-        </div>
-      </el-space>
-    </section>
+  </div>
+  <div class="pagination_field">
+    <el-row justify="center">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="PAGESIZE"
+        :total="blog_num_total"
+        @current-change="curChange"
+        v-model:current-page="this.cur_page"
+      />
+    </el-row>
   </div>
 </template>
 
 <script>
-import Carousel from "../components/Carousel.vue";
 import BlogInfoBoard from "../components/BlogInfoBoard.vue";
 import axios from "axios";
 import PageLoading from "../components/PageLoading.vue";
 export default {
   components: {
-    Carousel,
     BlogInfoBoard,
     PageLoading,
   },
   data() {
     return {
-      sort_type: 0, //0-时间，1-热度
+      sort_type: "0", //0-时间，1-热度
       blog_list: [],
+      loading: false,
+      blog_num_total: 0,
+      PAGESIZE: 6,
+      cur_page: 1,
     };
   },
 
   methods: {
+    curChange(res) {
+      this.loading = true;
+      this.cur_page = res;
+      let sort_type_name = this.sort_type == 0 ? "time" : "heat";
+      axios
+        .get(
+          "/blog/" +
+            sort_type_name +
+            "?num=1000&page=" +
+            res +
+            "&page_size=" +
+            this.PAGESIZE
+        )
+        .then((res) => {
+          this.blog_list = [].concat(res.data.data.blog);
+          this.loading = false;
+          window.scrollTo(0, 0); //将滚动条回滚至最顶端
+        }).catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
+    },
+    sortSwitcher(res) {
+      this.cur_page = 1;
+      if (res.paneName == "0") {
+        this.sortByTime();
+      } else {
+        this.sortByHeat();
+      }
+    },
     sortByTime() {
-      if (this.sort_type == 0) {
+      if (this.sort_type == "0") {
         return;
       }
-  
-      this.sort_type = 0;
+      this.loading = true;
+      this.sort_type = "0";
       axios({
-        url: "/blog/time?num=100",
+        url: "/blog/time?num=100&page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
           this.blog_list = [].concat(res.data.data.blog);
+          this.loading = false;
         })
         .catch((errMsg) => {
           console.log(errMsg);
+          this.loading = false;
         });
     },
     sortByHeat() {
-      if (this.sort_type == 1) {
+      if (this.sort_type == "1") {
         return;
       }
-      this.sort_type = 1;
+      this.loading = true;
+      this.sort_type = "1";
       axios
-        .get("/blog/heat?num=100")
+        .get("/blog/heat?num=100&page_size=" + this.PAGESIZE + "&page=1")
         .then((res) => {
           this.blog_list = [].concat(res.data.data.blog);
+          this.loading = false;
         })
         .catch((errMsg) => {
           console.log(errMsg);
+          this.loading = false;
         });
     },
     bottoomLoading() {
@@ -107,20 +198,31 @@ export default {
         document.documentElement.clientHeight + window.scrollY >=
         document.documentElement.scrollHeight
       ) {
-        console.log();("触底了!!!!记得加载");
+        console.log();
+        ("触底了!!!!记得加载");
       }
     },
   },
   created() {
-    
-    axios
-      .get("/blog/time?num=100")
+    let get_num = axios
+      .get("/blog/time/num?num=1000")
+      .then((res) => {
+        this.blog_num_total = res.data.data.num;
+      })
+      .catch((errMsg) => {
+        console.log(errMsg);
+      });
+    let get_list = axios
+      .get("/blog/time?num=1000&page_size=" + this.PAGESIZE + "&page=1")
       .then((res) => {
         this.blog_list = [].concat(res.data.data.blog);
       })
       .catch((errMsg) => {
         console.log(errMsg);
       });
+    // Promise.all([get_num, get_list]).then(() => {
+    //   this.loading = false;
+    // });
   },
   mounted() {
     window.addEventListener("scroll", this.bottoomLoading);
@@ -133,21 +235,19 @@ export default {
 
 <style scoped>
 .blog_field {
-  margin-top: 1%;
   margin-bottom: 3%;
-  background-color: white;
   border-radius: 28px;
-  background: #ecf5ff;
-  box-shadow: 34px 34px 68px #dedfdf, -34px -34px 68px #ffffff;
+  /* box-shadow: 34px 34px 68px #dedfdf, -34px -34px 68px #ffffff; */
 }
 .select_field {
-  padding-top: 30px;
+  /* padding-top: 30px; */
   font-weight: bolder;
   margin-left: 8%;
+  width: 84%;
 }
 .content_field {
   margin-top: 2%;
-  margin-left: 8%;
+  margin-left: 3.5%;
 }
 .blog_card {
   margin-bottom: 8%;
@@ -157,5 +257,13 @@ export default {
   vertical-align: top;
   flex-wrap: wrap;
   flex-direction: row;
+}
+.header_field {
+  font-size: 70px;
+  font-family: "SimSun";
+  font-weight: bolder;
+}
+.pagination_field {
+  margin-bottom: 10px;
 }
 </style>

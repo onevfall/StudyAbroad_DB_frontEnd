@@ -163,7 +163,7 @@
       </div>
     </div>
   </div>
-  <div>
+  <div class="pagination_field">
     <el-row justify="center">
       <el-pagination
         background
@@ -286,6 +286,7 @@ export default {
           console.log(this.rank_type_value);
           this.institution_list = res.data.data.institution_list;
           this.isLoading = false;
+          window.scrollTo(0,0);//将滚动条回滚至最顶端
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -347,6 +348,7 @@ export default {
       .then((res) => {
         this.all_num = res.data.data.num;
         this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
+        this.all_institution_list = res.data.data.institution_list;
         console.log(this.all_num)
         //进行当页数据检索
         axios({
@@ -358,7 +360,6 @@ export default {
         })
           .then((res) => {
             this.institution_list = res.data.data.institution_list;
-            this.all_institution_list = res.data.data.institution_list;
             this.isLoading = false;
           })
           .catch((errMsg) => {
@@ -470,5 +471,9 @@ p.QS_rank_test {
 .search_component {
   margin-left: 35%;
   margin-top: 2.8%;
+}
+.pagination_field {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>

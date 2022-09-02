@@ -84,7 +84,7 @@ export default {
       }
     },
     userSignature() {
-      if (this.blog_user_info.user_signature >= 1) {
+      if (this.blog_user_info.user_signature != 'none') {
         return this.blog_user_info.user_signature;
       } else {
         return "该用户尚未编写个性签名";

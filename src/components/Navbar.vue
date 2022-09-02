@@ -25,10 +25,10 @@
     >
     <el-sub-menu index="3">
       <template #title>说说留学</template>
-      <el-menu-item index="question" @click="goQACenter">留学问答</el-menu-item>
+      <el-menu-item index="qa_center" @click="goQACenter">留学问答</el-menu-item>
       <el-menu-item index="blog" @click="goBlog">动态分享</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="news" @click="goNewsHome">留学快讯</el-menu-item>
+    <el-menu-item index="newsHome" @click="goNewsHome">留学快讯</el-menu-item>
 
     <el-sub-menu index="6" v-if="is_login == false">
       <template #title>登录/注册</template>
