@@ -4,10 +4,25 @@
 -->
 <template>
   <el-carousel indicator-position="outside" @change="setCurIndex" type="card">
-    <el-carousel-item v-for="(item, i) in 4" :key="item" @click="goLink(i)">
-      <!-- <img src="../assets/carousel_1.png" />
+    <el-carousel-item>
+      <img src="../assets/carousel_0.jpg"
         fit="cover" style="width: 100%; height: 100%" />
-      > -->
+      >
+    </el-carousel-item>
+    <el-carousel-item>
+      <img src="../assets/carousel_1.jpg"
+        fit="cover" style="width: 100%; height: 100%" />
+      >
+    </el-carousel-item>
+    <el-carousel-item>
+      <img src="../assets/carousel_2.jpg"
+        fit="cover" style="width: 100%; height: 100%" />
+      >
+    </el-carousel-item>
+    <el-carousel-item>
+      <img src="../assets/carousel_3.jpg"
+        fit="cover" style="width: 100%; height: 100%" />
+      >
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -16,6 +31,12 @@ export default {
   data() {
     return {
       cur_index: 0,
+      // image_url:[
+      //   "../assets/carousel_0.jpg",
+      //   "../assets/carousel_1.jpg",
+      //   "../assets/carousel_2.jpg",
+      //   "../assets/carousel_3.jpg"
+      // ]
     };
   },
   methods: {
