@@ -30,7 +30,7 @@
             <div class="user_profile_content">
               <span
                 style="font-size: 20px; font-weight: bolder; margin-right: 0.5%"
-                >{{ person_info.user_follower }}</span
+                >{{ this.user_follower_count }}</span
               >
               <span>粉丝</span>
               <el-divider
@@ -39,7 +39,11 @@
               />
               <span
                 style="font-size: 20px; font-weight: bolder; margin-right: 0.5%"
-                >{{ person_info.user_follows }}</span
+                >{{
+                  this.user_follow_count +
+                  this.follow_university_count +
+                  this.follow_institution_count
+                }}</span
               >
               <span>关注</span>
               <span
@@ -155,11 +159,42 @@
           <template #header>
             <div class="grow_center_head">
               <span>成长中心</span>
+              <el-button
+                text="primary"
+                type="primary"
+                style="margin-left: 45%"
+                @click="grow_detail = true"
+                >查看详情</el-button
+              >
             </div>
           </template>
-          <div>你已连续登录1天，继续登录999999天可获得1鸟币</div>
-          <div>你已累计登录1天，继续登录99天可获得1点经验值</div>
-          <div>当前经验：1/99</div>
+          <div style="display: flex; margin: 5% 0 7% 5%">
+            <img
+              src="../assets/level.png"
+              style="height: 30px; margin-right: 6%"
+            />
+            <div style="margin-top: 1%">
+              <span>您的等级为 </span>
+              <span style="font-weight: bold">{{ this.grow_info.level }}</span>
+              <span>，当前经验值为 </span>
+              <span style="font-weight: bold">{{ this.grow_info.exp }}</span>
+            </div>
+          </div>
+          <div style="display: flex; margin: 3%">
+            <img
+              src="../assets/sign_in.png"
+              style="height: 40px; margin-right: 3%"
+            />
+            <div style="margin-top: 3%">
+              <span>您已连续登录 </span>
+              <span style="font-weight: bold">{{
+                this.grow_info.continus
+              }}</span>
+              <span>天，明日登录即可获得 </span>
+              <span style="font-weight: bold">{{ this.gain_exp }}</span>
+              <span>点经验值</span>
+            </div>
+          </div>
         </el-card>
       </div>
       <div class="user_profile_body_right">
@@ -174,7 +209,7 @@
                       <span style="color: gray">{{ user_follow_count }}</span>
                     </span>
                   </template>
-                  <el-scrollbar height="610px">
+                  <el-scrollbar height="643px">
                     <div v-if="user_follow_count == 0">
                       <img
                         src="../assets/question-empty.png"
@@ -238,7 +273,7 @@
                       }}</span>
                     </span>
                   </template>
-                  <el-scrollbar height="610px">
+                  <el-scrollbar height="643px">
                     <div v-if="follow_university_count == 0">
                       <img
                         src="../assets/school_empty.png"
@@ -320,7 +355,7 @@
                       }}</span>
                     </span>
                   </template>
-                  <el-scrollbar height="610px">
+                  <el-scrollbar height="643px">
                     <div v-if="follow_institution_count == 0">
                       <img
                         src="../assets/institution_empty.png"
@@ -402,7 +437,7 @@
                   <span style="color: gray">{{ user_follower_count }}</span>
                 </span>
               </template>
-              <el-scrollbar height="654px">
+              <el-scrollbar height="686px">
                 <div v-if="user_follower_count == 0">
                   <img
                     src="../assets/question-empty.png"
@@ -466,7 +501,7 @@
                       <span style="color: gray">{{ star_question_count }}</span>
                     </span>
                   </template>
-                  <el-scrollbar height="610px">
+                  <el-scrollbar height="643px">
                     <div v-if="star_question_count == 0">
                       <img
                         src="../assets/QA_empty.png"
@@ -553,7 +588,7 @@
                       <span style="color: gray">{{ star_answer_count }}</span>
                     </span>
                   </template>
-                  <el-scrollbar height="610px">
+                  <el-scrollbar height="643px">
                     <div v-if="star_answer_count == 0">
                       <img
                         src="../assets/QA_empty.png"
@@ -670,7 +705,7 @@
                       <span style="color: gray">{{ star_blog_count }}</span>
                     </span>
                   </template>
-                  <el-scrollbar height="610px">
+                  <el-scrollbar height="643px">
                     <div v-if="star_blog_count == 0">
                       <img
                         src="../assets/blog_empty.png"
@@ -811,7 +846,7 @@
                   <span style="color: gray">{{ question_count }}</span>
                 </span>
               </template>
-              <el-scrollbar height="654px">
+              <el-scrollbar height="686px">
                 <div v-if="question_count == 0">
                   <img
                     src="../assets/QA_empty.png"
@@ -833,19 +868,39 @@
                   class="question_list"
                   v-for="question in question_list"
                   :key="question.QuestionId"
-                  @click="goQuestionPage(question.QuestionId, $event)"
+                  @click="
+                    goQuestionPage(
+                      question.QuestionId,
+                      question.ReviewResult,
+                      $event
+                    )
+                  "
                 >
                   <div style="display: block; width: 100%">
                     <div
                       style="
-                        font-size: 20px;
-                        font-weight: bold;
                         margin-left: 2%;
                         margin-bottom: 2%;
                         text-align: left;
                       "
                     >
-                      {{ question.QuestionTitle }}
+                      <span style="font-size: 20px; font-weight: bold">
+                        {{ question.QuestionTitle }}
+                      </span>
+                      <el-tag
+                        v-if="question.ReviewResult == '待审核'"
+                        type=""
+                        effect="light"
+                      >
+                        审核中
+                      </el-tag>
+                      <el-tag
+                        v-if="question.ReviewResult == '不通过'"
+                        type="danger"
+                        effect="light"
+                      >
+                        审核不通过
+                      </el-tag>
                     </div>
                     <div
                       style="
@@ -902,7 +957,7 @@
                   <span style="color: gray">{{ answer_count }}</span>
                 </span>
               </template>
-              <el-scrollbar height="654px">
+              <el-scrollbar height="686px">
                 <div v-if="answer_count == 0">
                   <img
                     src="../assets/QA_empty.png"
@@ -924,19 +979,40 @@
                   class="answer_list"
                   v-for="(answer, index) in answer_list"
                   :key="answer"
-                  @click="goAnswerDetail(answer.question_id, index, $event)"
+                  @click="
+                    goAnswerDetail(
+                      answer.question_id,
+                      index,
+                      answer.ReviewResult,
+                      $event
+                    )
+                  "
                 >
                   <div style="display: block; width: 100%">
                     <div
                       style="
-                        font-size: 20px;
-                        font-weight: bold;
                         margin-left: 2%;
                         margin-bottom: 2%;
                         text-align: left;
                       "
                     >
-                      {{ answer.QuestionTitle }}
+                      <span style="font-size: 20px; font-weight: bold">
+                        {{ answer.QuestionTitle }}
+                      </span>
+                      <el-tag
+                        v-if="answer.ReviewResult == '待审核'"
+                        type=""
+                        effect="light"
+                      >
+                        审核中
+                      </el-tag>
+                      <el-tag
+                        v-if="answer.ReviewResult == '不通过'"
+                        type="danger"
+                        effect="light"
+                      >
+                        审核不通过
+                      </el-tag>
                     </div>
                     <div
                       style="
@@ -1017,7 +1093,7 @@
                   <span style="color: gray">{{ blog_count }}</span>
                 </span>
               </template>
-              <el-scrollbar height="654px">
+              <el-scrollbar height="686px">
                 <div v-if="blog_count == 0">
                   <img
                     src="../assets/blog_empty.png"
@@ -1039,30 +1115,42 @@
                   class="blog_list"
                   v-for="(blog, index) in blog_list"
                   :key="blog.BlogId"
-                  @click="goBlogDetail(blog.BlogId, index, 1, $event)"
+                  @click="
+                    goBlogDetail(
+                      blog.BlogId,
+                      index,
+                      1,
+                      blog.ReviewResult,
+                      $event
+                    )
+                  "
                 >
                   <div style="display: block; width: 100%">
                     <div
                       style="
-                        font-size: 20px;
-                        font-weight: bold;
                         margin-left: 2%;
                         margin-bottom: 2%;
                         text-align: left;
                       "
                     >
-                      {{ this.person_info.user_name }}：
+                      <span style="font-size: 20px; font-weight: bold">
+                        {{ this.person_info.user_name }}：
+                      </span>
+                      <el-tag
+                        v-if="blog.ReviewResult == '待审核'"
+                        type=""
+                        effect="light"
+                      >
+                        审核中
+                      </el-tag>
+                      <el-tag
+                        v-if="blog.ReviewResult == '不通过'"
+                        type="danger"
+                        effect="light"
+                      >
+                        审核不通过
+                      </el-tag>
                     </div>
-                    <!-- <div
-                      style="
-                        font-size: 15px;
-                        font-weight: normal;
-                        margin-left: 2%;
-                        text-align: left;
-                      "
-                    >
-                      {{ blog.BlogSummary }}
-                    </div> -->
                     <div style="display: flex">
                       <div style="text-align: left; padding: 2%">
                         <img
@@ -1163,6 +1251,40 @@
       </span>
     </template>
   </el-dialog>
+  <el-dialog v-model="grow_detail" title="成长详情" width="50%">
+    <div
+      style="
+        color: gray;
+        font-weight: bold;
+        font-size: 20px;
+        text-align: left;
+        margin-left: 5%;
+        margin-bottom: 2%;
+      "
+    >
+      等级{{ this.grow_info.level }}：
+    </div>
+    <el-progress
+      :text-inside="true"
+      :stroke-width="26"
+      :percentage="
+        (100 * this.grow_info.exp) /
+        (this.grow_info.level * this.grow_info.level)
+      "
+      style="width: 70%; margin-left: 17%"
+    >
+      <span style="font-size: 20px"
+        >{{ this.grow_info.exp }}/{{
+          this.grow_info.level * this.grow_info.level
+        }}</span
+      >
+    </el-progress>
+    <template #footer>
+      <span>
+        <el-button type="primary" @click="grow_detail = false">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -1189,6 +1311,8 @@ export default {
       person_info: {},
       identity_info_list: [],
       achieve_info: {},
+      grow_info: {},
+      gain_exp: 0,
       visit_id: -1,
       host_id: -1,
       user_follow_list: [],
@@ -1223,6 +1347,7 @@ export default {
       fresh_type: 0, //0-动态，1-问题，2回答
       to_be_killed_type: "",
       to_be_killed_id: -1,
+      grow_detail: false,
     };
   },
   props: ["host_id"],
@@ -1385,8 +1510,16 @@ export default {
         },
       });
     },
-    goQuestionPage(id, event) {
+    goQuestionPage(id, flag, event) {
       console.log(id);
+      if (flag != "通过") {
+        ElMessage({
+          type: "error",
+          message: "还不能查看哦",
+          showClose: true,
+        });
+        return;
+      }
       this.$router.push({
         path: "/question",
         query: {
@@ -1394,8 +1527,16 @@ export default {
         },
       });
     },
-    goAnswerDetail(id, index, event) {
+    goAnswerDetail(id, index, flag, event) {
       console.log(id);
+      if (flag != "通过") {
+        ElMessage({
+          type: "error",
+          message: "还不能查看哦",
+          showClose: true,
+        });
+        return;
+      }
       this.$router.push({
         path: "/answer_detail",
         query: {
@@ -1414,7 +1555,7 @@ export default {
         },
       });
     },
-    goBlogDetail(id, index, flag, event) {
+    goBlogDetail(id, index, flag, flag_re, event) {
       if (flag == 0) {
         this.$router.push({
           path: "/blog_detail",
@@ -1425,6 +1566,14 @@ export default {
           },
         });
       } else {
+        if (flag_re != "通过") {
+          ElMessage({
+            type: "error",
+            message: "还不能查看哦",
+            showClose: true,
+          });
+          return;
+        }
         this.$router.push({
           path: "/blog_detail",
           query: {
@@ -1537,6 +1686,23 @@ export default {
         .catch((errMsg) => {
           console.log(errMsg);
           console.log("获取成就信息失败");
+        });
+      //成长信息
+      axios({
+        url: "userinfo/grow",
+        params: { user_id: this.host_id },
+        method: "get",
+      })
+        .then((res) => {
+          this.grow_info = res.data.data;
+          this.gain_exp =
+            this.grow_info.continus == 7
+              ? 1
+              : Math.pow(this.grow_info.continus + 1, 2);
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("获取成长信息失败");
         });
       //粉丝列表
       axios({
@@ -1681,6 +1847,11 @@ export default {
           console.log(errMsg);
           console.log("获取动态信息失败");
         });
+      this.person_info.user_follows =
+        this.user_follow_count +
+        this.follow_university_count +
+        this.follow_institution_count;
+      this.person_info.user_follower = this.user_follower_count;
     },
     openDeleteDia(id, type_name) {
       this.to_be_killed_id = id;
