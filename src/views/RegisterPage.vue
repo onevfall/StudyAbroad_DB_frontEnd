@@ -3,7 +3,7 @@
 作者：方新宇
 -->
 <template>
-  <div class="common-layout">
+  <div class="common-layout body_card">
     <el-container>
       <el-header height="100px">
         <!-- <div id="registerTips">
@@ -366,5 +366,12 @@ export default {
 }
 .dialog-footer button:first-child {
   margin-right: 10px;
+}
+.body_card {
+  width:98%;
+  margin-left: 1%;
+  border-radius: 17px;
+  background: linear-gradient(#ffffffd0, #bdecfdd5);
+  box-shadow: -5px -5px 10px #eff0f0, 5px 5px 10px #ffffff;
 }
 </style>

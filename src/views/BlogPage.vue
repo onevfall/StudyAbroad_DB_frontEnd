@@ -3,106 +3,89 @@
 作者：焦佳宇
 -->
 <template>
-  <page-loading v-if="blog_list.length == 0"></page-loading>
-  <div class="header_field">
-    <el-row>
-      <el-col
-        :span="9"
-        style="text-align: left; padding-left: 220px; padding-top: 55px"
-      >
-        <img src="../assets/drawing_blog1.png" style="height: 200px" />
-      </el-col>
-      <el-col
-        :span="7"
-        style="text-align: left; padding-top: 90px; padding-left: 20px"
-      >
-        动态分享
-      </el-col>
-      <el-col
-        :span="8"
-        style="text-align: left; padding-top: 20px; padding-left: 35px"
-      >
-        <img src="../assets/drawing_blog2.png" style="height: 250px" />
-      </el-col>
-    </el-row>
-  </div>
-  <div class="blog_field">
-    <section class="select_field">
-      <!-- <span>
-        <el-row gutter="10">
-          <el-col span="1" @click="sortByTime">
-            <img src="../assets/sort_desc.png" />
-          </el-col>
-          <el-col span="1" @click="sortByTime">
-            <div
-              :style="{
-                'margin-top': '9px',
-                color: this.sort_type == 0 ? '#fbc563' : 'black',
-              }"
-            >
-              发布时间
-            </div>
-          </el-col>
-          <el-col span="1" @click="sortByHeat">
-            <img src="../assets/sort_asc.png" />
-          </el-col>
-          <el-col span="1" @click="sortByHeat">
-            <div
-              :style="{
-                'margin-top': '9px',
-                color: this.sort_type == 1 ? '#fbc563' : 'black',
-              }"
-            >
-              动态热度
-            </div>
-          </el-col>
-        </el-row>
-      </span> -->
-      <el-tabs v-model="sort_type" class="demo-tabs" @tab-click="sortSwitcher">
-        <el-tab-pane name="0">
-          <template #label>
-            <span class="custom-tabs-label">
-              <el-icon :size="20"><Star /></el-icon>
-              <span style="font-size: large">最新动态</span>
-            </span>
-          </template>
-          <section class="content_field" v-loading="this.loading">
-            <el-space warp :size="40">
-              <div class="blog_card" v-for="blog in this.blog_list" :key="blog">
-                <blog-info-board :blog_info="blog"></blog-info-board>
-              </div>
-            </el-space>
-          </section>
-        </el-tab-pane>
-        <el-tab-pane name="1">
-          <template #label>
-            <span class="custom-tabs-label">
-              <el-icon :size="20"><Sunny /></el-icon>
-              <span style="font-size: large">热门动态</span>
-            </span>
-          </template>
-          <section class="content_field" v-loading="this.loading">
-            <el-space warp :size="40">
-              <div class="blog_card" v-for="blog in this.blog_list" :key="blog">
-                <blog-info-board :blog_info="blog"></blog-info-board>
-              </div>
-            </el-space>
-          </section>
-        </el-tab-pane>
-      </el-tabs>
-    </section>
-  </div>
-  <div class="pagination_field">
-    <el-row justify="center">
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :page-size="PAGESIZE"
-        :total="blog_num_total"
-        @current-change="curChange"
-        v-model:current-page="this.cur_page"
-      />
-    </el-row>
+  <div class="body_card">
+    <div class="header_field" v-loading.fullscreen.lock="blog_list.length == 0">
+      <el-row>
+        <el-col
+          :span="9"
+          style="text-align: left; padding-left: 220px; padding-top: 55px"
+        >
+          <img src="../assets/drawing_blog1.png" style="height: 200px" />
+        </el-col>
+        <el-col
+          :span="7"
+          style="text-align: left; padding-top: 90px; padding-left: 20px"
+        >
+          动态分享
+        </el-col>
+        <el-col
+          :span="8"
+          style="text-align: left; padding-top: 20px; padding-left: 35px"
+        >
+          <img src="../assets/drawing_blog2.png" style="height: 250px" />
+        </el-col>
+      </el-row>
+    </div>
+    <div class="blog_field">
+      <section class="select_field">
+        <el-tabs
+          v-model="sort_type"
+          class="demo-tabs"
+          @tab-click="sortSwitcher"
+        >
+          <el-tab-pane name="0">
+            <template #label>
+              <span class="custom-tabs-label">
+                <el-icon :size="20"><Star /></el-icon>
+                <span style="font-size: large">最新动态</span>
+              </span>
+            </template>
+            <section class="content_field" v-loading="this.loading">
+              <el-space warp :size="40">
+                <div
+                  class="blog_card"
+                  v-for="blog in this.blog_list"
+                  :key="blog"
+                >
+                  <blog-info-board :blog_info="blog"></blog-info-board>
+                </div>
+              </el-space>
+            </section>
+          </el-tab-pane>
+          <el-tab-pane name="1">
+            <template #label>
+              <span class="custom-tabs-label">
+                <el-icon :size="20"><Sunny /></el-icon>
+                <span style="font-size: large">热门动态</span>
+              </span>
+            </template>
+            <section class="content_field" v-loading="this.loading">
+              <el-space warp :size="40">
+                <div
+                  class="blog_card"
+                  v-for="blog in this.blog_list"
+                  :key="blog"
+                >
+                  <blog-info-board :blog_info="blog"></blog-info-board>
+                </div>
+              </el-space>
+            </section>
+          </el-tab-pane>
+        </el-tabs>
+      </section>
+    </div>
+    <div class="pagination_field">
+      <el-row justify="center">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :page-size="PAGESIZE"
+          :total="blog_num_total"
+          @current-change="curChange"
+          v-model:current-page="this.cur_page"
+        />
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -144,7 +127,8 @@ export default {
           this.blog_list = [].concat(res.data.data.blog);
           this.loading = false;
           window.scrollTo(0, 0); //将滚动条回滚至最顶端
-        }).catch((err) => {
+        })
+        .catch((err) => {
           this.loading = false;
           console.log(err);
         });
@@ -247,7 +231,7 @@ export default {
 }
 .content_field {
   margin-top: 2%;
-  margin-left: 3.5%;
+  margin-left: 1%;
 }
 .blog_card {
   margin-bottom: 8%;
@@ -265,5 +249,12 @@ export default {
 }
 .pagination_field {
   margin-bottom: 10px;
+}
+.body_card {
+  width:98%;
+  margin-left: 1%;
+  border-radius: 17px;
+  background: linear-gradient(#ffffffd0, #bdecfdd5);
+  box-shadow: -5px -5px 10px #eff0f0, 5px 5px 10px #ffffff;
 }
 </style>
