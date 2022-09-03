@@ -526,7 +526,13 @@
                       class="star_question_list"
                       v-for="star_question in star_question_list"
                       :key="star_question.question_id"
-                      @click="goQuestionPage(star_question.question_id, $event)"
+                      @click="
+                        goQuestionPage(
+                          star_question.question_id,
+                          '收藏',
+                          $event
+                        )
+                      "
                     >
                       <div style="display: block; width: 100%">
                         <div
@@ -730,7 +736,15 @@
                       class="star_blog_list"
                       v-for="(star_blog, index) in star_blog_list"
                       :key="star_blog.blog_id"
-                      @click="goBlogDetail(star_blog.blog_id, index, 0, $event)"
+                      @click="
+                        goBlogDetail(
+                          star_blog.blog_id,
+                          index,
+                          0,
+                          '收藏',
+                          $event
+                        )
+                      "
                     >
                       <div style="display: block; width: 100%">
                         <div
@@ -1519,7 +1533,7 @@ export default {
     },
     goQuestionPage(id, flag, event) {
       console.log(id);
-      if (flag != "通过") {
+      if (!(flag == "通过" || flag == "收藏")) {
         ElMessage({
           type: "error",
           message: "还不能查看哦",
