@@ -838,7 +838,7 @@
                 </el-tab-pane>
               </el-tabs>
             </el-tab-pane>
-            <el-tab-pane :key="need_refresh">
+            <el-tab-pane >
               <template #label>
                 <span class="first-tabs-label">
                   <span>问题 </span>
@@ -846,6 +846,7 @@
                 </span>
               </template>
               <el-scrollbar height="686px">
+                <div :key="need_refresh_question">
                 <div v-if="question_count == 0">
                   <img
                     src="../assets/QA_empty.png"
@@ -863,7 +864,7 @@
                     现在就提问
                   </el-link>
                 </div>
-                <div
+                <div 
                   class="question_list"
                   v-for="question in question_list"
                   :key="question.QuestionId"
@@ -947,9 +948,10 @@
                     </div>
                   </div>
                 </div>
+              </div>
               </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane :key="need_refresh">
+            <el-tab-pane :key="need_refresh_answer">
               <template #label>
                 <span class="first-tabs-label">
                   <span>回答 </span>
@@ -957,6 +959,7 @@
                 </span>
               </template>
               <el-scrollbar height="686px">
+                <div :key="need_refresh_answer">
                 <div v-if="answer_count == 0">
                   <img
                     src="../assets/QA_empty.png"
@@ -1083,9 +1086,10 @@
                     </div>
                   </div>
                 </div>
+              </div>
               </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane>
+            <el-tab-pane >
               <template #label>
                 <span class="first-tabs-label">
                   <span>动态 </span>
@@ -1093,6 +1097,7 @@
                 </span>
               </template>
               <el-scrollbar height="686px">
+                <div :key="need_refresh_blog">
                 <div v-if="blog_count == 0">
                   <img
                     src="../assets/blog_empty.png"
@@ -1229,6 +1234,7 @@
                     </div>
                   </div>
                 </div>
+              </div>
               </el-scrollbar>
             </el-tab-pane>
           </el-tabs>
@@ -1336,7 +1342,9 @@ export default {
       blog_count: -1,
       loading: true,
       delete_dialog_visible: false,
-      need_refresh: false,
+      need_refresh_question:false,
+      need_refresh_answer:false,
+      need_refresh_blog:false,
       fresh_followerlist_button: 1,
       fresh_userlist_button: 1,
       follow_or_follower: 0, //0-follow
@@ -1872,16 +1880,24 @@ export default {
         })
         .then((res) => {
           this.delete_dialog_visible = false;
-          this.to_be_killed_type = "";
-          this.to_be_killed_id = -1;
-          console.log(res);
+          console.log(res.data)
           if (res.data.status == true) {
             ElMessage.success("删除成功!");
             // this.$emit("deletecheck",true);
-            this.need_refresh = !this.need_refresh;
+            if (this.to_be_killed_type == "question") {
+              this.need_refresh_question = !this.need_refresh_question;
+            }
+            if (this.to_be_killed_type == "answer") {
+              this.need_refresh_answer = !this.need_refresh_answer;
+            }
+            if (this.to_be_killed_type == "blog") {
+              this.need_refresh_blog = !this.need_refresh_blog;
+            }
           } else {
             ElMessage.error("删除失败!");
           }
+          this.to_be_killed_type = "";
+          this.to_be_killed_id = -1;
         })
         .catch((errMsg) => {
           this.delete_dialog_visible = false;
@@ -1896,9 +1912,50 @@ export default {
     $route() {
       this.initPage();
     },
-    need_refresh() {
-      console.log("fresh!");
-      this.initPage();
+    need_refresh_question() {
+      axios({
+        url: "userinfo/questions",
+        params: { user_id: this.host_id },
+        method: "get",
+      })
+        .then((res) => {
+          this.question_list = res.data.data.question_list;
+          this.question_count = res.data.data.count;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("获取问题信息失败");
+        });
+    },
+    need_refresh_answer() {
+      axios({
+        url: "userinfo/answers",
+        params: { user_id: this.host_id },
+        method: "get",
+      })
+        .then((res) => {
+          this.answer_list = res.data.data.answer_list;
+          this.answer_count = res.data.data.count;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("获取回答信息失败");
+        });
+    },
+    need_refresh_blog() {
+      axios({
+        url: "userinfo/blogs",
+        params: { user_id: this.host_id },
+        method: "get",
+      })
+        .then((res) => {
+          this.blog_list = res.data.data.blog_list;
+          this.blog_count = res.data.data.count;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("获取动态信息失败");
+        });
     },
   },
   created() {

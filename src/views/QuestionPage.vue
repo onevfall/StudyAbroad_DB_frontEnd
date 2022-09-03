@@ -3,7 +3,7 @@
 作者：王若晗 方新宇
 -->
 <template>
-  <div class="common-layout" v-loading.fullscreen.lock="this.card_info.length == 0">
+  <div class="common-layout" v-loading.fullscreen.lock="this.question_info == '' ">
     <el-container>
       <el-main>
         <el-card id="question" shadow="never">
@@ -467,6 +467,7 @@ export default {
     },
     initPage: function () {
       this.question_id = this.$route.query.question_id;
+      this.question_info = '';
       axios({
         url: "question",
         method: "get",
@@ -497,9 +498,11 @@ export default {
         },
       })
         .then((res) => {
+          // console.log(this.question_id)
           this.answer_num = res.data.data.count;
           this.answer_info = res.data.data.answers;
           this.apply_id = res.data.data.apply;
+          // console.log("11",res.data.data)
           for (let i = 0; i < this.answer_info.length; ++i) {
             if (this.answer_info[i].AnswerId == this.apply_id) {
               let tmp = this.answer_info[0];
@@ -523,6 +526,7 @@ export default {
         .then((res) => {
           this.related_question_tag = res.data.data.tag;
           this.question_relevant = res.data.data.related_questions;
+          console.log(res.data.data)
           for (let i = 0; i < this.question_relevant.length; i++) {
             var tem_info = {
               essence: "问题",
