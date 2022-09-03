@@ -52,6 +52,8 @@
                     shape="circle"
                     :size="50"
                     :src="this.question_info.user_profile"
+                    @click="goPersonSpace(this.question_info.user_id, $event)"
+                    class="asker_profile"
                   />
                 </el-col>
                 <span class="user_name">
@@ -169,6 +171,8 @@
                         shape="circle"
                         :size="35"
                         :src="ans.UserProfile"
+                        @click="goPersonSpace(ans.AnswerUserId, $event)"
+                        class="answer_profile"
                       />
                     </el-col>
                     <span class="user_name">
@@ -357,6 +361,14 @@ export default {
     };
   },
   methods: {
+    goPersonSpace(id, event) {
+      this.$router.push({
+        path: "/person_space",
+        query: {
+          host_id: id,
+        },
+      });
+    },
     starResult(result) {
       if (result) {
         ElMessage({
@@ -364,7 +376,7 @@ export default {
           type: "success",
         });
         this.is_stared = true;
-      }else{
+      } else {
         ElMessage({
           message: "取消收藏问题成功",
           type: "success",
@@ -402,7 +414,7 @@ export default {
     //       message: "已取消关注问题",
     //       type: "success",
     //     });
-       
+
     //     this.is_stared = false;
     //   } else {
     //     ElMessage({
@@ -743,5 +755,13 @@ export default {
 
 #star:hover {
   background-color: #0071e2;
+}
+
+.asker_profile:hover {
+  box-shadow: 0 0 15px 10px #00000020;
+}
+
+.answer_profile:hover {
+  box-shadow: 0 0 15px 10px #00000020;
 }
 </style>

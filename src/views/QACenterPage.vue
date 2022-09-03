@@ -1,57 +1,94 @@
 <!--
 描述：问答首页
-作者：王若晗
+作者：王若晗 方新宇
 -->
 <template>
   <page-loading v-if="this.loading"></page-loading>
   <el-container>
     <el-header>
       <el-row>
-        <el-col :span="9" style="text-align:left;padding-left:220px;padding-top:55px">
+        <el-col
+          :span="9"
+          style="text-align: left; padding-left: 220px; padding-top: 55px"
+        >
           <img src="../assets/drawing_qacenter2.png" style="height: 140px" />
         </el-col>
-        <el-col :span="7" style="text-align:left;padding-top:90px;padding-left:20px">
+        <el-col
+          :span="7"
+          style="text-align: left; padding-top: 90px; padding-left: 20px"
+        >
           留学问答
+          <el-row style="text-align: center;margin-top:30px;margin-left: -10px;">
+
+          <span style="font-size: 26px">没找到想看的问题？</span>
+          <el-link
+            type="primary"
+            :underline="false"
+            @click="goToAskPage"
+            style="font-size: 26px; font-weight: 500"
+          >
+            去提问
+          </el-link>
+
+
+      </el-row>
         </el-col>
-        <el-col :span="8" style="text-align:left;padding-top:20px;padding-left:35px">
+        <el-col
+          :span="8"
+          style="text-align: left; padding-top: 20px; padding-left: 35px"
+        >
           <img src="../assets/drawing_qacenter1.png" style="height: 250px" />
         </el-col>
       </el-row>
     </el-header>
     <el-main>
       <el-row>
-        <el-col :span="3" style="padding-left:10px">
-          <el-button type="primary" text="primary" @click="newStatus" style="font-size:20px">
+        <el-col :span="3" style="padding-left: 10px">
+          <el-button
+            type="primary"
+            text="primary"
+            @click="newStatus"
+            style="font-size: 20px"
+          >
             <el-icon :size="20"><Star /></el-icon>
             按最新话题
           </el-button>
         </el-col>
         <el-col :span="3">
-          <el-button type="primary" text="primary" @click="heatStatus" style="font-size:20px">
+          <el-button
+            type="primary"
+            text="primary"
+            @click="heatStatus"
+            style="font-size: 20px"
+          >
             <el-icon :size="20"><Sunny /></el-icon>
             按最热话题
           </el-button>
         </el-col>
       </el-row>
-      <el-row style="margin-top:20px" v-if="this.display_status">
-        <el-col :span="6" class="card-field" v-for="ques in this.question_time_info" :key="ques">
-          <question-card :question_info="ques"></question-card>
+      <el-row style="margin-top: 20px" v-loading="this.question_loading">
+        <el-col
+          :span="6"
+          class="card-field"
+          v-for="(ques, index) in this.question_list"
+          :key="ques"
+        >
+          <question-card :question_info="ques" :question_num="index+(this.cur_page-1)*this.PAGESIZE"></question-card>
         </el-col>
       </el-row>
-      <el-row style="margin-top:20px" v-if="!this.display_status">
-        <el-col :span="6" class="card-field" v-for="ques in this.question_heat_info" :key="ques">
-          <question-card :question_info="ques"></question-card>
-        </el-col>
-      </el-row>
-      <el-row style="text-align:center">
-        <div id="go-ask" style="margin-left:36%;">
-          <span>没找到想看的问题？</span>
-          <el-link type="primary" :underline="false" @click="goToAskPage" 
-          style="font-size:29px;padding-bottom:6px;font-weight:500">
-          去提问
-          </el-link>
-        </div>
-      </el-row>
+     
+      <div class="pagination_field">
+        <el-row justify="center">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="PAGESIZE"
+            :total="question_num_total"
+            @current-change="curChange"
+            v-model:current-page="this.cur_page"
+          />
+        </el-row>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -60,85 +97,139 @@
 import QuestionCard from "../components/QuestionCard.vue";
 import PageLoading from "../components/PageLoading.vue";
 import axios from "axios";
-export default ({
+import { ElMessage } from "element-plus";
+export default {
   name: "QACenterPage",
   components: {
     QuestionCard,
-    PageLoading
+    PageLoading,
+    ElMessage,
   },
   data() {
     return {
-      question_time_info:[],
-      question_heat_info:[],
-      display_status:true,
-      loading:true
+      question_list: [],
+      question_num_total: 0,
+      PAGESIZE: 8,
+      display_status: true,
+      loading: true,
+      question_loading: false,
+      cur_page: 1,
     };
   },
-  methods:{
-    newStatus:function(){
-      this.display_status=true;
+  methods: {
+    newStatus: function () {
+      this.cur_page = 1;
+      this.display_status = true;
+      this.sortByTime();
     },
-    heatStatus:function(){
-      this.display_status=false;
+    heatStatus: function () {
+      this.cur_page = 1;
+      this.display_status = false;
+      this.sortByHeat();
     },
-    goToAskPage:function(){
+    goToAskPage: function () {
       this.$router.push({
         name: "question_edit",
       });
-    }
+    },
+    curChange: function (res) {
+      this.question_loading = true;
+      this.cur_page = res;
+      let sort_type_name = this.display_status ? "time" : "heat";
+      axios
+        .get(
+          "/question/" +
+            sort_type_name +
+            "?page=" +
+            res +
+            "&page_size=" +
+            this.PAGESIZE
+        )
+        .then((res) => {
+          this.question_list = [].concat(res.data.data.question);
+          this.question_loading = false;
+          window.scrollTo(0, 0); //将滚动条回滚至最顶端
+        })
+        .catch((err) => {
+          this.question_loading = false;
+          console.log(err);
+          ElMessage.error("加载失败！！！");
+        });
+    },
+    sortByTime: function () {
+      this.question_loading = true;
+      axios({
+        url: "/question/time?page_size=" + this.PAGESIZE + "&page=1",
+        method: "get",
+      })
+        .then((res) => {
+          this.question_list = [].concat(res.data.data.question);
+          this.question_loading = false;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          this.question_loading = false;
+          ElMessage.error("切换到时间失败！！！");
+        });
+    },
+    sortByHeat: function () {
+      this.question_loading = true;
+      axios({
+        url: "/question/heat?page_size=" + this.PAGESIZE + "&page=1",
+        method: "get",
+      })
+        .then((res) => {
+          this.question_list = [].concat(res.data.data.question);
+          this.question_loading = false;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          this.question_loading = false;
+          ElMessage.error("切换到热度失败！！！");
+        });
+    },
   },
-  created(){
-    axios({
-      url: "question/time",
-      method: "get",
+  created() {
+    let get_num = axios
+      .get("/question/num")
+      .then((res) => {
+        this.question_num_total = res.data.data.num;
       })
+      .catch((errMsg) => {
+        console.log(errMsg);
+      });
+
+    axios({
+      url: "question/time?page_size=" + this.PAGESIZE + "&page=1",
+      method: "get",
+    })
       .then((res) => {
         console.log(res.data.data);
-        this.question_time_info=res.data.data.question.slice(0,8);
-        for(let i=0;i<this.question_time_info.length;i++)
-        {
-          this.question_time_info[i].num=i;
-        };
-        this.loading=false;
+        this.question_list = [].concat(res.data.data.question);
+        this.question_loading = false;
+        this.loading = false;
       })
       .catch((err) => {
         console.log(err);
       });
-    axios({
-      url: "question/heat",
-      method: "get",
-      })
-      .then((res) => {
-        console.log(res.data.data);
-        this.question_heat_info=res.data.data.question.slice(0,8);
-        for(let i=0;i<this.question_heat_info.length;i++)
-        {
-          this.question_heat_info[i].num=i;
-        };
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-})
+
+  },
+};
 </script>
 
 <style scoped>
-  .el-header{
-    font-size:70px;
-    font-family:"SimSun";
-    font-weight:bolder;
-    margin-bottom:170px;
-  }
+.el-header {
+  font-size: 70px;
+  font-family: "SimSun";
+  font-weight: bolder;
+  margin-bottom: 170px;
+}
 
-  .el-main{
-    padding-bottom:50px;
-  }
+.el-main {
+  padding-bottom: 50px;
+}
 
-  #go-ask{
-    margin-top:20px;
-    font-size:30px;
-    color:rgb(37, 37, 37);
-    font-weight:300;
-  }
+.pagination_field {
+  margin-bottom: 10px;
+}
 </style>
