@@ -3,8 +3,7 @@
 作者：焦佳宇
 -->
 <template>
-  <page-loading v-if="blog_user_info == ''" />
-  <div class="common-layout" id="top">
+  <div class="common-layout" id="top" v-loading.fullscreen.lock="blog_user_info == ''">
     <el-container>
       <el-aside width="400px" class="aside_field">
         <el-affix :offset="5" target=".aside_field">
