@@ -251,8 +251,8 @@ export default {
   margin-bottom: 10px;
 }
 .body_card {
-  width:95%;
-  margin-left: 2.5%;
+  width:98%;
+  margin-left: 1%;
   border-radius: 17px;
   background: linear-gradient(#ffffffd0, #bdecfdd5);
   box-shadow: -5px -5px 10px #eff0f0, 5px 5px 10px #ffffff;
