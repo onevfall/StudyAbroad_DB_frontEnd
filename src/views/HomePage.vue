@@ -113,10 +113,10 @@
           <el-col
             :span="6"
             class="card-field"
-            v-for="ques in this.question_time_info"
+            v-for="(ques,index) in this.question_time_info"
             :key="ques"
           >
-            <question-card :question_info="ques"></question-card>
+            <question-card :question_info="ques" :question_num="index"></question-card>
           </el-col>
         </el-row>
         <el-button class="jump_to_detail" type="primary" @click="goQACenter"
@@ -124,6 +124,36 @@
         >
       </div>
     </div>
+
+    <el-button class="help" type="primary" plain @click="helpVisible = true">
+          help me
+    </el-button>
+
+    <el-dialog 
+      v-model="helpVisible"
+      title="帮助页面"
+      width="80%"
+      :before-close="handleClose"
+      draggable>
+        <div style="float:left;text-align: left;font-size: medium;">&nbsp&nbsp&nbsp&nbsp 候鸟留学信息交流平台是一个面向留学问题，以准留学人群、留学生（学长）、留学机构为主要目标用户的留学信息整合交互系统。通过此系统，不仅能将最新留学资讯和关注的大学信息准确地推送到普通用户，而且为准留学生提供了一个与留学学长交流咨询、相互问答和查询联系周边机构的平台和机会。 
+我们的项目包含几个完整的功能链：
+<p>注册账号-输入手机号-接收并输入二维码-注册成功-登录</p>
+<p>管理员发布快讯-用户浏览快讯</p>
+<p>用户发布动态-管理员审核动态-用户点赞收藏评论动态-其他用户举报动态-管理员处理举报/用户</p>
+<p>用户发布问题-管理员审核问题-用户回答问题-用户点赞收藏评论问题-提问用户采纳问题-其他用户举报问题-管理员处理举报/用户</p>
+<p>管理员发布/修改高校机构信息-用户搜索高校机构-用户浏览高校机构信息</p>
+<p>用户进入自己的个人空间-用户查看关注列表/粉丝列表/收藏列表/提问历史/回答历史/动态历史</p>
+<p>用户进入自己的个人空间-鸟币充值-选择充值数额-跳转至支付宝沙盒</p>
+<p>用户进入其他用户的空间-查看其他的用户的信息-关注其他用户</p>
+        </div>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="helpVisible = false">quit<meta name="description" content=""></el-button>
+        <!-- <el-button type="primary" @click="deleteCheck">确认</el-button> -->
+      </span>
+    </template>
+    </el-dialog>
+
   </section>
 </template>
 
@@ -139,7 +169,7 @@ export default {
     BlogInfoBoard,
     QuestionCard,
     NewsEntry,
-  },
+},
   data() {
     return {
       dataList: [],
@@ -156,6 +186,9 @@ export default {
 
       //问答
       question_time_info: [],
+
+      helpVisible:false,
+      userManuel:"这么简单的系统，自己学吧你"
     };
   },
   created() {
@@ -191,15 +224,24 @@ export default {
       .then((res) => {
         console.log(res.data.data);
         this.question_time_info = res.data.data.question.slice(0, 4);
-        for (let i = 0; i < this.question_time_info.length; i++) {
-          this.question_time_info[i].num = i;
-        }
+        console.log(this.question_time_info)
+
       })
       .catch((err) => {
         console.log(err);
       });
   },
   methods: {
+    handleClose()
+    {
+      this.$confirm('确认关闭？')
+        .then(_=>{
+          this.helpVisible=false
+          done();
+        })
+        .catch(_=>{});
+      this.Visible=false;
+    }, 
     goHome() {
       this.$router.push({ name: "home" });
     },
@@ -382,7 +424,8 @@ export default {
 
 .school_bg .school_img {
   background-image: url(../assets/school_main.jpeg);
-  background-size: contain;
+  background-size:cover;
+  background-position: 40% ;
   border-radius: 1%;
   margin: 0 auto;
   text-align: center;
@@ -393,7 +436,8 @@ export default {
 
 .institution_bg .institution_img {
   background-image: url(../assets/institution_main.jpeg);
-  background-size: contain;
+  background-size: cover;
+  background-position: 50% ;
   border-radius: 1%;
   margin: 0 auto;
   text-align: center;
@@ -553,5 +597,25 @@ export default {
   padding-top: 30px;
   font-family: "宋体";
   font-size: xxx-large;
+}
+.help{
+  color: #b8b0b0;
+  font-size:small;
+  padding: 10px;
+  background-color: #ffffff;
+  position: fixed;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  bottom: 50px;
+  right: -30px;
+  outline: none;
+  border-width: 5px;
+  border-color: #d0674a;
+}
+.help:hover{
+  border-color: #e64113;
+
+  right: 10px;
 }
 </style>

@@ -1,6 +1,5 @@
 <template>
-  <page-loading v-if="blog_count == -1"></page-loading>
-  <div class="user_profile">
+  <div class="user_profile" v-loading.fullscreen.lock="blog_count == -1">
     <div class="user_profile_head">
       <div class="user_profile_banner"></div>
       <el-card class="user_profile_info_box">
@@ -1924,7 +1923,7 @@ body {
 }
 .user_profile_banner {
   position: inherit;
-  height: 30%;
+  height: 20%;
 }
 .user_profile_info_box {
   position: inherit;

@@ -71,7 +71,7 @@ export default {
   padding: 0;
 }
 .el-main {
-  background-color: #f1f9ff;
+  background-color: #f1f9ffb9;
   padding-right: 0;
   padding-top: 0;
   height: 800px;
@@ -110,7 +110,7 @@ export default {
 
 .box-card {
   width: 99%;
-  background-color: #f1f9ff;
+  /* background-color: #f1f9ff; */
   border-radius: 30px;
   margin-bottom: 3%;
 }

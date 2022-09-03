@@ -27,7 +27,7 @@
     v-model="DetailDialogVisible"
     title="举报详情"
     width="30%"
-    :before-close="handleClose"
+    
     draggable
   >
     <div class="report_item">
