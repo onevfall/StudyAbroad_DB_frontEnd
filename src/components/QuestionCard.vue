@@ -40,6 +40,7 @@ export default {
   props: ["question_info","question_num"],
   computed: {
     contentShow() {
+      console.log(this.question_info);
       if (this.question_info.QuestionTitle.length < 19) {
         return this.question_info.QuestionTitle;
       } 

@@ -3,8 +3,7 @@
 作者：王若晗 方新宇
 -->
 <template>
-  <page-loading v-if="this.loading"></page-loading>
-  <el-container>
+  <el-container v-loading.fullscreen.lock="this.loading" class="body_card">
     <el-header>
       <el-row>
         <el-col
@@ -231,5 +230,12 @@ export default {
 
 .pagination_field {
   margin-bottom: 10px;
+}
+.body_card {
+  width:95%;
+  margin-left: 2.5%;
+  border-radius: 17px;
+  background: linear-gradient(#ffffffd0, #bdecfdd5);
+  box-shadow: -5px -5px 10px #eff0f0, 5px 5px 10px #ffffff;
 }
 </style>

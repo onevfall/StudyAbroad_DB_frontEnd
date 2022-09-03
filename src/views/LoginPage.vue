@@ -3,7 +3,7 @@
 作者：焦佳宇
 -->
 <template>
-  <div class="common-layout">
+  <div class="common-layout body_card" >
     <el-container>
       <el-header>
         <div id="registerTips">
@@ -166,5 +166,12 @@ export default {
   --el-input-border-color: #a0cfff;
   --el-input-bg-color: #ffffff00;
   --el-input-hover-border-color: #88c3fe;
+}
+.body_card {
+  width:98%;
+  margin-left: 1%;
+  border-radius: 17px;
+  background: linear-gradient(#ffffffd0, #bdecfdd5);
+  box-shadow: -5px -5px 10px #eff0f0, 5px 5px 10px #ffffff;
 }
 </style>

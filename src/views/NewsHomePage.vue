@@ -4,11 +4,10 @@
 -->
 <template>
   <carousel
-    type="card"
     indicator-position="none"
     style="margin-top: 10px"
   ></carousel>
-  <div v-loading.fullscreen.lock="isLoading" style="margin-top: 30px">
+  <div v-loading.fullscreen.lock="isLoading" style="margin-top: 30px" class="body_card">
     <div class="list_field" v-if="this.news_list.length != 0">
       <div v-for="news in this.news_list" :key="news">
         <news-entry
@@ -105,4 +104,5 @@ export default {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 </style>

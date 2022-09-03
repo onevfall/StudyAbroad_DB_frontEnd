@@ -4,7 +4,7 @@
 -->
 <template>
   <div
-    class="school-center-layout"
+    class="school-center-layout body_card"
     v-loading.fullscreen.lock="isLoading"
     element-loading-text="正在加载"
   >
@@ -148,11 +148,15 @@
     </div>
 
     <div>
-      <div class="left_text">
-        搜索结果如下,【<span style="color: coral">{{
+      <div class="left_text" v-if="isCreated">
+        候鸟留学平台为您智能推荐【<span style="color: coral">{{
           this.all_num
         }}</span
-        >】家机构符合你的搜索
+        >】家中国机构
+      </div>
+      <div v-else class="left_text">
+        搜索结果如下,【<span style="color: coral">{{ this.all_num }}</span
+        >】所机构符合你的搜索
       </div>
       <hr />
       <div class="downBox">
@@ -194,6 +198,7 @@ export default {
       all_institution_list: [], //最初赋值获得的所有机构
       search_value: "",
       isLoading: false,
+      isCreated: true,
       //以下为搜索限定词
       pname: "", //省的名字
       cname: "", //市的名字
@@ -260,6 +265,8 @@ export default {
 
     filter() {
       this.isLoading = true;
+      this.isCreated = false;
+      
       var x = ""; //需要拼接的判断
       if (this.pname != "") {
         //省份非空，就加入省份
@@ -274,6 +281,20 @@ export default {
       x += "&" + "page=" + this.cur_page + "&" + "page_size=" + this.PAGESIZE;
       console.log(x);
       axios({
+      url: "institution/num?" + x,
+      method: "get",
+       })
+      .then((res) => {
+        this.all_num = res.data.data.num;
+        this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
+        console.log(this.all_num);
+      })
+      .catch((errMsg) => {
+            console.log(errMsg);
+            console.log("1111");
+          });
+
+      axios({
         // 点击搜索时加载符合条件的数据
         url: "institution/list?" + x,
         method: "get",
@@ -286,7 +307,7 @@ export default {
           console.log(this.rank_type_value);
           this.institution_list = res.data.data.institution_list;
           this.isLoading = false;
-          window.scrollTo(0,0);//将滚动条回滚至最顶端
+          window.scrollTo(0, 0); //将滚动条回滚至最顶端
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -340,6 +361,7 @@ export default {
     this.getCityData();
   },
   created() {
+    this.isCreated = true;
     this.isLoading = true;
     axios({
       url: "institution/num",
@@ -349,13 +371,10 @@ export default {
         this.all_num = res.data.data.num;
         this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
         this.all_institution_list = res.data.data.institution_list;
-        console.log(this.all_num)
+        console.log(this.all_num);
         //进行当页数据检索
         axios({
-          url:
-            "institution/list?" +
-            "page_size=" +
-            this.PAGESIZE,
+          url: "institution/list?" + "page_size=" + this.PAGESIZE,
           method: "get",
         })
           .then((res) => {
@@ -475,5 +494,12 @@ p.QS_rank_test {
 .pagination_field {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.body_card {
+  width:95%;
+  margin-left: 2.5%;
+  border-radius: 17px;
+  background: linear-gradient(#ffffffd0, #bdecfdd5);
+  box-shadow: -5px -5px 10px #eff0f0, 5px 5px 10px #ffffff;
 }
 </style>
