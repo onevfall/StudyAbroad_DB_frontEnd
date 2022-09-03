@@ -139,7 +139,7 @@
         </el-main>
       </el-container>
     </div>
-
+    <div class="body_card">
     <div class="left_text">
       搜索结果如下,【<span style="color: coral">{{
         this.all_num
@@ -164,6 +164,7 @@
     <el-row justify="center">
       <el-pagination background layout="prev, pager, next" :page-size="PAGESIZE" :total="all_num" @current-change="curChange"/>
     </el-row>
+  </div>
   </div>
 </template>
 <script>
@@ -434,5 +435,12 @@ p.QS_rank_test {
 .pagination_field {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.body_card {
+  width:95%;
+  margin-left: 2.5%;
+  border-radius: 17px;
+  background: linear-gradient(#ffffffd0, #bdecfdd5);
+  box-shadow: -5px -5px 10px #eff0f0, 5px 5px 10px #ffffff;
 }
 </style>

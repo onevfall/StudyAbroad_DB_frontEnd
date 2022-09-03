@@ -3,10 +3,7 @@
 作者：方新宇
 -->
 <template>
-  <page-loading
-    v-if="this.card_info.length == 0 || !this.finish_load_html"
-  ></page-loading>
-  <div class="common-layout">
+  <div class="common-layout" v-loading.fullscreen.lock="this.card_info.length == 0 || !this.finish_load_html">
     <el-container>
       <el-aside width="400px" style="top: 0px" class="aside_field">
         <img src="../assets/question.png" style="height: 200px" />

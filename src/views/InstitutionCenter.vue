@@ -4,7 +4,7 @@
 -->
 <template>
   <div
-    class="school-center-layout"
+    class="school-center-layout body_card"
     v-loading.fullscreen.lock="isLoading"
     element-loading-text="正在加载"
   >
@@ -475,5 +475,12 @@ p.QS_rank_test {
 .pagination_field {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.body_card {
+  width:95%;
+  margin-left: 2.5%;
+  border-radius: 17px;
+  background: linear-gradient(#ffffffd0, #bdecfdd5);
+  box-shadow: -5px -5px 10px #eff0f0, 5px 5px 10px #ffffff;
 }
 </style>
