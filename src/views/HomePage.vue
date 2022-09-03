@@ -111,8 +111,8 @@
     <h1 class="QA_title">—— 留学问答 ——</h1>
   <div class="QA_field">
       <el-row style="margin-top:20px" >
-        <el-col :span="6" class="card-field" v-for="ques in this.question_time_info" :key="ques">
-          <question-card :question_info="ques"></question-card>
+        <el-col :span="6" class="card-field" v-for="(ques, index) in this.question_time_info" :key="ques">
+          <question-card :question_info="ques" :question_num="index"></question-card>
         </el-col>
       </el-row>
     <el-button class="jump_to_detail" type="primary" @click="goQACenter" >查看详情</el-button>

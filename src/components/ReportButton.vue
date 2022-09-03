@@ -78,6 +78,7 @@ export default {
       console.log(this.dynamic_type)
       console.log(this.content_id)
       console.log(this.report_reason)
+      console.log(this.$store.state.user_info.user_id)
       axios
         .post("report/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,

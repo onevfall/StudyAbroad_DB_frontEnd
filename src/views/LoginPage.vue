@@ -87,7 +87,6 @@ export default {
         .then((res) => {
           console.log(res);
           var response = res.data;
-          console.log(response.state);
           if (response.status == true) {
             var user_info = response.data;
             //若成功登录
@@ -107,7 +106,15 @@ export default {
             }
           } else {
             //若登录失败
-            ElMessage.error("用户手机号或密码不正确！");
+            if(res.data.data.errortype == 1){
+              ElMessage.error("该用户名不存在！请确认后重新输入");
+            }
+            if(res.data.data.errortype == 2){
+              ElMessage.error("用户密码不正确！请确认后重新输入");
+            }
+            if(res.data.data.errortype == 3){
+              ElMessage.error("该用户已被封禁！无法登录账号");
+            }      
             (this.user_phone = ""), (this.user_password = "");
           }
         })

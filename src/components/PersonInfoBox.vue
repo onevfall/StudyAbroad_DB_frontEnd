@@ -162,28 +162,46 @@
         <el-col :span="3"></el-col>
         <el-col :span="6" style="text-align: left">手机号码：</el-col>
         <el-col :span="8" style="text-align: left">
-          <el-input v-model="phone" v-if="isUpdating.phone"></el-input>
-          <div v-else>{{ phone }}</div>
+          <!-- <el-input v-model="phone" v-if="isUpdating.phone"></el-input> -->
+          <div >{{ phone }}</div>
         </el-col>
         <el-col :span="2"></el-col>
-        <el-col :span="3" style="text-align: left">
-          <!-- <el-button
-            text="primary"
-            type="primary"
-            v-if="!isUpdating.phone"
-            @click="update('phone')"
-            >编辑</el-button
-          >
+        <!-- <el-col :span="3" style="text-align: left">
           <el-button
             text="primary"
             type="primary"
-            v-else
-            @click="confirm('phone')"
-            >确认</el-button
-          > -->
-        </el-col>
+            @click="show_phone_edit_dialog = true"
+            >编辑</el-button
+          >
+        </el-col> -->
         <el-col :span="2"></el-col>
       </el-row>
+
+      <el-dialog
+        title="修改手机号"
+        v-model="show_phone_edit_dialog"
+        class="change_dialog"
+      >
+        <!-- <el-form :model="form" style="width:300px;margin-left: 150px;">
+          <el-form-item label="新的手机号">
+            <el-input v-model="this.new_phone_num" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="验证码" style="margin-left:30px;">
+            <el-input v-model="this.iden_code" ></el-input>
+          </el-form-item>
+        </el-form> -->
+        <div slot="footer" class="modify-name-footer">
+          <el-button
+            @click="show_phone_edit_dialog = false;this.iden_code =''; "
+            >取 消</el-button
+          >
+          <el-button
+            type="primary"
+            @click="changePhoneCheck()"
+            >确 定</el-button
+          >
+        </div>
+      </el-dialog>
 
       <el-row class="info-content">
         <el-col :span="3"></el-col>
@@ -288,6 +306,9 @@ export default {
       },
       coin: 0,
       change_profile: true,
+      show_phone_edit_dialog: false,
+      new_phone_num:"",
+      iden_code:"",
     };
   },
   components: {
