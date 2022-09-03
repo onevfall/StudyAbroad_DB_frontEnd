@@ -48,26 +48,23 @@
             v-on:childByValue="childByValue"
           ></recharge-coin-card>
         </div>
-        <div class="coin-index-right">
-            <div class="coin-index-right-title">如何充值？</div>
-            <p class="coin-text-p">
-              <span class="coin-i"></span>
-              通过点击鸟币充值框，即可跳转至支付宝充值页面
-            </p>
-            <p class="coin-text-p">
-              <span class="coin-i"></span>
-              最后一栏的框内可以自定义输入鸟币，实现自由充值
-            </p>
-          </div>
-      </div>
-      <div id="divwapform">
-        <!--网页端测试代码-->
+        <div class="coin-index-right ">
+          <div class="coin-index-right-title">如何充值？</div>
+          <p class="coin-text-p">
+            <span class="coin-i"></span>
+            通过点击鸟币充值框，即可跳转至支付宝充值页面
+          </p>
+          <p class="coin-text-p">
+            <span class="coin-i"></span>
+            最后一栏的框内可以自定义输入鸟币，实现自由充值
+          </p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script >
+<script>
 import RechargeCoinCard from "../components/RechargeCoinCard.vue";
 import axios from "axios";
 import $ from "jquery";
@@ -212,10 +209,11 @@ export default {
   position: relative;
 }
 .coin-index-right {
-  float: left;
-  width: 35%;
+  width: 100%;
   padding: 24px 0 10px;
-  margin-left: 2%;
+  padding-left: 2%;
+  padding-bottom: 6%;
+  background: #fff;
 }
 .coin-text-p {
   color: #6d757a;
@@ -239,4 +237,3 @@ export default {
   text-align: left;
 }
 </style>
-

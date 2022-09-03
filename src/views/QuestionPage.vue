@@ -3,8 +3,7 @@
 作者：王若晗 方新宇
 -->
 <template>
-  <page-loading v-if="this.card_info.length == 0"></page-loading>
-  <div class="common-layout">
+  <div class="common-layout" v-loading.fullscreen.lock="this.card_info.length == 0">
     <el-container>
       <el-main>
         <el-card id="question" shadow="never">
@@ -601,14 +600,12 @@ export default {
   background: #87a5c7;
 }
 .el-main {
-  background: #f1f9ff;
+  /* background: #f1f9ff; */
   padding-left: 50px;
   padding-right: 50px;
 }
 
-.el-footer {
-  background: #87a5c7;
-}
+
 
 .logo {
   height: 80px;
