@@ -424,7 +424,8 @@ export default {
 
 .school_bg .school_img {
   background-image: url(../assets/school_main.jpeg);
-  background-size: contain;
+  background-size:cover;
+  background-position: 40% ;
   border-radius: 1%;
   margin: 0 auto;
   text-align: center;
@@ -435,7 +436,8 @@ export default {
 
 .institution_bg .institution_img {
   background-image: url(../assets/institution_main.jpeg);
-  background-size: contain;
+  background-size: cover;
+  background-position: 50% ;
   border-radius: 1%;
   margin: 0 auto;
   text-align: center;
