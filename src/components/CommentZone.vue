@@ -106,7 +106,7 @@ export default {
         });
       } else {
         axios
-          .post("/" + this.dynamic_type + "/comment", {
+          .post("/api/" + this.dynamic_type + "/comment", {
             [this.dynamic_type + "_id"]: this.id,
             [this.dynamic_type + "_comment_user_id"]:
               this.$store.state.user_info.user_id,
@@ -124,7 +124,7 @@ export default {
             });
             this.comment_now = "";
             axios
-              .get("/" + this.dynamic_type + "/comment", {
+              .get("/api/" + this.dynamic_type + "/comment", {
                 params: {
                   [this.dynamic_type + "_id"]: this.id,
                 },
@@ -147,7 +147,7 @@ export default {
     },
     initZone(){
       axios
-      .get("/" + this.dynamic_type + "/comment", {
+      .get("/api/" + this.dynamic_type + "/comment", {
         params: {
           [this.dynamic_type + "_id"]: this.id,
         },

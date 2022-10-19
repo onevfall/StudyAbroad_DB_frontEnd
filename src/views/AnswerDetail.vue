@@ -224,7 +224,7 @@ export default {
   methods: {
     async reloadAnswer() {
       axios
-        .get("/answer", {
+        .get("/api/answer", {
           params: {
             answer_id: this.answer_id,
           },
@@ -258,7 +258,7 @@ export default {
       console.log("00");
 
       await axios
-        .get("/answer", {
+        .get("/api/answer", {
           params: {
             answer_id: this.answer_id,
           },
@@ -278,7 +278,7 @@ export default {
       // console.log("获取答案信息")
       await this.reloadAnswer(); //先获取answer infor
       axios
-        .get("/userinfo", {
+        .get("/api/userinfo", {
           params: {
             user_id: this.answer_infor.answer_user_id,
           },
@@ -305,7 +305,7 @@ export default {
       // console.log(this.answer_user_info);
       this.question_id = this.$route.query.question_id;
       axios
-        .get("/question", {
+        .get("/api/question", {
           params: {
             question_id: this.question_id,
           },
@@ -324,7 +324,7 @@ export default {
         });
 
       axios
-        .get("question/related", {
+        .get("/api/question/related", {
           params: {
             question_id: this.question_id,
           },

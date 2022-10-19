@@ -80,7 +80,7 @@ export default {
           
           */
       axios
-        .post("login", {
+        .post("api/login", {
           user_phone: this.user_phone,
           user_password: this.user_password,
         })

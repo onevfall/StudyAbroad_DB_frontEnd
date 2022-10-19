@@ -170,7 +170,7 @@ export default {
         return;
       } else {
         axios
-          .post("/register", {
+          .post("/api/register", {
             user_phone: this.user_phone,
             user_password: this.user_password,
             code:this.iden_code,
@@ -277,7 +277,7 @@ export default {
         return;
       }
       axios
-        .post("/register/verifycode",{
+        .post("/api/register/verifycode",{
           user_phone:this.user_phone,
         })
         .then((res) => {

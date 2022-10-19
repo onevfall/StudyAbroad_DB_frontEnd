@@ -468,7 +468,7 @@ export default {
     initPage: function () {
       this.question_id = this.$route.query.question_id;
       axios({
-        url: "question",
+        url: "api/question",
         method: "get",
         params: {
           question_id: this.question_id,
@@ -490,7 +490,7 @@ export default {
         });
       //回答信息
       axios({
-        url: "question/answers",
+        url: "api/question/answers",
         method: "get",
         params: {
           question_id: this.question_id,
@@ -514,7 +514,7 @@ export default {
         });
       //相关问题
       axios({
-        url: "question/related",
+        url: "api/question/related",
         method: "get",
         params: {
           question_id: this.question_id,
@@ -539,7 +539,7 @@ export default {
     },
     adoptCheck() {
       axios
-        .put("question/apply", {
+        .put("api/question/apply", {
           question_id: this.question_id,
           answer_id: this.applied_answer_id,
         })

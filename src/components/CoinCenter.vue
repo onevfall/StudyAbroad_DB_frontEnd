@@ -194,7 +194,7 @@ export default {
       });
     }
     axios({
-      url: "/money/record?user_id=" + this.$store.state.user_info.user_id,
+      url: "/api/money/record?user_id=" + this.$store.state.user_info.user_id,
     })
       .then((res) => {
         console.log("鸟币")

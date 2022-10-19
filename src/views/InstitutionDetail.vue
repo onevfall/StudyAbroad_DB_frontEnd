@@ -11,7 +11,7 @@
         <div  style="position:sticky;top:0px;">
           <nav-list></nav-list>
           <div style="height:10px"></div>
-          <Advertisement></Advertisement>
+          <!-- <Advertisement></Advertisement> -->
         </div>
       </el-aside>
       <el-main>
@@ -30,15 +30,14 @@ import axios from "axios";
 import InstitutionInfo from "../components/InstitutionInfo.vue";
 import InstitutionInfoCard from "../components/InstitutionInfoCard.vue";
 import NavList from "../components/NavList.vue";
-import Advertisement from "../components/Advertisement.vue";
+import DistrictNewsList from "../components/DistrictNewsList.vue";
 export default {
   components: {
     InstitutionInfo,
     InstitutionInfoCard,
     BmapDemo,
     NavList,
-    Advertisement,
-    Advertisement
+    DistrictNewsList,
 },
   data() {
     return {
@@ -57,7 +56,7 @@ export default {
     this.getParams();
     //在此处向服务器请求数据，初始化所需变量
     axios({
-        url: "institution?institution_id="+this.institution_id,
+        url: "api/institution?institution_id="+this.institution_id,
         method: "get",
       })
         .then((res) => {

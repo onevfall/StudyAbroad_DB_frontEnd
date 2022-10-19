@@ -220,7 +220,7 @@ export default {
     //   });
     // }
     axios({
-      url: "/identity?user_id=" + this.$store.state.user_info.user_id,
+      url: "/api/identity?user_id=" + this.$store.state.user_info.user_id,
     })
       .then((res) => {
         console.log(res);
@@ -238,7 +238,7 @@ export default {
   watch: {
     need_refresh() {//重新申请数据 尚不确定是否成功
       axios({
-        url: "/identity?user_id=" + this.$store.state.user_info.user_id,
+        url: "/api/identity?user_id=" + this.$store.state.user_info.user_id,
       })
         .then((res) => {
           console.log(res);
@@ -283,7 +283,7 @@ export default {
         " ~ " +
         endDate.substring(0, endDate.indexOf("T"));
       axios
-        .post("/identity", {
+        .post("/api/identity", {
           img: this.now_input.certification_material,
           user_id: this.$store.state.user_info.user_id,
           identity: this.now_input.degree_name,

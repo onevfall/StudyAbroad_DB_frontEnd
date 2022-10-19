@@ -1394,7 +1394,7 @@ export default {
         console.log(res);
         if (ob_type == "0") {
           axios({
-            url: "follow/follows",
+            url: "api/follow/follows",
             params: { user_id: this.host_id },
             method: "get",
           })
@@ -1412,7 +1412,7 @@ export default {
             });
         } else if (ob_type == "1") {
           axios({
-            url: "follow/universities",
+            url: "api/follow/universities",
             params: { user_id: this.host_id },
             method: "get",
           })
@@ -1427,7 +1427,7 @@ export default {
             });
         } else {
           axios({
-            url: "follow/institutions",
+            url: "api/follow/institutions",
             params: { user_id: this.host_id },
             method: "get",
           })
@@ -1662,7 +1662,7 @@ export default {
       console.log(this.host_id + "  " + this.visit_id);
       //个人信息
       axios({
-        url: "userinfo",
+        url: "api/userinfo",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1676,7 +1676,7 @@ export default {
       // this.person_info = this.$store.state.user_info;
       //学历认证
       axios({
-        url: "userinfo/identity",
+        url: "api/userinfo/identity",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1689,7 +1689,7 @@ export default {
         });
       //成就信息
       axios({
-        url: "userinfo/achieve",
+        url: "api/userinfo/achieve",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1719,7 +1719,7 @@ export default {
         });
       //粉丝列表
       axios({
-        url: "follow/follower",
+        url: "api/follow/follower",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1735,7 +1735,7 @@ export default {
         });
       //关注用户列表
       axios({
-        url: "follow/follows",
+        url: "api/follow/follows",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1749,7 +1749,7 @@ export default {
         });
       //关注学校列表
       axios({
-        url: "follow/universities",
+        url: "api/follow/universities",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1763,7 +1763,7 @@ export default {
         });
       //关注机构列表
       axios({
-        url: "follow/institutions",
+        url: "api/follow/institutions",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1777,7 +1777,7 @@ export default {
         });
       //收藏问题列表
       axios({
-        url: "star/questions",
+        url: "api/star/questions",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1791,7 +1791,7 @@ export default {
         });
       //收藏回答列表
       axios({
-        url: "star/answers",
+        url: "api/star/answers",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1805,7 +1805,7 @@ export default {
         });
       //收藏动态列表
       axios({
-        url: "star/blogs",
+        url: "api/star/blogs",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1819,7 +1819,7 @@ export default {
         });
       //问题列表
       axios({
-        url: "userinfo/questions",
+        url: "api/userinfo/questions",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1833,7 +1833,7 @@ export default {
         });
       //回答列表
       axios({
-        url: "userinfo/answers",
+        url: "api/userinfo/answers",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1847,7 +1847,7 @@ export default {
         });
       //动态列表
       axios({
-        url: "userinfo/blogs",
+        url: "api/userinfo/blogs",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1878,7 +1878,7 @@ export default {
     },
     deleteCheck() {
       axios
-        .delete("/" + this.to_be_killed_type, {
+        .delete("/api/" + this.to_be_killed_type, {
           params: {
             // 请求参数拼接在url上
             [this.to_be_killed_type + "_id"]: this.to_be_killed_id,
@@ -1888,7 +1888,6 @@ export default {
           this.delete_dialog_visible = false;
           this.to_be_killed_type = "";
           this.to_be_killed_id = -1;
-          console.log(res);
           if (res.data.status == true) {
             ElMessage.success("删除成功!");
             // this.$emit("deletecheck",true);

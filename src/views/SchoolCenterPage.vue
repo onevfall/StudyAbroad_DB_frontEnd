@@ -339,7 +339,7 @@ export default {
           this.country_value;
       }
       axios({
-        url: "university/num?" + x,
+        url: "api/university/num?" + x,
         method: "get",
       })
         .then((res) => {
@@ -352,7 +352,7 @@ export default {
         });
       axios({
         // 点击搜索时加载符合条件的数据
-        url: "university/rank?" + x,
+        url: "api/university/rank?" + x,
         method: "get",
       })
         .then((res) => {
@@ -375,7 +375,7 @@ export default {
     this.isCreated = true;
     this.isLoading = true;
     axios({
-      url: "university/num" + "?rank_year=" + this.year_value,
+      url: "api/university/num" + "?rank_year=" + this.year_value,
       method: "get",
     })
       .then((res) => {
@@ -385,7 +385,7 @@ export default {
         //进行当页数据检索
         axios({
           url:
-            "university/rank" +
+            "api/university/rank" +
             "?rank_year=" +
             this.year_value +
             "&" +

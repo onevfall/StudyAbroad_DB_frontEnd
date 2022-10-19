@@ -189,7 +189,7 @@ export default {
     //   });
     // }
     axios
-        .get("/report", {
+        .get("/api/report", {
           params: {
             user_id: this.$store.state.user_info.user_id,
           },
@@ -290,7 +290,7 @@ export default {
         this.now_situation = "";
         this.report_type = "";
         axios
-        .get("/report", {
+        .get("/api/report", {
           params: {
             user_id: this.$store.state.user_info.user_id,
           },
