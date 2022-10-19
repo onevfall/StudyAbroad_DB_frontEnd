@@ -59,6 +59,7 @@
             最后一栏的框内可以自定义输入鸟币，实现自由充值
           </p>
         </div>
+         <div id="divwapform"></div>
       </div>
     </div>
   </div>
