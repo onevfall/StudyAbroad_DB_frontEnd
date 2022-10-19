@@ -73,7 +73,7 @@ export default {
         });
       } else {
         axios
-          .post("star/" + this.dynamic_type, {
+          .post("api/star/" + this.dynamic_type, {
             user_id: this.$store.state.user_info.user_id,
             [this.dynamic_type + "_id"]: this.content_id,
           })
@@ -101,7 +101,7 @@ export default {
     },
     unStar() {
       axios
-        .put("star/" + this.dynamic_type, {
+        .put("api/star/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
         })
@@ -132,7 +132,7 @@ export default {
      if (this.$store.state.is_login) {
       axios
         .get(
-          "star/" +
+          "api/star/" +
             this.dynamic_type +
             "?user_id=" +
             this.$store.state.user_info.user_id +
@@ -153,7 +153,7 @@ export default {
       //查询收藏个数
       axios
         .get(
-          "star/" +
+          "api/star/" +
             this.dynamic_type +
             "?user_id=" +
             1 +
@@ -211,7 +211,7 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          "star/" +
+          "api/star/" +
             this.dynamic_type +
             "?user_id=" +
             this.$store.state.user_info.user_id +
@@ -231,7 +231,7 @@ export default {
       //查询收藏个数
       axios
         .get(
-          "star/" +
+          "api/star/" +
             this.dynamic_type +
             "?user_id=" +
             1 +

@@ -1,18 +1,14 @@
 <!--
 高校详情
 描述：展示详细高校信息
-作者：张子涵
+作者：张子涵、焦佳宇（部分改为web-api调用）
 -->
 <template>
-
   <school-info :school ="this.school_info"></school-info>
   <el-container >
-    
     <el-aside width=25% style="overflow:visible">
-      <div  style="position:sticky;top:0px;">
-        <nav-list></nav-list>
-        <div style="height:10px"></div>
-        <Advertisement></Advertisement>
+      <div style="position:sticky;top:0px;">
+        <DistrictNewsList :country_name="this.school_country_zh"></DistrictNewsList>        
       </div>
     </el-aside>
     <el-main>
@@ -30,19 +26,20 @@ import axios from "axios";
 import SchoolInfo from "../components/SchoolInfo.vue";
 import SchoolInfoCard from "../components/SchoolInfoCard.vue";
 import NavList from "../components/NavList.vue";
-import Advertisement from "../components/Advertisement.vue";
+import DistrictNewsList from "../components/DistrictNewsList.vue";
 export default {
 components: {
   SchoolInfo,
   SchoolInfoCard,
   BmapDemo,
   NavList,
-  Advertisement
+  DistrictNewsList
 },
 data() {
   return {
     school_info: "",
     school_id:"",
+    school_country_zh:"",
   };
 },
 props:["school_id"],
@@ -55,7 +52,7 @@ created() {
   this.getParams();
   //在此处向服务器请求数据，初始化所需变量
   axios({
-      url: "university?university_id="+this.school_id,
+      url: "api/university?university_id="+this.school_id,
       method: "get",
     })
       .then((res) => {
@@ -64,32 +61,12 @@ created() {
         //console.log(response.state);
         if (response.status == true) {
           this.school_info = response.data;
-          console.log(this.school_info.university_chname);
+          this.school_country_zh = response.data.university_country;
         }
       })
       .catch((err) => {
         console.log(err);
       });
-
-  /* axios({
-      url: "https://www.zhihu.com/api/v4/search/top_search",
-      baseURL:"/api2",
-    })
-      .then((res) => {
-        console.log(res.data);
-        var response=res.data
-        if (response.status == true) {
-          this.school_info = response.data;
-          console.log(response.data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });*/
-      //var a=document.createElement('document');
-      //a.src="https://www.zhihu.com/api/v4/search/top_search";
-      //console.log(a.src);
-
 },
 mounted(){
    window.scrollTo(0,0);

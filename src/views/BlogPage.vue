@@ -116,7 +116,7 @@ export default {
       let sort_type_name = this.sort_type == 0 ? "time" : "heat";
       axios
         .get(
-          "/blog/" +
+          "/api/blog/" +
             sort_type_name +
             "?num=1000&page=" +
             res +
@@ -148,7 +148,7 @@ export default {
       this.loading = true;
       this.sort_type = "0";
       axios({
-        url: "/blog/time?num=100&page_size=" + this.PAGESIZE + "&page=1",
+        url: "/api/blog/time?num=100&page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
@@ -167,7 +167,7 @@ export default {
       this.loading = true;
       this.sort_type = "1";
       axios
-        .get("/blog/heat?num=100&page_size=" + this.PAGESIZE + "&page=1")
+        .get("/api/blog/heat?num=100&page_size=" + this.PAGESIZE + "&page=1")
         .then((res) => {
           this.blog_list = [].concat(res.data.data.blog);
           this.loading = false;
@@ -189,7 +189,7 @@ export default {
   },
   created() {
     let get_num = axios
-      .get("/blog/time/num?num=1000")
+      .get("/api/blog/time/num?num=1000")
       .then((res) => {
         this.blog_num_total = res.data.data.num;
       })
@@ -197,7 +197,7 @@ export default {
         console.log(errMsg);
       });
     let get_list = axios
-      .get("/blog/time?num=1000&page_size=" + this.PAGESIZE + "&page=1")
+      .get("/api/blog/time?num=1000&page_size=" + this.PAGESIZE + "&page=1")
       .then((res) => {
         this.blog_list = [].concat(res.data.data.blog);
       })

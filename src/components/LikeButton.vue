@@ -57,7 +57,7 @@ export default {
         });
       } else {
         axios
-          .post("like/" + this.dynamic_type, {
+          .post("/api/like/" + this.dynamic_type, {
             user_id: this.$store.state.user_info.user_id,
             [this.dynamic_type + "_id"]: this.content_id,
           })
@@ -84,7 +84,7 @@ export default {
     },
     unLike() {
       axios
-        .put("like/" + this.dynamic_type, {
+        .put("api/like/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
         })
@@ -113,7 +113,7 @@ export default {
     //查询是否点过赞
     if (this.$store.state.is_login) {
       axios(
-        "like/" +
+        "api/like/" +
           this.dynamic_type +
           "?user_id=" +
           this.$store.state.user_info.user_id +
@@ -133,7 +133,7 @@ export default {
     } else {
       //查询点赞个数
       axios(
-        "like/" +
+        "api/like/" +
           this.dynamic_type +
           "?user_id=" +
           1 +
@@ -195,7 +195,7 @@ export default {
     //查询是否点过赞
     if (this.$store.state.is_login) {
       axios(
-        "like/" +
+        "api/like/" +
           this.dynamic_type +
           "?user_id=" +
           this.$store.state.user_info.user_id +
@@ -215,7 +215,7 @@ export default {
     } else {
       //查询点赞个数
       axios(
-        "like/" +
+        "api/like/" +
           this.dynamic_type +
           "?user_id=" +
           1 +

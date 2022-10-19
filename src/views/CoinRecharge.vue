@@ -103,7 +103,7 @@ export default {
         console.log("goods_name:", this.goods_name);
         console.log("moeny_num:", this.money_num);
         axios
-          .post("money/order", {
+          .post("api/money/order", {
             user_id: this.user_info.user_id,
             name: this.goods_name,
             num: this.money_num,

@@ -137,7 +137,7 @@ export default {
       let sort_type_name = this.display_status ? "time" : "heat";
       axios
         .get(
-          "/question/" +
+          "/api/question/" +
             sort_type_name +
             "?page=" +
             res +
@@ -158,7 +158,7 @@ export default {
     sortByTime: function () {
       this.question_loading = true;
       axios({
-        url: "/question/time?page_size=" + this.PAGESIZE + "&page=1",
+        url: "/api/question/time?page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
@@ -174,7 +174,7 @@ export default {
     sortByHeat: function () {
       this.question_loading = true;
       axios({
-        url: "/question/heat?page_size=" + this.PAGESIZE + "&page=1",
+        url: "/api/question/heat?page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
@@ -190,7 +190,7 @@ export default {
   },
   created() {
     let get_num = axios
-      .get("/question/num")
+      .get("/api/question/num")
       .then((res) => {
         this.question_num_total = res.data.data.num;
       })
@@ -199,7 +199,7 @@ export default {
       });
 
     axios({
-      url: "question/time?page_size=" + this.PAGESIZE + "&page=1",
+      url: "api/question/time?page_size=" + this.PAGESIZE + "&page=1",
       method: "get",
     })
       .then((res) => {
