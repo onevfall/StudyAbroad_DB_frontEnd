@@ -58,7 +58,7 @@ export default {
     curChange(res) {
       this.isLoading = true;
       axios
-        .get("newsflash/all?page=" + res + "&page_size=" + this.PAGESIZE)
+        .get("api/newsflash/all?page=" + res + "&page_size=" + this.PAGESIZE)
         .then((res) => {
           this.news_list = [].concat(res.data.data.newsflashs);
           this.isLoading = false;
@@ -73,14 +73,14 @@ export default {
   created() {
     //在此处向服务器请求数据，初始化所需变量
     let get_news_list = axios
-      .get("newsflash/all?page=1&page_size=" + this.PAGESIZE)
+      .get("api/newsflash/all?page=1&page_size=" + this.PAGESIZE)
       .then((res) => {
         this.news_list = [].concat(res.data.data.newsflashs);
       })
       .catch((err) => {
         console.log(err);
       });
-    let get_news_num=axios.get("newsflash/num").then((res)=>{
+    let get_news_num=axios.get("api/newsflash/num").then((res)=>{
       this.news_num_total=res.data.data.num;
     }).catch((err)=>{
       console.log(err);

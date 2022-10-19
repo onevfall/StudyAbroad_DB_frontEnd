@@ -1,6 +1,6 @@
 <!--
 快讯列表项
-作者：焦佳宇
+作者：焦佳宇、
 -->
 <template>
   <div class="common-layout card">

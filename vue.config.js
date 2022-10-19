@@ -8,6 +8,20 @@ module.exports = defineConfig({
         //target为后端数据接口的地址
         target:'http://43.142.41.192:6001/',
         changeOrigin:true
+      },
+      // '/spring/v1':{
+      //   target:'http://localhost:8090', 
+      //   changeOrigin:false,
+      //   pathRewrite:{
+      //     '^/spring':'/api'
+      //   }
+      // }
+        '/spring/v1':{
+        target:'http://43.143.84.166:8090/', 
+        changeOrigin:true,
+        pathRewrite:{
+          '^/spring':'/api'
+        }
       }
     }
   }

@@ -100,7 +100,7 @@ export default {
       this.input_nums = false;
 
       axios
-        .post("coin/" + this.dynamic_type, {
+        .post("/api/coin/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
           num: this.coin_in_num,
@@ -145,7 +145,7 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          "coin/" +
+          "/api/coin/" +
             this.dynamic_type +
             "?user_id=" +
             this.$store.state.user_info.user_id +
@@ -169,7 +169,7 @@ export default {
       //查询投币个数
       axios
         .get(
-          "coin/" +
+          "/api/coin/" +
             this.dynamic_type +
             "?user_id=" +
             1 +
@@ -230,7 +230,7 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          "coin/" +
+          "api/coin/" +
             this.dynamic_type +
             "?user_id=" +
             this.$store.state.user_info.user_id +
@@ -254,7 +254,7 @@ export default {
       //查询投币个数
       axios
         .get(
-          "coin/" +
+          "api/coin/" +
             this.dynamic_type +
             "?user_id=" +
             1 +

@@ -196,7 +196,7 @@ export default {
       this.run(),
       //快讯
       axios
-        .get("newsflash/all?page=1&page_size=" + 6)
+        .get("api/newsflash/all?page=1&page_size=" + 6)
         .then((res) => {
           this.news_relevant = [].concat(res.data.data.newsflashs);
           this.news_relevant = this.news_relevant.slice(0, 3);
@@ -207,7 +207,7 @@ export default {
 
     //博客
     axios({
-      url: "/blog/time?num=6",
+      url: "/api/blog/time?num=6",
       method: "get",
     })
       .then((res) => {
@@ -218,7 +218,7 @@ export default {
       });
     //问答
     axios({
-      url: "question/time",
+      url: "api/question/time",
       method: "get",
     })
       .then((res) => {

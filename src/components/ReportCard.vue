@@ -191,7 +191,7 @@ export default {
     },
     checkSeen() {
       axios
-        .put("/report/" + this.report.Type, {
+        .put("/api/report/" + this.report.Type, {
           user_id: this.$store.state.user_info.user_id,
           report_id: this.report.ReportId,
         })
@@ -222,7 +222,7 @@ export default {
         break;
     }
     axios
-      .get("/check/" + this.report.Type, {
+      .get("/api/check/" + this.report.Type, {
         params: {
           report_id: this.report.ReportId,
         },

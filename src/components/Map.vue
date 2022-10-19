@@ -7,7 +7,6 @@
   <!--bmap框-->
 
   <div class="bmap" id="container"></div>
-  <div>{{ school.university_chname }}关键字的检索结果</div>
 </template>
 
 <script>
