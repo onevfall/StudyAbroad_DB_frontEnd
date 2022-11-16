@@ -279,7 +279,7 @@ export default {
       // 调用web api
       // hipo 获取地区、域名
       axios
-        .get("/spring/v1/college/basic_info", {
+        .get("/spring/college/detail/basic_info", {
           params: {
             college_enname: this.school.university_enname,
           },
@@ -294,7 +294,7 @@ export default {
         });
       // open weather 获取天气
       axios
-        .get("/spring/v1/weather/getWeather", {
+        .get("/spring/college/weather", {
           params: {
             longitude: this.school.university_address_x,
             latitude: this.school.university_address_y,
@@ -307,7 +307,7 @@ export default {
         });
       // bing 获取相关页面
       axios
-        .get("/spring/v1/college/bing_search_video", {
+        .get("/spring/college/detail/bing_search", {
           params: {
             college_name: this.school.university_chname + "官网",
           },

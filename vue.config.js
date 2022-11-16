@@ -9,20 +9,20 @@ module.exports = defineConfig({
         target:'http://43.142.41.192:6001/',
         changeOrigin:true
       },
-      // '/spring/v1':{
-      //   target:'http://localhost:8090', 
-      //   changeOrigin:false,
+      '/spring':{
+        target:'http://43.143.84.166:8888', 
+        changeOrigin:true,
+        pathRewrite:{
+          '^/spring':''
+        }
+      }
+      //   '/spring/v1':{
+      //   target:'http://43.143.84.166:8090/', 
+      //   changeOrigin:true,
       //   pathRewrite:{
       //     '^/spring':'/api'
       //   }
       // }
-        '/spring/v1':{
-        target:'http://43.143.84.166:8090/', 
-        changeOrigin:true,
-        pathRewrite:{
-          '^/spring':'/api'
-        }
-      }
     }
   }
 })

@@ -41,7 +41,7 @@ export default {
   watch:{
     country_name(newVal){
       if(newVal!=""){
-        axios.get("/spring/v1/news/district_news", {
+        axios.get("/spring/college/news", {
         params: {
           district_name: this.country_name,
           news_num:5
