@@ -80,9 +80,9 @@ export default {
           
           */
       axios
-        .post("api/login", {
-          user_phone: this.user_phone,
-          user_password: this.user_password,
+        .post("/spring/login", {
+          phone: this.user_phone,
+          password: this.user_password,
         })
         .then((res) => {
           console.log(res);
