@@ -93,7 +93,7 @@ export default {
     school: function (newVal, oldVal) {
     // web API
     this.axios
-      .get("/spring/v1/college/intro", {
+      .get("/spring/college/detail/intro", {
         params: {
           college_name: this.school.university_chname,
         },
