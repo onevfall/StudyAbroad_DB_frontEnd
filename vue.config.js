@@ -16,11 +16,11 @@ module.exports = defineConfig({
           '^/spring':''
         }
       }
-      //   '/spring/v1':{
-      //   target:'http://43.143.84.166:8090/', 
+      // '/spring':{
+      //   target:'localhost:8888', 
       //   changeOrigin:true,
       //   pathRewrite:{
-      //     '^/spring':'/api'
+      //     '^/spring':''
       //   }
       // }
     }
