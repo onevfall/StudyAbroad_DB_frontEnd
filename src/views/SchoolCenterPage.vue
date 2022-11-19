@@ -345,9 +345,9 @@ export default {
         .then((res) => {
           console.log("num:");
           console.log(res);
-          this.all_num = res.data.obj.length;
+          this.all_num = res.data.obj.college_num;
           this.page_num = Math.ceil(this.all_num / this.PAGESIZE); //向上取整
-          this.school_list = res.data.obj;
+          this.school_list = res.data.obj.collegeBasicInfoList;
           this.isLoading = false;
           window.scrollTo(0, 0); //将滚动条回滚至最顶端
         })
@@ -367,9 +367,9 @@ export default {
       .then((res) => {
         console.log("页面初始化")
         console.log(res);
-        this.all_num = res.data.obj.length;
+        this.all_num = res.data.obj.college_num;
         this.page_num = Math.ceil(this.all_num / this.PAGESIZE); //向上取整
-        this.all_school_list = res.data.obj;
+        this.all_school_list = res.data.obj.collegeBasicInfoList;
         //进行当页数据检索
         axios({
           url:
@@ -384,7 +384,7 @@ export default {
           method: "get",
         })
           .then((res) => {
-            this.school_list = res.data.obj;
+            this.school_list = res.data.obj.collegeBasicInfoList;
             this.isLoading = false;
           })
           .catch((errMsg) => {
