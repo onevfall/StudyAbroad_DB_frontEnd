@@ -23,6 +23,20 @@ import App from './App.vue'
 //配置全局baseURL默认值
 //axios.defaults.baseURL="/api"
 axios.defaults.headers.post['Content-Type']='application/x-www-form-urlencoded'
+
+axios.defaults.withCredentials=true
+// 在每次请求中携带satoken的headers
+axios.interceptors.request.use((config) => {
+    let satoken = localStorage.getItem("satoken")
+    if (satoken) {
+       config.headers['satoken'] = satoken
+       config.headers['Access-Control-Allow-Cridentials']=true
+    }
+    return config
+  }, err => {
+    console.log(satoken)
+    return Promise.reject(err)
+  })
 const app = createApp(App).use(ElementPlus).use(store).use(router).use(VueAxios,axios).use(mock)
 
 //初始化图标
