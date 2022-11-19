@@ -89,7 +89,8 @@ export default {
           var response = res.data;
           console.log(response.state);
           if (response.status == true) {
-            var user_info = response.data;
+            var user_info = response.data
+            localStorage.setItem("satoken",response.data.satoken)
             //若成功登录
             ElMessage({
               message: user_info.user_name + "，欢迎您！",
