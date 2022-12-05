@@ -304,7 +304,7 @@ export default {
     confirm(key) {
       this.isUpdating[key] = false;
       axios
-        .put("api/userinfo/change", {
+        .put("spring/personal_center/user_info", {
           user_id: this.$store.state.user_info.user_id,
           user_name: this.name,
           user_gender: this.gender == "女" ? "f" : "m",
@@ -364,7 +364,7 @@ export default {
     },
     submit() {
       axios
-        .put("api/userinfo/profile", {
+        .put("spring/personal_center/user_info/profile", {
           user_id: this.$store.state.user_info.user_id,
           user_profile: this.profile,
         })
@@ -389,7 +389,7 @@ export default {
   created() {
     //个人信息
     axios({
-      url: "api/userinfo",
+      url: "spring/personal_center/user_info",
       params: { user_id: this.$store.state.user_info.user_id },
       method: "get",
     })
@@ -402,7 +402,7 @@ export default {
       });
     //学历认证信息
     axios({
-      url: "api/userinfo/identity",
+      url: "spring/personal_center/identity",
       params: { user_id: this.$store.state.user_info.user_id },
       method: "get",
     })
