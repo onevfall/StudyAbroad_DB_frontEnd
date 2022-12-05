@@ -1662,7 +1662,7 @@ export default {
       console.log(this.host_id + "  " + this.visit_id);
       //个人信息
       axios({
-        url: "api/userinfo",
+        url: "spring/personal_center/user_info",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1676,7 +1676,7 @@ export default {
       // this.person_info = this.$store.state.user_info;
       //学历认证
       axios({
-        url: "api/userinfo/identity",
+        url: "spring/personal_center/identity",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1689,7 +1689,7 @@ export default {
         });
       //成就信息
       axios({
-        url: "api/userinfo/achieve",
+        url: "spring/personal_center/user_info/achievement",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1702,7 +1702,7 @@ export default {
         });
       //成长信息
       axios({
-        url: "userinfo/grow",
+        url: "spring/personal_center/user_info/growth",
         params: { user_id: this.host_id },
         method: "get",
       })

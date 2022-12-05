@@ -48,7 +48,7 @@
                               :key="index"
                             >
                               <!-- 需要变化记录的数据：需要弄清鸟币部分的表是怎么做的！ -->
-                              <td><div>{{item.change_time.replace("T"," ")}}</div></td>
+                              <td><div>{{item.change_time}}</div></td>
                               <td><div>{{item.change_num}}</div></td>
                               <td><div>{{item.change_reason}}</div></td>
                             </tr>
@@ -59,7 +59,7 @@
                               v-for="(item, index) in coin_change_list"
                               :key="index"
                             >
-                              <td><div>{{item.change_time.replace("T"," ")}}</div></td>
+                              <td><div>{{item.change_time}}</div></td>
                               <td><div>{{item.change_num}}</div></td>
                               <td><div>{{item.change_reason}}</div></td>
                             </tr>
@@ -131,7 +131,7 @@
                               :key="index"
                             >
                               <!-- 需要变化记录的数据：需要弄清鸟币部分的表是怎么做的！ -->
-                              <td><div>{{item.change_time.replace("T"," ")}}</div></td>
+                              <td><div>{{item.change_time}}</div></td>
                               <td><div>{{item.change_num}}</div></td>
                               <td><div>{{item.change_reason}}</div></td>
                             </tr>
@@ -142,7 +142,7 @@
                               v-for="(item, index) in coin_change_list"
                               :key="index"
                             >
-                              <td><div>{{item.change_time.replace("T"," ")}}</div></td>
+                              <td><div>{{item.change_time}}</div></td>
                               <td><div>{{item.change_num}}</div></td>
                               <td><div>{{item.change_reason}}</div></td>
                             </tr>
@@ -194,7 +194,7 @@ export default {
       });
     }
     axios({
-      url: "/api/money/record?user_id=" + this.$store.state.user_info.user_id,
+      url: "/spring/coin/record?user_id=" + this.$store.state.user_info.user_id + "&page=0&page_size=20",
     })
       .then((res) => {
         console.log("鸟币")
