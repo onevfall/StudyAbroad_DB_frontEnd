@@ -80,15 +80,16 @@ export default {
           
           */
       axios
-        .post("login", {
-          user_phone: this.user_phone,
-          user_password: this.user_password,
+        .post("/spring/login", {
+          phone: this.user_phone,
+          password: this.user_password,
         })
         .then((res) => {
           console.log(res);
           var response = res.data;
           if (response.status == true) {
-            var user_info = response.data;
+            var user_info = response.data
+            localStorage.setItem("satoken",response.data.satoken)
             //若成功登录
             ElMessage({
               message: user_info.user_name + "，欢迎您！",

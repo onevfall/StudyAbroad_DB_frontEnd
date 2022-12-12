@@ -120,7 +120,7 @@ export default {
       }
       console.log("id" + this.old_password);
       axios
-        .put("userinfo/password", {
+        .put("spring/personal_center/user_info/password", {
           user_id: this.$store.state.user_info.user_id,
           user_password: this.old_password,
           new_password: this.new_password,

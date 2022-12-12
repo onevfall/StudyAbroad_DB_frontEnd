@@ -169,9 +169,9 @@ export default {
         return;
       } else {
         axios
-          .post("/register", {
-            user_phone: this.user_phone,
-            user_password: this.user_password,
+          .post("/spring/login/register", {
+            phone: this.user_phone,
+            password: this.user_password,
             code:this.iden_code,
           })
           .then((res) => {
@@ -184,7 +184,7 @@ export default {
                 message: "注册成功！",
                 type: "success",
               });
-              this.user_id = res.data.data.user_id;
+              this.user_id = res.data.data.id;
               console.log(this.user_id);
               this.dialogVisible = true;
             } else {
@@ -276,8 +276,8 @@ export default {
         return;
       }
       axios
-        .post("/register/verifycode",{
-          user_phone:this.user_phone,
+        .post("/spring/login/register/verification",{
+          phone:this.user_phone,
         })
         .then((res) => {
           console.log(res);

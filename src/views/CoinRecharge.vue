@@ -59,6 +59,7 @@
             最后一栏的框内可以自定义输入鸟币，实现自由充值
           </p>
         </div>
+         <div id="divwapform"></div>
       </div>
     </div>
   </div>
@@ -103,7 +104,7 @@ export default {
         console.log("goods_name:", this.goods_name);
         console.log("moeny_num:", this.money_num);
         axios
-          .post("money/order", {
+          .post("spring/coin/order", {
             user_id: this.user_info.user_id,
             name: this.goods_name,
             num: this.money_num,

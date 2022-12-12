@@ -171,13 +171,13 @@ export default {
     getData() {
       /*在此处向服务器请求数据，初始化所需变量*/
       //博客用户
-      axios.get("userinfo?user_id=" + this.$route.query.user_id).then((res) => {
+      axios.get("api/userinfo?user_id=" + this.$route.query.user_id).then((res) => {
         this.blog_user_info = res.data.data;
       });
       //相关博客
 
       axios
-        .get("/blog/tag?num=3&tag=" + this.$route.query.blog_tag)
+        .get("/api/blog/tag?num=3&tag=" + this.$route.query.blog_tag)
         .then((res) => {
           this.blog_relevant = [].concat(
             res.data.data.blog.filter(
@@ -195,7 +195,7 @@ export default {
         });
       //当前博客内容
       axios
-        .get("/blog?blog_id=" + this.$route.query.blog_id)
+        .get("/api/blog?blog_id=" + this.$route.query.blog_id)
         .then((res) => {
           this.blog_detail = res.data.data;
           const xhrFile = new XMLHttpRequest();

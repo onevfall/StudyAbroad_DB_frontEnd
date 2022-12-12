@@ -80,7 +80,7 @@ export default {
       console.log(this.report_reason)
       console.log(this.$store.state.user_info.user_id)
       axios
-        .post("report/" + this.dynamic_type, {
+        .post("api/report/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
           report_reason: this.report_reason,
@@ -144,7 +144,7 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          "report/" +
+          "api/report/" +
             this.dynamic_type +
             "?user_id=" +
             this.$store.state.user_info.user_id +

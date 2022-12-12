@@ -100,7 +100,7 @@ export default {
     //取关
     CancelFollow() {
       axios
-        .put("follow/follow_user", {
+        .put("api/follow/follow_user", {
           user_id: this.$store.state.user_info.user_id,
           follow_user_id: this.blog_user_info.user_id,
         })
@@ -150,7 +150,7 @@ export default {
           });
         } else {
           axios
-            .post("follow/follow_user", {
+            .post("api/follow/follow_user", {
               user_id: this.$store.state.user_info.user_id,
               follow_user_id: this.blog_user_info.user_id,
             })
@@ -193,7 +193,7 @@ export default {
     //认证信息
     console.log(this.blog_user_info); //若为beforeMount 则此处打印为空 无法获取identity
     axios({
-      url: "userinfo/identity?user_id=" + this.blog_user_info.user_id,
+      url: "spring/personal_center/identity?user_id=" + this.blog_user_info.user_id,
     })
       .then((res) => {
         this.identity_info = [].concat(res.data.data.identity_info);
@@ -205,7 +205,7 @@ export default {
     //当前用户是否关注
     axios({
       url:
-        "follow?user_id=" +
+        "api/follow?user_id=" +
         this.$store.state.user_info.user_id +
         "&follow_user_id=" +
         this.blog_user_info.user_id,

@@ -205,7 +205,7 @@ export default {
     init() {
       if (this.dynamic_type == "answer") {
         axios
-          .get("/" + this.dynamic_type + "/reply", {
+          .get("/api/" + this.dynamic_type + "/reply", {
             params: {
               answer_comment_id: this.comment_infor.AnswerCommentId,
             },
@@ -220,7 +220,7 @@ export default {
           });
       } else {
         axios
-          .get("/" + this.dynamic_type + "/reply", {
+          .get("/api/" + this.dynamic_type + "/reply", {
             params: {
               blog_comment_id: this.comment_infor.BlogCommentId,
             },
@@ -273,7 +273,7 @@ export default {
       } else {
         if (this.dynamic_type == "answer") {
           axios
-            .post("/answer/reply", {
+            .post("/api/answer/reply", {
               comment_id: this.comment_infor.AnswerCommentId,
               reply_user_id: this.$store.state.user_info.user_id,
               reply_content: this.comment_now,
@@ -295,7 +295,7 @@ export default {
             });
         } else {
           axios
-            .post("/blog/reply", {
+            .post("/api/blog/reply", {
               comment_id: this.comment_infor.BlogCommentId,
               reply_user_id: this.$store.state.user_info.user_id,
               reply_content: this.comment_now,
@@ -356,7 +356,7 @@ export default {
     },
     deleteCheck() {
       axios
-        .delete("/" + this.dynamic_type + "/comment", {
+        .delete("/api/" + this.dynamic_type + "/comment", {
           params: {
             // 请求参数拼接在url上
             [this.dynamic_type + "comment_id"]: this.now_delete_id,

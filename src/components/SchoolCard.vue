@@ -7,9 +7,9 @@
     <!-- 排名小卡片 -->
     <el-card class="rank_card">
       <div class="rank_text">
-        <div>{{ school.university_qs_rank }}</div>
-        <div>{{ school.university_the_rank }}</div>
-        <div>{{ school.university_usnews_rank }}</div>
+        <div>{{ school.universityQsRank }}</div>
+        <div>{{ school.universityTheRank }}</div>
+        <div>{{ school.universityUsnewsRank }}</div>
       </div>
     </el-card>
 
@@ -17,10 +17,10 @@
       <div class="two_block_hori">
         <div>
           <div class="avatar_text">
-            <el-avatar shape="square" :size="70" :src="school.university_badge" />
+            <el-avatar shape="square" :size="70" :src="school.universityBadge" />
             <div>
-                <p class="enname">{{ school.university_enname }}</p>
-                <p class="chname">{{ school.university_chname }}</p>
+                <p class="enname">{{ school.universityEnName }}</p>
+                <p class="chname">{{ school.universityChName }}</p>
               
             </div>
           </div>
@@ -31,19 +31,19 @@
                   <el-col :span="8">
                     <div >
                       <span class="info_text">在校人数:</span>
-                      <span style="color:gray;">{{school.university_student_num}}</span>
+                      <span style="color:gray;">{{school.universityStudentNum}}</span>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div>
                       <span class="info_text">位置：</span>
-                      <span style="color:gray;">{{school.university_location}}</span>
+                      <span style="color:gray;">{{school.universityLocation}}</span>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div>
                       <span class="info_text">学费：</span>
-                      <span style="color:gray;">{{school.university_tuition}}</span>
+                      <span style="color:gray;">{{school.universityTuition}}</span>
                     </div>
                   </el-col>
                 </el-row>
@@ -51,7 +51,7 @@
 
                 <div>
                     <span class="info_text">简介：</span>
-                    <span style="color:gray;">{{school.university_introduction}}</span>
+                    <span style="color:gray;">{{school.universityIntroduction.slice(0,150)}}</span>
                 </div>
               
           </div>
@@ -82,7 +82,7 @@ export default {
       this.$router.push({
         path:'/school_detail',
         query:{
-          school_id:this.school.university_id
+          school_id:this.school.universityId
         }
       })
     }

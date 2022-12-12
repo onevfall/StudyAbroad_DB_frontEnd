@@ -194,7 +194,7 @@ export default {
       }
       tag = tag.slice(0, tag.length - 1);
       this.axios
-        .post("question", {
+        .post("api/question", {
           question_user_id: this.$store.state.user_info.user_id,
           question_title: this.title,
           question_description:args.base64_content,

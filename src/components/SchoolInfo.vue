@@ -1,163 +1,190 @@
 <!--
 高校信息
 描述：展示高校信息卡（详情页最上）
-作者：张子涵
+作者：张子涵、焦佳宇（修改部分调用接口为SpringBoot后端）
 -->
 <template>
-  <el-container class="info_table">
-      <el-aside width=60% class="left">
-          <div class="con1"  style="width:100%;float:left;" >
-          <img :src="this.school.university_badge"  class="school_badge">
-           <div style="float:left;text-align:left;">
-            <p class="p1" style="font-size:30px">{{school.university_enname}}
-              </p>
-              
-            <p class="p1">{{school.university_chname}}</p>
-            <p class="p1">{{school.university_abbreviation}}</p>
-
-           </div>
-           <span style="float:right;margin-top: 50px;margin-right: 50px;">
-                <follow-button
-                        object_type="1"
-                        :object_id=" this.$route.query.school_id "
-                        @giveFollow="follow"
-                        @cancelFollow="unFollow"
-                        
-            ></follow-button></span>
-          </div> 
-          <p style="float:left; padding:20px;">
-            <span class="con2_span" style="float:left;text-align:left;">{{school.university_introduction}}</span> 
-            <span class="show" style="float:right;text-align:right;"></span> <!---->
+  <el-container class="info_table" v-loading="loading">
+    <el-aside width="60%" class="left" >
+      <div class="con1" style="width: 100%; float: left">
+        <img :src="this.school.university_badge" class="school_badge" />
+        <div style="float: left; text-align: left">
+          <p class="p1" style="font-size: 30px">
+            {{ school.university_enname }}
           </p>
-  </el-aside>
 
-      <el-main>相关图片
-        <div class="container">
-    <div class="lunbo" @mouseenter="clear" @mouseleave="run">
-        
-      <div class="img" >
-        <img :src="dataList[currentIndex]" alt="" />
+          <p class="p1">{{ school.university_chname }}</p>
+          <p class="p1">{{ school.university_abbreviation }}</p>
+        </div>
+        <span style="float: right; margin-top: 50px; margin-right: 50px">
+          <follow-button
+            object_type="1"
+            :object_id="this.$route.query.school_id"
+            @giveFollow="follow"
+            @cancelFollow="unFollow"
+          ></follow-button
+        ></span>
       </div>
-        
-      <div class="dooted" v-if="this.dataList.length">
-        <ul class="doo">
-          <li 
-            v-for="(item, index) in this.dataList"
-            :key="index"
-            :class="{ current: currentIndex == index }"
-            @click="gotoPage(index)"
-          ></li>
-        </ul>
-      </div>
-        
-      <div class="right_turn turn" @click="next()">
-        <i class="el-icon-arrow-right"></i>
-      </div>
-       
-      <div class="left_turn turn " @click="up()">
-        <i class="el-icon-arrow-left"></i>
-      </div>
-    </div>
+      <p style="float: left; padding: 20px">
+        <span class="con2_span" style="float: left; text-align: left">{{
+          web_school_info
+        }}</span>
+        <span class="show" style="float: right; text-align: right"></span>
+        <!---->
+      </p>
+    </el-aside>
 
-  </div>
+    <el-main
+      >
+      <div class="container">
+        <div class="lunbo" @mouseenter="clear" @mouseleave="run">
+          <div class="img">
+            <img :src="dataList[currentIndex]" alt="" />
+          </div>
 
-      </el-main>
-    </el-container>
-    
-    </template>
+          <div class="dooted" v-if="this.dataList.length">
+            <ul class="doo">
+              <li
+                v-for="(item, index) in this.dataList"
+                :key="index"
+                :class="{ current: currentIndex == index }"
+                @click="gotoPage(index)"
+              ></li>
+            </ul>
+          </div>
+
+          <div class="right_turn turn" @click="next()">
+            <i class="el-icon-arrow-right"></i>
+          </div>
+
+          <div class="left_turn turn" @click="up()">
+            <i class="el-icon-arrow-left"></i>
+          </div>
+        </div>
+      </div>
+    </el-main>
+  </el-container>
+</template>
 
 <script>
 //到时候传入一个
 import FollowButton from "../components/FollowButton.vue";
-import Loading from "../components/Loading.vue"
+import Loading from "../components/Loading.vue";
 import axios from "axios";
 export default {
-  components:{
+  components: {
     FollowButton,
-    Loading
+    Loading,
   },
   props: ["school"],
-  data () {
+  data() {
     return {
-      is_followed:false,
+      is_followed: false,
       dataList: [],
       currentIndex: 0, // 默认显示图片
-      timer: null // 定时器
-    }
+      timer: null, // 定时器
+      // web API
+      web_school_info: "",
+      web_school_photo: "",
+      loading: true,
+    };
   },
-  created () {
-    this.run()
-  
+  watch: {
+    school: function (newVal, oldVal) {
+    // web API
+    this.axios
+      .get("/spring/college/detail/intro", {
+        params: {
+          college_name: this.school.university_chname,
+        },
+      })
+      .then((res) => {
+        this.web_school_info = res.data.obj.data.text;
+        this.web_school_photo = res.data.obj.data.img_url;
+        if (this.web_school_info == undefined) {
+          this.web_school_info = this.school.university_introduction;
+        } else {
+          this.web_school_info = this.web_school_info.replace(/\[.*?\]/g, ""); // 去除[]中的内容
+        }
+        if (this.web_school_photo != undefined) {
+          this.dataList = [].concat(this.web_school_photo);
+        } else {
+          this.dataList = this.school.university_photo;
+        }
+        this.loading = false;
+      })
+      .catch((err) => {
+        this.loading = false;
+        console.log(err);
+      });
+    },
   },
-  updated(){
-    this.dataList=this.school.university_photo;
+  created() {
+    this.run();
+  },
 
-  },
   methods: {
-      //点击小圆圈切换图片
-    gotoPage (index) {
-      this.currentIndex = index
+    //点击小圆圈切换图片
+    gotoPage(index) {
+      this.currentIndex = index;
     },
-      //下一张
-    next () {
-      if (this.currentIndex === this.dataList.length - 1) {
-        this.currentIndex = 0
-      } else {
-        this.currentIndex++
-      }
+    //下一张
+    next() {
+      // if (this.currentIndex === this.dataList.length - 1) {
+      //   this.currentIndex = 0;
+      // } else {
+      //   this.currentIndex++;
+      // }
     },
-      //上一张
-    up () {
+    //上一张
+    up() {
       if (this.currentIndex === 0) {
-        this.currentIndex = this.dataList.length - 1
+        this.currentIndex = this.dataList.length - 1;
       } else {
-        this.currentIndex--
+        this.currentIndex--;
       }
     },
-      //清除定时器
-    clear () {
-      clearInterval(this.timer)
+    //清除定时器
+    clear() {
+      clearInterval(this.timer);
     },
     // 定时器
-    run () {
+    run() {
       this.timer = setInterval(() => {
-        this.next()
-      }, 2000)
-    }
-  }
-
+        this.next();
+      }, 2000);
+    },
+  },
 };
 </script>
 
 <style scoped>
+.info_table {
+  height: 400px;
+  width: 100%;
+  color: white;
 
-
-.info_table{
-  height: 400px; 
-  width: 100%; 
-  color:white;
-  
   background: rgb(26, 46, 80);
   background-image: linear-gradient(#a6c1ee, #d3afa5);
-  opacity: 1; 
+  opacity: 1;
   z-index: -1;
 }
 
-.school_badge{
-  background:white;
-  margin:30px;
+.school_badge {
+  background: white;
+  margin: 30px;
   margin-bottom: 0;
   height: 100px;
   width: 100px;
-  float:left;
+  float: left;
 }
 
-.left{
-  color:white;
+.left {
+  color: white;
   border: black;
 }
 
-.left::-webkit-scrollbar{
+.left::-webkit-scrollbar {
   background-color: rgb(36, 56, 90);
   background-image: linear-gradient(#a6c1ea, #d3afae);
   color: rgb(26, 46, 80);
@@ -177,27 +204,27 @@ ul li {
   position: relative;
   height: 90%;
   width: 100%;
-  margin: 0 ;
+  margin: 0;
 }
 
-.container  .img { 
-    width: 100%; 
-    height: 350px;
-    border: 1px solid gray;
-  }
-  .container  .img img {  
-    width: 100%;
-    height: 350px;
-  }
-  .dooted {
-    position: absolute;
-    bottom: -10px;
-    right: 0px;
-  }
+.container .img {
+  width: 100%;
+  height: 350px;
+  border: 1px solid gray;
+}
+.container .img img {
+  width: 100%;
+  height: 350px;
+}
+.dooted {
+  position: absolute;
+  bottom: -10px;
+  right: 0px;
+}
 
 .turn {
   width: 30px;
-  height:30px;
+  height: 30px;
   line-height: 20px;
   border-radius: 5px;
   cursor: pointer;
@@ -216,7 +243,4 @@ ul li {
 .current {
   color: gray;
 }
-
 </style>
-
-

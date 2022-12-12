@@ -34,9 +34,9 @@
                   >
                     <el-option
                       v-for="item in all_school_list"
-                      :key="item.university_id"
-                      :label="item.university_chname"
-                      :value="item.university_id"
+                      :key="item.universityId"
+                      :label="item.universityChName"
+                      :value="item.universityId"
                     />
                   </el-select>
                   <span style="margin: 10px; vertical-align: bottom">
@@ -339,35 +339,21 @@ export default {
           this.country_value;
       }
       axios({
-        url: "university/num?" + x,
+        url: "spring/college/list?" + x,
         method: "get",
       })
         .then((res) => {
-          this.all_num = res.data.data.num;
-          this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
-        })
-        .catch((errMsg) => {
-          console.log(errMsg);
-          console.log("获取新的all_num失败");
-        });
-      axios({
-        // 点击搜索时加载符合条件的数据
-        url: "university/rank?" + x,
-        method: "get",
-      })
-        .then((res) => {
+          console.log("num:");
           console.log(res);
-          console.log(res.data.data.university_list);
-          console.log("搜索成功");
-          console.log(this.country_value);
-          console.log(this.rank_type_value);
-          this.school_list = res.data.data.university_list;
+          this.all_num = res.data.obj.college_num;
+          this.page_num = Math.ceil(this.all_num / this.PAGESIZE); //向上取整
+          this.school_list = res.data.obj.collegeBasicInfoList;
           this.isLoading = false;
           window.scrollTo(0, 0); //将滚动条回滚至最顶端
         })
         .catch((errMsg) => {
           console.log(errMsg);
-          console.log("大失败");
+          console.log("获取新的all_num失败");
         });
     },
   },
@@ -375,26 +361,30 @@ export default {
     this.isCreated = true;
     this.isLoading = true;
     axios({
-      url: "university/num" + "?rank_year=" + this.year_value,
+      url: "spring/college/list" + "?rank_year=" + this.year_value,
       method: "get",
     })
       .then((res) => {
-        this.all_num = res.data.data.num;
-        this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
-        this.all_school_list = res.data.data.university_list;
+        console.log("页面初始化")
+        console.log(res);
+        this.all_num = res.data.obj.college_num;
+        this.page_num = Math.ceil(this.all_num / this.PAGESIZE); //向上取整
+        this.all_school_list = res.data.obj.collegeBasicInfoList;
         //进行当页数据检索
         axios({
           url:
-            "university/rank" +
+            "spring/college/list" +
             "?rank_year=" +
             this.year_value +
             "&" +
             "page_size=" +
-            this.PAGESIZE,
+            this.PAGESIZE+
+            "&page=" +
+            this.cur_page,
           method: "get",
         })
           .then((res) => {
-            this.school_list = res.data.data.university_list;
+            this.school_list = res.data.obj.collegeBasicInfoList;
             this.isLoading = false;
           })
           .catch((errMsg) => {
