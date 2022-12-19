@@ -11,13 +11,13 @@
     <div class="list_field" v-if="this.news_list.length != 0">
       <div v-for="news in this.news_list" :key="news">
         <news-entry
-          :news_flash_date="news.NewsFlashDate"
-          :news_flash_title="news.NewsFlashTitle"
-          :news_flash_region="news.NewsFlashRegion"
-          :news_flash_tag="news.NewsFlashTag"
-          :news_flash_summary="news.NewsFlashSummary"
-          :news_flash_id="news.NewsFlashId"
-          :news_flash_image="news.NewsFlashImage"
+          :news_flash_date="news.newsFlashDate"
+          :news_flash_title="news.newsFlashTitle"
+          :news_flash_region="news.newsFlashRegion"
+          :news_flash_tag="news.newsFlashTag"
+          :news_flash_summary="news.newsFlashSummary"
+          :news_flash_id="news.newsFlashId"
+          :news_flash_image="news.newsFlashImage"
           style="margin-bottom: 5px"
         ></news-entry>
       </div>
@@ -58,7 +58,7 @@ export default {
     curChange(res) {
       this.isLoading = true;
       axios
-        .get("api/newsflash/all?page=" + res + "&page_size=" + this.PAGESIZE)
+        .get("spring/admin/newsflash/all?page=" + res + "&page_size=" + this.PAGESIZE)
         .then((res) => {
           this.news_list = [].concat(res.data.data.newsflashs);
           this.isLoading = false;
@@ -73,14 +73,14 @@ export default {
   created() {
     //在此处向服务器请求数据，初始化所需变量
     let get_news_list = axios
-      .get("api/newsflash/all?page=1&page_size=" + this.PAGESIZE)
+      .get("spring/admin/newsflash/all?page=1&page_size=" + this.PAGESIZE)
       .then((res) => {
         this.news_list = [].concat(res.data.data.newsflashs);
       })
       .catch((err) => {
         console.log(err);
       });
-    let get_news_num=axios.get("api/newsflash/num").then((res)=>{
+    let get_news_num=axios.get("spring/admin/newsflash/num").then((res)=>{
       this.news_num_total=res.data.data.num;
     }).catch((err)=>{
       console.log(err);
