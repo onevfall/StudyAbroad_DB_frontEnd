@@ -1394,7 +1394,7 @@ export default {
         console.log(res);
         if (ob_type == "0") {
           axios({
-            url: "api/follow/follows",
+            url: "spring/personal_center/follow/follows",
             params: { user_id: this.host_id },
             method: "get",
           })
@@ -1412,7 +1412,7 @@ export default {
             });
         } else if (ob_type == "1") {
           axios({
-            url: "api/follow/universities",
+            url: "spring/personal_center/follow/universities",
             params: { user_id: this.host_id },
             method: "get",
           })
@@ -1427,7 +1427,7 @@ export default {
             });
         } else {
           axios({
-            url: "api/follow/institutions",
+            url: "spring/personal_center/follow/institutions",
             params: { user_id: this.host_id },
             method: "get",
           })
@@ -1719,7 +1719,7 @@ export default {
         });
       //粉丝列表
       axios({
-        url: "api/follow/follower",
+        url: "spring/personal_center/follow/follower",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1735,7 +1735,7 @@ export default {
         });
       //关注用户列表
       axios({
-        url: "api/follow/follows",
+        url: "spring/personal_center/follow/follows",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1749,7 +1749,7 @@ export default {
         });
       //关注学校列表
       axios({
-        url: "api/follow/universities",
+        url: "spring/personal_center/follow/universities",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1763,7 +1763,7 @@ export default {
         });
       //关注机构列表
       axios({
-        url: "api/follow/institutions",
+        url: "spring/personal_center/follow/institutions",
         params: { user_id: this.host_id },
         method: "get",
       })
