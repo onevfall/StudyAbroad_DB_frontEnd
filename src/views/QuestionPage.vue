@@ -468,7 +468,7 @@ export default {
     initPage: function () {
       this.question_id = this.$route.query.question_id;
       axios({
-        url: "api/question",
+        url: "qa/question",
         method: "get",
         params: {
           question_id: this.question_id,
@@ -490,7 +490,7 @@ export default {
         });
       //回答信息
       axios({
-        url: "api/question/answers",
+        url: "qa/question/answers",
         method: "get",
         params: {
           question_id: this.question_id,

@@ -305,7 +305,7 @@ export default {
       // console.log(this.answer_user_info);
       this.question_id = this.$route.query.question_id;
       axios
-        .get("/api/question", {
+        .get("/qa/question", {
           params: {
             question_id: this.question_id,
           },
