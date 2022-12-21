@@ -13,9 +13,8 @@
             @click="goPersonSpace(comment_infor.UserId, $event)"
             class="reviewer_profile"
           />
-          <span class="comment_name"
-            ><b>{{ comment_infor.UserName }}</b></span
-          ><br />
+          <span
+            class="comment_name"><b>{{ comment_infor.UserName }}</b></span><br />
           <div
             style="width: 5%; display: flex; justify-content: space-around"
             v-if="this.type == '0'"
@@ -43,12 +42,21 @@
             />
           </div>
           <div class="comment_button">
-            <el-button type="" @click="reply" link>
-              <el-icon class="el-icon--right"><ChatSquare /></el-icon>
+            <el-button
+              type=""
+              @click="reply"
+              link
+            >
+              <el-icon class="el-icon--right">
+                <ChatSquare />
+              </el-icon>
             </el-button>
             <div style="display: flex; justify-content: space-around">回复</div>
           </div>
-          <div class="report_button" v-if="this.type == '0'">
+          <div
+            class="report_button"
+            v-if="this.type == '0'"
+          >
             <report-button
               content_type="3"
               :content_id="comment_infor.AnswerCommentId"
@@ -57,7 +65,10 @@
             />
             <div style="display: flex; justify-content: space-around">举报</div>
           </div>
-          <div class="report_button" v-else>
+          <div
+            class="report_button"
+            v-else
+          >
             <report-button
               content_type="2"
               :content_id="comment_infor.BlogCommentId"
@@ -67,25 +78,42 @@
             <div style="display: flex; justify-content: space-around">举报</div>
           </div>
           <div class="delete_button">
-            <el-button type="" @click.stop="deleteComment" link>
-              <el-icon class="el-icon--right" style="color: red"
-                ><Delete
-              /></el-icon>
+            <el-button
+              type=""
+              @click.stop="deleteComment"
+              link
+            >
+              <el-icon
+                class="el-icon--right"
+                style="color: red"
+              >
+                <Delete />
+              </el-icon>
             </el-button>
             <div style="display: flex; justify-content: space-around">删除</div>
           </div>
         </div>
-        <div class="content_main" v-if="this.type == '0'">
+        <div
+          class="content_main"
+          v-if="this.type == '0'"
+        >
           {{ comment_infor.AnswerCommentContent }}
         </div>
-        <div class="content_main" v-else>
+        <div
+          class="content_main"
+          v-else
+        >
           {{ comment_infor.BlogCommentContent }}
         </div>
         <div class="comment_footer"></div>
       </div>
     </template>
     <!-- 以下为输入框 -->
-    <div v-if="this.is_reply" class="reply_input" :key="this.is_reply">
+    <div
+      v-if="this.is_reply"
+      class="reply_input"
+      :key="this.is_reply"
+    >
       <!-- <el-header class="header_comment"> -->
       <el-col :span="1">
         <div v-if="this.$store.state.is_login">
@@ -119,7 +147,7 @@
         @click="sendComment"
         type="primary"
         style="margin-top: 5px"
-        >发表评论
+      >发表评论
       </el-button>
       <!-- </el-header> -->
     </div>
@@ -132,7 +160,10 @@
       <!-- <div v-if="this.reply == true"> 
       </div> -->
       <el-collapse accordion>
-        <div v-for="(item, i) in this.comment_infor.child_comments" :key="i">
+        <div
+          v-for="(item, i) in this.comment_infor.child_comments"
+          :key="i"
+        >
           <comment-item
             :comment_infor="this.comment_infor.child_comments[i]"
             :type="this.type"
@@ -153,7 +184,10 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click.stop="handleClose">取消</el-button>
-        <el-button type="primary" @click.stop="deleteCheck">确认</el-button>
+        <el-button
+          type="primary"
+          @click.stop="deleteCheck"
+        >确认</el-button>
       </span>
     </template>
   </el-dialog>
@@ -169,7 +203,7 @@ export default {
   name: "CommentItem",
   props: ["comment_infor", "type"],
   components: { LikeButton, ElMessage, ReportButton },
-  data() {
+  data () {
     return {
       is_reply: false,
       comment_now: "",
@@ -178,7 +212,7 @@ export default {
       now_delete_id: -1,
     };
   },
-  created() {
+  created () {
     // this.comment_infor.reply_num = 0;
     // this.comment_infor.child_comments = [];
     switch (this.type) {
@@ -192,7 +226,7 @@ export default {
     this.init();
   },
   computed: {
-    nowplaceholder() {
+    nowplaceholder () {
       // console.log(this.$store);
       if (this.comment_infor.UserName !== "") {
         return "回复" + this.comment_infor.UserName;
@@ -202,7 +236,7 @@ export default {
     },
   },
   methods: {
-    init() {
+    init () {
       if (this.dynamic_type == "answer") {
         axios
           .get("/api/" + this.dynamic_type + "/reply", {
@@ -235,7 +269,7 @@ export default {
           });
       }
     },
-    reply() {
+    reply () {
       if (this.$store.state.is_login == false) {
         //若未登录
         ElMessage({
@@ -256,7 +290,7 @@ export default {
         // console.log(this.isReply);
       }
     },
-    sendComment() {
+    sendComment () {
       if (this.$store.state.is_login == false) {
         //若未登录
         ElMessage({
@@ -296,9 +330,9 @@ export default {
         } else {
           axios
             .post("/api/blog/reply", {
-              comment_id: this.comment_infor.BlogCommentId,
-              reply_user_id: this.$store.state.user_info.user_id,
-              reply_content: this.comment_now,
+              commentId: this.comment_infor.BlogCommentId,
+              replyUserId: this.$store.state.user_info.user_id,
+              replyContent: this.comment_now,
             })
             .then((res) => {
               console.log("更改！");
@@ -320,7 +354,7 @@ export default {
         }
       }
     },
-    deleteComment() {
+    deleteComment () {
       if (this.$store.state.is_login == false) {
         //若未登录
         ElMessage({
@@ -350,11 +384,11 @@ export default {
         }
       }
     },
-    handleClose() {
+    handleClose () {
       this.now_delete_id = -1;
       this.delete_dialog_visible = false;
     },
-    deleteCheck() {
+    deleteCheck () {
       axios
         .delete("/api/" + this.dynamic_type + "/comment", {
           params: {
@@ -379,7 +413,7 @@ export default {
           ElMessage.error("删除失败!");
         });
     },
-    like(res) {
+    like (res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -396,7 +430,7 @@ export default {
         });
       }
     },
-    unLike(res) {
+    unLike (res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -413,7 +447,7 @@ export default {
         });
       }
     },
-    goPersonSpace(id, event) {
+    goPersonSpace (id, event) {
       this.$router.push({
         path: "/person_space",
         query: {
@@ -421,7 +455,7 @@ export default {
         },
       });
     },
-    reportResponse(res) {
+    reportResponse (res) {
       if (res) {
         ElMessage({
           type: "success",

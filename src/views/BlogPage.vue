@@ -4,13 +4,19 @@
 -->
 <template>
   <div class="body_card">
-    <div class="header_field" v-loading.fullscreen.lock="blog_list.length == 0">
+    <div
+      class="header_field"
+      v-loading.fullscreen.lock="blog_list.length == 0"
+    >
       <el-row>
         <el-col
           :span="9"
           style="text-align: left; padding-left: 220px; padding-top: 55px"
         >
-          <img src="../assets/drawing_blog1.png" style="height: 200px" />
+          <img
+            src="../assets/drawing_blog1.png"
+            style="height: 200px"
+          />
         </el-col>
         <el-col
           :span="7"
@@ -22,7 +28,10 @@
           :span="8"
           style="text-align: left; padding-top: 20px; padding-left: 35px"
         >
-          <img src="../assets/drawing_blog2.png" style="height: 250px" />
+          <img
+            src="../assets/drawing_blog2.png"
+            style="height: 250px"
+          />
         </el-col>
       </el-row>
     </div>
@@ -36,12 +45,20 @@
           <el-tab-pane name="0">
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon :size="20"><Star /></el-icon>
+                <el-icon :size="20">
+                  <Star />
+                </el-icon>
                 <span style="font-size: large">最新动态</span>
               </span>
             </template>
-            <section class="content_field" v-loading="this.loading">
-              <el-space warp :size="40">
+            <section
+              class="content_field"
+              v-loading="this.loading"
+            >
+              <el-space
+                warp
+                :size="40"
+              >
                 <div
                   class="blog_card"
                   v-for="blog in this.blog_list"
@@ -55,12 +72,20 @@
           <el-tab-pane name="1">
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon :size="20"><Sunny /></el-icon>
+                <el-icon :size="20">
+                  <Sunny />
+                </el-icon>
                 <span style="font-size: large">热门动态</span>
               </span>
             </template>
-            <section class="content_field" v-loading="this.loading">
-              <el-space warp :size="40">
+            <section
+              class="content_field"
+              v-loading="this.loading"
+            >
+              <el-space
+                warp
+                :size="40"
+              >
                 <div
                   class="blog_card"
                   v-for="blog in this.blog_list"
@@ -98,7 +123,7 @@ export default {
     BlogInfoBoard,
     PageLoading,
   },
-  data() {
+  data () {
     return {
       sort_type: "0", //0-时间，1-热度
       blog_list: [],
@@ -110,21 +135,22 @@ export default {
   },
 
   methods: {
-    curChange(res) {
+    curChange (res) {
       this.loading = true;
       this.cur_page = res;
-      let sort_type_name = this.sort_type == 0 ? "time" : "heat";
+      let sort_type_name = this.sort_type == 0 ? "time" : "hot";
       axios
         .get(
-          "/api/blog/" +
-            sort_type_name +
-            "?num=1000&page=" +
-            res +
-            "&page_size=" +
-            this.PAGESIZE
+          "/api/blog/list/" +
+          sort_type_name +
+          "?num=1000&page=" +
+          res +
+          "&page_size=" +
+          this.PAGESIZE
         )
         .then((res) => {
-          this.blog_list = [].concat(res.data.data.blog);
+          // this.blog_list = [].concat(res.data.data.blog);
+          this.blog_list = [].concat(res.data.data);
           this.loading = false;
           window.scrollTo(0, 0); //将滚动条回滚至最顶端
         })
@@ -133,7 +159,7 @@ export default {
           console.log(err);
         });
     },
-    sortSwitcher(res) {
+    sortSwitcher (res) {
       this.cur_page = 1;
       if (res.paneName == "0") {
         this.sortByTime();
@@ -141,18 +167,18 @@ export default {
         this.sortByHeat();
       }
     },
-    sortByTime() {
+    sortByTime () {
       if (this.sort_type == "0") {
         return;
       }
       this.loading = true;
       this.sort_type = "0";
       axios({
-        url: "/api/blog/time?num=100&page_size=" + this.PAGESIZE + "&page=1",
+        url: "/api/blog/list/time?num=100&page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
-          this.blog_list = [].concat(res.data.data.blog);
+          this.blog_list = [].concat(res.data.data);
           this.loading = false;
         })
         .catch((errMsg) => {
@@ -160,16 +186,16 @@ export default {
           this.loading = false;
         });
     },
-    sortByHeat() {
+    sortByHeat () {
       if (this.sort_type == "1") {
         return;
       }
       this.loading = true;
       this.sort_type = "1";
       axios
-        .get("/api/blog/heat?num=100&page_size=" + this.PAGESIZE + "&page=1")
+        .get("/api/blog/list/hot?num=100&page_size=" + this.PAGESIZE + "&page=1")
         .then((res) => {
-          this.blog_list = [].concat(res.data.data.blog);
+          this.blog_list = [].concat(res.data.data);
           this.loading = false;
         })
         .catch((errMsg) => {
@@ -177,7 +203,7 @@ export default {
           this.loading = false;
         });
     },
-    bottoomLoading() {
+    bottoomLoading () {
       if (
         document.documentElement.clientHeight + window.scrollY >=
         document.documentElement.scrollHeight
@@ -187,19 +213,20 @@ export default {
       }
     },
   },
-  created() {
+  created () {
+    //统计动态总数
     let get_num = axios
-      .get("/api/blog/time/num?num=1000")
+      .get("/api/blog/num?num=1000")
       .then((res) => {
-        this.blog_num_total = res.data.data.num;
+        this.blog_num_total = res.data.data.blog_num;
       })
       .catch((errMsg) => {
         console.log(errMsg);
       });
     let get_list = axios
-      .get("/api/blog/time?num=1000&page_size=" + this.PAGESIZE + "&page=1")
+      .get("/api/blog/list/time?num=1000&page_size=" + this.PAGESIZE + "&page=1")
       .then((res) => {
-        this.blog_list = [].concat(res.data.data.blog);
+        this.blog_list = [].concat(res.data.data);
       })
       .catch((errMsg) => {
         console.log(errMsg);
@@ -208,10 +235,10 @@ export default {
     //   this.loading = false;
     // });
   },
-  mounted() {
+  mounted () {
     window.addEventListener("scroll", this.bottoomLoading);
   },
-  unmounted() {
+  unmounted () {
     window.removeEventListener("scroll", this.bottoomLoading);
   },
 };
@@ -251,7 +278,7 @@ export default {
   margin-bottom: 10px;
 }
 .body_card {
-  width:98%;
+  width: 98%;
   margin-left: 1%;
   border-radius: 17px;
   background: linear-gradient(#ffffffd0, #bdecfdd5);
