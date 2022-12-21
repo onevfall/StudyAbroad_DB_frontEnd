@@ -134,10 +134,10 @@ export default {
     curChange: function (res) {
       this.question_loading = true;
       this.cur_page = res;
-      let sort_type_name = this.display_status ? "time" : "heat";
+      let sort_type_name = this.display_status ? "time" : "hot";
       axios
         .get(
-          "/api/question/" +
+          "/test/question/list" +
             sort_type_name +
             "?page=" +
             res +
@@ -145,7 +145,7 @@ export default {
             this.PAGESIZE
         )
         .then((res) => {
-          this.question_list = [].concat(res.data.data.question);
+          this.question_list = [].concat(res.data.obj);
           this.question_loading = false;
           window.scrollTo(0, 0); //将滚动条回滚至最顶端
         })
@@ -158,11 +158,11 @@ export default {
     sortByTime: function () {
       this.question_loading = true;
       axios({
-        url: "/api/question/time?page_size=" + this.PAGESIZE + "&page=1",
+        url: "/test/question/list/time?page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
-          this.question_list = [].concat(res.data.data.question);
+          this.question_list = [].concat(res.data.obj);
           this.question_loading = false;
         })
         .catch((errMsg) => {
@@ -174,11 +174,11 @@ export default {
     sortByHeat: function () {
       this.question_loading = true;
       axios({
-        url: "/api/question/heat?page_size=" + this.PAGESIZE + "&page=1",
+        url: "/test/question/list/hot?page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
-          this.question_list = [].concat(res.data.data.question);
+          this.question_list = [].concat(res.data.obj);
           this.question_loading = false;
         })
         .catch((errMsg) => {
@@ -190,21 +190,20 @@ export default {
   },
   created() {
     let get_num = axios
-      .get("/api/question/num")
+      .get("/test/question/num")
       .then((res) => {
-        this.question_num_total = res.data.data.num;
+        this.question_num_total = res.data.obj.num;
       })
       .catch((errMsg) => {
         console.log(errMsg);
       });
 
     axios({
-      url: "api/question/time?page_size=" + this.PAGESIZE + "&page=1",
+      url: "test/question/list/time?page_size=" + this.PAGESIZE + "&page=1",
       method: "get",
     })
       .then((res) => {
-        console.log(res.data.data);
-        this.question_list = [].concat(res.data.data.question);
+        this.question_list = [].concat(res.data.obj);
         this.question_loading = false;
         this.loading = false;
       })

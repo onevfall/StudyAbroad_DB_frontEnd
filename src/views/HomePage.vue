@@ -218,12 +218,12 @@ export default {
       });
     //问答
     axios({
-      url: "api/question/time",
+      url: "/test/question/list/time?page_size=4&page=1",
       method: "get",
     })
       .then((res) => {
-        console.log(res.data.data);
-        this.question_time_info = res.data.data.question.slice(0, 4);
+        console.log(res.data.obj);
+        this.question_time_info = res.data.obj;
         console.log(this.question_time_info)
 
       })
