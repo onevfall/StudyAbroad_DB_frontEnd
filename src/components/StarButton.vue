@@ -47,7 +47,8 @@ export default {
       is_stared: false,
       dynamic_type: "",
       icon_size: 0,
-      star_nums: 0
+      star_nums: 0,
+      type_url:""
     };
   },
   watch:{
@@ -73,7 +74,7 @@ export default {
         });
       } else {
         axios
-          .post("api/star/" + this.dynamic_type, {
+          .post(this.type_url+"/star", {
             user_id: this.$store.state.user_info.user_id,
             [this.dynamic_type + "_id"]: this.content_id,
           })
@@ -101,7 +102,7 @@ export default {
     },
     unStar() {
       axios
-        .put("api/star/" + this.dynamic_type, {
+        .put(this.type_url+"/star", {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
         })
@@ -132,8 +133,7 @@ export default {
      if (this.$store.state.is_login) {
       axios
         .get(
-          "api/star/" +
-            this.dynamic_type +
+          this.type_url+"/star"+
             "?user_id=" +
             this.$store.state.user_info.user_id +
             "&" +
@@ -143,8 +143,8 @@ export default {
         )
         .then((res) => {
       console.log(res);  
-          this.star_nums = res.data.data.star_nums;
-          this.is_stared = res.data.status;
+          this.star_nums = res.data.obj.num;
+          this.is_stared = res.data.obj.is;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -153,8 +153,7 @@ export default {
       //查询收藏个数
       axios
         .get(
-          "api/star/" +
-            this.dynamic_type +
+          this.type_url+"/star"+
             "?user_id=" +
             1 +
             "&" +
@@ -163,7 +162,7 @@ export default {
             this.content_id
         )
         .then((res) => {
-          this.star_nums = res.data.data.star_nums;
+          this.star_nums = res.data.obj.num;
           this.is_stared = false;
         })
         .catch((errMsg) => {
@@ -203,16 +202,17 @@ export default {
         break;
       case "1":
         this.dynamic_type = "answer";
+        this.type_url="/test/answer"
         break;
       case "2":
         this.dynamic_type= "question"
+        this.type_url="/test/question"
     }
     //查询是否收藏
     if (this.$store.state.is_login) {
       axios
         .get(
-          "api/star/" +
-            this.dynamic_type +
+          this.type_url+"/star"+
             "?user_id=" +
             this.$store.state.user_info.user_id +
             "&" +
@@ -221,8 +221,8 @@ export default {
             this.content_id
         )
         .then((res) => {
-          this.star_nums = res.data.data.star_nums;
-          this.is_stared = res.data.status;
+          this.star_nums = res.data.obj.num;
+          this.is_stared = res.data.obj.is;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -231,8 +231,7 @@ export default {
       //查询收藏个数
       axios
         .get(
-          "api/star/" +
-            this.dynamic_type +
+          this.type_url+"/star" +
             "?user_id=" +
             1 +
             "&" +
@@ -241,7 +240,7 @@ export default {
             this.content_id
         )
         .then((res) => {
-          this.star_nums = res.data.data.star_nums;
+          this.star_nums = res.data.obj.num;
           this.is_stared = false;
         })
         .catch((errMsg) => {

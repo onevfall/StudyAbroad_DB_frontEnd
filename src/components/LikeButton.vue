@@ -37,7 +37,8 @@ export default {
       is_liked: false,
       dynamic_type: "",
       like_nums: "",
-      icon_size:0
+      icon_size:0,
+      type_url:""
     };
   },
   methods: {
@@ -57,7 +58,7 @@ export default {
         });
       } else {
         axios
-          .post("/api/like/" + this.dynamic_type, {
+          .post(this.type_url+"/like", {
             user_id: this.$store.state.user_info.user_id,
             [this.dynamic_type + "_id"]: this.content_id,
           })
@@ -84,7 +85,7 @@ export default {
     },
     unLike() {
       axios
-        .put("api/like/" + this.dynamic_type, {
+        .put(this.type_url+"/like", {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
         })
@@ -113,8 +114,7 @@ export default {
     //查询是否点过赞
     if (this.$store.state.is_login) {
       axios(
-        "api/like/" +
-          this.dynamic_type +
+        this.type_url+"/like" +
           "?user_id=" +
           this.$store.state.user_info.user_id +
           "&" +
@@ -123,8 +123,8 @@ export default {
           this.content_id
       )
         .then((res) => {
-          this.like_nums = res.data.data.like_times;
-          this.is_liked = res.data.status;
+          this.like_nums = res.data.obj.num;
+          this.is_liked = res.data.obj.is;
           // console.log(this.is_liked);
         })
         .catch((errMsg) => {
@@ -133,8 +133,7 @@ export default {
     } else {
       //查询点赞个数
       axios(
-        "api/like/" +
-          this.dynamic_type +
+        this.type_url+"/like" +
           "?user_id=" +
           1 +
           "&" +
@@ -143,7 +142,7 @@ export default {
           this.content_id
       )
         .then((res) => {
-          this.like_nums = res.data.data.like_times;
+          this.like_nums = res.data.obj.num;
           this.is_liked = false;
         })
         .catch((errMsg) => {
@@ -184,12 +183,15 @@ export default {
         break;
       case "1":
         this.dynamic_type = "blog_comment";
+        
         break;
       case "2":
         this.dynamic_type = "answer";
+        this.type_url="/test/answer"
         break;
       case "3":
         this.dynamic_type = "answer_comment";
+        this.type_url+"/star"
         break;
     }
     //查询是否点过赞
