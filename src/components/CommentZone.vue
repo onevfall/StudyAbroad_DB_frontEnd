@@ -105,7 +105,7 @@ export default {
         break;
       case "1":
         this.dynamic_type = "blog";
-        url = "/spring/blog/comment";
+        this.url = "/spring/blog/comment";
         break;
     }
     this.initZone();
@@ -127,7 +127,7 @@ export default {
         });
       } else {
         axios
-          .post(url, {
+          .post(this.url, {
             [this.dynamic_type + "_id"]: this.id,
             [this.dynamic_type + "_comment_user_id"]:
               this.$store.state.user_info.user_id,
@@ -145,7 +145,7 @@ export default {
             });
             this.comment_now = "";
             axios
-              .get(url + "/" + this.id)
+              .get(this.url + "/" + this.id)
               .then((res) => {
                 for (let i = 0; i < res.data.data.comment_list.length; ++i) {
                   this.comments[i] = res.data.data.comment_list[i];
@@ -164,7 +164,7 @@ export default {
     },
     initZone () {
       axios
-        .get(url + "/" + this.id)
+        .get(this.url + "/" + this.id)
         .then((res) => {
           console.log(res.data.data);
           this.comments = [];

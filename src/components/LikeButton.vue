@@ -195,11 +195,11 @@ export default {
     switch (this.content_type) {
       case "0":
         this.dynamic_type = "blog";
-        url = "spring/blog/like";
+        this.url = "spring/blog/like";
         break;
       case "1":
         this.dynamic_type = "blog_comment";
-        url = "spring/blog/comment/like";
+        this.url = "spring/blog/comment/like";
         break;
       case "2":
         this.dynamic_type = "answer";
@@ -211,7 +211,7 @@ export default {
     //查询是否点过赞
     if (this.$store.state.is_login) {
       axios(
-        url +
+        this.url +
         "?user_id=" +
         this.$store.state.user_info.user_id +
         "&" +
@@ -230,7 +230,7 @@ export default {
     } else {
       //查询点赞个数
       axios(
-        url +
+        this.url +
         "?user_id=" +
         1 +
         "&" +

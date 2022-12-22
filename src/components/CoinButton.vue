@@ -69,6 +69,7 @@ export default {
   },
   data () {
     return {
+      url: "",
       is_coined: false,
       dynamic_type: "",
       coin_nums: "",
@@ -112,7 +113,7 @@ export default {
       this.input_nums = false;
 
       axios
-        .post(url, {
+        .post(this.url, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
           num: this.coin_in_num,
@@ -157,7 +158,7 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          url +
+          this.url +
           "?user_id=" +
           this.$store.state.user_info.user_id +
           "&" +
@@ -180,7 +181,7 @@ export default {
       //查询投币个数
       axios
         .get(
-          url +
+          this.url +
           "?user_id=" +
           1 +
           "&" +
@@ -230,7 +231,7 @@ export default {
     switch (this.content_type) {
       case "0":
         this.dynamic_type = "blog";
-        url = "spring/blog/coin";
+        this.url = "spring/blog/coin";
         break;
       case "1":
         this.dynamic_type = "answer";
@@ -241,7 +242,7 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          url +
+          this.url +
           "?user_id=" +
           this.$store.state.user_info.user_id +
           "&" +
@@ -264,7 +265,7 @@ export default {
       //查询投币个数
       axios
         .get(
-          url +
+          this.url +
           "?user_id=" +
           1 +
           "&" +

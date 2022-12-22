@@ -80,7 +80,7 @@ export default {
         });
       } else {
         axios
-          .post(url, {
+          .post(this.url, {
             user_id: this.$store.state.user_info.user_id,
             [this.dynamic_type + "_id"]: this.content_id,
           })
@@ -108,7 +108,7 @@ export default {
     },
     unStar () {
       axios
-        .put(url, {
+        .put(this.url, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
         })
@@ -139,7 +139,7 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          url +
+          this.url +
           "?user_id=" +
           this.$store.state.user_info.user_id +
           "&" +
@@ -159,7 +159,7 @@ export default {
       //查询收藏个数
       axios
         .get(
-          url +
+          this.url +
           "?user_id=" +
           1 +
           "&" +
@@ -205,7 +205,7 @@ export default {
     switch (this.content_type) {
       case "0":
         this.dynamic_type = "blog";
-        url = "spring/blog/star";
+        this.url = "spring/blog/star";
         break;
       case "1":
         this.dynamic_type = "answer";
@@ -217,7 +217,7 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          url +
+          this.url +
           "?user_id=" +
           this.$store.state.user_info.user_id +
           "&" +
@@ -236,7 +236,7 @@ export default {
       //查询收藏个数
       axios
         .get(
-          url +
+          this.url +
           "?user_id=" +
           1 +
           "&" +

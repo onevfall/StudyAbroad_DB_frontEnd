@@ -222,7 +222,7 @@ export default {
         break;
       case "1":
         this.dynamic_type = "blog";
-        url = "/spring/blog";
+        this.url = "/spring/blog";
         break;
     }
     this.init();
@@ -241,7 +241,7 @@ export default {
     init () {
       if (this.dynamic_type == "answer") {
         axios
-          .get(url + "/reply", {
+          .get(this.url + "/reply", {
             params: {
               answer_comment_id: this.comment_infor.AnswerCommentId,
             },
@@ -256,7 +256,7 @@ export default {
           });
       } else {
         axios
-          .get(url + "/reply" + "/" + this.comment_infor.blogCommentId)
+          .get(this.url + "/reply/" + this.comment_infor.blogCommentId)
           .then((res) => {
             this.comment_infor.reply_num = res.data.data.reply_num;
             this.comment_infor.child_comments = res.data.data.reply_list;
@@ -388,7 +388,7 @@ export default {
     },
     deleteCheck () {
       axios
-        .delete(url + "/comment/" + this.now_delete_id)
+        .delete(this.url + "/comment/" + this.now_delete_id)
         .then((res) => {
           this.delete_dialog_visible = false;
           this.now_delete_id = -1;
