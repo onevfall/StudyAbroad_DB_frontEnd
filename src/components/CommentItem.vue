@@ -387,24 +387,45 @@ export default {
       this.delete_dialog_visible = false;
     },
     deleteCheck () {
-      axios
-        .delete(this.url + "/comment/" + this.now_delete_id)
-        .then((res) => {
-          this.delete_dialog_visible = false;
-          this.now_delete_id = -1;
-          if (res.data.status == true) {
-            ElMessage.success("删除成功!");
-            this.$emit("refreshZone", true);
-          } else {
+      if (this.dynamic_type == "blog") {
+        axios
+          .post(this.url + "/uncomment/" + this.now_delete_id)
+          .then((res) => {
+            this.delete_dialog_visible = false;
+            this.now_delete_id = -1;
+            if (res.data.status == true) {
+              ElMessage.success("删除成功!");
+              this.$emit("refreshZone", true);
+            } else {
+              ElMessage.error("删除失败!");
+            }
+          })
+          .catch((errMsg) => {
+            this.delete_dialog_visible = false;
+            this.now_delete_id = -1;
+            console.log(errMsg);
             ElMessage.error("删除失败!");
-          }
-        })
-        .catch((errMsg) => {
-          this.delete_dialog_visible = false;
-          this.now_delete_id = -1;
-          console.log(errMsg);
-          ElMessage.error("删除失败!");
-        });
+          });
+      } else {
+        axios
+          .delete(this.url + "/comment/" + this.now_delete_id)
+          .then((res) => {
+            this.delete_dialog_visible = false;
+            this.now_delete_id = -1;
+            if (res.data.status == true) {
+              ElMessage.success("删除成功!");
+              this.$emit("refreshZone", true);
+            } else {
+              ElMessage.error("删除失败!");
+            }
+          })
+          .catch((errMsg) => {
+            this.delete_dialog_visible = false;
+            this.now_delete_id = -1;
+            console.log(errMsg);
+            ElMessage.error("删除失败!");
+          });
+      }
     },
     like (res) {
       if (res) {
