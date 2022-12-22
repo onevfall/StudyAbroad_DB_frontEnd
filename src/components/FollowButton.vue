@@ -95,7 +95,7 @@ export default {
           });
         } else {
           axios
-            .post("/api/follow/" + this.dynamic_type, {
+            .post("/spring/personal_center/follow/" + this.dynamic_type, {
               user_id: this.$store.state.user_info.user_id,
               [this.dynamic_type + "_id"]: this.object_id,
             })
@@ -123,7 +123,7 @@ export default {
     },
     unFollow() {
       axios
-        .put("api/follow/" + this.dynamic_type, {
+        .put("/spring/personal_center/follow/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.object_id,
         })
@@ -164,7 +164,7 @@ export default {
     //查询是否已关注
     if (this.$store.state.is_login) {
       axios(
-        "api/follow/" +
+        "/spring/personal_center/follow/" +
           this.dynamic_type +
           "?user_id=" +
           this.$store.state.user_info.user_id +
@@ -183,7 +183,7 @@ export default {
     } else {
       //查询关注人数
       axios(
-        "api/follow/" +
+        "/spring/personal_center/follow/" +
           this.dynamic_type +
           "?user_id=" +
           1 +
