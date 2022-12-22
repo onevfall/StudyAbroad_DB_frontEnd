@@ -72,10 +72,8 @@ export default {
         });
       } else {
         axios
-          .post("/spring/" + this.dynamic_type + "/like/", {
-            user_id: this.$store.state.user_info.user_id,
-            [this.dynamic_type + "_id"]: this.content_id,
-          })
+          .post(this.url + "?user_id=" + this.$store.state.user_info.user_id
+            + "&" + this.dynamic_type + "_id=" + this.content_id)
           .then((res) => {
             if (res.data.status) {
               this.is_liked = true;
@@ -99,10 +97,8 @@ export default {
     },
     unLike () {
       axios
-        .put("spring/like/" + this.dynamic_type, {
-          user_id: this.$store.state.user_info.user_id,
-          [this.dynamic_type + "_id"]: this.content_id,
-        })
+        .put(this.url + "?user_id=" + this.$store.state.user_info.user_id
+          + "&" + this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
           if (res.data.status) {
             this.is_liked = false;
@@ -128,8 +124,7 @@ export default {
     //查询是否点过赞
     if (this.$store.state.is_login) {
       axios(
-        "spring/like/" +
-        this.dynamic_type +
+        this.url +
         "?user_id=" +
         this.$store.state.user_info.user_id +
         "&" +
@@ -148,8 +143,7 @@ export default {
     } else {
       //查询点赞个数
       axios(
-        "spring/" + this.dynamic_type +
-        "/like?user_id=" +
+        this.url + "?user_id=" +
         1 +
         "&" +
         this.dynamic_type +

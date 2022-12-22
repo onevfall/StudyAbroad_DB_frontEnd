@@ -113,11 +113,8 @@ export default {
       this.input_nums = false;
 
       axios
-        .post(this.url, {
-          user_id: this.$store.state.user_info.user_id,
-          [this.dynamic_type + "_id"]: this.content_id,
-          num: this.coin_in_num,
-        })
+        .post(this.url + "?user_id=" + this.$store.state.user_info.user_id + "&" + this.dynamic_type + "_id=" + this.content_id + "&num=" + this.coin_in_num
+        )
         .then((res) => {
           if (res.data.status) {
             this.is_coined = true;

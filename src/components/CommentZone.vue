@@ -112,6 +112,7 @@ export default {
   },
   methods: {
     sendComment () {
+
       if (this.$store.state.is_login == false) {
         //若未登录
         ElMessage({
