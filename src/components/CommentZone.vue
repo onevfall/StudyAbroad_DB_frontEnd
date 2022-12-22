@@ -3,7 +3,10 @@
 作者：方新宇
 -->
 <template>
-  <el-container class="comment_zone" :key="this.$route.query">
+  <el-container
+    class="comment_zone"
+    :key="this.$route.query"
+  >
     <el-header class="header_comment">
       <el-col :span="1">
         <div v-if="this.$store.state.is_login">
@@ -38,20 +41,36 @@
         @click="sendComment"
         type="primary"
         style="margin-top: 5px"
-        >发表评论
+      >发表评论
       </el-button>
     </el-header>
     <el-main :key="this.commentChange">
       <div v-if="this.comments.length == 0">
-        <img src="../assets/question-empty.png" style="width: 30%" />
+        <img
+          src="../assets/question-empty.png"
+          style="width: 30%"
+        />
         <div style="font-weight: bold">暂时还没有任何评论，赶紧去评论吧！</div>
         <!-- <div @click="goToWriteAnswerPage" >开始写第一个回答</div> -->
       </div>
-      <el-scrollbar v-if="this.comments.length !== 0" height="400px">
+      <el-scrollbar
+        v-if="this.comments.length !== 0"
+        height="400px"
+      >
         <!-- <el-collapse accordion @change="handleChange"> -->
-        <el-collapse accordion :key="this.comments ">
-          <div v-for="(item, i) in this.comments" :key="i">
-            <comment-item :comment_infor="this.comments[i]" :type="this.type" @refreshZone="initZone">
+        <el-collapse
+          accordion
+          :key="this.comments "
+        >
+          <div
+            v-for="(item, i) in this.comments"
+            :key="i"
+          >
+            <comment-item
+              :comment_infor="this.comments[i]"
+              :type="this.type"
+              @refreshZone="initZone"
+            >
             </comment-item>
           </div>
         </el-collapse>
@@ -68,8 +87,9 @@ export default {
   name: "CommentZone",
   props: ["id", "type"],
   components: { CommentItem, ElMessage },
-  data() {
+  data () {
     return {
+      url: "",
       dynamic_type: "",
       comment_now: "",
       comments: [],
@@ -78,19 +98,21 @@ export default {
       commentChange: false,
     };
   },
-  created() {
+  created () {
     switch (this.type) {
       case "0":
         this.dynamic_type = "answer";
         break;
       case "1":
         this.dynamic_type = "blog";
+        this.url = "/spring/blog/comment";
         break;
     }
     this.initZone();
   },
   methods: {
-    sendComment() {
+    sendComment () {
+
       if (this.$store.state.is_login == false) {
         //若未登录
         ElMessage({
@@ -106,7 +128,7 @@ export default {
         });
       } else {
         axios
-          .post("/api/" + this.dynamic_type + "/comment", {
+          .post(this.url, {
             [this.dynamic_type + "_id"]: this.id,
             [this.dynamic_type + "_comment_user_id"]:
               this.$store.state.user_info.user_id,
@@ -124,11 +146,7 @@ export default {
             });
             this.comment_now = "";
             axios
-              .get("/api/" + this.dynamic_type + "/comment", {
-                params: {
-                  [this.dynamic_type + "_id"]: this.id,
-                },
-              })
+              .get(this.url + "/" + this.id)
               .then((res) => {
                 for (let i = 0; i < res.data.data.comment_list.length; ++i) {
                   this.comments[i] = res.data.data.comment_list[i];
@@ -145,28 +163,24 @@ export default {
           });
       }
     },
-    initZone(){
+    initZone () {
       axios
-      .get("/api/" + this.dynamic_type + "/comment", {
-        params: {
-          [this.dynamic_type + "_id"]: this.id,
-        },
-      })
-      .then((res) => {
-        console.log(res.data.data);
-        this.comments = [];
-        for (let i = 0; i < res.data.data.comment_list.length; ++i) {
-          this.comments[i] = res.data.data.comment_list[i];
-          this.comments[i].reply_num = 0;
-          this.comments[i].child_comments = [];
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .get(this.url + "/" + this.id)
+        .then((res) => {
+          console.log(res.data.data);
+          this.comments = [];
+          for (let i = 0; i < res.data.data.comment_list.length; ++i) {
+            this.comments[i] = res.data.data.comment_list[i];
+            this.comments[i].reply_num = 0;
+            this.comments[i].child_comments = [];
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   },
-  watch:{
+  watch: {
 
 
   },
