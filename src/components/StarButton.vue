@@ -205,10 +205,13 @@ export default {
         break;
       case "1":
         this.dynamic_type = "answer";
+        this.type_url="/spring/qa/answer"
         break;
       case "2":
-        this.dynamic_type = "question"
+        this.dynamic_type= "question"
+        this.type_url="/spring/qa/question"
     }
+    
     //查询是否收藏
     if (this.$store.state.is_login) {
       axios

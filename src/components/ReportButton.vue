@@ -79,7 +79,7 @@ export default {
       console.log(this.content_id)
       console.log(this.report_reason)
       axios
-        .post("spring/personal_center/report/" + this.dynamic_type, {
+        .post(this.url+"/report", {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
           report_reason: this.report_reason,
@@ -131,20 +131,21 @@ export default {
         break;
       case "1":
         this.dynamic_type = "answer";
+        this.url = "spring/qa/answer";
         break;
       case "2":
         this.dynamic_type = "blogcomment";
         break;
       case "3":
         this.dynamic_type = "answercomment";
+        this.url = "spring/qa/answer/comment";
         break;
     }
     //查询是否举报过
     if (this.$store.state.is_login) {
       axios
         .get(
-          "spring/personal_center/report/" +
-            this.dynamic_type +
+          this.url+"/report" +
             "?user_id=" +
             this.$store.state.user_info.user_id +
             "&" +
