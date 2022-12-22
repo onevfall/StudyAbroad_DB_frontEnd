@@ -74,7 +74,7 @@ export default {
     deleteCheck() {
       console.log("1111");
       axios.delete(
-        '/spring/personal_center/identity', {	
+        '/api/identity', {	
       params: {	// 请求参数拼接在url上
         identity_id: this.certif_infor.identity_id,
       }

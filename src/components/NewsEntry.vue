@@ -26,7 +26,7 @@
             {{
               this.news_flash_date.substring(
                 0,
-                this.news_flash_date.indexOf(" ")
+                this.news_flash_date.indexOf("T")
               )
             }}
           </el-col>

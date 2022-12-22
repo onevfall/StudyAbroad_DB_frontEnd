@@ -48,9 +48,8 @@ export default {
   components: {
     ElMessage,
   },
-  data  () {
+  data () {
     return {
-      url: "",
       url: "",
       is_stared: false,
       dynamic_type: "",
@@ -58,13 +57,13 @@ export default {
       star_nums: 0
     };
   },
-  watch:  {
-    is_stared  ()  {
+  watch: {
+    is_stared () {
       this.$emit("starChange", this.is_stared);
     },
   },
   methods: {
-    star  () {
+    star () {
       //判断是否登录
       if (this.$store.state.is_login == false) {
         //若未登录
@@ -81,8 +80,6 @@ export default {
         });
       } else {
         axios
-          .post(this.url + "/star?user_id=" + this.$store.state.user_info.user_id + "&" +
-            this.dynamic_type + "_id=" + this.content_id)
           .post(this.url + "/star?user_id=" + this.$store.state.user_info.user_id + "&" +
             this.dynamic_type + "_id=" + this.content_id)
           .then((res) => {
@@ -102,19 +99,13 @@ export default {
               "的" +
               this.dynamic_type +
               "收藏，相关API此时未完成"
-              this.content_id +
-              "的" +
-              this.dynamic_type +
-              "收藏，相关API此时未完成"
             );
             console.log(errMsg);
           });
       }
     },
-    unStar  () {
+    unStar () {
       axios
-        .post(this.url + "/unstar?user_id=" + this.$store.state.user_info.user_id + "&" +
-          this.dynamic_type + "_id=" + this.content_id)
         .post(this.url + "/unstar?user_id=" + this.$store.state.user_info.user_id + "&" +
           this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
@@ -133,19 +124,12 @@ export default {
             "的" +
             this.dynamic_type +
             "收藏，相关API此时未完成"
-            this.content_id +
-            "的" +
-            this.dynamic_type +
-            "收藏，相关API此时未完成"
           );
           console.log(errMsg);
         });
     },
   },
   // 用update效率低，但简便，日后迭代需要优化此处
-  updated () {
-    console.log("update!!!");
-    if (this.$store.state.is_login) {
   updated () {
     console.log("update!!!");
     if (this.$store.state.is_login) {
@@ -158,16 +142,8 @@ export default {
           this.dynamic_type +
           "_id=" +
           this.content_id
-          this.url +
-          "/star?user_id=" +
-          this.$store.state.user_info.user_id +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
         )
         .then((res) => {
-          console.log(res);
           console.log(res);
           this.star_nums = res.data.data.star_nums;
           this.is_stared = res.data.status;
@@ -186,13 +162,6 @@ export default {
           this.dynamic_type +
           "_id=" +
           this.content_id
-          this.url +
-          "/star?user_id=" +
-          1 +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
         )
         .then((res) => {
           this.star_nums = res.data.data.star_nums;
@@ -203,7 +172,7 @@ export default {
         });
     }
   },
-  created  () {
+  created () {
     //设定大小
     switch (this.size) {
       case "xx-small":
@@ -233,7 +202,6 @@ export default {
       case "0":
         this.dynamic_type = "blog";
         this.url = "spring/blog";
-        this.url = "spring/blog";
         break;
       case "1":
         this.dynamic_type = "answer";
@@ -254,13 +222,6 @@ export default {
           this.dynamic_type +
           "_id=" +
           this.content_id
-          this.url +
-          "/star?user_id=" +
-          this.$store.state.user_info.user_id +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
         )
         .then((res) => {
           this.star_nums = res.data.data.star_nums;
@@ -273,13 +234,6 @@ export default {
       //查询收藏个数
       axios
         .get(
-          this.url +
-          "/star?user_id=" +
-          1 +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
           this.url +
           "/star?user_id=" +
           1 +

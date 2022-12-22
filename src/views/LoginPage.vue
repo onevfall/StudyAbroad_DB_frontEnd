@@ -3,27 +3,19 @@
 作者：焦佳宇
 -->
 <template>
-  <div class="common-layout body_card">
+  <div class="common-layout body_card" >
     <el-container>
       <el-header>
         <div id="registerTips">
-          <el-link
-            type="primary"
-            style="font-size: small"
-            @click="goRegister"
-          >还没有账号，注册<el-icon color="#409eff">
-              <Right />
-            </el-icon>
-          </el-link>
+          <el-link type="primary" style="font-size: small" @click="goRegister"
+            >还没有账号，注册<el-icon color="#409eff"><Right /></el-icon
+          ></el-link>
         </div>
         <div id="signInTips">用户登录</div>
       </el-header>
       <el-container>
         <el-aside width="900px">
-          <img
-            src="../assets/drawing_login.png"
-            class="drawing"
-          />
+          <img src="../assets/drawing_login.png" class="drawing" />
         </el-aside>
         <el-main>
           <div class="loginField">
@@ -37,9 +29,7 @@
                     :input-style="this.input_style"
                   >
                     <template #suffix>
-                      <el-icon color="#409eff">
-                        <UserFilled />
-                      </el-icon>
+                      <el-icon color="#409eff"><UserFilled /></el-icon>
                     </template>
                   </el-input>
                 </el-col>
@@ -60,10 +50,7 @@
               </el-row>
             </div>
             <div class="buttonCard">
-              <el-button
-                type="primary"
-                @click="login"
-              >登录</el-button>
+              <el-button type="primary" @click="login">登录</el-button>
             </div>
           </div>
         </el-main>
@@ -78,17 +65,17 @@ import axios from "axios";
 import store from "@/store";
 export default {
   components: { ElMessage },
-  data () {
+  data() {
     return {
       user_phone: "",
       user_password: "",
     };
   },
   methods: {
-    goRegister () {
+    goRegister() {
       this.$router.replace("/register");
     },
-    login () {
+    login() {
       /*此处日后需要加数据格式验证
           
           */
@@ -103,7 +90,7 @@ export default {
           console.log(response.state);
           if (response.status == true) {
             var user_info = response.data
-            localStorage.setItem("satoken", response.data.satoken)
+            localStorage.setItem("satoken",response.data.satoken)
             //若成功登录
             ElMessage({
               message: user_info.user_name + "，欢迎您！",
@@ -175,7 +162,7 @@ export default {
   --el-input-hover-border-color: #88c3fe;
 }
 .body_card {
-  width: 98%;
+  width:98%;
   margin-left: 1%;
   border-radius: 17px;
   background: linear-gradient(#ffffffd0, #bdecfdd5);

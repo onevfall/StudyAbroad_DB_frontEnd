@@ -10,20 +10,20 @@
   >
     <template #header>
       <div class="card-header">
-        <span>{{ new_info.newsFlashTitle.length>18?new_info.NewsFlashTitle.slice(0,18)+'...': new_info.newsFlashTitle}}</span>
+        <span>{{ new_info.NewsFlashTitle.length>18?new_info.NewsFlashTitle.slice(0,18)+'...': new_info.NewsFlashTitle}}</span>
       </div>
       <el-row gutter="10" justify="left">
         <el-col span="30">
           <el-tag class="ml-2" type="primary" size="small">{{
-            new_info.newsFlashDate.substring(
+            new_info.NewsFlashDate.substring(
                 0,
-                new_info.newsFlashDate.indexOf(" ")
+                new_info.NewsFlashDate.indexOf("T")
               )
           }}</el-tag>
         </el-col>
         <el-col span="30">
           <el-tag class="ml-2" type="success" size="small">{{
-            new_info.newsFlashRegion
+            new_info.NewsFlashRegion
           }}</el-tag>
         </el-col>
         <el-col span="30" v-for="tag in this.new_tags.slice(0,3)" :key="tag">
@@ -34,7 +34,7 @@
       </el-row>
     </template>
     <div class="content">
-      {{ new_info.newsFlashSummary }}
+      {{ new_info.NewsFlashSummary }}
     </div>
   </el-card>
 </template>
@@ -53,14 +53,14 @@ export default {
       this.$router.push({
         path: "news",
         query: {
-          news_id: new_info.newsFlashId,
+          news_id: new_info.NewsFlashId,
         },
       });
     },
   },
   created(){
-    this.new_tags=[].concat(this.new_info.newsFlashTag.split("-"));
-    this.new_info.newsFlashSummary=this.new_info.newsFlashSummary.slice(0,75)+'...';
+    this.new_tags=[].concat(this.new_info.NewsFlashTag.split("-"));
+    this.new_info.NewsFlashSummary=this.new_info.NewsFlashSummary.slice(0,75)+'...';
   }
 };
 </script>

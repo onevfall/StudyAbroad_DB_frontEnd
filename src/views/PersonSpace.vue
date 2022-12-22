@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="user_profile"
-    v-loading.fullscreen.lock="blog_count == -1"
-  >
+  <div class="user_profile" v-loading.fullscreen.lock="blog_count == -1">
     <div class="user_profile_head">
       <div class="user_profile_banner"></div>
       <el-card class="user_profile_info_box">
@@ -16,20 +13,24 @@
 
           <div class="user_profile_info_right">
             <div class="user_profile_title">
-              <span style="
+              <span
+                style="
                   font-size: 20px;
                   font-weight: bold;
                   text-align: left;
                   margin-right: 1%;
-                ">{{ person_info.user_name }}
+                "
+                >{{ person_info.user_name }}
               </span>
               <span style="font-size: 3px; color: gray; text-align: left">
-                等级：{{ person_info.user_level }}</span>
+                等级：{{ person_info.user_level }}</span
+              >
             </div>
             <div class="user_profile_content">
               <span
                 style="font-size: 20px; font-weight: bolder; margin-right: 0.5%"
-              >{{ this.user_follower_count }}</span>
+                >{{ this.user_follower_count }}</span
+              >
               <span>粉丝</span>
               <el-divider
                 direction="vertical"
@@ -37,11 +38,12 @@
               />
               <span
                 style="font-size: 20px; font-weight: bolder; margin-right: 0.5%"
-              >{{
+                >{{
                   this.user_follow_count +
                   this.follow_university_count +
                   this.follow_institution_count
-                }}</span>
+                }}</span
+              >
               <span>关注</span>
               <span
                 v-for="identity_info in identity_info_list"
@@ -51,9 +53,11 @@
                   direction="vertical"
                   style="margin-left: 2%; margin-right: 2%"
                 />
-                <span>{{ identity_info.identity }}：{{
+                <span
+                  >{{ identity_info.identity }}：{{
                     identity_info.university_name
-                  }}</span>
+                  }}</span
+                >
               </span>
 
               <div>个性签名：{{ person_info.user_signature }}</div>
@@ -76,13 +80,15 @@
                 type="primary"
                 plain
                 @click="goRecharge"
-              >鸟币充值</el-button>
+                >鸟币充值</el-button
+              >
               <el-button
                 v-if="person_info.user_id == this.visit_id"
                 type="primary"
                 plain
                 @click="goPersonInfo"
-              >个人信息</el-button>
+                >个人信息</el-button
+              >
             </div>
           </div>
         </div>
@@ -107,7 +113,8 @@
               icon="Edit"
               style="width: 50%; height: 40px; font-size: 16px"
               @click="goAskPage"
-            >提问</el-button>
+              >提问</el-button
+            >
           </div>
           <div class="publish_center_button">
             <el-button
@@ -115,7 +122,8 @@
               icon="Share"
               style="width: 50%; height: 40px; font-size: 16px"
               @click="goBlogEdit"
-            >发动态</el-button>
+              >发动态</el-button
+            >
           </div>
         </el-card>
         <el-card class="user_profile_aside_card">
@@ -125,28 +133,22 @@
             </div>
           </template>
           <div class="achievement_content">
-            <img
-              src="../assets/like_ex.png"
-              style="height: 30px"
-            />
-            <span
-              style="margin-left: 5%">获得{{ achieve_info.like_times }}次点赞</span>
+            <img src="../assets/like_ex.png" style="height: 30px" />
+            <span style="margin-left: 5%"
+              >获得{{ achieve_info.like_times }}次点赞</span
+            >
           </div>
           <div class="achievement_content">
-            <img
-              src="../assets/comment_ex.png"
-              style="height: 30px"
-            />
-            <span
-              style="margin-left: 5%">内容获得{{ achieve_info.comment_times }}次评论</span>
+            <img src="../assets/comment_ex.png" style="height: 30px" />
+            <span style="margin-left: 5%"
+              >内容获得{{ achieve_info.comment_times }}次评论</span
+            >
           </div>
           <div class="achievement_content">
-            <img
-              src="../assets/star_ex.png"
-              style="height: 30px"
-            />
-            <span
-              style="margin-left: 5%">获得{{ achieve_info.star_times }}次收藏</span>
+            <img src="../assets/star_ex.png" style="height: 30px" />
+            <span style="margin-left: 5%"
+              >获得{{ achieve_info.star_times }}次收藏</span
+            >
           </div>
         </el-card>
         <el-card
@@ -161,7 +163,8 @@
                 type="primary"
                 style="margin-left: 45%"
                 @click="grow_detail = true"
-              >查看详情</el-button>
+                >查看详情</el-button
+              >
             </div>
           </template>
           <div style="display: flex; margin: 5% 0 7% 5%">
@@ -220,29 +223,30 @@
                       v-for="follow_person in user_follow_list"
                       :key="follow_person.user_id"
                     >
-                      <el-avatar
-                        :size="70"
-                        :src="follow_person.user_profile"
-                      />
+                      <el-avatar :size="70" :src="follow_person.user_profile" />
                       <div
                         style="display: block; width: 85%"
                         @click="goPersonSpace(follow_person.user_id, $event)"
                       >
-                        <div style="
+                        <div
+                          style="
                             font-size: 20px;
                             font-weight: bold;
                             margin-left: 2%;
                             margin-bottom: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           {{ follow_person.user_name }}
                         </div>
-                        <div style="
+                        <div
+                          style="
                             font-size: 15px;
                             font-weight: normal;
                             margin-left: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           个性签名：{{ follow_person.user_signature }}
                         </div>
                       </div>
@@ -308,21 +312,25 @@
                           )
                         "
                       >
-                        <div style="
+                        <div
+                          style="
                             font-size: 20px;
                             font-weight: bold;
                             margin-left: 2%;
                             margin-bottom: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           {{ follow_university.university_chname }}
                         </div>
-                        <div style="
+                        <div
+                          style="
                             font-size: 15px;
                             font-weight: normal;
                             margin-left: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           国家：{{ follow_university.university_country }}
                         </div>
                       </div>
@@ -386,21 +394,25 @@
                           )
                         "
                       >
-                        <div style="
+                        <div
+                          style="
                             font-size: 20px;
                             font-weight: bold;
                             margin-left: 2%;
                             margin-bottom: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           {{ follow_institution.institution_name }}
                         </div>
-                        <div style="
+                        <div
+                          style="
                             font-size: 15px;
                             font-weight: normal;
                             margin-left: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           服务范围：{{ follow_institution.institution_target }}
                         </div>
                       </div>
@@ -439,29 +451,30 @@
                   v-for="follower_person in user_follower_list"
                   :key="follower_person.user_id"
                 >
-                  <el-avatar
-                    :size="70"
-                    :src="follower_person.user_profile"
-                  />
+                  <el-avatar :size="70" :src="follower_person.user_profile" />
                   <div
                     style="display: block; width: 85%"
                     @click="goPersonSpace(follower_person.user_id, $event)"
                   >
-                    <div style="
+                    <div
+                      style="
                         font-size: 20px;
                         font-weight: bold;
                         margin-left: 2%;
                         margin-bottom: 2%;
                         text-align: left;
-                      ">
+                      "
+                    >
                       {{ follower_person.user_name }}
                     </div>
-                    <div style="
+                    <div
+                      style="
                         font-size: 15px;
                         font-weight: normal;
                         margin-left: 2%;
                         text-align: left;
-                      ">
+                      "
+                    >
                       个性签名：{{ follower_person.user_signature }}
                     </div>
                   </div>
@@ -478,10 +491,7 @@
                 </div>
               </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane
-              label="收藏"
-              class="user_profile_follow_tabs"
-            >
+            <el-tab-pane label="收藏" class="user_profile_follow_tabs">
               <el-tabs class="user_profile_star_tabs">
                 <el-tab-pane>
                   <template #label>
@@ -525,21 +535,25 @@
                       "
                     >
                       <div style="display: block; width: 100%">
-                        <div style="
+                        <div
+                          style="
                             font-size: 20px;
                             font-weight: bold;
                             margin-left: 2%;
                             margin-bottom: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           {{ star_question.question_title }}
                         </div>
-                        <div style="
+                        <div
+                          style="
                             font-size: 15px;
                             font-weight: normal;
                             margin-left: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           {{ star_question.user_name }}：{{
                             star_question.question_summary
                           }}
@@ -610,21 +624,25 @@
                       "
                     >
                       <div style="display: block; width: 100%">
-                        <div style="
+                        <div
+                          style="
                             font-size: 20px;
                             font-weight: bold;
                             margin-left: 2%;
                             margin-bottom: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           {{ star_answer.question_title }}
                         </div>
-                        <div style="
+                        <div
+                          style="
                             font-size: 15px;
                             font-weight: normal;
                             margin-left: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           {{ star_answer.answer_user_name }}：{{
                             star_answer.answer_summary
                           }}
@@ -639,10 +657,7 @@
                         </div>
                         <div style="margin-top: 20%">
                           <el-row>
-                            <el-col
-                              :span="5"
-                              @click.stop=""
-                            >
+                            <el-col :span="5" @click.stop="">
                               <like-button
                                 :content_id="star_answer.answer_id"
                                 content_type="2"
@@ -650,10 +665,7 @@
                                 size="large"
                               />
                             </el-col>
-                            <el-col
-                              :span="5"
-                              @click.stop=""
-                            >
+                            <el-col :span="5" @click.stop="">
                               <coin-button
                                 :content_id="star_answer.answer_id"
                                 content_type="1"
@@ -661,10 +673,7 @@
                                 size="large"
                               />
                             </el-col>
-                            <el-col
-                              :span="5"
-                              @click.stop=""
-                            >
+                            <el-col :span="5" @click.stop="">
                               <star-button
                                 :content_id="star_answer.answer_id"
                                 content_type="1"
@@ -673,10 +682,7 @@
                               />
                             </el-col>
                             <el-col :span="2"></el-col>
-                            <el-col
-                              :span="3"
-                              @click.stop=""
-                            >
+                            <el-col :span="3" @click.stop="">
                               <report-button
                                 :content_id="star_answer.answer_id"
                                 content_type="1"
@@ -741,13 +747,15 @@
                       "
                     >
                       <div style="display: block; width: 100%">
-                        <div style="
+                        <div
+                          style="
                             font-size: 20px;
                             font-weight: bold;
                             margin-left: 2%;
                             margin-bottom: 2%;
                             text-align: left;
-                          ">
+                          "
+                        >
                           {{ star_blog.blog_user_name }}：
                         </div>
                         <!-- <div
@@ -774,13 +782,15 @@
                               :src="star_blog.image_url"
                             />
                           </div>
-                          <div style="
+                          <div
+                            style="
                               font-size: 17px;
                               font-weight: normal;
                               margin-left: 2%;
                               text-align: left;
                               margin-top: 2%;
-                            ">
+                            "
+                          >
                             {{ star_blog.blog_summary }}
                           </div>
                         </div>
@@ -794,10 +804,7 @@
                         </div>
                         <div style="margin-top: 30%">
                           <el-row>
-                            <el-col
-                              :span="5"
-                              @click.stop=""
-                            >
+                            <el-col :span="5" @click.stop="">
                               <like-button
                                 :content_id="star_blog.blog_id"
                                 content_type="0"
@@ -805,10 +812,7 @@
                                 size="large"
                               />
                             </el-col>
-                            <el-col
-                              :span="5"
-                              @click.stop=""
-                            >
+                            <el-col :span="5" @click.stop="">
                               <coin-button
                                 :content_id="star_blog.blog_id"
                                 content_type="0"
@@ -816,10 +820,7 @@
                                 size="large"
                               />
                             </el-col>
-                            <el-col
-                              :span="5"
-                              @click.stop=""
-                            >
+                            <el-col :span="5" @click.stop="">
                               <star-button
                                 :content_id="star_blog.blog_id"
                                 content_type="0"
@@ -828,10 +829,7 @@
                               />
                             </el-col>
                             <el-col :span="2"></el-col>
-                            <el-col
-                              :span="3"
-                              @click.stop=""
-                            >
+                            <el-col :span="3" @click.stop="">
                               <report-button
                                 :content_id="star_blog.blog_id"
                                 content_type="0"
@@ -892,11 +890,13 @@
                   "
                 >
                   <div style="display: block; width: 100%">
-                    <div style="
+                    <div
+                      style="
                         margin-left: 2%;
                         margin-bottom: 2%;
                         text-align: left;
-                      ">
+                      "
+                    >
                       <span style="font-size: 20px; font-weight: bold">
                         {{ question.QuestionTitle }}
                       </span>
@@ -915,12 +915,14 @@
                         审核不通过
                       </el-tag>
                     </div>
-                    <div style="
+                    <div
+                      style="
                         font-size: 15px;
                         font-weight: normal;
                         margin-left: 2%;
                         text-align: left;
-                      ">
+                      "
+                    >
                       {{ this.person_info.user_name }}：{{
                         question.QuestionSummary
                       }}
@@ -940,11 +942,9 @@
                       @click.stop="
                         openDeleteDia(question.QuestionId, 'question')
                       "
+                      ><el-icon class="el-icon--left"><Delete /></el-icon
+                      >删除</el-button
                     >
-                      <el-icon class="el-icon--left">
-                        <Delete />
-                      </el-icon>删除
-                    </el-button>
                     <div
                       style="margin-top: 5%; margin-right: 10%"
                       @click.stop=""
@@ -1002,11 +1002,13 @@
                   "
                 >
                   <div style="display: block; width: 100%">
-                    <div style="
+                    <div
+                      style="
                         margin-left: 2%;
                         margin-bottom: 2%;
                         text-align: left;
-                      ">
+                      "
+                    >
                       <span style="font-size: 20px; font-weight: bold">
                         {{ answer.QuestionTitle }}
                       </span>
@@ -1025,12 +1027,14 @@
                         审核不通过
                       </el-tag>
                     </div>
-                    <div style="
+                    <div
+                      style="
                         font-size: 15px;
                         font-weight: normal;
                         margin-left: 2%;
                         text-align: left;
-                      ">
+                      "
+                    >
                       {{ answer.UserName }}：{{ answer.AnswerSummary }}
                     </div>
                   </div>
@@ -1044,17 +1048,12 @@
                       type="danger"
                       style="margin-top: 10px; margin-left: 25px"
                       @click.stop="openDeleteDia(answer.AnswerId, 'answer')"
+                      ><el-icon class="el-icon--left"><Delete /></el-icon
+                      >删除</el-button
                     >
-                      <el-icon class="el-icon--left">
-                        <Delete />
-                      </el-icon>删除
-                    </el-button>
                     <div style="margin-top: 20%">
                       <el-row>
-                        <el-col
-                          :span="5"
-                          @click.stop=""
-                        >
+                        <el-col :span="5" @click.stop="">
                           <like-button
                             :content_id="answer.AnswerId"
                             content_type="2"
@@ -1062,10 +1061,7 @@
                             size="large"
                           />
                         </el-col>
-                        <el-col
-                          :span="5"
-                          @click.stop=""
-                        >
+                        <el-col :span="5" @click.stop="">
                           <coin-button
                             :content_id="answer.AnswerId"
                             content_type="1"
@@ -1073,10 +1069,7 @@
                             size="large"
                           />
                         </el-col>
-                        <el-col
-                          :span="5"
-                          @click.stop=""
-                        >
+                        <el-col :span="5" @click.stop="">
                           <star-button
                             :content_id="answer.AnswerId"
                             content_type="1"
@@ -1085,10 +1078,7 @@
                           />
                         </el-col>
                         <el-col :span="2"></el-col>
-                        <el-col
-                          :span="3"
-                          @click.stop=""
-                        >
+                        <el-col :span="3" @click.stop="">
                           <report-button
                             :content_id="answer.AnswerId"
                             content_type="1"
@@ -1149,11 +1139,13 @@
                   "
                 >
                   <div style="display: block; width: 100%">
-                    <div style="
+                    <div
+                      style="
                         margin-left: 2%;
                         margin-bottom: 2%;
                         text-align: left;
-                      ">
+                      "
+                    >
                       <span style="font-size: 20px; font-weight: bold">
                         {{ this.person_info.user_name }}：
                       </span>
@@ -1179,13 +1171,15 @@
                           :src="blog.BlogImage"
                         />
                       </div>
-                      <div style="
+                      <div
+                        style="
                           font-size: 17px;
                           font-weight: normal;
                           margin-left: 2%;
                           text-align: left;
                           margin-top: 2%;
-                        ">
+                        "
+                      >
                         {{ blog.BlogSummary }}
                       </div>
                     </div>
@@ -1200,17 +1194,12 @@
                       type="danger"
                       style="margin-top: 10px; margin-left: 25px"
                       @click.stop="openDeleteDia(blog.BlogId, 'blog')"
+                      ><el-icon class="el-icon--left"><Delete /></el-icon
+                      >删除</el-button
                     >
-                      <el-icon class="el-icon--left">
-                        <Delete />
-                      </el-icon>删除
-                    </el-button>
                     <div style="margin-top: 25%">
                       <el-row>
-                        <el-col
-                          :span="5"
-                          @click.stop=""
-                        >
+                        <el-col :span="5" @click.stop="">
                           <like-button
                             :content_id="blog.BlogId"
                             content_type="0"
@@ -1218,10 +1207,7 @@
                             size="large"
                           />
                         </el-col>
-                        <el-col
-                          :span="5"
-                          @click.stop=""
-                        >
+                        <el-col :span="5" @click.stop="">
                           <coin-button
                             :content_id="blog.BlogId"
                             content_type="0"
@@ -1229,10 +1215,7 @@
                             size="large"
                           />
                         </el-col>
-                        <el-col
-                          :span="5"
-                          @click.stop=""
-                        >
+                        <el-col :span="5" @click.stop="">
                           <star-button
                             :content_id="blog.BlogId"
                             content_type="0"
@@ -1241,10 +1224,7 @@
                           />
                         </el-col>
                         <el-col :span="2"></el-col>
-                        <el-col
-                          :span="3"
-                          @click.stop=""
-                        >
+                        <el-col :span="3" @click.stop="">
                           <report-button
                             :content_id="blog.BlogId"
                             content_type="0"
@@ -1280,26 +1260,21 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="handleClose">取消</el-button>
-        <el-button
-          type="primary"
-          @click="deleteCheck"
-        >确认</el-button>
+        <el-button type="primary" @click="deleteCheck">确认</el-button>
       </span>
     </template>
   </el-dialog>
-  <el-dialog
-    v-model="grow_detail"
-    title="成长详情"
-    width="50%"
-  >
-    <div style="
+  <el-dialog v-model="grow_detail" title="成长详情" width="50%">
+    <div
+      style="
         color: gray;
         font-weight: bold;
         font-size: 20px;
         text-align: left;
         margin-left: 5%;
         margin-bottom: 2%;
-      ">
+      "
+    >
       等级{{ this.grow_info.level }}：
     </div>
     <el-progress
@@ -1311,16 +1286,15 @@
       "
       style="width: 70%; margin-left: 17%"
     >
-      <span style="font-size: 20px">{{ this.grow_info.exp }}/{{
+      <span style="font-size: 20px"
+        >{{ this.grow_info.exp }}/{{
           this.grow_info.level * this.grow_info.level
-        }}</span>
+        }}</span
+      >
     </el-progress>
     <template #footer>
       <span>
-        <el-button
-          type="primary"
-          @click="grow_detail = false"
-        >确认</el-button>
+        <el-button type="primary" @click="grow_detail = false">确认</el-button>
       </span>
     </template>
   </el-dialog>
@@ -1345,7 +1319,7 @@ export default {
     StarButton,
     ReportButton,
   },
-  data () {
+  data() {
     return {
       person_info: {},
       identity_info_list: [],
@@ -1391,7 +1365,7 @@ export default {
   },
   props: ["host_id"],
   methods: {
-    star (res) {
+    star(res) {
       if (res) {
         if (this.fresh_type == 0) this.star_blog_count++;
         else if (this.fresh_type == 1) this.star_question_count++;
@@ -1409,7 +1383,7 @@ export default {
         this.fresh_star++;
       }
     },
-    follow (res, ob_type) {
+    follow(res, ob_type) {
       if (res) {
         ElMessage({
           type: "success",
@@ -1420,7 +1394,7 @@ export default {
         console.log(res);
         if (ob_type == "0") {
           axios({
-            url: "spring/personal_center/follow/follows",
+            url: "api/follow/follows",
             params: { user_id: this.host_id },
             method: "get",
           })
@@ -1438,7 +1412,7 @@ export default {
             });
         } else if (ob_type == "1") {
           axios({
-            url: "spring/personal_center/follow/universities",
+            url: "api/follow/universities",
             params: { user_id: this.host_id },
             method: "get",
           })
@@ -1453,7 +1427,7 @@ export default {
             });
         } else {
           axios({
-            url: "spring/personal_center/follow/institutions",
+            url: "api/follow/institutions",
             params: { user_id: this.host_id },
             method: "get",
           })
@@ -1476,7 +1450,7 @@ export default {
         });
       }
     },
-    unFollow (res, ob_type) {
+    unFollow(res, ob_type) {
       console.log("执行unfollow");
       if (res) {
         ElMessage({
@@ -1505,24 +1479,24 @@ export default {
         });
       }
     },
-    freshStarOwn (event, type, type2) {
+    freshStarOwn(event, type, type2) {
       this.star_or_own = type;
       this.fresh_type = type2;
     },
-    freshButton (event, type) {
+    freshButton(event, type) {
       this.follow_or_follower = type;
     },
-    goPersonInfo () {
+    goPersonInfo() {
       this.$router.push({
         path: "/person_info",
       });
     },
-    goRecharge () {
+    goRecharge() {
       this.$router.push({
         path: "/recharge",
       });
     },
-    goPersonSpace (id, event) {
+    goPersonSpace(id, event) {
       console.log(id);
       this.$router.push({
         path: "/person_space",
@@ -1531,7 +1505,7 @@ export default {
         },
       });
     },
-    goSchoolDetail (id, event) {
+    goSchoolDetail(id, event) {
       console.log(id);
       this.$router.push({
         path: "/school_detail",
@@ -1540,7 +1514,7 @@ export default {
         },
       });
     },
-    goInstitutionDetail (id, event) {
+    goInstitutionDetail(id, event) {
       console.log(id);
       this.$router.push({
         path: "/institution_detail",
@@ -1549,7 +1523,7 @@ export default {
         },
       });
     },
-    goQuestionPage (id, flag, event) {
+    goQuestionPage(id, flag, event) {
       console.log(id);
       if (!(flag == "通过" || flag == "收藏")) {
         ElMessage({
@@ -1566,7 +1540,7 @@ export default {
         },
       });
     },
-    goAnswerDetail (id, index, flag, event) {
+    goAnswerDetail(id, index, flag, event) {
       console.log(id);
       if (flag != "通过") {
         ElMessage({
@@ -1584,7 +1558,7 @@ export default {
         },
       });
     },
-    goAnswerDetail1 (id, index, event) {
+    goAnswerDetail1(id, index, event) {
       console.log(id);
       this.$router.push({
         path: "/answer_detail",
@@ -1594,7 +1568,7 @@ export default {
         },
       });
     },
-    goBlogDetail (id, index, flag, flag_re, event) {
+    goBlogDetail(id, index, flag, flag_re, event) {
       if (flag == 0) {
         this.$router.push({
           path: "/blog_detail",
@@ -1623,12 +1597,12 @@ export default {
         });
       }
     },
-    goBlogEdit () {
+    goBlogEdit() {
       this.$router.push({
         path: "/blog_edit",
       });
     },
-    goCoinCenter () {
+    goCoinCenter() {
       this.$router.push({
         path: "/person_info",
         query: {
@@ -1636,36 +1610,36 @@ export default {
         },
       });
     },
-    goAskPage () {
+    goAskPage() {
       this.$router.push({
         name: "question_edit",
       });
     },
-    goQACenter () {
+    goQACenter() {
       this.$router.push({
         name: "qa_center",
       });
     },
-    goBlogPage () {
+    goBlogPage() {
       this.$router.push({
         name: "blog",
       });
     },
-    goSchoolCenter () {
+    goSchoolCenter() {
       this.$router.push({
         name: "school_center",
       });
     },
-    goInstitutionCenter () {
+    goInstitutionCenter() {
       this.$router.push({
         name: "institution_center",
       });
     },
-    getParams () {
+    getParams() {
       this.host_id = this.$route.query.host_id;
       console.log("h" + this.host_id);
     },
-    reportResponse (res) {
+    reportResponse(res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -1745,7 +1719,7 @@ export default {
         });
       //粉丝列表
       axios({
-        url: "spring/personal_center/follow/follower",
+        url: "api/follow/follower",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1761,7 +1735,7 @@ export default {
         });
       //关注用户列表
       axios({
-        url: "spring/personal_center/follow/follows",
+        url: "api/follow/follows",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1775,7 +1749,7 @@ export default {
         });
       //关注学校列表
       axios({
-        url: "spring/personal_center/follow/universities",
+        url: "api/follow/universities",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1789,7 +1763,7 @@ export default {
         });
       //关注机构列表
       axios({
-        url: "spring/personal_center/follow/institutions",
+        url: "api/follow/institutions",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1892,17 +1866,17 @@ export default {
         this.follow_institution_count;
       this.person_info.user_follower = this.user_follower_count;
     },
-    openDeleteDia (id, type_name) {
+    openDeleteDia(id, type_name) {
       this.to_be_killed_id = id;
       this.to_be_killed_type = type_name;
       this.delete_dialog_visible = true;
     },
-    handleClose () {
+    handleClose() {
       this.delete_dialog_visible = false;
       this.to_be_killed_type = "";
       this.to_be_killed_id = -1;
     },
-    deleteCheck () {
+    deleteCheck() {
       axios
         .delete("/api/" + this.to_be_killed_type, {
           params: {
@@ -1932,15 +1906,15 @@ export default {
     },
   },
   watch: {
-    $route () {
+    $route() {
       this.initPage();
     },
-    need_refresh () {
+    need_refresh() {
       console.log("fresh!");
       this.initPage();
     },
   },
-  created () {
+  created() {
     this.initPage();
   },
 };

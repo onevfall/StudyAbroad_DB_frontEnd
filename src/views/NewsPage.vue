@@ -91,13 +91,13 @@ export default {
       //在此处向服务器请求数据，给所需变量重新赋值
       this.oss_loading=true;
       axios
-        .get("spring/admin/newsflash/single" + "?newsflash_id=" + this.news_id)
+        .get("api/newsflash/single" + "?newsflash_id=" + this.news_id)
         .then((res) => {
           this.news_info = res.data.data;
           this.new_tags = [].concat(res.data.data.NewsFlashTag.split("-"));
           this.news_info.NewsFlashDate = this.news_info.NewsFlashDate.substring(
             0,
-            this.news_info.NewsFlashDate.indexOf(" ")
+            this.news_info.NewsFlashDate.indexOf("T")
           );
           const xhrFile = new XMLHttpRequest();
           console.log("开始解析oss");
@@ -125,7 +125,7 @@ export default {
     this.getParams();
 
     axios
-      .get("spring/admin/newsflash/all")
+      .get("api/newsflash/all")
       .then((res) => {
         this.news_relevant = [].concat(res.data.data.newsflashs.filter(
           (news) => news.NewsFlashId != this.news_id

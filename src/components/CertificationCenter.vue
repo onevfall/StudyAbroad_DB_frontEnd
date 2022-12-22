@@ -220,11 +220,11 @@ export default {
     //   });
     // }
     axios({
-      url: "/spring/personal_center/identity?user_id=" + this.$store.state.user_info.user_id,
+      url: "/api/identity?user_id=" + this.$store.state.user_info.user_id,
     })
       .then((res) => {
         console.log(res);
-        this.certification_infor = [].concat(res.data.data.identity_info);
+        this.certification_infor = [].concat(res.data.data.identity_list);
         this.certification_infor = this.sortByKey(
           this.certification_infor,
           "identity"
@@ -238,11 +238,11 @@ export default {
   watch: {
     need_refresh() {//重新申请数据 尚不确定是否成功
       axios({
-        url: "/spring/personal_center/identity?user_id=" + this.$store.state.user_info.user_id,
+        url: "/api/identity?user_id=" + this.$store.state.user_info.user_id,
       })
         .then((res) => {
           console.log(res);
-          this.certification_infor = [].concat(res.data.data.identity_info);
+          this.certification_infor = [].concat(res.data.data.identity_list);
           this.certification_infor = this.sortByKey(
             this.certification_infor,
             "identity"
@@ -283,7 +283,7 @@ export default {
         " ~ " +
         endDate.substring(0, endDate.indexOf("T"));
       axios
-        .post("/spring/personal_center/identity", {
+        .post("/api/identity", {
           img: this.now_input.certification_material,
           user_id: this.$store.state.user_info.user_id,
           identity: this.now_input.degree_name,

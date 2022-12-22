@@ -5,20 +5,14 @@
 
 <template>
   <div>
-    <span
-      style="text-align: left; margin-right: 8px"
-      v-if="is_coined == false"
-    >
+    <span style="text-align: left; margin-right: 8px" v-if="is_coined == false">
       <img
         src="../assets/dollar.png"
         :style="{ height: this.icon_size + 'px' }"
         @click="coinConfirm"
       />
     </span>
-    <span
-      style="text-align: left; margin-right: 8px"
-      v-else
-    >
+    <span style="text-align: left; margin-right: 8px" v-else>
       <img
         src="../assets/dollar_solid.png"
         :style="{ height: this.icon_size + 'px' }"
@@ -31,10 +25,7 @@
       {{ coin_nums }}
     </span>
   </div>
-  <el-dialog
-    v-model="input_nums"
-    title="请选择投币数"
-  >
+  <el-dialog v-model="input_nums" title="请选择投币数">
     <el-input-number
       min="1"
       max="3"
@@ -44,10 +35,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="input_nums = false">我再想想</el-button>
-        <el-button
-          type="primary"
-          @click="coinIn"
-        >确认投币</el-button>
+        <el-button type="primary" @click="coinIn">确认投币</el-button>
       </span>
     </template>
   </el-dialog>
@@ -67,9 +55,8 @@ export default {
   components: {
     ElMessage,
   },
-  data () {
+  data() {
     return {
-      url: "",
       is_coined: false,
       dynamic_type: "",
       coin_nums: "",
@@ -79,7 +66,7 @@ export default {
     };
   },
   methods: {
-    coinConfirm () {
+    coinConfirm() {
       //判断是否登录
       if (this.$store.state.is_login == false) {
         //若未登录
@@ -99,7 +86,7 @@ export default {
         this.input_nums = true;
       }
     },
-    coinIn () {
+    coinIn() {
       //判断输入是否为合法类型-number
       if (typeof this.coin_in_num != "number") {
         ElMessage({
@@ -113,8 +100,11 @@ export default {
       this.input_nums = false;
 
       axios
-        .post(this.url + "?user_id=" + this.$store.state.user_info.user_id + "&" + this.dynamic_type + "_id=" + this.content_id + "&num=" + this.coin_in_num
-        )
+        .post("/api/coin/" + this.dynamic_type, {
+          user_id: this.$store.state.user_info.user_id,
+          [this.dynamic_type + "_id"]: this.content_id,
+          num: this.coin_in_num,
+        })
         .then((res) => {
           if (res.data.status) {
             this.is_coined = true;
@@ -141,27 +131,28 @@ export default {
         .catch((errMsg) => {
           alert(
             "对id为" +
-            this.content_id +
-            "的" +
-            this.dynamic_type +
-            "投币，相关API此时未完成"
+              this.content_id +
+              "的" +
+              this.dynamic_type +
+              "投币，相关API此时未完成"
           );
           console.log(errMsg);
         });
     },
   },
-  updated () {
+  updated() {
     //查询是否投过币
     if (this.$store.state.is_login) {
       axios
         .get(
-          this.url +
-          "?user_id=" +
-          this.$store.state.user_info.user_id +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
+          "/api/coin/" +
+            this.dynamic_type +
+            "?user_id=" +
+            this.$store.state.user_info.user_id +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
         )
         .then((res) => {
           if (this.dynamic_type == "blog") {
@@ -178,13 +169,14 @@ export default {
       //查询投币个数
       axios
         .get(
-          this.url +
-          "?user_id=" +
-          1 +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
+          "/api/coin/" +
+            this.dynamic_type +
+            "?user_id=" +
+            1 +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
         )
         .then((res) => {
           if (this.dynamic_type == "blog") {
@@ -199,7 +191,7 @@ export default {
         });
     }
   },
-  created () {
+  created() {
     //设定大小
     switch (this.size) {
       case "xx-small":
@@ -228,7 +220,6 @@ export default {
     switch (this.content_type) {
       case "0":
         this.dynamic_type = "blog";
-        this.url = "spring/blog/coin";
         break;
       case "1":
         this.dynamic_type = "answer";
@@ -239,13 +230,14 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          this.url +
-          "?user_id=" +
-          this.$store.state.user_info.user_id +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
+          "api/coin/" +
+            this.dynamic_type +
+            "?user_id=" +
+            this.$store.state.user_info.user_id +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
         )
         .then((res) => {
           if (this.dynamic_type == "blog") {
@@ -262,13 +254,14 @@ export default {
       //查询投币个数
       axios
         .get(
-          this.url +
-          "?user_id=" +
-          1 +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
+          "api/coin/" +
+            this.dynamic_type +
+            "?user_id=" +
+            1 +
+            "&" +
+            this.dynamic_type +
+            "_id=" +
+            this.content_id
         )
         .then((res) => {
           if (this.dynamic_type == "blog") {

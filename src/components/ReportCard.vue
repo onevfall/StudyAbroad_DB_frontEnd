@@ -191,7 +191,7 @@ export default {
     },
     checkSeen() {
       axios
-        .put("/spring/personal_center/report/" + this.report.Type, {
+        .put("/api/report/" + this.report.Type, {
           user_id: this.$store.state.user_info.user_id,
           report_id: this.report.ReportId,
         })
@@ -222,7 +222,7 @@ export default {
         break;
     }
     axios
-      .get("/spring/personal_center/check/" + this.report.Type, {
+      .get("/api/check/" + this.report.Type, {
         params: {
           report_id: this.report.ReportId,
         },
@@ -231,6 +231,7 @@ export default {
         this.htmlText = "";
         if (res.data.status) {
           this.BeingReportedUserName = res.data.data.ReportedUserName;
+          // console.log(res.data.data);
           this.reportDetail = res.data.data;
           if (this.TextType === "回答评论") {
             if (res.data.data.RepliedComment == null) {
