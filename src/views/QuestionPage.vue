@@ -477,8 +477,6 @@ export default {
         .then((res) => {
           this.question_info = res.data.obj;
           this.apply_id = this.question_info.questionApply;
-          console.log (this.question_info)
-          console.log (res)
           if (this.question_info.questionDescription.substr(0, 4) == "http") {
             const xhrFile = new XMLHttpRequest();
             xhrFile.open("GET", this.question_info.questionDescription, true);
@@ -516,21 +514,18 @@ export default {
         });
       //相关问题
       axios({
-        url: "api/question/related",
-        method: "get",
-        params: {
-          question_id: this.question_id,
-        },
+        url: "test/question/related_questions/"+this.question_id,
+        method: "get"
       })
         .then((res) => {
-          this.related_question_tag = res.data.data.tag;
-          this.question_relevant = res.data.data.related_questions;
+          this.related_question_tag = res.data.obj.tags;
+          this.question_relevant = res.data.obj.relatedQuestions;
           for (let i = 0; i < this.question_relevant.length; i++) {
             var tem_info = {
               essence: "问题",
-              content: this.question_relevant[i].QuestionTitle,
-              keyword: res.data.data.tag,
-              id: this.question_relevant[i].QuestionId,
+              content: this.question_relevant[i].questionTitle,
+              keyword: res.data.obj.tags,
+              id: this.question_relevant[i].questionId,
             };
             this.card_info[i] = tem_info;
           }

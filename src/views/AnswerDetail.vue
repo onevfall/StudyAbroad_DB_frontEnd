@@ -252,10 +252,6 @@ export default {
     },
     async initPage() {
       this.answer_id = this.$route.query.answer_id; //获取本页的answer
-      //this.answer_user_info = this.$store.state.answer_user_info;
-      // console.log(this.$store.state.answer_user_info);
-      // console.log(this.answer_user_info);
-      console.log("00");
 
       await axios
         .get("/test/answer", {
@@ -324,25 +320,20 @@ export default {
         });
 
       axios
-        .get("/api/question/related", {
-          params: {
-            question_id: this.question_id,
-          },
-        })
+        .get("/test/question/related_questions/"+this.question_id)
         .then((res) => {
-          console.log(res.data.data);
-          this.related_question_tag = res.data.data.tag;
-          this.question_relevant = res.data.data.related_questions;
+          console.log(res.data.obj);
+          this.related_question_tag = res.data.obj.tags;
+          this.question_relevant = res.data.obj.relatedQuestions;
           for (let i = 0; i < this.question_relevant.length; i++) {
             var tem_info = {
               essence: "问题",
-              content: this.question_relevant[i].QuestionTitle,
-              keyword: res.data.data.tag,
-              id: this.question_relevant[i].QuestionId,
+              content: this.question_relevant[i].questionTitle,
+              keyword: res.data.obj.tags,
+              id: this.question_relevant[i].questionId,
             };
             this.card_info[i] = tem_info;
           }
-          console.log(this.card_info);
         })
         .catch((err) => {
           console.log(err);
