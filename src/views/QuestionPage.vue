@@ -468,7 +468,7 @@ export default {
     initPage: function () {
       this.question_id = this.$route.query.question_id;
       axios({
-        url: "test/question",
+        url: "spring/qa/question",
         method: "get",
         params: {
           question_id: this.question_id,
@@ -491,7 +491,7 @@ export default {
         });
       //回答信息
       axios({
-        url: "test/question/answers",
+        url: "spring/qa/question/answers",
         method: "get",
         params: {
           question_id: this.question_id,
@@ -514,7 +514,7 @@ export default {
         });
       //相关问题
       axios({
-        url: "test/question/related_questions/"+this.question_id,
+        url: "spring/qa/question/related_questions/"+this.question_id,
         method: "get"
       })
         .then((res) => {

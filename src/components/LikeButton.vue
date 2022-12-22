@@ -4,12 +4,26 @@
 -->
 <template>
   <div>
-    <span style="text-align: left; margin-right: 8px" v-if="is_liked == false">
+    <span
+      style="text-align: left; margin-right: 8px"
+      v-if="is_liked == false"
+    >
       <!-- <el-icon :size="this.size" @click="like"><Chicken /></el-icon> -->
-      <img src="../assets/favorite.png" :style="{height:this.icon_size+'px'}" @click.stop="like">
+      <img
+        src="../assets/favorite.png"
+        :style="{height:this.icon_size+'px'}"
+        @click.stop="like"
+      >
     </span>
-    <span style="text-align: left; margin-right: 8px" v-else>
-      <img src="../assets/favorite_solid.png" :style="{height:this.icon_size+'px'}" @click.stop="unLike">
+    <span
+      style="text-align: left; margin-right: 8px"
+      v-else
+    >
+      <img
+        src="../assets/favorite_solid.png"
+        :style="{height:this.icon_size+'px'}"
+        @click.stop="unLike"
+      >
     </span>
     <span
       :style="{ 'text-align': 'left', 'font-size': this.size }"
@@ -32,17 +46,17 @@ export default {
   components: {
     ElMessage,
   },
-  data() {
+  data () {
     return {
+      url: "",
       is_liked: false,
       dynamic_type: "",
       like_nums: "",
-      icon_size:0,
-      type_url:""
+      icon_size: 0
     };
   },
   methods: {
-    like() {
+    like () {
       if (this.$store.state.is_login == false) {
         //若未登录
         ElMessage({
@@ -58,10 +72,8 @@ export default {
         });
       } else {
         axios
-          .post(this.type_url+"/like", {
-            user_id: this.$store.state.user_info.user_id,
-            [this.dynamic_type + "_id"]: this.content_id,
-          })
+          .post(this.url + "/like?user_id=" + this.$store.state.user_info.user_id
+            + "&" + this.dynamic_type + "_id=" + this.content_id)
           .then((res) => {
             if (res.data.status) {
               this.is_liked = true;
@@ -74,21 +86,19 @@ export default {
           .catch((errMsg) => {
             alert(
               "对id为" +
-                this.content_id +
-                "的" +
-                this.dynamic_type +
-                "点赞，相关API此时未完成"
+              this.content_id +
+              "的" +
+              this.dynamic_type +
+              "点赞，相关API此时未完成"
             );
             console.log(errMsg);
           });
       }
     },
-    unLike() {
+    unLike () {
       axios
-        .put(this.type_url+"/like", {
-          user_id: this.$store.state.user_info.user_id,
-          [this.dynamic_type + "_id"]: this.content_id,
-        })
+        .post(this.url + "/unlike?user_id=" + this.$store.state.user_info.user_id
+          + "&" + this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
           if (res.data.status) {
             this.is_liked = false;
@@ -101,110 +111,26 @@ export default {
         .catch((errMsg) => {
           alert(
             "取消对id为" +
-              this.content_id +
-              "的" +
-              this.dynamic_type +
-              "点赞，相关API此时未完成"
+            this.content_id +
+            "的" +
+            this.dynamic_type +
+            "点赞，相关API此时未完成"
           );
           console.log(errMsg);
         });
     },
   },
-  updated(){
+  updated () {
     //查询是否点过赞
     if (this.$store.state.is_login) {
-      axios(
-        this.type_url+"/like" +
-          "?user_id=" +
-          this.$store.state.user_info.user_id +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
-      )
-        .then((res) => {
-          this.like_nums = res.data.obj.num;
-          this.is_liked = res.data.obj.is;
-          // console.log(this.is_liked);
-        })
-        .catch((errMsg) => {
-          console.log(errMsg);
-        });
-    } else {
-      //查询点赞个数
-      axios(
-        this.type_url+"/like" +
-          "?user_id=" +
-          1 +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
-      )
-        .then((res) => {
-          this.like_nums = res.data.obj.num;
-          this.is_liked = false;
-        })
-        .catch((errMsg) => {
-          console.log(errMsg);
-        });
-    }
-  },
-  created() {
-    //设定大小
-    switch(this.size){
-      case "xx-small":
-        this.icon_size=9;
-        break;
-      case "x-small":
-        this.icon_size=10;
-        break;
-      case "small":
-        this.icon_size=12;
-        break;
-      case "normal":
-        this.icon_size=14;
-        break;
-      case "large":
-        this.icon_size=17;
-        break;
-      case "x-large":
-        this.icon_size=24;
-        break;
-      case "xx-large":
-        this.icon_size=30;
-        break;
-
-    }
-    //动态改变url
-    switch (this.content_type) {
-      case "0":
-        this.dynamic_type = "blog";
-        break;
-      case "1":
-        this.dynamic_type = "blog_comment";
-        
-        break;
-      case "2":
-        this.dynamic_type = "answer";
-        this.type_url="/test/answer"
-        break;
-      case "3":
-        this.dynamic_type = "answer_comment";
-        this.type_url+"/star"
-        break;
-    }
-    //查询是否点过赞
-    if (this.$store.state.is_login) {
-      axios(
-        "api/like/" +
-          this.dynamic_type +
-          "?user_id=" +
-          this.$store.state.user_info.user_id +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
+      axios.get(
+        this.url +
+        "/like?user_id=" +
+        this.$store.state.user_info.user_id +
+        "&" +
+        this.dynamic_type +
+        "_id=" +
+        this.content_id
       )
         .then((res) => {
           this.like_nums = res.data.data.like_times;
@@ -216,15 +142,96 @@ export default {
         });
     } else {
       //查询点赞个数
-      axios(
-        "api/like/" +
-          this.dynamic_type +
-          "?user_id=" +
-          1 +
-          "&" +
-          this.dynamic_type +
-          "_id=" +
-          this.content_id
+      axios.get(
+        this.url + "/like?user_id=" +
+        1 +
+        "&" +
+        this.dynamic_type +
+        "_id=" +
+        this.content_id
+      )
+        .then((res) => {
+          this.like_nums = res.data.data.like_times;
+          this.is_liked = false;
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    }
+  },
+  created () {
+    //设定大小
+    switch (this.size) {
+      case "xx-small":
+        this.icon_size = 9;
+        break;
+      case "x-small":
+        this.icon_size = 10;
+        break;
+      case "small":
+        this.icon_size = 12;
+        break;
+      case "normal":
+        this.icon_size = 14;
+        break;
+      case "large":
+        this.icon_size = 17;
+        break;
+      case "x-large":
+        this.icon_size = 24;
+        break;
+      case "xx-large":
+        this.icon_size = 30;
+        break;
+    }
+    //动态改变url
+    switch (this.content_type) {
+      case "0":
+        this.dynamic_type = "blog";
+        this.url = "spring/blog";
+        break;
+      case "1":
+        this.dynamic_type = "blog_comment";
+        this.url = "spring/blog/comment";
+        break;
+      case "2":
+        this.dynamic_type = "answer";
+        this.url = "spring/qa/answer";
+        break;
+      case "3":
+        this.dynamic_type = "answer_comment";
+        this.url = "spring/qa/answer/comment";
+        break;
+    }
+    //查询是否点过赞
+    if (this.$store.state.is_login) {
+      axios.get(
+        this.url +
+        "/like?user_id=" +
+        this.$store.state.user_info.user_id +
+        "&" +
+        this.dynamic_type +
+        "_id=" +
+        this.content_id
+      )
+        .then((res) => {
+          this.like_nums = res.data.data.like_times;
+          this.is_liked = res.data.status;
+          // console.log(this.is_liked);
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+        });
+    } else {
+      //查询点赞个数
+      axios.get(
+        this.url +
+        "/like?user_id=" +
+        1 +
+        "&" +
+        this.dynamic_type +
+        "_id=" +
+        this.content_id
       )
         .then((res) => {
           this.like_nums = res.data.data.like_times;
