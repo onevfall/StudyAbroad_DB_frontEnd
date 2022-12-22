@@ -195,6 +195,7 @@ export default {
           },
         })
         .then((res) => {
+          console.log(res)
           if(res.data.status){
             this.answer_report=res.data.data.answer_report
             for(var i in this.answer_report)
@@ -296,6 +297,7 @@ export default {
           },
         })
         .then((res) => {
+          console.log(res)
           if(res.data.status){
             this.answer_report=res.data.data.answer_report
             for(var i in this.answer_report)

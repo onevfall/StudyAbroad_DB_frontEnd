@@ -3,7 +3,10 @@
 作者：焦佳宇
 -->
 <template>
-  <el-card :body-style="{ padding: '0px' }" class="blog_card">
+  <el-card
+    :body-style="{ padding: '0px' }"
+    class="blog_card"
+  >
     <div class="image_field">
       <img
         class="card_image"
@@ -21,12 +24,26 @@
 
     <div style="padding: 14px; padding-bottom: 0px">
       <section class="card_info">
-        <el-row gutter="10" justify="left">
-          <el-col span="1" v-for="tag in blog_info.BlogTag" :key="tag">
-            <el-tag class="ml-2" type="success" size="small">{{ tag }}</el-tag>
+        <el-row
+          gutter="10"
+          justify="left"
+        >
+          <el-col
+            span="1"
+            v-for="tag in blog_tags"
+            :key="tag"
+          >
+            <el-tag
+              class="ml-2"
+              type="success"
+              size="small"
+            >{{ tag }}</el-tag>
           </el-col>
           <el-col span="1">
-            <el-tag class="ml-2" size="small">{{ blogTime }}</el-tag>
+            <el-tag
+              class="ml-2"
+              size="small"
+            >{{ blogTime }}</el-tag>
           </el-col>
         </el-row>
       </section>
@@ -34,17 +51,26 @@
         {{ blogSummary }}
       </section>
       <section class="card_user">
-        <el-row gutter="10" align="middle">
+        <el-row
+          gutter="10"
+          align="middle"
+        >
           <el-col :span="2">
-            <el-avatar :src="this.blog_info.UserProfile" size="small" />
+            <el-avatar
+              :src="this.blog_info.userProfile"
+              size="small"
+            />
           </el-col>
-          <el-col :span="12" style="text-align: left">
-            <span class="user_name"> {{ this.blog_info.UserName }} </span>
+          <el-col
+            :span="12"
+            style="text-align: left"
+          >
+            <span class="user_name"> {{ this.blog_info.userName }} </span>
           </el-col>
           <el-col :span="5">
             <like-button
               content_type="0"
-              :content_id="blog_info.BlogId"
+              :content_id="blog_info.blogId"
               :show_num="true"
               size="normal"
               @giveLike="like"
@@ -54,7 +80,7 @@
           <el-col :span="5">
             <coin-button
               content_type="0"
-              :content_id="blog_info.BlogId"
+              :content_id="blog_info.blogId"
               :show_num="true"
               size="normal"
               @giveCoin="coinIn"
@@ -62,7 +88,10 @@
           </el-col>
         </el-row>
       </section>
-      <el-button class="card-button" @click="goDetail">去看看</el-button>
+      <el-button
+        class="card-button"
+        @click="goDetail"
+      >去看看</el-button>
     </div>
   </el-card>
 </template>
@@ -81,28 +110,34 @@ export default {
   },
   props: ["blog_info"],
   computed: {
-    blogTime() {
-      return this.blog_info.BlogDate.replace("T", " ");
+    blogTime () {
+      if (this.flag) {
+        return this.blog_info.blogDate.replace("T", " ").replace(".000+00:00", " ");
+      }
     },
-    blogSummary() {
-      if (this.blog_info.BlogSummary == null) {
+    blogSummary () {
+      if (this.blog_info.blogSummary == null) {
         return "";
       }
-      if (this.blog_info.BlogSummary.length < 12) {
-        return this.blog_info.BlogSummary;
+      if (this.blog_info.blogSummary.length < 12) {
+        return this.blog_info.blogSummary;
       } else {
-        return this.blog_info.BlogSummary.slice(0, 12) + "...";
+        return this.blog_info.blogSummary.slice(0, 12) + "...";
       }
     },
   },
-  data() {
+  data () {
     return {
+      blogTime: "",
       blog_image: "",
       img_ready: false,
+      // blog_tags负责把tags拆分出来
+      blog_tags: [],
+      flag: false
     };
   },
   methods: {
-    like(res) {
+    like (res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -119,7 +154,7 @@ export default {
         });
       }
     },
-    unLike(res) {
+    unLike (res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -136,7 +171,7 @@ export default {
         });
       }
     },
-    coinIn(res) {
+    coinIn (res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -146,24 +181,32 @@ export default {
         });
       }
     },
-    goDetail() {
+    goDetail () {
       this.$router.push({
         path: "/blog_detail",
         query: {
-          blog_id: this.blog_info.BlogId,
-          blog_tag: this.blog_info.BlogTag[0],
-          user_id: this.blog_info.UserId,
+          blog_id: this.blog_info.blogId,
+          blog_tag: this.blog_info.blogTag,
+          user_id: this.blog_info.blogUserId,
         },
       });
     },
   },
-  created() {
-    if (this.blog_info.BlogImage == null) {
-      this.blog_image = this.blog_info.UserProfile;
+  created () {
+    if (this.blog_info.blogImage == null || this.blog_info.blogImage == "") {
+      this.blog_image = this.blog_info.userProfile;
       this.img_ready = true;
     } else {
-      this.blog_image = this.blog_info.BlogImage;
+      this.blog_image = this.blog_info.blogImage;
       this.img_ready = true;
+    }
+    if (this.blog_info.blogTag != null && this.blog_info.blogTag != "") {
+      this.blog_tags = this.blog_info.blogTag.split('-');
+      console.log("blog_tags:" + this.blog_tags);
+    }
+    this.flag = true
+    if (this.blog_info.blogDate != null) {
+      this.blogTime = this.blog_info.blogDate.replace("T", " ").replace(".000+00:00", " ");
     }
   },
 };

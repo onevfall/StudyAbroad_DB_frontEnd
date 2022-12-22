@@ -100,7 +100,7 @@ export default {
     //取关
     CancelFollow() {
       axios
-        .put("api/follow/follow_user", {
+        .put("/spring/personal_center/follow/follow_user", {
           user_id: this.$store.state.user_info.user_id,
           follow_user_id: this.blog_user_info.user_id,
         })
@@ -150,7 +150,7 @@ export default {
           });
         } else {
           axios
-            .post("api/follow/follow_user", {
+            .post("/spring/personal_center/follow/follow_user", {
               user_id: this.$store.state.user_info.user_id,
               follow_user_id: this.blog_user_info.user_id,
             })
@@ -205,7 +205,7 @@ export default {
     //当前用户是否关注
     axios({
       url:
-        "api/follow?user_id=" +
+        "/spring/personal_center/follow/follow_user?user_id=" +
         this.$store.state.user_info.user_id +
         "&follow_user_id=" +
         this.blog_user_info.user_id,
