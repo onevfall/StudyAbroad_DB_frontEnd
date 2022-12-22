@@ -3,10 +3,20 @@
 作者：焦佳宇
 -->
 <template>
-  <div class="common-layout" id="top" v-loading.fullscreen.lock="blog_user_info == ''">
+  <div
+    class="common-layout"
+    id="top"
+    v-loading.fullscreen.lock="blog_user_info == ''"
+  >
     <el-container>
-      <el-aside width="400px" class="aside_field">
-        <el-affix :offset="5" target=".aside_field">
+      <el-aside
+        width="400px"
+        class="aside_field"
+      >
+        <el-affix
+          :offset="5"
+          target=".aside_field"
+        >
           <user-info-board
             class="UserInfo"
             :blog_user_info="this.blog_user_info"
@@ -16,7 +26,11 @@
           <!-- <div v-for="blog in this.blog_relevant.slice(0, 2)" :key="blog">
             <blog-info-board :blog_info="blog" class="BlogCard" />
           </div> -->
-          <blog-info-board :blog_info="this.blog_relevant[0]" v-if="this.blog_relevant.length!=0" class="BlogCard" />
+          <blog-info-board
+            :blog_info="this.blog_relevant[0]"
+            v-if="this.blog_relevant.length!=0"
+            class="BlogCard"
+          />
         </el-affix>
       </el-aside>
       <el-main>
@@ -27,18 +41,30 @@
                 <div class="content_header">
                   <p class="title">{{ BlogTitle }}</p>
 
-                  <el-row gutter="10" justify="center" style="width: 100%">
+                  <el-row
+                    gutter="10"
+                    justify="center"
+                    style="width: 100%"
+                  >
                     <el-col span="1">
-                      <el-tag class="ml-2" type="primary" size="large">
+                      <el-tag
+                        class="ml-2"
+                        type="primary"
+                        size="large"
+                      >
                         {{ BlogTime }}
                       </el-tag>
                     </el-col>
                     <el-col
                       span="1"
-                      v-for="tag in blog_detail.blog_tag"
+                      v-for="tag in blog_tags"
                       :key="tag"
                     >
-                      <el-tag class="ml-2" type="success" size="large">
+                      <el-tag
+                        class="ml-2"
+                        type="success"
+                        size="large"
+                      >
                         {{ tag }}
                       </el-tag>
                     </el-col>
@@ -46,16 +72,26 @@
                 </div>
               </el-aside>
               <el-main>
-                <img src="../assets/drawing_blog.png" style="height: 80px" />
+                <img
+                  src="../assets/drawing_blog.png"
+                  style="height: 80px"
+                />
               </el-main>
             </el-container>
           </div>
           <el-divider />
           <div class="main_field">
-            <div class="content_main" v-loading="oss_loading">
-              <p v-html="this.blog_detail.blog_content"></p>
+            <div
+              class="content_main"
+              v-loading="oss_loading"
+            >
+              <p v-html="this.blog_detail.blogContent"></p>
             </div>
-            <el-affix target=".main_field" position="bottom" :offset="0">
+            <el-affix
+              target=".main_field"
+              position="bottom"
+              :offset="0"
+            >
               <div class="option_bar">
                 <el-row gutter="10">
                   <el-col :span="2">
@@ -89,7 +125,10 @@
                     />
                     <!-- </el-tag> -->
                   </el-col>
-                  <el-col :span="2" style="margin-left: 10px">
+                  <el-col
+                    :span="2"
+                    style="margin-left: 10px"
+                  >
                     <el-row gutter="4">
                       <el-col :span="2">
                         <report-button
@@ -104,7 +143,10 @@
                     <!-- </el-tag> -->
                   </el-col>
 
-                  <el-col :span="14" style="text-align: right">
+                  <el-col
+                    :span="14"
+                    style="text-align: right"
+                  >
                     <el-tooltip
                       class="box-item"
                       effect="dark"
@@ -116,8 +158,12 @@
                         circle
                         size="small"
                         @click="goTop"
-                        ><el-icon><ArrowUpBold /></el-icon></el-button
-                    ></el-tooltip>
+                      >
+                        <el-icon>
+                          <ArrowUpBold />
+                        </el-icon>
+                      </el-button>
+                    </el-tooltip>
                   </el-col>
                 </el-row>
               </div>
@@ -125,7 +171,11 @@
           </div>
           <el-divider />
           <div>
-            <comment-zone type="1" :id="this.$route.query.blog_id" :key="this.$route.query.blog_id">
+            <comment-zone
+              type="1"
+              :id="this.$route.query.blog_id"
+              :key="this.$route.query.blog_id"
+            >
             </comment-zone>
           </div>
           <!-- <div class="comment_field"></div> -->
@@ -159,35 +209,41 @@ export default {
     ReportButton,
     ElMessage,
   },
-  data() {
+  data () {
     return {
       blog_user_info: "",
       blog_relevant: [],
       blog_detail: "",
-      oss_loading:true
+      oss_loading: true,
+      BlogTitle: "",
+      BlogTime: "",
+      blog_tags: []
     };
   },
   methods: {
-    getData() {
+    getData () {
+
       /*在此处向服务器请求数据，初始化所需变量*/
       //博客用户
+      //先注释掉看看是不是这个的问题
       axios.get("api/userinfo?user_id=" + this.$route.query.user_id).then((res) => {
         this.blog_user_info = res.data.data;
       });
       //相关博客
 
       axios
-        .get("/api/blog/tag?num=3&tag=" + this.$route.query.blog_tag)
+        .get("/spring/blog/tag/" + this.$route.query.blog_tag + "?num=3")
         .then((res) => {
           this.blog_relevant = [].concat(
             res.data.data.blog.filter(
-              (blog) => blog.BlogId != this.$route.query.blog_id
+              // (blog) => blog.BlogId != this.$route.query.blog_id
+              (blog) => blog.blogId != this.$route.query.blog_id
             )
           );
-          if(this.blog_relevant.length!=0){
+          if (this.blog_relevant.length != 0) {
             //生成0-数组长度的随机数
-            let index_random=Math.floor(Math.random()*this.blog_relevant.length);
-            this.blog_relevant[0] =this.blog_relevant[index_random];
+            let index_random = Math.floor(Math.random() * this.blog_relevant.length);
+            this.blog_relevant[0] = this.blog_relevant[index_random];
           }
         })
         .catch((errMsg) => {
@@ -195,19 +251,19 @@ export default {
         });
       //当前博客内容
       axios
-        .get("/api/blog?blog_id=" + this.$route.query.blog_id)
+        .get("/spring/blog/" + this.$route.query.blog_id)
         .then((res) => {
           this.blog_detail = res.data.data;
           const xhrFile = new XMLHttpRequest();
           console.log('开始解析oss');
-          xhrFile.open("GET", this.blog_detail.blog_content, true);
+          xhrFile.open("GET", this.blog_detail.blogContent, true);
           xhrFile.send();
           xhrFile.onload = () => {
             //res.data.data.blog_content=xhrFile.response;
-            this.blog_detail.blog_content = xhrFile.response;
+            this.blog_detail.blogContent = xhrFile.response;
 
             console.log('oss解析完成');
-            this.oss_loading=false;
+            this.oss_loading = false;
           };
 
           // this.blog_detail.blog_content = decode(this.blog_detail.blog_content);
@@ -215,11 +271,31 @@ export default {
         .catch((errMsg) => {
           console.log(errMsg);
         });
+      if (this.blog_detail.blogTag != null && this.blog_detail.blogTag != "") {
+        this.blog_tags = this.blog_detail.blogTag.split('-');
+      }
+      if (this.blog_detail == null || this.blog_detail == "") {
+        this.BlogTitle = "";
+      }
+      else if (this.blog_detail.blogSummary == null || this.blog_detail.blogSummary == "") {
+        this.BlogTitle = "";
+      }
+      else if (this.blog_detail.blogSummary.length < 12) {
+        this.BlogTitle = this.blog_detail.blogSummary;
+      } else {
+        this.BlogTitle = this.blog_detail.blogSummary.slice(0, 12) + "...";
+      }
+
+      if (this.blog_detail == null || this.blog_detail == "") {
+        this.BlogTime = "";
+      } else {
+        this.BlogTime = this.blog_detail.blogDate.replace("T", " ").replace(".000+00:00", " ");
+      }
     },
-    goTop() {
+    goTop () {
       window.scrollTo(0, 0);
     },
-    reportResponse(res) {
+    reportResponse (res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -238,7 +314,7 @@ export default {
     },
   },
   watch: {
-    $route(to, from) {
+    $route (to, from) {
       //监听相同路由下参数变化的时候，从而实现异步刷新
       this.blog_user_info = "";
       //重新获取数据
@@ -246,28 +322,28 @@ export default {
     },
   },
   computed: {
-    BlogTitle() {
+    BlogTitle () {
       if (this.blog_detail == "") {
         return "";
       }
-      if (this.blog_detail.blog_summary == "") {
+      else if (this.blog_detail.blogSummary == "") {
         return "";
       }
-      if (this.blog_detail.blog_summary.length < 12) {
-        return this.blog_detail.blog_summary;
+      else if (this.blog_detail.blogSummary.length < 12) {
+        return this.blog_detail.blogSummary;
       } else {
-        return this.blog_detail.blog_summary.slice(0, 12) + "...";
+        return this.blog_detail.blogSummary.slice(0, 12) + "...";
       }
     },
-    BlogTime() {
+    BlogTime () {
       if (this.blog_detail == "") {
         return "";
       } else {
-        return this.blog_detail.blog_date.replace("T", " ");
+        return this.blog_detail.blogDate.replace("T", " ").replace(".000+00:00", " ");
       }
     },
   },
-  created() {
+  created () {
     this.getData();
   },
 };
@@ -319,7 +395,7 @@ export default {
 }
 /* .comment_field {
 } */
-.aside_field{
+.aside_field {
   margin-bottom: 100px;
 }
 </style>
