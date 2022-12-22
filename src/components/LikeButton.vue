@@ -48,6 +48,7 @@ export default {
   },
   data () {
     return {
+      url: "",
       is_liked: false,
       dynamic_type: "",
       like_nums: "",
@@ -71,7 +72,7 @@ export default {
         });
       } else {
         axios
-          .post("/api/" + this.dynamic_type + "/like/", {
+          .post("/spring/" + this.dynamic_type + "/like/", {
             user_id: this.$store.state.user_info.user_id,
             [this.dynamic_type + "_id"]: this.content_id,
           })
@@ -98,7 +99,7 @@ export default {
     },
     unLike () {
       axios
-        .put("api/like" + this.dynamic_type, {
+        .put("spring/like/" + this.dynamic_type, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
         })
@@ -127,7 +128,7 @@ export default {
     //查询是否点过赞
     if (this.$store.state.is_login) {
       axios(
-        "api/like" +
+        "spring/like/" +
         this.dynamic_type +
         "?user_id=" +
         this.$store.state.user_info.user_id +
@@ -147,8 +148,8 @@ export default {
     } else {
       //查询点赞个数
       axios(
-        "api/like" + this.dynamic_type +
-        "?user_id=" +
+        "spring/" + this.dynamic_type +
+        "/like?user_id=" +
         1 +
         "&" +
         this.dynamic_type +
@@ -194,9 +195,11 @@ export default {
     switch (this.content_type) {
       case "0":
         this.dynamic_type = "blog";
+        url = "spring/blog/like";
         break;
       case "1":
         this.dynamic_type = "blog_comment";
+        url = "spring/blog/comment/like";
         break;
       case "2":
         this.dynamic_type = "answer";
@@ -208,8 +211,7 @@ export default {
     //查询是否点过赞
     if (this.$store.state.is_login) {
       axios(
-        "api/like/" +
-        this.dynamic_type +
+        url +
         "?user_id=" +
         this.$store.state.user_info.user_id +
         "&" +
@@ -228,8 +230,7 @@ export default {
     } else {
       //查询点赞个数
       axios(
-        "api/like/" +
-        this.dynamic_type +
+        url +
         "?user_id=" +
         1 +
         "&" +

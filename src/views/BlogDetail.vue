@@ -57,7 +57,7 @@
                     </el-col>
                     <el-col
                       span="1"
-                      v-for="tag in blog_detail.blog_tag"
+                      v-for="tag in blog_tags"
                       :key="tag"
                     >
                       <el-tag
@@ -85,7 +85,7 @@
               class="content_main"
               v-loading="oss_loading"
             >
-              <p v-html="this.blog_detail.blog_content"></p>
+              <p v-html="this.blog_detail.blogContent"></p>
             </div>
             <el-affix
               target=".main_field"
@@ -214,20 +214,25 @@ export default {
       blog_user_info: "",
       blog_relevant: [],
       blog_detail: "",
-      oss_loading: true
+      oss_loading: true,
+      BlogTitle: "",
+      BlogTime: "",
+      blog_tags: []
     };
   },
   methods: {
     getData () {
+
       /*在此处向服务器请求数据，初始化所需变量*/
       //博客用户
+      //先注释掉看看是不是这个的问题
       axios.get("api/userinfo?user_id=" + this.$route.query.user_id).then((res) => {
         this.blog_user_info = res.data.data;
       });
       //相关博客
 
       axios
-        .get("/api/blog/tag?num=3&tag=" + this.$route.query.blog_tag)
+        .get("/spring/blog/tag/" + this.$route.query.blog_tag + "?num=3")
         .then((res) => {
           this.blog_relevant = [].concat(
             res.data.data.blog.filter(
@@ -246,7 +251,7 @@ export default {
         });
       //当前博客内容
       axios
-        .get("/api/blog?blog_id=" + this.$route.query.blog_id)
+        .get("/spring/blog/" + this.$route.query.blog_id)
         .then((res) => {
           this.blog_detail = res.data.data;
           const xhrFile = new XMLHttpRequest();
@@ -266,6 +271,26 @@ export default {
         .catch((errMsg) => {
           console.log(errMsg);
         });
+      if (this.blog_detail.blogTag != null && this.blog_detail.blogTag != "") {
+        this.blog_tags = this.blog_detail.blogTag.split('-');
+      }
+      if (this.blog_detail == null || this.blog_detail == "") {
+        this.BlogTitle = "";
+      }
+      else if (this.blog_detail.blogSummary == null || this.blog_detail.blogSummary == "") {
+        this.BlogTitle = "";
+      }
+      else if (this.blog_detail.blogSummary.length < 12) {
+        this.BlogTitle = this.blog_detail.blogSummary;
+      } else {
+        this.BlogTitle = this.blog_detail.blogSummary.slice(0, 12) + "...";
+      }
+
+      if (this.blog_detail == null || this.blog_detail == "") {
+        this.BlogTime = "";
+      } else {
+        this.BlogTime = this.blog_detail.blogDate.replace("T", " ").replace(".000+00:00", " ");
+      }
     },
     goTop () {
       window.scrollTo(0, 0);
@@ -301,20 +326,20 @@ export default {
       if (this.blog_detail == "") {
         return "";
       }
-      if (this.blog_detail.blog_summary == "") {
+      else if (this.blog_detail.blogSummary == "") {
         return "";
       }
-      if (this.blog_detail.blog_summary.length < 12) {
-        return this.blog_detail.blog_summary;
+      else if (this.blog_detail.blogSummary.length < 12) {
+        return this.blog_detail.blogSummary;
       } else {
-        return this.blog_detail.blog_summary.slice(0, 12) + "...";
+        return this.blog_detail.blogSummary.slice(0, 12) + "...";
       }
     },
     BlogTime () {
       if (this.blog_detail == "") {
         return "";
       } else {
-        return this.blog_detail.blog_date.replace("T", " ");
+        return this.blog_detail.blogDate.replace("T", " ").replace(".000+00:00", " ");
       }
     },
   },

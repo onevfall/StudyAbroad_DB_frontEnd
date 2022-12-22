@@ -135,7 +135,7 @@ export default {
         image_url = args.image_array[0]; //选第一张图片
       }
       this.axios
-        .post("api/blog", {
+        .post("spring/blog", {
           userId: this.$store.state.user_info.user_id,
           Summary: summary,
           Content: args.base64_content,

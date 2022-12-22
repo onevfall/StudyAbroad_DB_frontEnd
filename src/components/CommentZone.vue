@@ -89,6 +89,7 @@ export default {
   components: { CommentItem, ElMessage },
   data () {
     return {
+      url: "",
       dynamic_type: "",
       comment_now: "",
       comments: [],
@@ -104,6 +105,7 @@ export default {
         break;
       case "1":
         this.dynamic_type = "blog";
+        url = "/spring/blog/comment";
         break;
     }
     this.initZone();
@@ -125,7 +127,7 @@ export default {
         });
       } else {
         axios
-          .post("/api/" + this.dynamic_type + "/comment", {
+          .post(url, {
             [this.dynamic_type + "_id"]: this.id,
             [this.dynamic_type + "_comment_user_id"]:
               this.$store.state.user_info.user_id,
@@ -143,11 +145,7 @@ export default {
             });
             this.comment_now = "";
             axios
-              .get("/api/" + this.dynamic_type + "/comment", {
-                params: {
-                  [this.dynamic_type + "_id"]: this.id,
-                },
-              })
+              .get(url + "/" + this.id)
               .then((res) => {
                 for (let i = 0; i < res.data.data.comment_list.length; ++i) {
                   this.comments[i] = res.data.data.comment_list[i];
@@ -166,11 +164,7 @@ export default {
     },
     initZone () {
       axios
-        .get("/api/" + this.dynamic_type + "/comment", {
-          params: {
-            [this.dynamic_type + "_id"]: this.id,
-          },
-        })
+        .get(url + "/" + this.id)
         .then((res) => {
           console.log(res.data.data);
           this.comments = [];

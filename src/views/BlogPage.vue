@@ -141,7 +141,7 @@ export default {
       let sort_type_name = this.sort_type == 0 ? "time" : "hot";
       axios
         .get(
-          "/api/blog/list/" +
+          "/spring/blog/list/" +
           sort_type_name +
           "?num=1000&page=" +
           res +
@@ -174,7 +174,7 @@ export default {
       this.loading = true;
       this.sort_type = "0";
       axios({
-        url: "/api/blog/list/time?num=100&page_size=" + this.PAGESIZE + "&page=1",
+        url: "/spring/blog/list/time?num=100&page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
@@ -193,7 +193,7 @@ export default {
       this.loading = true;
       this.sort_type = "1";
       axios
-        .get("/api/blog/list/hot?num=100&page_size=" + this.PAGESIZE + "&page=1")
+        .get("/spring/blog/list/hot?num=100&page_size=" + this.PAGESIZE + "&page=1")
         .then((res) => {
           this.blog_list = [].concat(res.data.data);
           this.loading = false;
@@ -216,7 +216,7 @@ export default {
   created () {
     //统计动态总数
     let get_num = axios
-      .get("/api/blog/num?num=1000")
+      .get("/spring/blog/num?num=1000")
       .then((res) => {
         this.blog_num_total = res.data.data.blog_num;
       })
@@ -224,7 +224,7 @@ export default {
         console.log(errMsg);
       });
     let get_list = axios
-      .get("/api/blog/list/time?num=1000&page_size=" + this.PAGESIZE + "&page=1")
+      .get("/spring/blog/list/time?num=1000&page_size=" + this.PAGESIZE + "&page=1")
       .then((res) => {
         this.blog_list = [].concat(res.data.data);
       })

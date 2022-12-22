@@ -8,13 +8,13 @@
       <div class="self_comment">
         <div class="comment_header">
           <el-avatar
-            :src="comment_infor.UserProfile"
+            :src="comment_infor.userProfile"
             size="xx-small"
-            @click="goPersonSpace(comment_infor.UserId, $event)"
+            @click="goPersonSpace(comment_infor.userId, $event)"
             class="reviewer_profile"
           />
           <span
-            class="comment_name"><b>{{ comment_infor.UserName }}</b></span><br />
+            class="comment_name"><b>{{ comment_infor.userName }}</b></span><br />
           <div
             style="width: 5%; display: flex; justify-content: space-around"
             v-if="this.type == '0'"
@@ -34,7 +34,7 @@
           >
             <like-button
               content_type="1"
-              :content_id="comment_infor.BlogCommentId"
+              :content_id="comment_infor.blogCommentId"
               :show_num="true"
               size="normal"
               @giveLike="like"
@@ -71,7 +71,7 @@
           >
             <report-button
               content_type="2"
-              :content_id="comment_infor.BlogCommentId"
+              :content_id="comment_infor.blogCommentId"
               size="normal"
               @reportResponse="reportResponse"
             />
@@ -103,7 +103,7 @@
           class="content_main"
           v-else
         >
-          {{ comment_infor.BlogCommentContent }}
+          {{ comment_infor.blogCommentContent }}
         </div>
         <div class="comment_footer"></div>
       </div>
@@ -205,6 +205,7 @@ export default {
   components: { LikeButton, ElMessage, ReportButton },
   data () {
     return {
+      url: "",
       is_reply: false,
       comment_now: "",
       dynamic_type: "",
@@ -221,6 +222,7 @@ export default {
         break;
       case "1":
         this.dynamic_type = "blog";
+        url = "/spring/blog";
         break;
     }
     this.init();
@@ -228,8 +230,8 @@ export default {
   computed: {
     nowplaceholder () {
       // console.log(this.$store);
-      if (this.comment_infor.UserName !== "") {
-        return "回复" + this.comment_infor.UserName;
+      if (this.comment_infor.userName !== "") {
+        return "回复" + this.comment_infor.userName;
       } else {
         return "评论点什么...";
       }
@@ -239,7 +241,7 @@ export default {
     init () {
       if (this.dynamic_type == "answer") {
         axios
-          .get("/api/" + this.dynamic_type + "/reply", {
+          .get(url + "/reply", {
             params: {
               answer_comment_id: this.comment_infor.AnswerCommentId,
             },
@@ -254,11 +256,7 @@ export default {
           });
       } else {
         axios
-          .get("/api/" + this.dynamic_type + "/reply", {
-            params: {
-              blog_comment_id: this.comment_infor.BlogCommentId,
-            },
-          })
+          .get(url + "/reply" + "/" + this.comment_infor.blogCommentId)
           .then((res) => {
             this.comment_infor.reply_num = res.data.data.reply_num;
             this.comment_infor.child_comments = res.data.data.reply_list;
@@ -307,7 +305,7 @@ export default {
       } else {
         if (this.dynamic_type == "answer") {
           axios
-            .post("/api/answer/reply", {
+            .post("/spring/answer/reply", {
               comment_id: this.comment_infor.AnswerCommentId,
               reply_user_id: this.$store.state.user_info.user_id,
               reply_content: this.comment_now,
@@ -329,8 +327,8 @@ export default {
             });
         } else {
           axios
-            .post("/api/blog/reply", {
-              commentId: this.comment_infor.BlogCommentId,
+            .post("/spring/blog/reply", {
+              commentId: this.comment_infor.blogCommentId,
               replyUserId: this.$store.state.user_info.user_id,
               replyContent: this.comment_now,
             })
@@ -368,12 +366,12 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
-        if (this.comment_infor.UserId == this.$store.state.user_info.user_id) {
+        if (this.comment_infor.blogCommentUserId == this.$store.state.user_info.user_id) {
           //发comment的用户和当前登录的用户id是相同的id
           this.delete_dialog_visible = true;
           if (this.dynamic_type == "answer")
             this.now_delete_id = this.comment_infor.AnswerCommentId;
-          else this.now_delete_id = this.comment_infor.BlogCommentId;
+          else this.now_delete_id = this.comment_infor.blogCommentId;
         } else {
           ElMessage({
             message: "您不具有对这条评论的删除权限！",
@@ -390,12 +388,7 @@ export default {
     },
     deleteCheck () {
       axios
-        .delete("/api/" + this.dynamic_type + "/comment", {
-          params: {
-            // 请求参数拼接在url上
-            [this.dynamic_type + "comment_id"]: this.now_delete_id,
-          },
-        })
+        .delete(url + "/comment/" + this.now_delete_id)
         .then((res) => {
           this.delete_dialog_visible = false;
           this.now_delete_id = -1;
