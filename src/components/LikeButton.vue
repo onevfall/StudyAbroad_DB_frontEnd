@@ -72,7 +72,7 @@ export default {
         });
       } else {
         axios
-          .post(this.url + "?user_id=" + this.$store.state.user_info.user_id
+          .post(this.url + "/like?user_id=" + this.$store.state.user_info.user_id
             + "&" + this.dynamic_type + "_id=" + this.content_id)
           .then((res) => {
             if (res.data.status) {
@@ -97,7 +97,7 @@ export default {
     },
     unLike () {
       axios
-        .put(this.url + "?user_id=" + this.$store.state.user_info.user_id
+        .post(this.url + "/unlike?user_id=" + this.$store.state.user_info.user_id
           + "&" + this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
           if (res.data.status) {
@@ -123,9 +123,9 @@ export default {
   updated () {
     //查询是否点过赞
     if (this.$store.state.is_login) {
-      axios(
+      axios.get(
         this.url +
-        "?user_id=" +
+        "/like?user_id=" +
         this.$store.state.user_info.user_id +
         "&" +
         this.dynamic_type +
@@ -142,8 +142,8 @@ export default {
         });
     } else {
       //查询点赞个数
-      axios(
-        this.url + "?user_id=" +
+      axios.get(
+        this.url + "/like?user_id=" +
         1 +
         "&" +
         this.dynamic_type +
@@ -189,11 +189,11 @@ export default {
     switch (this.content_type) {
       case "0":
         this.dynamic_type = "blog";
-        this.url = "spring/blog/like";
+        this.url = "spring/blog";
         break;
       case "1":
         this.dynamic_type = "blog_comment";
-        this.url = "spring/blog/comment/like";
+        this.url = "spring/blog/comment";
         break;
       case "2":
         this.dynamic_type = "answer";
@@ -204,9 +204,9 @@ export default {
     }
     //查询是否点过赞
     if (this.$store.state.is_login) {
-      axios(
+      axios.get(
         this.url +
-        "?user_id=" +
+        "/like?user_id=" +
         this.$store.state.user_info.user_id +
         "&" +
         this.dynamic_type +
@@ -223,9 +223,9 @@ export default {
         });
     } else {
       //查询点赞个数
-      axios(
+      axios.get(
         this.url +
-        "?user_id=" +
+        "/like?user_id=" +
         1 +
         "&" +
         this.dynamic_type +

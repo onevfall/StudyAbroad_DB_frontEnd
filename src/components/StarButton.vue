@@ -80,7 +80,7 @@ export default {
         });
       } else {
         axios
-          .post(this.url + "?user_id=" + this.$store.state.user_info.user_id + "&" +
+          .post(this.url + "/star?user_id=" + this.$store.state.user_info.user_id + "&" +
             this.dynamic_type + "_id=" + this.content_id)
           .then((res) => {
             console.log(res);
@@ -106,7 +106,7 @@ export default {
     },
     unStar () {
       axios
-        .put(this.url + "?user_id=" + this.$store.state.user_info.user_id + "&" +
+        .post(this.url + "/unstar?user_id=" + this.$store.state.user_info.user_id + "&" +
           this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
           if (res.data.status) {
@@ -136,7 +136,7 @@ export default {
       axios
         .get(
           this.url +
-          "?user_id=" +
+          "/star?user_id=" +
           this.$store.state.user_info.user_id +
           "&" +
           this.dynamic_type +
@@ -156,7 +156,7 @@ export default {
       axios
         .get(
           this.url +
-          "?user_id=" +
+          "/star?user_id=" +
           1 +
           "&" +
           this.dynamic_type +
@@ -201,7 +201,7 @@ export default {
     switch (this.content_type) {
       case "0":
         this.dynamic_type = "blog";
-        this.url = "spring/blog/star";
+        this.url = "spring/blog";
         break;
       case "1":
         this.dynamic_type = "answer";
@@ -214,7 +214,7 @@ export default {
       axios
         .get(
           this.url +
-          "?user_id=" +
+          "/star?user_id=" +
           this.$store.state.user_info.user_id +
           "&" +
           this.dynamic_type +
@@ -233,7 +233,7 @@ export default {
       axios
         .get(
           this.url +
-          "?user_id=" +
+          "/star?user_id=" +
           1 +
           "&" +
           this.dynamic_type +
