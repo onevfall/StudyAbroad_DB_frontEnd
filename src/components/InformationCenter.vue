@@ -189,12 +189,13 @@ export default {
     //   });
     // }
     axios
-        .get("/api/report", {
+        .get("spring/personal_center/report", {
           params: {
             user_id: this.$store.state.user_info.user_id,
           },
         })
         .then((res) => {
+          console.log(res)
           if(res.data.status){
             this.answer_report=res.data.data.answer_report
             for(var i in this.answer_report)
@@ -290,12 +291,13 @@ export default {
         this.now_situation = "";
         this.report_type = "";
         axios
-        .get("/api/report", {
+        .get("spring/personal_center/report", {
           params: {
             user_id: this.$store.state.user_info.user_id,
           },
         })
         .then((res) => {
+          console.log(res)
           if(res.data.status){
             this.answer_report=res.data.data.answer_report
             for(var i in this.answer_report)

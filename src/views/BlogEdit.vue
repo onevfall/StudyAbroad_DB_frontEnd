@@ -14,15 +14,27 @@
               style="margin-top: 7.5px"
             />
           </el-col>
-          <el-col :span="3" style="margin-top: 17px; font-size: large">
+          <el-col
+            :span="3"
+            style="margin-top: 17px; font-size: large"
+          >
             {{ this.$store.state.user_info.user_name }}
           </el-col>
-          <el-col :span="15" style="margin-top: 5px; font-size: 1.8em">
+          <el-col
+            :span="15"
+            style="margin-top: 5px; font-size: 1.8em"
+          >
             <strong>动态发布</strong>
           </el-col>
         </el-row>
-        <el-row :gutter="30" style="margin-top: 5px">
-          <el-col span="3" style="margin-top: 5px"> <strong>动态话题:</strong> </el-col>
+        <el-row
+          :gutter="30"
+          style="margin-top: 5px"
+        >
+          <el-col
+            span="3"
+            style="margin-top: 5px"
+          > <strong>动态话题:</strong> </el-col>
           <el-col span="3">
             <el-checkbox-group v-model="tagList">
               <el-checkbox label="生活" />
@@ -33,9 +45,12 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-main class="card content_field"
-        ><div class="input_field">
-          <editor ref="text_editor"  @editorSubmit="upLoad" />
+      <el-main class="card content_field">
+        <div class="input_field">
+          <editor
+            ref="text_editor"
+            @editorSubmit="upLoad"
+          />
           <button
             @click="callEditor"
             class="mine_button"
@@ -50,7 +65,10 @@
                   width="24"
                   height="24"
                 >
-                  <path fill="none" d="M0 0h24v24H0z"></path>
+                  <path
+                    fill="none"
+                    d="M0 0h24v24H0z"
+                  ></path>
                   <path
                     fill="currentColor"
                     d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"
@@ -60,8 +78,8 @@
             </div>
             <span>发布</span>
           </button>
-        </div></el-main
-      >
+        </div>
+      </el-main>
     </el-container>
   </div>
 </template>
@@ -75,14 +93,14 @@ export default {
     Editor,
     ElMessage,
   },
-  data() {
+  data () {
     return {
       tagList: [],
       fullscreenLoading: false,
     };
   },
   methods: {
-    callEditor() {
+    callEditor () {
       if (this.tagList.length == 0) {
         ElMessage({
           message: "请选择至少一个关键词",
@@ -94,7 +112,7 @@ export default {
         this.$refs.text_editor.submit();
       }
     },
-    upLoad(args) {
+    upLoad (args) {
       this.fullscreenLoading = true;
       //处理summary
       var summary = "";
@@ -117,12 +135,12 @@ export default {
         image_url = args.image_array[0]; //选第一张图片
       }
       this.axios
-        .post("api/blog", {
-          user_id: this.$store.state.user_info.user_id,
-          summary: summary,
-          content: args.base64_content,
-          tag: tag,
-          image_url: image_url,
+        .post("spring/blog", {
+          userId: this.$store.state.user_info.user_id,
+          Summary: summary,
+          Content: args.base64_content,
+          Tag: tag,
+          imageUrl: image_url,
         })
         .then((res) => {
           if (res.data.status == true) {
@@ -148,11 +166,11 @@ export default {
         .catch((errMsg) => {
           this.fullscreenLoading = false;
           ElMessage({
-              type: "warning",
-              message: "提交失败，请检查网络连接",
-              duration: 2000,
-              showClose: true,
-            });
+            type: "warning",
+            message: "提交失败，请检查网络连接",
+            duration: 2000,
+            showClose: true,
+          });
           console.log(errMsg);
         });
     },

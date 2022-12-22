@@ -69,13 +69,13 @@
         <li v-for="news in this.news_relevant" :key="news" class="list-item">
           <div class="common-layout2">
             <news-entry
-              :news_flash_date="news.NewsFlashDate"
-              :news_flash_title="news.NewsFlashTitle"
-              :news_flash_region="news.NewsFlashRegion"
-              :news_flash_tag="news.NewsFlashTag"
-              :news_flash_summary="news.NewsFlashSummary"
-              :news_flash_id="news.NewsFlashId"
-              :news_flash_image="news.NewsFlashImage"
+              :news_flash_date="news.newsFlashDate"
+              :news_flash_title="news.newsFlashTitle"
+              :news_flash_region="news.newsFlashRegion"
+              :news_flash_tag="news.newsFlashTag"
+              :news_flash_summary="news.newsFlashSummary"
+              :news_flash_id="news.newsFlashId"
+              :news_flash_image="news.newsFlashImage"
               style="margin-bottom: 5px"
             ></news-entry>
           </div>
@@ -196,7 +196,7 @@ export default {
       this.run(),
       //快讯
       axios
-        .get("api/newsflash/all?page=1&page_size=" + 6)
+        .get("spring/admin/newsflash/all?page=1&page_size=" + 6)
         .then((res) => {
           this.news_relevant = [].concat(res.data.data.newsflashs);
           this.news_relevant = this.news_relevant.slice(0, 3);
@@ -207,7 +207,7 @@ export default {
 
     //博客
     axios({
-      url: "/api/blog/time?num=6",
+      url: "/spring/blog/list/time?num=6",
       method: "get",
     })
       .then((res) => {
@@ -218,12 +218,12 @@ export default {
       });
     //问答
     axios({
-      url: "/test/question/list/time?page_size=4&page=1",
+      url: "spring/question/list/time",
       method: "get",
     })
       .then((res) => {
-        console.log(res.data.obj);
-        this.question_time_info = res.data.obj;
+        console.log(res.data.data);
+        this.question_time_info = res.data.data.question.slice(0, 4);
         console.log(this.question_time_info)
 
       })

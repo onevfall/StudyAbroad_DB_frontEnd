@@ -224,7 +224,7 @@ export default {
   methods: {
     async reloadAnswer() {
       axios
-        .get("/test/answer", {
+        .get("/spring/qa/answer", {
           params: {
             answer_id: this.answer_id,
           },
@@ -254,7 +254,7 @@ export default {
       this.answer_id = this.$route.query.answer_id; //获取本页的answer
 
       await axios
-        .get("/test/answer", {
+        .get("/spring/qa/answer", {
           params: {
             answer_id: this.answer_id,
           },
@@ -301,7 +301,7 @@ export default {
       // console.log(this.answer_user_info);
       this.question_id = this.$route.query.question_id;
       axios
-        .get("/test/question", {
+        .get("/spring/qa/question", {
           params: {
             question_id: this.question_id,
           },
@@ -320,7 +320,7 @@ export default {
         });
 
       axios
-        .get("/test/question/related_questions/"+this.question_id)
+        .get("/spring/qa/question/related_questions/"+this.question_id)
         .then((res) => {
           console.log(res.data.obj);
           this.related_question_tag = res.data.obj.tags;

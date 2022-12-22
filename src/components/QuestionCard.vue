@@ -24,10 +24,10 @@
       <el-row style="margin-top:40px">
         <el-col :span="8" class="display-num">
             <!-- <el-icon :size="18"><Chicken /></el-icon> {{ this.question_info.QuestionReward }} -->
-            <img src="../assets/dollar.png" style="height:16px"/> {{ this.question_info.questionReward }}
+            <img src="../assets/dollar.png" style="height:16px"/> {{ this.question_info.QuestionReward }}
         </el-col>
         <el-col :span="8" class="display-num">
-            <el-icon :size="18"><FolderRemove /></el-icon> {{ this.question_info.answerCount }}
+            <el-icon :size="18"><FolderRemove /></el-icon> {{ this.question_info.Count }}
         </el-col>
       </el-row>
     </el-card>
@@ -40,11 +40,12 @@ export default {
   props: ["question_info","question_num"],
   computed: {
     contentShow() {
-      if (this.question_info.questionTitle.length < 19) {
-        return this.question_info.questionTitle;
+      console.log(this.question_info);
+      if (this.question_info.QuestionTitle.length < 19) {
+        return this.question_info.QuestionTitle;
       } 
       else{
-        return this.question_info.questionTitle.slice(0, 19) + "...";
+        return this.question_info.QuestionTitle.slice(0, 19) + "...";
       }
     },
   },
@@ -53,7 +54,7 @@ export default {
     {
       this.$router.push({
         name:"question",
-        query:{question_id:this.question_info.questionId},
+        query:{question_id:this.question_info.QuestionId},
       });
     }
   }

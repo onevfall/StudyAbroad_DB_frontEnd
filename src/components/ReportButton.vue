@@ -45,7 +45,6 @@ export default {
   },
   data() {
     return {
-      url: "",
       is_reported: false,
       dynamic_type: "",
       icon_size: 0,
@@ -80,7 +79,7 @@ export default {
       console.log(this.content_id)
       console.log(this.report_reason)
       axios
-        .post(this.url + "/report" ,{
+        .post(this.url+"/report", {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
           report_reason: this.report_reason,
@@ -146,7 +145,7 @@ export default {
     if (this.$store.state.is_login) {
       axios
         .get(
-          this.url + "/report"+
+          this.url+"/report" +
             "?user_id=" +
             this.$store.state.user_info.user_id +
             "&" +
