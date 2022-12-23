@@ -24,10 +24,10 @@
       <el-row style="margin-top:40px">
         <el-col :span="8" class="display-num">
             <!-- <el-icon :size="18"><Chicken /></el-icon> {{ this.question_info.QuestionReward }} -->
-            <img src="../assets/dollar.png" style="height:16px"/> {{ this.question_info.QuestionReward }}
+            <img src="../assets/dollar.png" style="height:16px"/> {{ this.question_info.questionReward }}
         </el-col>
         <el-col :span="8" class="display-num">
-            <el-icon :size="18"><FolderRemove /></el-icon> {{ this.question_info.Count }}
+            <el-icon :size="18"><FolderRemove /></el-icon> {{ this.question_info.answerCount }}
         </el-col>
       </el-row>
     </el-card>
@@ -41,11 +41,11 @@ export default {
   computed: {
     contentShow() {
       console.log(this.question_info);
-      if (this.question_info.QuestionTitle.length < 19) {
-        return this.question_info.QuestionTitle;
+      if (this.question_info.questionTitle.length < 19) {
+        return this.question_info.questionTitle;
       } 
       else{
-        return this.question_info.QuestionTitle.slice(0, 19) + "...";
+        return this.question_info.questionTitle.slice(0, 19) + "...";
       }
     },
   },
@@ -54,7 +54,7 @@ export default {
     {
       this.$router.push({
         name:"question",
-        query:{question_id:this.question_info.QuestionId},
+        query:{question_id:this.question_info.questionId},
       });
     }
   }

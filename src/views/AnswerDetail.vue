@@ -231,8 +231,8 @@ export default {
         })
         .then((res) => {
           if (res.data.status === true) {
-            console.log(res.data.obj);
-            this.answer_infor = res.data.obj; //获取answer全部内容
+            console.log(res.data.data);
+            this.answer_infor = res.data.data; //获取answer全部内容
             if (this.answer_infor.answerContent.substr(0, 4) == "http") {
             const xhrFile = new XMLHttpRequest();
             xhrFile.open("GET", this.answer_infor.answerContent, true);
@@ -261,8 +261,8 @@ export default {
         })
         .then((res) => {
           if (res.data.status === true) {
-            console.log(res.data.obj);
-            this.answer_infor = res.data.obj; //获取answer全部内容
+            console.log(res.data.data);
+            this.answer_infor = res.data.data; //获取answer全部内容
           } else {
             console.log("内容获取失败");
           }
@@ -308,8 +308,8 @@ export default {
         })
         .then((res) => {
           if (res.data.status === true) {
-            console.log(res.data.obj);
-            this.question_infor = res.data.obj;
+            console.log(res.data.data);
+            this.question_infor = res.data.data;
           } else {
             console.log(res.data);
             console.log("内容获取失败");
@@ -322,14 +322,14 @@ export default {
       axios
         .get("/spring/qa/question/related_questions/"+this.question_id)
         .then((res) => {
-          console.log(res.data.obj);
-          this.related_question_tag = res.data.obj.tags;
-          this.question_relevant = res.data.obj.relatedQuestions;
+          console.log(res.data.data);
+          this.related_question_tag = res.data.data.tags;
+          this.question_relevant = res.data.data.relatedQuestions;
           for (let i = 0; i < this.question_relevant.length; i++) {
             var tem_info = {
               essence: "问题",
               content: this.question_relevant[i].questionTitle,
-              keyword: res.data.obj.tags,
+              keyword: res.data.data.tags,
               id: this.question_relevant[i].questionId,
             };
             this.card_info[i] = tem_info;

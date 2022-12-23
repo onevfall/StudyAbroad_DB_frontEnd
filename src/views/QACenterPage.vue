@@ -145,7 +145,7 @@ export default {
             this.PAGESIZE
         )
         .then((res) => {
-          this.question_list = [].concat(res.data.obj);
+          this.question_list = [].concat(res.data.data);
           this.question_loading = false;
           window.scrollTo(0, 0); //将滚动条回滚至最顶端
         })
@@ -158,11 +158,11 @@ export default {
     sortByTime: function () {
       this.question_loading = true;
       axios({
-        url: "/spring/qaquestion/list/time?page_size=" + this.PAGESIZE + "&page=1",
+        url: "/spring/qa/question/list/time?page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
-          this.question_list = [].concat(res.data.obj);
+          this.question_list = [].concat(res.data.data);
           this.question_loading = false;
         })
         .catch((errMsg) => {
@@ -178,7 +178,7 @@ export default {
         method: "get",
       })
         .then((res) => {
-          this.question_list = [].concat(res.data.obj);
+          this.question_list = [].concat(res.data.data);
           this.question_loading = false;
         })
         .catch((errMsg) => {
@@ -192,7 +192,7 @@ export default {
     let get_num = axios
       .get("/spring/qa/question/num")
       .then((res) => {
-        this.question_num_total = res.data.obj.num;
+        this.question_num_total = res.data.data.num;
       })
       .catch((errMsg) => {
         console.log(errMsg);
@@ -203,7 +203,7 @@ export default {
       method: "get",
     })
       .then((res) => {
-        this.question_list = [].concat(res.data.obj);
+        this.question_list = [].concat(res.data.data);
         this.question_loading = false;
         this.loading = false;
       })
