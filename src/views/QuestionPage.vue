@@ -475,7 +475,7 @@ export default {
         },
       })
         .then((res) => {
-          this.question_info = res.data.obj;
+          this.question_info = res.data.data;
           this.apply_id = this.question_info.questionApply;
           if (this.question_info.questionDescription.substr(0, 4) == "http") {
             const xhrFile = new XMLHttpRequest();
@@ -498,8 +498,8 @@ export default {
         },
       })
         .then((res) => {
-          this.answer_num = res.data.obj.length;
-          this.answer_info = res.data.obj;         
+          this.answer_num = res.data.data.length;
+          this.answer_info = res.data.data;         
           for (let i = 0; i < this.answer_info.length; ++i) {
             if (this.answer_info[i].answerId == this.apply_id) {
               let tmp = this.answer_info[0];
@@ -518,13 +518,13 @@ export default {
         method: "get"
       })
         .then((res) => {
-          this.related_question_tag = res.data.obj.tags;
-          this.question_relevant = res.data.obj.relatedQuestions;
+          this.related_question_tag = res.data.data.tags;
+          this.question_relevant = res.data.data.relatedQuestions;
           for (let i = 0; i < this.question_relevant.length; i++) {
             var tem_info = {
               essence: "问题",
               content: this.question_relevant[i].questionTitle,
-              keyword: res.data.obj.tags,
+              keyword: res.data.data.tags,
               id: this.question_relevant[i].questionId,
             };
             this.card_info[i] = tem_info;
