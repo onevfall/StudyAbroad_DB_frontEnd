@@ -5,14 +5,20 @@
 
 <template>
   <div>
-    <span style="text-align: left; margin-right: 8px" v-if="is_stared== false">
+    <span
+      style="text-align: left; margin-right: 8px"
+      v-if="is_stared== false"
+    >
       <img
         src="../assets/star.png"
         :style="{ height: this.icon_size + 'px' }"
         @click="star"
       />
     </span>
-    <span style="text-align: left; margin-right: 8px" v-else>
+    <span
+      style="text-align: left; margin-right: 8px"
+      v-else
+    >
       <img
         src="../assets/star_solid.png"
         :style="{ height: this.icon_size + 'px' }"
@@ -42,21 +48,22 @@ export default {
   components: {
     ElMessage,
   },
-  data() {
+  data () {
     return {
+      url: "",
       is_stared: false,
       dynamic_type: "",
       icon_size: 0,
       star_nums: 0
     };
   },
-  watch:{
-    is_stared(){
+  watch: {
+    is_stared () {
       this.$emit("starChange", this.is_stared);
     },
   },
   methods: {
-    star() {
+    star () {
       //判断是否登录
       if (this.$store.state.is_login == false) {
         //若未登录
@@ -73,10 +80,8 @@ export default {
         });
       } else {
         axios
-          .post("api/star/" + this.dynamic_type, {
-            user_id: this.$store.state.user_info.user_id,
-            [this.dynamic_type + "_id"]: this.content_id,
-          })
+          .post(this.url + "/star?user_id=" + this.$store.state.user_info.user_id + "&" +
+            this.dynamic_type + "_id=" + this.content_id)
           .then((res) => {
             console.log(res);
             if (res.data.status) {
@@ -90,21 +95,19 @@ export default {
           .catch((errMsg) => {
             alert(
               "对id为" +
-                this.content_id +
-                "的" +
-                this.dynamic_type +
-                "收藏，相关API此时未完成"
+              this.content_id +
+              "的" +
+              this.dynamic_type +
+              "收藏，相关API此时未完成"
             );
             console.log(errMsg);
           });
       }
     },
-    unStar() {
+    unStar () {
       axios
-        .put("api/star/" + this.dynamic_type, {
-          user_id: this.$store.state.user_info.user_id,
-          [this.dynamic_type + "_id"]: this.content_id,
-        })
+        .post(this.url + "/unstar?user_id=" + this.$store.state.user_info.user_id + "&" +
+          this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
           if (res.data.status) {
             this.is_stared = false;
@@ -117,32 +120,31 @@ export default {
         .catch((errMsg) => {
           alert(
             "取消对id为" +
-              this.content_id +
-              "的" +
-              this.dynamic_type +
-              "收藏，相关API此时未完成"
+            this.content_id +
+            "的" +
+            this.dynamic_type +
+            "收藏，相关API此时未完成"
           );
           console.log(errMsg);
         });
     },
   },
   // 用update效率低，但简便，日后迭代需要优化此处
-  updated(){
-      console.log("update!!!");
-     if (this.$store.state.is_login) {
+  updated () {
+    console.log("update!!!");
+    if (this.$store.state.is_login) {
       axios
         .get(
-          "api/star/" +
-            this.dynamic_type +
-            "?user_id=" +
-            this.$store.state.user_info.user_id +
-            "&" +
-            this.dynamic_type +
-            "_id=" +
-            this.content_id
+          this.url +
+          "/star?user_id=" +
+          this.$store.state.user_info.user_id +
+          "&" +
+          this.dynamic_type +
+          "_id=" +
+          this.content_id
         )
         .then((res) => {
-      console.log(res);  
+          console.log(res);
           this.star_nums = res.data.data.star_nums;
           this.is_stared = res.data.status;
         })
@@ -153,14 +155,13 @@ export default {
       //查询收藏个数
       axios
         .get(
-          "api/star/" +
-            this.dynamic_type +
-            "?user_id=" +
-            1 +
-            "&" +
-            this.dynamic_type +
-            "_id=" +
-            this.content_id
+          this.url +
+          "/star?user_id=" +
+          1 +
+          "&" +
+          this.dynamic_type +
+          "_id=" +
+          this.content_id
         )
         .then((res) => {
           this.star_nums = res.data.data.star_nums;
@@ -171,7 +172,7 @@ export default {
         });
     }
   },
-  created() {
+  created () {
     //设定大小
     switch (this.size) {
       case "xx-small":
@@ -200,25 +201,28 @@ export default {
     switch (this.content_type) {
       case "0":
         this.dynamic_type = "blog";
+        this.url = "spring/blog";
         break;
       case "1":
         this.dynamic_type = "answer";
+        this.type_url="/spring/qa/answer"
         break;
       case "2":
         this.dynamic_type= "question"
+        this.type_url="/spring/qa/question"
     }
+    
     //查询是否收藏
     if (this.$store.state.is_login) {
       axios
         .get(
-          "api/star/" +
-            this.dynamic_type +
-            "?user_id=" +
-            this.$store.state.user_info.user_id +
-            "&" +
-            this.dynamic_type +
-            "_id=" +
-            this.content_id
+          this.url +
+          "/star?user_id=" +
+          this.$store.state.user_info.user_id +
+          "&" +
+          this.dynamic_type +
+          "_id=" +
+          this.content_id
         )
         .then((res) => {
           this.star_nums = res.data.data.star_nums;
@@ -231,14 +235,13 @@ export default {
       //查询收藏个数
       axios
         .get(
-          "api/star/" +
-            this.dynamic_type +
-            "?user_id=" +
-            1 +
-            "&" +
-            this.dynamic_type +
-            "_id=" +
-            this.content_id
+          this.url +
+          "/star?user_id=" +
+          1 +
+          "&" +
+          this.dynamic_type +
+          "_id=" +
+          this.content_id
         )
         .then((res) => {
           this.star_nums = res.data.data.star_nums;

@@ -8,14 +8,13 @@
       <div class="self_comment">
         <div class="comment_header">
           <el-avatar
-            :src="comment_infor.UserProfile"
+            :src="comment_infor.userProfile"
             size="xx-small"
-            @click="goPersonSpace(comment_infor.UserId, $event)"
+            @click="goPersonSpace(comment_infor.userId, $event)"
             class="reviewer_profile"
           />
-          <span class="comment_name"
-            ><b>{{ comment_infor.UserName }}</b></span
-          ><br />
+          <span
+            class="comment_name"><b>{{ comment_infor.userName }}</b></span><br />
           <div
             style="width: 5%; display: flex; justify-content: space-around"
             v-if="this.type == '0'"
@@ -35,7 +34,7 @@
           >
             <like-button
               content_type="1"
-              :content_id="comment_infor.BlogCommentId"
+              :content_id="comment_infor.blogCommentId"
               :show_num="true"
               size="normal"
               @giveLike="like"
@@ -43,12 +42,21 @@
             />
           </div>
           <div class="comment_button">
-            <el-button type="" @click="reply" link>
-              <el-icon class="el-icon--right"><ChatSquare /></el-icon>
+            <el-button
+              type=""
+              @click="reply"
+              link
+            >
+              <el-icon class="el-icon--right">
+                <ChatSquare />
+              </el-icon>
             </el-button>
             <div style="display: flex; justify-content: space-around">回复</div>
           </div>
-          <div class="report_button" v-if="this.type == '0'">
+          <div
+            class="report_button"
+            v-if="this.type == '0'"
+          >
             <report-button
               content_type="3"
               :content_id="comment_infor.AnswerCommentId"
@@ -57,35 +65,55 @@
             />
             <div style="display: flex; justify-content: space-around">举报</div>
           </div>
-          <div class="report_button" v-else>
+          <div
+            class="report_button"
+            v-else
+          >
             <report-button
               content_type="2"
-              :content_id="comment_infor.BlogCommentId"
+              :content_id="comment_infor.blogCommentId"
               size="normal"
               @reportResponse="reportResponse"
             />
             <div style="display: flex; justify-content: space-around">举报</div>
           </div>
           <div class="delete_button">
-            <el-button type="" @click.stop="deleteComment" link>
-              <el-icon class="el-icon--right" style="color: red"
-                ><Delete
-              /></el-icon>
+            <el-button
+              type=""
+              @click.stop="deleteComment"
+              link
+            >
+              <el-icon
+                class="el-icon--right"
+                style="color: red"
+              >
+                <Delete />
+              </el-icon>
             </el-button>
             <div style="display: flex; justify-content: space-around">删除</div>
           </div>
         </div>
-        <div class="content_main" v-if="this.type == '0'">
+        <div
+          class="content_main"
+          v-if="this.type == '0'"
+        >
           {{ comment_infor.AnswerCommentContent }}
         </div>
-        <div class="content_main" v-else>
-          {{ comment_infor.BlogCommentContent }}
+        <div
+          class="content_main"
+          v-else
+        >
+          {{ comment_infor.blogCommentContent }}
         </div>
         <div class="comment_footer"></div>
       </div>
     </template>
     <!-- 以下为输入框 -->
-    <div v-if="this.is_reply" class="reply_input" :key="this.is_reply">
+    <div
+      v-if="this.is_reply"
+      class="reply_input"
+      :key="this.is_reply"
+    >
       <!-- <el-header class="header_comment"> -->
       <el-col :span="1">
         <div v-if="this.$store.state.is_login">
@@ -119,7 +147,7 @@
         @click="sendComment"
         type="primary"
         style="margin-top: 5px"
-        >发表评论
+      >发表评论
       </el-button>
       <!-- </el-header> -->
     </div>
@@ -132,7 +160,10 @@
       <!-- <div v-if="this.reply == true"> 
       </div> -->
       <el-collapse accordion>
-        <div v-for="(item, i) in this.comment_infor.child_comments" :key="i">
+        <div
+          v-for="(item, i) in this.comment_infor.child_comments"
+          :key="i"
+        >
           <comment-item
             :comment_infor="this.comment_infor.child_comments[i]"
             :type="this.type"
@@ -153,7 +184,10 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click.stop="handleClose">取消</el-button>
-        <el-button type="primary" @click.stop="deleteCheck">确认</el-button>
+        <el-button
+          type="primary"
+          @click.stop="deleteCheck"
+        >确认</el-button>
       </span>
     </template>
   </el-dialog>
@@ -169,8 +203,9 @@ export default {
   name: "CommentItem",
   props: ["comment_infor", "type"],
   components: { LikeButton, ElMessage, ReportButton },
-  data() {
+  data () {
     return {
+      url: "",
       is_reply: false,
       comment_now: "",
       dynamic_type: "",
@@ -178,7 +213,7 @@ export default {
       now_delete_id: -1,
     };
   },
-  created() {
+  created () {
     // this.comment_infor.reply_num = 0;
     // this.comment_infor.child_comments = [];
     switch (this.type) {
@@ -187,25 +222,26 @@ export default {
         break;
       case "1":
         this.dynamic_type = "blog";
+        this.url = "/spring/blog";
         break;
     }
     this.init();
   },
   computed: {
-    nowplaceholder() {
+    nowplaceholder () {
       // console.log(this.$store);
-      if (this.comment_infor.UserName !== "") {
-        return "回复" + this.comment_infor.UserName;
+      if (this.comment_infor.userName !== "") {
+        return "回复" + this.comment_infor.userName;
       } else {
         return "评论点什么...";
       }
     },
   },
   methods: {
-    init() {
+    init () {
       if (this.dynamic_type == "answer") {
         axios
-          .get("/api/" + this.dynamic_type + "/reply", {
+          .get(this.url + "/reply", {
             params: {
               answer_comment_id: this.comment_infor.AnswerCommentId,
             },
@@ -220,11 +256,7 @@ export default {
           });
       } else {
         axios
-          .get("/api/" + this.dynamic_type + "/reply", {
-            params: {
-              blog_comment_id: this.comment_infor.BlogCommentId,
-            },
-          })
+          .get(this.url + "/reply/" + this.comment_infor.blogCommentId)
           .then((res) => {
             this.comment_infor.reply_num = res.data.data.reply_num;
             this.comment_infor.child_comments = res.data.data.reply_list;
@@ -235,7 +267,7 @@ export default {
           });
       }
     },
-    reply() {
+    reply () {
       if (this.$store.state.is_login == false) {
         //若未登录
         ElMessage({
@@ -256,7 +288,7 @@ export default {
         // console.log(this.isReply);
       }
     },
-    sendComment() {
+    sendComment () {
       if (this.$store.state.is_login == false) {
         //若未登录
         ElMessage({
@@ -273,7 +305,7 @@ export default {
       } else {
         if (this.dynamic_type == "answer") {
           axios
-            .post("/api/answer/reply", {
+            .post("/spring/answer/reply", {
               comment_id: this.comment_infor.AnswerCommentId,
               reply_user_id: this.$store.state.user_info.user_id,
               reply_content: this.comment_now,
@@ -295,10 +327,10 @@ export default {
             });
         } else {
           axios
-            .post("/api/blog/reply", {
-              comment_id: this.comment_infor.BlogCommentId,
-              reply_user_id: this.$store.state.user_info.user_id,
-              reply_content: this.comment_now,
+            .post("/spring/blog/reply", {
+              commentId: this.comment_infor.blogCommentId,
+              replyUserId: this.$store.state.user_info.user_id,
+              replyContent: this.comment_now,
             })
             .then((res) => {
               console.log("更改！");
@@ -320,7 +352,7 @@ export default {
         }
       }
     },
-    deleteComment() {
+    deleteComment () {
       if (this.$store.state.is_login == false) {
         //若未登录
         ElMessage({
@@ -334,12 +366,12 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
-        if (this.comment_infor.UserId == this.$store.state.user_info.user_id) {
+        if (this.comment_infor.blogCommentUserId == this.$store.state.user_info.user_id) {
           //发comment的用户和当前登录的用户id是相同的id
           this.delete_dialog_visible = true;
           if (this.dynamic_type == "answer")
             this.now_delete_id = this.comment_infor.AnswerCommentId;
-          else this.now_delete_id = this.comment_infor.BlogCommentId;
+          else this.now_delete_id = this.comment_infor.blogCommentId;
         } else {
           ElMessage({
             message: "您不具有对这条评论的删除权限！",
@@ -350,36 +382,52 @@ export default {
         }
       }
     },
-    handleClose() {
+    handleClose () {
       this.now_delete_id = -1;
       this.delete_dialog_visible = false;
     },
-    deleteCheck() {
-      axios
-        .delete("/api/" + this.dynamic_type + "/comment", {
-          params: {
-            // 请求参数拼接在url上
-            [this.dynamic_type + "comment_id"]: this.now_delete_id,
-          },
-        })
-        .then((res) => {
-          this.delete_dialog_visible = false;
-          this.now_delete_id = -1;
-          if (res.data.status == true) {
-            ElMessage.success("删除成功!");
-            this.$emit("refreshZone", true);
-          } else {
+    deleteCheck () {
+      if (this.dynamic_type == "blog") {
+        axios
+          .post(this.url + "/uncomment/" + this.now_delete_id)
+          .then((res) => {
+            this.delete_dialog_visible = false;
+            this.now_delete_id = -1;
+            if (res.data.status == true) {
+              ElMessage.success("删除成功!");
+              this.$emit("refreshZone", true);
+            } else {
+              ElMessage.error("删除失败!");
+            }
+          })
+          .catch((errMsg) => {
+            this.delete_dialog_visible = false;
+            this.now_delete_id = -1;
+            console.log(errMsg);
             ElMessage.error("删除失败!");
-          }
-        })
-        .catch((errMsg) => {
-          this.delete_dialog_visible = false;
-          this.now_delete_id = -1;
-          console.log(errMsg);
-          ElMessage.error("删除失败!");
-        });
+          });
+      } else {
+        axios
+          .delete(this.url + "/comment/" + this.now_delete_id)
+          .then((res) => {
+            this.delete_dialog_visible = false;
+            this.now_delete_id = -1;
+            if (res.data.status == true) {
+              ElMessage.success("删除成功!");
+              this.$emit("refreshZone", true);
+            } else {
+              ElMessage.error("删除失败!");
+            }
+          })
+          .catch((errMsg) => {
+            this.delete_dialog_visible = false;
+            this.now_delete_id = -1;
+            console.log(errMsg);
+            ElMessage.error("删除失败!");
+          });
+      }
     },
-    like(res) {
+    like (res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -396,7 +444,7 @@ export default {
         });
       }
     },
-    unLike(res) {
+    unLike (res) {
       if (res) {
         ElMessage({
           type: "success",
@@ -413,7 +461,7 @@ export default {
         });
       }
     },
-    goPersonSpace(id, event) {
+    goPersonSpace (id, event) {
       this.$router.push({
         path: "/person_space",
         query: {
@@ -421,7 +469,7 @@ export default {
         },
       });
     },
-    reportResponse(res) {
+    reportResponse (res) {
       if (res) {
         ElMessage({
           type: "success",
