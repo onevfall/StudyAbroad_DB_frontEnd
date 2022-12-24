@@ -102,6 +102,7 @@ export default {
     switch (this.type) {
       case "0":
         this.dynamic_type = "answer";
+        this.url = "/spring/qa/answer/comment"
         break;
       case "1":
         this.dynamic_type = "blog";
