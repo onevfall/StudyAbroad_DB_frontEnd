@@ -79,11 +79,12 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
+        console.log("starrrr")
         axios
           .post(this.url + "/star?user_id=" + this.$store.state.user_info.user_id + "&" +
             this.dynamic_type + "_id=" + this.content_id)
           .then((res) => {
-            console.log(res);
+            console.log("starrrr"+res);
             if (res.data.status) {
               this.is_stared = true;
               this.star_nums++;
@@ -106,7 +107,7 @@ export default {
     },
     unStar () {
       axios
-        .post(this.url + "/unstar?user_id=" + this.$store.state.user_info.user_id + "&" +
+        .put(this.url + "/star?user_id=" + this.$store.state.user_info.user_id + "&" +
           this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
           if (res.data.status) {
@@ -205,11 +206,11 @@ export default {
         break;
       case "1":
         this.dynamic_type = "answer";
-        this.type_url="/spring/qa/answer"
+        this.url="/spring/qa/answer"
         break;
       case "2":
         this.dynamic_type= "question"
-        this.type_url="/spring/qa/question"
+        this.url="/spring/qa/question"
     }
     
     //查询是否收藏

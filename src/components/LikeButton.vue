@@ -97,7 +97,7 @@ export default {
     },
     unLike () {
       axios
-        .post(this.url + "/unlike?user_id=" + this.$store.state.user_info.user_id
+        .put(this.url + "/like?user_id=" + this.$store.state.user_info.user_id
           + "&" + this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
           if (res.data.status) {
@@ -133,9 +133,9 @@ export default {
         this.content_id
       )
         .then((res) => {
+          console.log(res);
           this.like_nums = res.data.data.like_times;
           this.is_liked = res.data.status;
-          // console.log(this.is_liked);
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -197,11 +197,11 @@ export default {
         break;
       case "2":
         this.dynamic_type = "answer";
-        this.type_url="/spring/qa/answer"
+        this.url="/spring/qa/answer"
         break;
       case "3":
         this.dynamic_type = "answer_comment";
-        this.type_url="/spring/qa/answer/comment"
+        this.url="/spring/qa/answer/comment"
         break;
     }
     //查询是否点过赞

@@ -437,6 +437,7 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
+        console.log(this.question_info)
         this.$router.push({
           name: "answer_edit",
           params: {
