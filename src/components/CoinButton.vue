@@ -232,6 +232,7 @@ export default {
         break;
       case "1":
         this.dynamic_type = "answer";
+        this.url = "spring/qa/answer/coin";
         break;
     }
     console.log("11111", this.dynamic_type);

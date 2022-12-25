@@ -16,14 +16,14 @@ module.exports = defineConfig({
         pathRewrite:{
           '^/spring':''
         }
+      },
+      '/test':{
+        target:'http://localhost:8082', 
+        changeOrigin:true,
+        pathRewrite:{
+          '^/test':''
+        }
       }
-      // '/spring':{
-      //   target:'localhost:8888', 
-      //   changeOrigin:true,
-      //   pathRewrite:{
-      //     '^/spring':''
-      //   }
-      // }
 //       '/spring': {
 //         target: 'http://localhost:8083',
 //         changeOrigin: true,
