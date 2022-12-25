@@ -134,7 +134,7 @@ export default {
       )
         .then((res) => {
           this.like_nums = res.data.data.like_times;
-          this.is_liked = res.data.status;
+          this.is_liked = res.data.data.status;
           // console.log(this.is_liked);
         })
         .catch((errMsg) => {
@@ -217,7 +217,8 @@ export default {
       )
         .then((res) => {
           this.like_nums = res.data.data.like_times;
-          this.is_liked = res.data.status;
+          this.is_liked = res.data.data.status;
+          console.log(this.is_liked)
           // console.log(this.is_liked);
         })
         .catch((errMsg) => {

@@ -167,7 +167,7 @@ export default {
           user_id: this.$store.state.user_info.user_id,
           summary: summary,
           content: args.base64_content,
-          question_id:this.question_info.question_id,
+          question_id:this.question_info.questionId,
           image_url: image_url,
         })
         .then((res) => {

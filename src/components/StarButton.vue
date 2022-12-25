@@ -146,7 +146,7 @@ export default {
         .then((res) => {
           console.log(res);
           this.star_nums = res.data.data.star_nums;
-          this.is_stared = res.data.status;
+          this.is_stared = res.data.data.status;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -226,7 +226,7 @@ export default {
         )
         .then((res) => {
           this.star_nums = res.data.data.star_nums;
-          this.is_stared = res.data.status;
+          this.is_stared = res.data.data.status;
         })
         .catch((errMsg) => {
           console.log(errMsg);

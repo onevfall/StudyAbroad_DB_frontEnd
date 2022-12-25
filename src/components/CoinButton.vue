@@ -169,7 +169,7 @@ export default {
           } else {
             this.coin_nums = res.data.data.answer_coin;
           }
-          this.is_coined = res.data.status;
+          this.is_coined = res.data.data.status;
         })
         .catch((errMsg) => {
           console.log(errMsg);
@@ -235,7 +235,7 @@ export default {
         this.url = "spring/qa/answer/coin";
         break;
     }
-    console.log("11111", this.dynamic_type);
+    // console.log("11111", this.dynamic_type);
     //查询是否投过币
     if (this.$store.state.is_login) {
       axios
@@ -254,7 +254,7 @@ export default {
           } else {
             this.coin_nums = res.data.data.answer_coin;
           }
-          this.is_coined = res.data.status;
+          this.is_coined = res.data.data.status;
         })
         .catch((errMsg) => {
           console.log(errMsg);
