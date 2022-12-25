@@ -9,21 +9,21 @@
         <el-row gutter="10">
           <el-col :span="2">
             <el-avatar
-              :src="this.question_info.user_profile"
+              :src="this.question_info.userProfile"
               size="normal"
               style="margin-top: 7.5px"
             />
           </el-col>
           <el-col :span="3" style="margin-top: 17px; font-size: large">
-            {{ this.question_info.user_name }}
+            {{ this.question_info.userName }}
           </el-col>
           <el-col :span="3" style="margin-top: 17px; font-size: large">
             <el-tag
               type="warning"
               size="large"
               v-if="this.question_info.user_university != 'null'"
-              >已认证:{{ this.question_info.user_university }}
-              {{ this.question_info.user_qualification }}</el-tag
+              >已认证:{{ this.question_info.userUniversity }}
+              {{ this.question_info.userQualification }}</el-tag
             >
           </el-col>
           <el-col :span="13" style="margin-top: 5px; font-size: 1.8em">
@@ -32,11 +32,11 @@
         </el-row>
         <el-row :gutter="30" style="margin-top: 10px">
           <el-col :span="3">
-            <strong>悬赏: {{ this.question_info.question_reward }} 鸟币</strong>
+            <strong>悬赏: {{ this.question_info.questionReward }} 鸟币</strong>
           </el-col>
           <el-col
             :span="1"
-            v-for="tag in this.question_info.question_tag"
+            v-for="tag in this.question_info.tagList"
             :key="tag"
             style="margin-right: 3px"
           >
@@ -45,16 +45,16 @@
         </el-row>
         <el-row gutter="5" style="margin-top: 10px; font-size: x-large">
           <el-col style="text-align: left; margin-left: 20px"
-            ><strong>{{ this.question_info.question_title }}</strong></el-col
+            ><strong>{{ this.question_info.questionTitle }}</strong></el-col
           >
         </el-row>
         <el-row gutter="5" style="margin-top: 20px; margin-left: 20px">
           <el-col style="font-size: 0.9em" :span="20">
             <div v-if="notFull" style="text-align: left">
-              {{ this.question_info.question_summary }}
+              {{ this.question_info.questionSummary }}
             </div>
             <div v-else style="text-align: left">
-              <p v-html="this.question_info.question_description"></p>
+              <p v-html="this.question_info.questionDescription"></p>
             </div>
           </el-col>
           <el-col class="expand" :span="3">
