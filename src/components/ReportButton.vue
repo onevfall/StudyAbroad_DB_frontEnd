@@ -131,14 +131,14 @@ export default {
         break;
       case "1":
         this.dynamic_type = "answer";
-        this.url = "spring/qa/answer";
+        this.url = "test/qa/answer";
         break;
       case "2":
         this.dynamic_type = "blogcomment";
         break;
       case "3":
         this.dynamic_type = "answercomment";
-        this.url = "spring/qa/answer/comment";
+        this.url = "test/qa/answer/comment";
         break;
     }
     //查询是否举报过
