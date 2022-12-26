@@ -163,7 +163,7 @@ export default {
         image_url = args.image_array[0]; //选第一张图片
       }
       this.axios
-        .post("/test/qa/answer", {
+        .post("/spring/qa/answer", {
           user_id: this.$store.state.user_info.user_id,
           summary: summary,
           content: args.base64_content,

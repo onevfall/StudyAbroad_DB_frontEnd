@@ -137,7 +137,7 @@ export default {
       let sort_type_name = this.display_status ? "time" : "hot";
       axios
         .get(
-          "/test/qa/question/list/" +
+          "/spring/qa/question/list/" +
             sort_type_name +
             "?page=" +
             res +
@@ -158,7 +158,7 @@ export default {
     sortByTime: function () {
       this.question_loading = true;
       axios({
-        url: "/test/qa/question/list/time?page_size=" + this.PAGESIZE + "&page=1",
+        url: "/spring/qa/question/list/time?page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
@@ -174,7 +174,7 @@ export default {
     sortByHeat: function () {
       this.question_loading = true;
       axios({
-        url: "/test/qa/question/list/hot?page_size=" + this.PAGESIZE + "&page=1",
+        url: "/spring/qa/question/list/hot?page_size=" + this.PAGESIZE + "&page=1",
         method: "get",
       })
         .then((res) => {
@@ -190,7 +190,7 @@ export default {
   },
   created() {
     let get_num = axios
-      .get("/test/qa/question/num")
+      .get("/spring/qa/question/num")
       .then((res) => {
         this.question_num_total = res.data.data.num;
       })
@@ -199,7 +199,7 @@ export default {
       });
 
     axios({
-      url: "/test/qa/question/list/time?page_size=" + this.PAGESIZE + "&page=1",
+      url: "/spring/qa/question/list/time?page_size=" + this.PAGESIZE + "&page=1",
       method: "get",
     })
       .then((res) => {

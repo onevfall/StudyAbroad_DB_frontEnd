@@ -468,7 +468,7 @@ export default {
     initPage: function () {
       this.question_id = this.$route.query.question_id;
       axios({
-        url: "test/qa/question",
+        url: "spring/qa/question",
         method: "get",
         params: {
           question_id: this.question_id,
@@ -491,7 +491,7 @@ export default {
         });
       //回答信息
       axios({
-        url: "test/qa/question/answers",
+        url: "spring/qa/question/answers",
         method: "get",
         params: {
           question_id: this.question_id,
@@ -514,7 +514,7 @@ export default {
         });
       //相关问题
       axios({
-        url: "test/qa/question/related_questions/"+this.question_id,
+        url: "spring/qa/question/related_questions/"+this.question_id,
         method: "get"
       })
         .then((res) => {
@@ -536,7 +536,7 @@ export default {
     },
     adoptCheck() {
       axios
-        .post("test/qa/question/apply", {
+        .post("spring/qa/question/apply", {
           question_id: this.question_id,
           answer_id: this.applied_answer_id,
         })

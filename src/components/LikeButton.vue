@@ -197,11 +197,11 @@ export default {
         break;
       case "2":
         this.dynamic_type = "answer";
-        this.url="/test/qa/answer"
+        this.url="/spring/qa/answer"
         break;
       case "3":
         this.dynamic_type = "answer_comment";
-        this.url="/test/qa/answer/comment"
+        this.url="/spring/qa/answer/comment"
         break;
     }
     //查询是否点过赞

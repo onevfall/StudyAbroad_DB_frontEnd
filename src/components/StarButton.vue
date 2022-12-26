@@ -205,11 +205,11 @@ export default {
         break;
       case "1":
         this.dynamic_type = "answer";
-        this.url="/test/qa/answer"
+        this.url="/spring/qa/answer"
         break;
       case "2":
         this.dynamic_type= "question"
-        this.url="/test/qa/question"
+        this.url="/spring/qa/question"
     }
     
     //查询是否收藏
