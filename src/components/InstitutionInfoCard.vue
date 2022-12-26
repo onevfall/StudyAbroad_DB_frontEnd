@@ -10,13 +10,13 @@
       <el-container class="info_table">
         <el-main>
           <div style="color:coral"><img src="../assets/location.png" style="filter: drop-shadow(0 0 0 coral);">
-            {{institution.institution_province}} {{institution.institution_city}}</div>
+            {{institution.institutionProvince}} {{institution.institutionCity}}</div>
           <div><img src="../assets/navigator.png">
-            机构官方网站：<a :href=this.institution.institution_website target="_blank">{{institution.institution_website}}</a></div>
+            机构官方网站：<a :href=this.institution.institutionWebsite target="_blank">{{institution.institutionWebsite}}</a></div>
           <div><img src="../assets/message.png">
-            学生招生处联系邮箱：<a href="#" target="_blank">{{institution.institution_email}}</a></div>
+            学生招生处联系邮箱：<a href="#" target="_blank">{{institution.institutionEmail}}</a></div>
           <div><img src="../assets/uni_currency.png">
-            学生招生处联系电话：<a href="#" target="_blank">{{institution.institution_phone}}</a></div>
+            学生招生处联系电话：<a href="#" target="_blank">{{institution.institutionPhone}}</a></div>
           <div ><img src="../assets/dollar.png">
             学生年度学费：<span  style="color:coral;font-size: larger;">30w+</span></div>
         
@@ -24,10 +24,10 @@
 
       <el-aside width=50%>
       <div><img src="../assets/location.png"><br>
-        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institution_province}} </span><br>
-        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institution_city}}</span><br>
-        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
-        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institution_name}}</span><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institutionProvince}} </span><br>
+        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institutionCity}}</span><br>
+        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institutionLocation}}</span><br>
+        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institutionName}}</span><br>
 
         </div>
       </el-aside>
@@ -47,10 +47,10 @@
       <el-aside width=25%>
         <br>
         <div><img src="../assets/location.png"><br>
-        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institution_province}} </span><br>
-        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institution_city}}</span><br>
-        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
-        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institution_name}}</span><br>
+        <span  class="info_tag">省份</span>：<span class="info_content">{{institution.institutionProvince}} </span><br>
+        <span  class="info_tag">城市</span>：<span class="info_content">{{institution.institutionCity}}</span><br>
+        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institutionLocation}}</span><br>
+        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institutionName}}</span><br>
 
         </div>
       </el-aside>
@@ -90,9 +90,9 @@
       <el-container class="info_table">
         <el-main>
           <div><img src="../assets/navigator.png">
-            学生招生处联系电话：<a :href=this.institution.institution_website target="_blank">{{institution.institution_phone}}</a></div>
+            学生招生处联系电话：<a :href=this.institution.institutionWebsite target="_blank">{{institution.institutionPhone}}</a></div>
           <div><img src="../assets/message.png">
-            学生招生处联系邮箱：<a href="#" target="_blank">{{institution.institution_email}}</a></div>
+            学生招生处联系邮箱：<a href="#" target="_blank">{{institution.institutionEmail}}</a></div>
           <div ><img src="../assets/dollar.png">
             学生年度学费：<span  style="color:coral;font-size: larger;">30w+</span></div>
       </el-main>
@@ -111,7 +111,7 @@
       <el-container class="info_table">
         <el-main>
           <div><img src="../assets/navigator.png" style="line-height:60px">
-            课程特色：{{institution.institution_lessons_characteristic}}</div>
+            课程特色：{{institution.institutionLessonsCharacteristic}}</div>
       </el-main>
 
       <el-aside width=0%>
@@ -146,7 +146,7 @@
 
       <el-aside width=50%>
         <div><img src="../assets/navigator.png" style="margin-top:20px">
-            学生招生处联系电话：<a :href=this.institution.institution_website target="_blank">{{institution.institution_phone}}</a></div>
+            学生招生处联系电话：<a :href=this.institution.institutionWebsite target="_blank">{{institution.institutionPhone}}</a></div>
       </el-aside>
     </el-container>
   </div>
@@ -158,15 +158,15 @@
       <el-container class="info_table">
         <el-main>
           <div><img src="../assets/navigator.png">
-            机构资质证书：{{institution.institution_qualify}}</div>
+            机构资质证书：{{institution.institutionQualify}}</div>
             <div>是不是没有？是不是没有？速速打电话举报吧！</div>
       </el-main>
 
       <el-aside width=50%>
       <div><img src="../assets/location.png"><br>
         
-        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institution_name}}</span><br>
-        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institution_location}}</span><br>
+        <span  class="info_tag">机构</span>：<span class="info_content">{{institution.institutionName}}</span><br>
+        <span  class="info_tag">地址</span>：<span class="info_content">{{institution.institutionLocation}}</span><br>
 
         </div>
       </el-aside>

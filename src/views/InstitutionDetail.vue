@@ -56,7 +56,7 @@ export default {
     this.getParams();
     //在此处向服务器请求数据，初始化所需变量
     axios({
-        url: "api/institution?institution_id="+this.institution_id,
+        url: "spring/institution/"+this.institution_id,
         method: "get",
       })
         .then((res) => {
@@ -64,8 +64,8 @@ export default {
           var response=res.data
           //console.log(response.state);
           if (response.status == true) {
-            this.institution_info = response.data;
-            console.log(this.institution_info.institution_name);
+            this.institution_info = response.obj;
+            console.log(this.institution_info.institutionName);
           }
         })
         .catch((err) => {
