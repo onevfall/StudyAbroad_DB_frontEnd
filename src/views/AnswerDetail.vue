@@ -26,7 +26,7 @@
               <el-aside style="width: 100%">
                 <div class="content_header">
                   <p class="title">
-                    {{ this.question_infor.question_title }}
+                    {{ this.question_infor.questionTitle }}
                   </p>
                   <el-row gutter="10" style="width: 100%">
                     <el-col span="1">
@@ -55,35 +55,9 @@
             </el-header>
             <el-main>
               <div class="content_main">
-                <p v-html="this.answer_infor.answer_content"></p>
+                <p v-html="this.answer_infor.answerContent"></p>
                 <!-- {{ this.answer_infor.answer_content }} -->
               </div>
-              <!-- <div style="float: left; margin-left: 3%; display: flex">
-                <div style="margin-right: 5px">赞同</div>
-                <like-button
-                  content_type="2"
-                  :content_id="this.answer_id"
-                  :show_num="false"
-                  size="large"
-                  @giveLike="like"
-                  @cancelLike="unlike"
-                />
-                <div style="margin-left: 5px; margin-right: 6px">投币</div>
-                <coin-button
-                  content_type="1"
-                  :content_id="this.answer_id"
-                  :show_num="false"
-                  size="large"
-                  @giveCoin="coinIn"
-                />
-                <div style="margin-left: 6px; margin-right: 5px">举报</div>
-                <report-button
-                  content_type="1"
-                  :content_id="this.answer_id"
-                  size="large"
-                  @reportResponse="reportResponse"
-                />
-              </div> -->
               <el-affix target=".content_main" position="bottom" :offset="0">
                 <div class="option_bar">
                   <el-row gutter="10">
@@ -214,7 +188,7 @@ export default {
   computed: {
     questionTime() {
       if (this.question_infor == "") return " ";
-      else return this.question_infor.question_date.replace("T", " ");
+      else return this.question_infor.questionDate.replace("T", " ");
     },
   },
   created() {
@@ -224,7 +198,7 @@ export default {
   methods: {
     async reloadAnswer() {
       axios
-        .get("/api/answer", {
+        .get("/spring/qa/answer", {
           params: {
             answer_id: this.answer_id,
           },
@@ -233,12 +207,12 @@ export default {
           if (res.data.status === true) {
             console.log(res.data.data);
             this.answer_infor = res.data.data; //获取answer全部内容
-            if (this.answer_infor.answer_content.substr(0, 4) == "http") {
+            if (this.answer_infor.answerContent.substr(0, 4) == "http") {
             const xhrFile = new XMLHttpRequest();
-            xhrFile.open("GET", this.answer_infor.answer_content, true);
+            xhrFile.open("GET", this.answer_infor.answerContent, true);
             xhrFile.send();
             xhrFile.onload = () => {
-              this.answer_infor.answer_content = xhrFile.response;
+              this.answer_infor.answerContent = xhrFile.response;
               this.finish_load_html = true;
             };
           }
@@ -252,13 +226,9 @@ export default {
     },
     async initPage() {
       this.answer_id = this.$route.query.answer_id; //获取本页的answer
-      //this.answer_user_info = this.$store.state.answer_user_info;
-      // console.log(this.$store.state.answer_user_info);
-      // console.log(this.answer_user_info);
-      console.log("00");
 
       await axios
-        .get("/api/answer", {
+        .get("/spring/qa/answer", {
           params: {
             answer_id: this.answer_id,
           },
@@ -280,7 +250,7 @@ export default {
       axios
         .get("/api/userinfo", {
           params: {
-            user_id: this.answer_infor.answer_user_id,
+            user_id: this.answer_infor.answerUserId,
           },
         })
         .then((res) => {
@@ -305,7 +275,7 @@ export default {
       // console.log(this.answer_user_info);
       this.question_id = this.$route.query.question_id;
       axios
-        .get("/api/question", {
+        .get("/spring/qa/question", {
           params: {
             question_id: this.question_id,
           },
@@ -324,25 +294,20 @@ export default {
         });
 
       axios
-        .get("/api/question/related", {
-          params: {
-            question_id: this.question_id,
-          },
-        })
+        .get("/spring/qa/question/related_questions/"+this.question_id)
         .then((res) => {
           console.log(res.data.data);
-          this.related_question_tag = res.data.data.tag;
-          this.question_relevant = res.data.data.related_questions;
+          this.related_question_tag = res.data.data.tags;
+          this.question_relevant = res.data.data.relatedQuestions;
           for (let i = 0; i < this.question_relevant.length; i++) {
             var tem_info = {
               essence: "问题",
-              content: this.question_relevant[i].QuestionTitle,
-              keyword: res.data.data.tag,
-              id: this.question_relevant[i].QuestionId,
+              content: this.question_relevant[i].questionTitle,
+              keyword: res.data.data.tags,
+              id: this.question_relevant[i].questionId,
             };
             this.card_info[i] = tem_info;
           }
-          console.log(this.card_info);
         })
         .catch((err) => {
           console.log(err);
@@ -362,7 +327,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
-        this.answer_infor.answer_like += 1;
+        this.answer_infor.answerLike += 1;
       } else {
         ElMessage({
           type: "error",
@@ -380,7 +345,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
-        this.answer_infor.answer_like -= 1;
+        this.answer_infor.answerLike -= 1;
       } else {
         ElMessage({
           type: "error",
@@ -398,7 +363,7 @@ export default {
           duration: 2000,
           showClose: true,
         });
-        this.answer_infor.answer_coin += 1;
+        this.answer_infor.answerCoin += 1;
       }
     },
     reportResponse(res) {

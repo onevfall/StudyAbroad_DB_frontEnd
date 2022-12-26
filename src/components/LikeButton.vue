@@ -134,7 +134,7 @@ export default {
       )
         .then((res) => {
           this.like_nums = res.data.data.like_times;
-          this.is_liked = res.data.status;
+          this.is_liked = res.data.data.status;
           // console.log(this.is_liked);
         })
         .catch((errMsg) => {
@@ -197,9 +197,11 @@ export default {
         break;
       case "2":
         this.dynamic_type = "answer";
+        this.url="/spring/qa/answer"
         break;
       case "3":
         this.dynamic_type = "answer_comment";
+        this.url="/spring/qa/answer/comment"
         break;
     }
     //查询是否点过赞
@@ -215,7 +217,8 @@ export default {
       )
         .then((res) => {
           this.like_nums = res.data.data.like_times;
-          this.is_liked = res.data.status;
+          this.is_liked = res.data.data.status;
+          console.log(this.is_liked)
           // console.log(this.is_liked);
         })
         .catch((errMsg) => {

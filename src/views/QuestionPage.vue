@@ -13,28 +13,28 @@
               <el-row type="flex" align="middle">
                 <el-col :span="3">
                   <el-tag size="middle" class="ml-2" type="warning"
-                    >悬赏金额：{{ this.question_info.question_reward }}</el-tag
+                    >悬赏金额：{{ this.question_info.questionReward }}</el-tag
                   >
                 </el-col>
                 <el-col
                   :span="2"
-                  v-if="this.question_info.user_university != 'null'"
+                  v-if="this.question_info.userUniversity != null"
                 >
                   <el-tag size="middle">{{
-                    this.question_info.user_university
+                    this.question_info.userUniversity
                   }}</el-tag>
                 </el-col>
                 <el-col
                   :span="2"
-                  v-if="this.question_info.user_university != 'null'"
+                  v-if="this.question_info.userUniversity != null"
                 >
                   <el-tag size="middle">{{
-                    this.question_info.university_country
+                    this.question_info.universityCountry
                   }}</el-tag>
                 </el-col>
                 <el-col
                   span="1"
-                  v-for="tag in this.question_info.question_tag"
+                  v-for="tag in this.question_info.tagList"
                   :key="tag"
                 >
                   <el-tag
@@ -50,26 +50,26 @@
                   <el-avatar
                     shape="circle"
                     :size="50"
-                    :src="this.question_info.user_profile"
-                    @click="goPersonSpace(this.question_info.user_id, $event)"
+                    :src="this.question_info.userProfile"
+                    @click="goPersonSpace(this.question_info.questionUserId, $event)"
                     class="asker_profile"
                   />
                 </el-col>
                 <span class="user_name">
-                  {{ this.question_info.user_name }}
+                  {{ this.question_info.userName }}
                 </span>
                 <el-col id="user_identify" :span="2">
                   <el-tag
-                    v-if="this.question_info.user_qualification != 'null'"
+                    v-if="this.question_info.userQualification != null&&this.question_info.userQualification != '未认证'"
                     type="warning"
                     size="large"
-                    >已认证:{{ this.question_info.user_university }}
-                    {{ this.question_info.user_qualification }}</el-tag
+                    >已认证:{{ this.question_info.userUniversity }}
+                    {{ this.question_info.userQualification }}</el-tag
                   >
                 </el-col>
               </el-row>
               <el-row id="question_content"
-                >问题：{{ this.question_info.question_title }}</el-row
+                >问题：{{ this.question_info.questionTitle }}</el-row
               >
             </el-col>
             <el-col :span="4">
@@ -80,11 +80,11 @@
             <el-col :span="1"></el-col>
             <el-col id="question_details" :span="20">
               <div v-if="notFull" style="text-align: left; margin-top: 5px">
-                问题摘要：{{ this.question_info.question_summary }}
+                问题摘要：{{ this.question_info.questionSummary }}
               </div>
               <div v-if="!notFull" style="text-align: left; margin-top: 10px">
                 问题详情：
-                <p v-html="this.question_info.question_description"></p>
+                <p v-html="this.question_info.questionDescription"></p>
               </div>
             </el-col>
             <el-col class="expand" :span="3">
@@ -112,7 +112,7 @@
                   {{ starQuestionMsg }}
                 </span>
                 <star-button
-                  :content_id="this.question_info.question_id"
+                  :content_id="this.question_info.questionId"
                   content_type="2"
                   :show_num="false"
                   size="x-large"
@@ -169,30 +169,30 @@
                       <el-avatar
                         shape="circle"
                         :size="35"
-                        :src="ans.UserProfile"
-                        @click="goPersonSpace(ans.AnswerUserId, $event)"
+                        :src="ans.userProfile"
+                        @click="goPersonSpace(ans.answerUserId, $event)"
                         class="answer_profile"
                       />
                     </el-col>
                     <span class="user_name">
-                      {{ ans.UserName }}
+                      {{ ans.userName }}
                     </span>
                     <el-tag
                       type="primary"
                       size="normal"
                       style="margin-top: 5px; margin-left: 7px"
-                      v-if="this.apply_id == ans.AnswerId"
+                      v-if="this.apply_id == ans.answerId"
                       >该问题已被题主采纳</el-tag
                     >
                     <el-tag
                       type="success"
                       size="normal"
                       style="margin-top: 5px; margin-left: 7px"
-                      >{{ ans.AnswerDate.replace("T", " ") }}</el-tag
+                      >{{ ans.answerDate.replace("T", " ") }}</el-tag
                     >
                   </el-row>
                   <el-row id="answer_content">
-                    {{ ans.AnswerSummary }}
+                    {{ ans.answerSummary }}
                   </el-row>
                   <el-row style="margin-top: 25px">
                     <el-col
@@ -203,7 +203,7 @@
                         type="primary"
                         key="primary"
                         size="normal"
-                        @click="goToAnswerPage(ans.AnswerId)"
+                        @click="goToAnswerPage(ans.answerId)"
                         ><el-icon class="icon"><View /></el-icon>
                         查看详情>></el-button
                       >
@@ -216,13 +216,13 @@
                       <el-button
                         v-if="
                           this.apply_id == 0 &&
-                          this.question_info.user_id ==
+                          this.question_info.questionUserId ==
                             this.$store.state.user_info.user_id
                         "
                         type="success"
                         key="primary"
                         size="normal"
-                        @click="adoptAnswer(ans.AnswerId)"
+                        @click="adoptAnswer(ans.answerId)"
                         >采纳此回答<el-icon class="el-icon--right"
                           ><Check /></el-icon
                       ></el-button>
@@ -232,13 +232,13 @@
                       style="margin-left: 70px"
                       v-if="
                         this.apply_id == 0 &&
-                        this.question_info.user_id ==
+                        this.question_info.questionUserId ==
                           this.$store.state.user_info.user_id
                       "
                     >
                       <like-button
                         content_type="2"
-                        :content_id="ans.AnswerId"
+                        :content_id="ans.answerId"
                         :show_num="true"
                         size="large"
                         @giveLike="like"
@@ -248,7 +248,7 @@
                     <el-col :span="2" style="margin-left: -70px" v-else>
                       <like-button
                         content_type="2"
-                        :content_id="ans.AnswerId"
+                        :content_id="ans.answerId"
                         :show_num="true"
                         size="large"
                         @giveLike="like"
@@ -258,7 +258,7 @@
                     <el-col :span="2">
                       <coin-button
                         content_type="1"
-                        :content_id="ans.AnswerId"
+                        :content_id="ans.answerId"
                         :show_num="true"
                         size="large"
                         @giveCoin="coinIn"
@@ -268,7 +268,7 @@
                       <el-row gutter="4">
                         <el-col :span="2">
                           <star-button
-                            :content_id="ans.AnswerId"
+                            :content_id="ans.answerId"
                             content_type="1"
                             :show_num="false"
                             size="large"
@@ -468,7 +468,7 @@ export default {
     initPage: function () {
       this.question_id = this.$route.query.question_id;
       axios({
-        url: "api/question",
+        url: "spring/qa/question",
         method: "get",
         params: {
           question_id: this.question_id,
@@ -476,12 +476,13 @@ export default {
       })
         .then((res) => {
           this.question_info = res.data.data;
-          if (this.question_info.question_description.substr(0, 4) == "http") {
+          this.apply_id = this.question_info.questionApply;
+          if (this.question_info.questionDescription.substr(0, 4) == "http") {
             const xhrFile = new XMLHttpRequest();
-            xhrFile.open("GET", this.question_info.question_description, true);
+            xhrFile.open("GET", this.question_info.questionDescription, true);
             xhrFile.send();
             xhrFile.onload = () => {
-              this.question_info.question_description = xhrFile.response;
+              this.question_info.questionDescription = xhrFile.response;
             };
           }
         })
@@ -490,18 +491,17 @@ export default {
         });
       //回答信息
       axios({
-        url: "api/question/answers",
+        url: "spring/qa/question/answers",
         method: "get",
         params: {
           question_id: this.question_id,
         },
       })
         .then((res) => {
-          this.answer_num = res.data.data.count;
-          this.answer_info = res.data.data.answers;
-          this.apply_id = res.data.data.apply;
+          this.answer_num = res.data.data.length;
+          this.answer_info = res.data.data;         
           for (let i = 0; i < this.answer_info.length; ++i) {
-            if (this.answer_info[i].AnswerId == this.apply_id) {
+            if (this.answer_info[i].answerId == this.apply_id) {
               let tmp = this.answer_info[0];
               this.answer_info[0] = this.answer_info[i];
               this.answer_info[i] = tmp;
@@ -514,21 +514,18 @@ export default {
         });
       //相关问题
       axios({
-        url: "api/question/related",
-        method: "get",
-        params: {
-          question_id: this.question_id,
-        },
+        url: "spring/qa/question/related_questions/"+this.question_id,
+        method: "get"
       })
         .then((res) => {
-          this.related_question_tag = res.data.data.tag;
-          this.question_relevant = res.data.data.related_questions;
+          this.related_question_tag = res.data.data.tags;
+          this.question_relevant = res.data.data.relatedQuestions;
           for (let i = 0; i < this.question_relevant.length; i++) {
             var tem_info = {
               essence: "问题",
-              content: this.question_relevant[i].QuestionTitle,
-              keyword: res.data.data.tag,
-              id: this.question_relevant[i].QuestionId,
+              content: this.question_relevant[i].questionTitle,
+              keyword: res.data.data.tags,
+              id: this.question_relevant[i].questionId,
             };
             this.card_info[i] = tem_info;
           }
@@ -539,7 +536,7 @@ export default {
     },
     adoptCheck() {
       axios
-        .put("api/question/apply", {
+        .post("spring/qa/question/apply", {
           question_id: this.question_id,
           answer_id: this.applied_answer_id,
         })
