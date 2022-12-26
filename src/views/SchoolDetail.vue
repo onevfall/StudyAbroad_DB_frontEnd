@@ -52,16 +52,15 @@ created() {
   this.getParams();
   //在此处向服务器请求数据，初始化所需变量
   axios({
-      url: "api/university?university_id="+this.school_id,
+      url: "spring/college/"+this.school_id,
       method: "get",
     })
       .then((res) => {
-        console.log(res.data);
         var response=res.data
         //console.log(response.state);
         if (response.status == true) {
-          this.school_info = response.data;
-          this.school_country_zh = response.data.university_country;
+          this.school_info = response.obj;
+          this.school_country_zh = response.obj.universityCountry;
         }
       })
       .catch((err) => {

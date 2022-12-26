@@ -281,7 +281,7 @@ export default {
       x += "&" + "page=" + this.cur_page + "&" + "page_size=" + this.PAGESIZE;
       console.log(x);
       axios({
-      url: "api/institution/num?" + x,
+      url: "spring/institution/num?" + x,
       method: "get",
        })
       .then((res) => {
@@ -293,7 +293,6 @@ export default {
             console.log(errMsg);
             console.log("1111");
           });
-
       axios({
         // 点击搜索时加载符合条件的数据
         url: "api/institution/list?" + x,

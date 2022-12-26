@@ -24,7 +24,7 @@ export default {
       if (data.status === 0) {
         var marker = new BMapGL.Marker(data.points[0]);
         bm.addOverlay(marker);
-        var label = new BMapGL.Label(this.school.university_chname, {
+        var label = new BMapGL.Label(this.school.universityChName, {
           offset: new BMapGL.Size(20, -10),
         });
         marker.setLabel(label); //添加百度label
@@ -37,8 +37,8 @@ export default {
     var bm = this.thisMap;
     bm.centerAndZoom(
       new BMapGL.Point(
-        this.school.university_address_x,
-        this.school.university_address_y
+        this.school.universityAddressX,
+        this.school.universityAddressY
       ),
       17
     );

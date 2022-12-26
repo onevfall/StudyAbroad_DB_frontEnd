@@ -7,14 +7,14 @@
   <el-container class="info_table" v-loading="loading">
     <el-aside width="60%" class="left" >
       <div class="con1" style="width: 100%; float: left">
-        <img :src="this.school.university_badge" class="school_badge" />
+        <img :src="this.school.universityBadge" class="school_badge" />
         <div style="float: left; text-align: left">
           <p class="p1" style="font-size: 30px">
-            {{ school.university_enname }}
+            {{ school.universityEnname }}
           </p>
 
-          <p class="p1">{{ school.university_chname }}</p>
-          <p class="p1">{{ school.university_abbreviation }}</p>
+          <p class="p1">{{ school.universityChname }}</p>
+          <p class="p1">{{ school.universityAbbreviation }}</p>
         </div>
         <span style="float: right; margin-top: 50px; margin-right: 50px">
           <follow-button
@@ -95,21 +95,21 @@ export default {
     this.axios
       .get("/spring/college/detail/intro", {
         params: {
-          college_name: this.school.university_chname,
+          college_name: this.school.universityChName,
         },
       })
       .then((res) => {
         this.web_school_info = res.data.obj.data.text;
         this.web_school_photo = res.data.obj.data.img_url;
         if (this.web_school_info == undefined) {
-          this.web_school_info = this.school.university_introduction;
+          this.web_school_info = this.school.universityIntroduction;
         } else {
           this.web_school_info = this.web_school_info.replace(/\[.*?\]/g, ""); // 去除[]中的内容
         }
         if (this.web_school_photo != undefined) {
           this.dataList = [].concat(this.web_school_photo);
         } else {
-          this.dataList = this.school.university_photo;
+          this.dataList = this.school.universityPhoto;
         }
         this.loading = false;
       })
