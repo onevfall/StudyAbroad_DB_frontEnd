@@ -70,25 +70,24 @@ export default {
   },
   methods: {
     reportConfirm () {
-      this.give_report_reason = true;
       //判断是否登录
-      // if (this.$store.state.is_login == false) {
-      //   //若未登录
-      //   ElMessage({
-      //     message: "请先登录",
-      //     type: "warning",
-      //     showClose: true,
-      //     duration: 2000,
-      //   });
-      //   /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
-      //   this.$router.push({
-      //     path: "/login",
-      //     query: { redirect: this.$route.fullPath },
-      //   });
-      // } else {
-      //   //呼出理由输入框
-      //   this.give_report_reason = true;
-      // }
+      if (this.$store.state.is_login == false) {
+        //若未登录
+        ElMessage({
+          message: "请先登录",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
+        });
+        /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
+        this.$router.push({
+          path: "/login",
+          query: { redirect: this.$route.fullPath },
+        });
+      } else {
+        //呼出理由输入框
+        this.give_report_reason = true;
+      }
     },
     reportPost () {
       this.give_report_reason = false;//关闭dialog
