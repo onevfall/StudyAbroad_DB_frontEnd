@@ -137,9 +137,9 @@ export default {
       this.axios
         .post("spring/blog", {
           userId: this.$store.state.user_info.user_id,
-          Summary: summary,
-          Content: args.base64_content,
-          Tag: tag,
+          summary: summary,
+          content: args.base64_content,
+          tag: tag,
           imageUrl: image_url,
         })
         .then((res) => {
