@@ -5,26 +5,42 @@
 
 <template>
   <div>
-    <span style="text-align: left; margin-right: 8px" v-if="!this.is_reported">
+    <span
+      style="text-align: left; margin-right: 8px"
+      v-if="!this.is_reported"
+    >
       <img
         src="../assets/warning.png"
         :style="{ height: this.icon_size + 'px' }"
         @click.stop="reportConfirm"
       />
     </span>
-    <span style="text-align: left; margin-right: 8px" v-else>
+    <span
+      style="text-align: left; margin-right: 8px"
+      v-else
+    >
       <img
         src="../assets/warning_solid.png"
         :style="{ height: this.icon_size + 'px' }"
       />
     </span>
   </div>
-  <el-dialog v-model="give_report_reason" title="举报详情">
-    <el-input v-model="report_reason" placeholder="请输入举报理由" clearable />
+  <el-dialog
+    v-model="give_report_reason"
+    title="举报详情"
+  >
+    <el-input
+      v-model="report_reason"
+      placeholder="请输入举报理由"
+      clearable
+    />
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="give_report_reason = false">我再想想</el-button>
-        <el-button type="primary" @click="reportPost">确认举报</el-button>
+        <el-button
+          type="primary"
+          @click="reportPost"
+        >确认举报</el-button>
       </span>
     </template>
   </el-dialog>
@@ -43,17 +59,17 @@ export default {
   components: {
     ElMessage,
   },
-  data() {
+  data () {
     return {
       is_reported: false,
       dynamic_type: "",
       icon_size: 0,
-      give_report_reason:false,
-      report_reason:"",
+      give_report_reason: false,
+      report_reason: "",
     };
   },
   methods: {
-    reportConfirm() {
+    reportConfirm () {
       //判断是否登录
       if (this.$store.state.is_login == false) {
         //若未登录
@@ -73,13 +89,13 @@ export default {
         this.give_report_reason = true;
       }
     },
-    reportPost() {
+    reportPost () {
       this.give_report_reason = false;//关闭dialog
       console.log(this.dynamic_type)
       console.log(this.content_id)
       console.log(this.report_reason)
       axios
-        .post(this.url+"/report", {
+        .post(this.url, {
           user_id: this.$store.state.user_info.user_id,
           [this.dynamic_type + "_id"]: this.content_id,
           report_reason: this.report_reason,
@@ -87,7 +103,7 @@ export default {
         .then((res) => {
           console.log(res.data);
           if (res.data.status) {
-            this.is_reported = true;   
+            this.is_reported = true;
             this.$emit("reportResponse", true);
           } else {
             this.$emit("reportResponse", false);
@@ -99,7 +115,7 @@ export default {
         });
     },
   },
-  created() {
+  created () {
     //设定大小
     switch (this.size) {
       case "xx-small":
@@ -128,33 +144,36 @@ export default {
     switch (this.content_type) {
       case "0":
         this.dynamic_type = "blog";
+        this.url = "spring/personal_center/report/blog";
         break;
       case "1":
         this.dynamic_type = "answer";
-        this.url = "spring/qa/answer";
+        this.url = "spring/qa/answer/report";
         break;
       case "2":
         this.dynamic_type = "blogcomment";
+        this.url = "spring/personal_center/report/blogcomment";
         break;
       case "3":
         this.dynamic_type = "answercomment";
-        this.url = "spring/qa/answer/comment";
+        this.url = "spring/qa/answer/comment/report";
         break;
     }
     //查询是否举报过
     if (this.$store.state.is_login) {
       axios
         .get(
-          this.url+"/report" +
-            "?user_id=" +
-            this.$store.state.user_info.user_id +
-            "&" +
-            this.dynamic_type +
-            "_id=" +
-            this.content_id
+          this.url +
+          "?user_id=" +
+          this.$store.state.user_info.user_id +
+          "&" +
+          this.dynamic_type +
+          "_id=" +
+          this.content_id
         )
         .then((res) => {
-          this.is_reported = res.data.data.status;
+          console.log("try", res.data);
+          this.is_reported = res.data.status;
         })
         .catch((errMsg) => {
           console.log(errMsg);
