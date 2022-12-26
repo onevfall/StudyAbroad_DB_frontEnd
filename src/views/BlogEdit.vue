@@ -87,6 +87,7 @@
 <script>
 import Editor from "../components/Editor";
 import { ElMessage } from "element-plus";
+import { useBase64 } from '@vueuse/core';
 
 export default {
   components: {
@@ -138,7 +139,7 @@ export default {
         .post("spring/blog", {
           userId: this.$store.state.user_info.user_id,
           summary: summary,
-          content: args.base64_content,
+          content: args.text_content,
           tag: tag,
           imageUrl: image_url,
         })
