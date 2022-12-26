@@ -536,7 +536,7 @@ export default {
     },
     adoptCheck() {
       axios
-        .put("test/qa/question/apply", {
+        .post("test/qa/question/apply", {
           question_id: this.question_id,
           answer_id: this.applied_answer_id,
         })
