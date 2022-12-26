@@ -172,8 +172,17 @@ export default {
           this.content_id
         )
         .then((res) => {
-          console.log("try", res.data);
-          this.is_reported = res.data.status;
+          if(this.dynamic_type=="blog"){
+            this.is_reported = res.data.status;
+          }
+          else if(this.dynamic_type=="answercomment"||this.dynamic_type=="answer"){
+            if(res.data.data==0){
+              this.is_reported=true;
+            }
+            else{
+              this.is_reported = res.data.data.status;
+            }
+          }
         })
         .catch((errMsg) => {
           console.log(errMsg);
