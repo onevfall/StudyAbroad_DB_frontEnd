@@ -211,7 +211,7 @@ export default {
       method: "get",
     })
       .then((res) => {
-        this.blog_list = [].concat(res.data.data.blog.slice(0, 3));
+        this.blog_list = [].concat(res.data.data.slice(0, 3));
       })
       .catch((errMsg) => {
         console.log(errMsg);

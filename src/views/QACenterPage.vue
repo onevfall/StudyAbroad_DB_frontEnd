@@ -137,7 +137,7 @@ export default {
       let sort_type_name = this.display_status ? "/time" : "/hot";
       axios
         .get(
-          "/spring/qa/question/list" +
+          "/spring/qa/question/list/" +
             sort_type_name +
             "?page=" +
             res +

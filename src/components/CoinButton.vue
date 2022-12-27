@@ -167,7 +167,7 @@ export default {
           } else {
             this.coin_nums = res.data.data.answer_coin;
           }
-          this.is_coined = res.data.data.status;
+          this.is_coined = res.data.data.data.status;
         })
         .catch((errMsg) => {
           console.log(errMsg);

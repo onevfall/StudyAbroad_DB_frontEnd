@@ -21,7 +21,7 @@
             <el-tag
               type="warning"
               size="large"
-              v-if="this.question_info.userUniversity != 'null'"
+              v-if="this.question_info.user_university != 'null'"
               >已认证:{{ this.question_info.userUniversity }}
               {{ this.question_info.userQualification }}</el-tag
             >
@@ -167,7 +167,7 @@ export default {
           user_id: this.$store.state.user_info.user_id,
           summary: summary,
           content: args.base64_content,
-          question_id:this.question_info.question_id,
+          question_id:this.question_info.questionId,
           image_url: image_url,
         })
         .then((res) => {

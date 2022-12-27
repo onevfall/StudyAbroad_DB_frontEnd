@@ -7,11 +7,11 @@
   <el-container class="info_table">
       <el-aside width=60% class="left">
           <div class="con1"  style="width:100%;float:left;" >
-          <img :src="this.institution.institution_profile"  class="institution_profile">
+          <img :src="this.institution.institutionProfile"  class="institution_profile">
            <div style="float:left;text-align:left;">
-            <p class="p1" style="font-size:30px">{{institution.institution_name}}</p>
-            <p class="p1">{{institution.institution_name}}</p>
-            <p class="p1">{{institution.institution_abbreviation}}</p>
+            <p class="p1" style="font-size:30px">{{institution.institutionName}}</p>
+            <p class="p1">{{institution.institutionName}}</p>
+            <p class="p1">{{institution.institutionAbbreviation}}</p>
            </div>
            <span style="float:right;margin-top: 50px;margin-right: 50px;">
             <follow-button
@@ -23,7 +23,7 @@
             ></follow-button></span>
           </div> 
           <p style="float:left;padding:20px;">
-            <span class="con2_span" style="float:left;text-align:left;">{{institution.institution_introduction}}</span> 
+            <span class="con2_span" style="float:left;text-align:left;">{{institution.institutionIntroduction}}</span>
             <span class="show" style="float:right;text-align:right;"></span> <!---->
           </p>
   </el-aside>
@@ -85,7 +85,7 @@ export default {
     this.run()
   },
   updated(){
-    this.dataList=this.institution.institution_photo;
+    this.dataList=this.institution.institutionPhoto;
   },
   methods: {
       //点击小圆圈切换图片

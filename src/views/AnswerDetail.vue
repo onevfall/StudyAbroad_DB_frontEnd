@@ -58,32 +58,6 @@
                 <p v-html="this.answer_infor.answerContent"></p>
                 <!-- {{ this.answer_infor.answer_content }} -->
               </div>
-              <!-- <div style="float: left; margin-left: 3%; display: flex">
-                <div style="margin-right: 5px">赞同</div>
-                <like-button
-                  content_type="2"
-                  :content_id="this.answer_id"
-                  :show_num="false"
-                  size="large"
-                  @giveLike="like"
-                  @cancelLike="unlike"
-                />
-                <div style="margin-left: 5px; margin-right: 6px">投币</div>
-                <coin-button
-                  content_type="1"
-                  :content_id="this.answer_id"
-                  :show_num="false"
-                  size="large"
-                  @giveCoin="coinIn"
-                />
-                <div style="margin-left: 6px; margin-right: 5px">举报</div>
-                <report-button
-                  content_type="1"
-                  :content_id="this.answer_id"
-                  size="large"
-                  @reportResponse="reportResponse"
-                />
-              </div> -->
               <el-affix target=".content_main" position="bottom" :offset="0">
                 <div class="option_bar">
                   <el-row gutter="10">
