@@ -211,19 +211,19 @@ export default {
       method: "get",
     })
       .then((res) => {
-        this.blog_list = [].concat(res.data.data.blog.slice(0, 3));
+        this.blog_list = [].concat(res.data.data.slice(0, 3));
       })
       .catch((errMsg) => {
         console.log(errMsg);
       });
     //问答
     axios({
-      url: "spring/question/list/time",
+      url: "spring/qa/question/list/time?page_size=5&page=1",
       method: "get",
     })
       .then((res) => {
         console.log(res.data.data);
-        this.question_time_info = res.data.data.question.slice(0, 4);
+        this.question_time_info = res.data.data.slice(0, 4);
         console.log(this.question_time_info)
 
       })

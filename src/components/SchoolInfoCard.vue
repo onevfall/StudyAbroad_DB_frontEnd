@@ -15,7 +15,7 @@
             src="../assets/location.png"
             style="filter: drop-shadow(0 0 0 coral)"
           />
-          {{ school.university_country }}
+          {{ school.universityCountry }}
         </div>
         <div>
           <img src="../assets/navigator.png" /> 学校官方网站：<a
@@ -28,13 +28,13 @@
           <img src="../assets/message.png" /> 国际学生招生处联系邮箱：<a
             href="#"
             target="_blank"
-            >{{ school.university_email }}</a
+            >{{ school.universityEmail }}</a
           >
         </div>
         <div>
           <img src="../assets/dollar.png" /> 国际学生年度学费：<span
             style="color: coral; font-size: larger"
-            >{{ school.university_tuition }}</span
+            >{{ school.universityTuition }}</span
           >
         </div>
         <!-- <div>
@@ -65,11 +65,11 @@
           ><br /> -->
           <br />
           <span class="info_tag">学校</span>：<span class="info_content">{{
-            school.university_chname
+            school.universityChName
           }}</span
           ><br />
           <span class="info_tag">名称</span>：<span class="info_content">{{
-            school.university_enname
+            school.universityEnName
           }}</span>
         </div>
       </el-aside>
@@ -151,20 +151,20 @@
         <img src="../assets/cup.png" />
         <span class="info_tag"> Tofel需求</span>：
         <span class="score_content">{{
-          school.university_tofel_requirement
+          school.universityTofelRequirement
         }}</span>
       </div>
       <div>
         <img src="../assets/cup.png" />
         <span class="info_tag"> IELTS需求</span>：
         <span class="score_content">{{
-          school.university_ielts_requirement
+          school.universityIeltsRequirement
         }}</span>
       </div>
       <div>
         <img src="../assets/dollar.png" />
         <span class="info_tag"> 国际学生年度学费</span>：
-        <span class="score_content">{{ school.university_tuition }}</span>
+        <span class="score_content">{{ school.universityTuition }}</span>
       </div>
     </div>
   </div>
@@ -177,7 +177,7 @@
       <el-main>
         <div>
           <img src="../assets/navigator.png" /> 学院及其实验室：
-          <div v-for="x in school.university_college">
+          <div v-for="x in school.universityCollege">
             {{ x }}
           </div>
         </div>
@@ -188,66 +188,66 @@
           <img src="../assets/message.png" /> 国际学生招生处联系邮箱：<a
             href="#"
             target="_blank"
-            >{{ school.university_email }}</a
+            >{{ school.universityEmail }}</a
           >
         </div>
       </el-aside>
     </el-container>
   </div>
 
-  <div class="info_border" id="6">
-    <div class="tips_bar"></div>
-    <span style="font-size: 30px; line-height: 60px">校友圈</span>
+<!--  <div class="info_border" id="6">-->
+<!--    <div class="tips_bar"></div>-->
+<!--    <span style="font-size: 30px; line-height: 60px">校友圈</span>-->
 
-    <el-container class="info_table" style="max-height: 800px">
-      <el-main>
-        <div><img src="../assets/cup.png" /> 让大家找到同校用户，交个朋友</div>
-        <div
-          class="user_list"
-          v-for="follower_person in user_list"
-          :key="follower_person.user_id"
-        >
-          <el-avatar :size="70" :src="follower_person.user_profile" />
-          <div
-            style="display: block; width: 85%"
-            @click="goPersonSpace(follower_person.user_id, $event)"
-          >
-            <div
-              style="
-                font-size: 20px;
-                font-weight: bold;
-                margin-left: 2%;
-                margin-bottom: 2%;
-                text-align: left;
-              "
-            >
-              {{ follower_person.user_name }}
-            </div>
-            <div
-              style="
-                font-size: 15px;
-                font-weight: normal;
-                margin-left: 2%;
-                text-align: left;
-              "
-            >
-              个性签名：{{ follower_person.user_signature }}
-            </div>
-          </div>
-          <span style="padding-top: 3%; padding-right: 2%">
-            <follow-button
-              object_type="0"
-              :object_id="follower_person.user_id"
-              @giveFollow="follow"
-              @cancelFollow="unFollow"
-            ></follow-button>
-          </span>
-        </div>
-      </el-main>
+<!--    <el-container class="info_table" style="max-height: 800px">-->
+<!--      <el-main>-->
+<!--        <div><img src="../assets/cup.png" /> 让大家找到同校用户，交个朋友</div>-->
+<!--        <div-->
+<!--          class="user_list"-->
+<!--          v-for="follower_person in user_list"-->
+<!--          :key="follower_person.user_id"-->
+<!--        >-->
+<!--          <el-avatar :size="70" :src="follower_person.user_profile" />-->
+<!--          <div-->
+<!--            style="display: block; width: 85%"-->
+<!--            @click="goPersonSpace(follower_person.user_id, $event)"-->
+<!--          >-->
+<!--            <div-->
+<!--              style="-->
+<!--                font-size: 20px;-->
+<!--                font-weight: bold;-->
+<!--                margin-left: 2%;-->
+<!--                margin-bottom: 2%;-->
+<!--                text-align: left;-->
+<!--              "-->
+<!--            >-->
+<!--              {{ follower_person.user_name }}-->
+<!--            </div>-->
+<!--            <div-->
+<!--              style="-->
+<!--                font-size: 15px;-->
+<!--                font-weight: normal;-->
+<!--                margin-left: 2%;-->
+<!--                text-align: left;-->
+<!--              "-->
+<!--            >-->
+<!--              个性签名：{{ follower_person.user_signature }}-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <span style="padding-top: 3%; padding-right: 2%">-->
+<!--            <follow-button-->
+<!--              object_type="0"-->
+<!--              :object_id="follower_person.user_id"-->
+<!--              @giveFollow="follow"-->
+<!--              @cancelFollow="unFollow"-->
+<!--            ></follow-button>-->
+<!--          </span>-->
+<!--        </div>-->
+<!--      </el-main>-->
 
-      <el-aside width="25%"> </el-aside>
-    </el-container>
-  </div>
+<!--      <el-aside width="25%"> </el-aside>-->
+<!--    </el-container>-->
+<!--  </div>-->
 </template>
 
 <script>
@@ -269,7 +269,7 @@ export default {
   props: ["school"],
   data() {
     return {
-      user_list: [],
+      // user_list: [],
       weather: null,
       relevant_pages: null,
     };
@@ -281,7 +281,7 @@ export default {
       axios
         .get("/spring/college/detail/basic_info", {
           params: {
-            college_enname: this.school.university_enname,
+            college_enname: this.school.universityEnName,
           },
         })
         .then((res) => {
@@ -296,8 +296,8 @@ export default {
       axios
         .get("/spring/college/weather", {
           params: {
-            longitude: this.school.university_address_x,
-            latitude: this.school.university_address_y,
+            longitude: this.school.universityAddressX,
+            latitude: this.school.universityAddressY,
           },
         })
         .then((res) => {
@@ -309,7 +309,7 @@ export default {
       axios
         .get("/spring/college/detail/bing_search", {
           params: {
-            college_name: this.school.university_chname + "官网",
+            college_name: this.school.universityChName + "官网",
           },
         })
         .then((res) => {
@@ -319,24 +319,24 @@ export default {
         });
     },
   },
-  updated() {
-    //在此处向服务器请求数据，初始化所需变量
-    axios({
-      url:
-        "api/university/get_oldboy?university_id=" + this.school.university_id,
-      method: "get",
-    })
-      .then((res) => {
-        var response = res.data;
-        //console.log(response.state);
-        if (response.status == true) {
-          this.user_list = response.data.user_info;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
+  // updated() {
+  //   //在此处向服务器请求数据，初始化所需变量
+  //   axios({
+  //     url:
+  //       "api/university/get_oldboy?university_id=" + this.school.universityId,
+  //     method: "get",
+  //   })
+  //     .then((res) => {
+  //       var response = res.data;
+  //       //console.log(response.state);
+  //       if (response.status == true) {
+  //         this.user_list = response.data.user_info;
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // },
   computed: {
     contentShow() {},
   },

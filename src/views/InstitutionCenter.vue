@@ -35,9 +35,9 @@
                   >
                     <el-option
                       v-for="item in all_institution_list"
-                      :key="item.institution_id"
-                      :label="item.institution_name"
-                      :value="item.institution_id"
+                      :key="item.institutionId"
+                      :label="item.institutionName"
+                      :value="item.institutionId"
                     />
                   </el-select>
                   <span style="margin: 10px; vertical-align: bottom">
@@ -281,31 +281,30 @@ export default {
       x += "&" + "page=" + this.cur_page + "&" + "page_size=" + this.PAGESIZE;
       console.log(x);
       axios({
-      url: "api/institution/num?" + x,
+      url: "spring/institution/num?" + x,
       method: "get",
        })
       .then((res) => {
-        this.all_num = res.data.data.num;
-        this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
+        this.all_num = res.data.obj.num;
+        this.page_num = Math.ceil(res.data.obj.num / this.PAGESIZE); //向上取整
         console.log(this.all_num);
       })
       .catch((errMsg) => {
             console.log(errMsg);
             console.log("1111");
           });
-
       axios({
         // 点击搜索时加载符合条件的数据
-        url: "api/institution/list?" + x,
+        url: "spring/institution/list?" + x,
         method: "get",
       })
         .then((res) => {
           console.log(res);
-          console.log(res.data.data.institution_list);
+          console.log(res.data.obj);
           console.log("机构搜索成功");
           console.log(this.country_value);
           console.log(this.rank_type_value);
-          this.institution_list = res.data.data.institution_list;
+          this.institution_list = res.data.obj;
           this.isLoading = false;
           window.scrollTo(0, 0); //将滚动条回滚至最顶端
         })
@@ -364,21 +363,21 @@ export default {
     this.isCreated = true;
     this.isLoading = true;
     axios({
-      url: "api/institution/num",
+      url: "spring/institution/num",
       method: "get",
     })
       .then((res) => {
-        this.all_num = res.data.data.num;
-        this.page_num = Math.ceil(res.data.data.num / this.PAGESIZE); //向上取整
-        this.all_institution_list = res.data.data.institution_list;
+        this.all_num = res.data.obj.num;
+        this.page_num = Math.ceil(res.data.obj.num / this.PAGESIZE); //向上取整
+        this.all_institution_list = res.data.obj.institution_list;
         console.log(this.all_num);
         //进行当页数据检索
         axios({
-          url: "api/institution/list?" + "page_size=" + this.PAGESIZE,
+          url: "spring/institution/list?" + "page_size=" + this.PAGESIZE,
           method: "get",
         })
           .then((res) => {
-            this.institution_list = res.data.data.institution_list;
+            this.institution_list = res.data.obj;
             this.isLoading = false;
           })
           .catch((errMsg) => {
