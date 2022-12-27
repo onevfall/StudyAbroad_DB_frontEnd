@@ -255,12 +255,6 @@ export default {
         })
         .then((res) => {
           if (res.data.status === true) {
-            // console.log("`23131243")
-            // console.log(res.data.data);
-            // const store = from.matched[0].instances.default.$store;
-            // console.log(store);
-            // store.commit("ChangeAnswerUserInfo", res.data.data);
-            // next(true); //获取answer_user_info全部内容 未验证过
             this.answer_user_info = res.data.data;
             console.log("获取用户信息");
           } else {

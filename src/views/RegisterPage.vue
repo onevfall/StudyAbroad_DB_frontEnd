@@ -43,7 +43,6 @@
                 <el-col :span="10">
                   <el-input
                     v-model="iden_code"
-                    style="width:235px"
                     :input-style="this.input_style"
                     v-on:input="validateCAPTCHA()"
                   >

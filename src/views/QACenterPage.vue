@@ -134,7 +134,7 @@ export default {
     curChange: function (res) {
       this.question_loading = true;
       this.cur_page = res;
-      let sort_type_name = this.display_status ? "time" : "hot";
+      let sort_type_name = this.display_status ? "/time" : "/hot";
       axios
         .get(
           "/spring/qa/question/list/" +
