@@ -573,25 +573,21 @@ export default {
         ElMessage.error("请完善相关信息再进行上传");
         return;
       }
-      console.log(language_score)
-      console.log(this.predict_input.gpa)
-      console.log(this.predict_input.year)
-      console.log(this.predict_input.school)
-      console.log(this.predict_input.major)
       axios.post("spring/ai",{
         total:language_score,
         gpa: this.predict_input.gpa,
         year: this.predict_input.year,
         school: this.predict_input.school,
         subject: this.predict_input.major,
+        userId: this.$store.state.user_info.user_id
       })
         .then((res) => {
           console.log(res)
-          // if(res.data.status){
+          if(res.data.status){
             ElMessage.success("Offer上传成功！您得到10鸟币奖励")
             this.ai_drawer_visible = false
             this.clear_predict_data()
-          // }
+          }
         })
         .catch((errMsg) => {
           console.log(errMsg);
