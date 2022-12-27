@@ -97,7 +97,7 @@ export default {
     },
     unLike () {
       axios
-        .put(this.url + "/like?user_id=" + this.$store.state.user_info.user_id
+        .post(this.url + "/unlike?user_id=" + this.$store.state.user_info.user_id
           + "&" + this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
           if (res.data.status) {
@@ -133,7 +133,6 @@ export default {
         this.content_id
       )
         .then((res) => {
-          console.log(res);
           this.like_nums = res.data.data.like_times;
           this.is_liked = res.data.data.status;
           // console.log(this.is_liked);

@@ -79,12 +79,11 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
-        console.log("starrrr")
         axios
           .post(this.url + "/star?user_id=" + this.$store.state.user_info.user_id + "&" +
             this.dynamic_type + "_id=" + this.content_id)
           .then((res) => {
-            console.log("starrrr"+res);
+            console.log(res);
             if (res.data.status) {
               this.is_stared = true;
               this.star_nums++;
@@ -107,7 +106,7 @@ export default {
     },
     unStar () {
       axios
-        .put(this.url + "/star?user_id=" + this.$store.state.user_info.user_id + "&" +
+        .post(this.url + "/unstar?user_id=" + this.$store.state.user_info.user_id + "&" +
           this.dynamic_type + "_id=" + this.content_id)
         .then((res) => {
           if (res.data.status) {
