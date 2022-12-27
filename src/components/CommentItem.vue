@@ -21,7 +21,7 @@
           >
             <like-button
               content_type="3"
-              :content_id="comment_infor.AnswerCommentId"
+              :content_id="comment_infor.answerCommentId"
               :show_num="true"
               size="normal"
               @giveLike="like"
@@ -59,7 +59,7 @@
           >
             <report-button
               content_type="3"
-              :content_id="comment_infor.AnswerCommentId"
+              :content_id="comment_infor.answerCommentId"
               size="normal"
               @reportResponse="reportResponse"
             />
@@ -97,7 +97,7 @@
           class="content_main"
           v-if="this.type == '0'"
         >
-          {{ comment_infor.AnswerCommentContent }}
+          {{ comment_infor.answerCommentContent }}
         </div>
         <div
           class="content_main"
@@ -219,6 +219,7 @@ export default {
     switch (this.type) {
       case "0":
         this.dynamic_type = "answer";
+        this.url = "/spring/qa/answer"
         break;
       case "1":
         this.dynamic_type = "blog";
@@ -241,11 +242,7 @@ export default {
     init () {
       if (this.dynamic_type == "answer") {
         axios
-          .get(this.url + "/reply", {
-            params: {
-              answer_comment_id: this.comment_infor.AnswerCommentId,
-            },
-          })
+          .get(this.url + "/reply/"+this.comment_infor.answerCommentId)
           .then((res) => {
             this.comment_infor.reply_num = res.data.data.reply_num;
             this.comment_infor.child_comments = res.data.data.reply_list;
@@ -305,8 +302,8 @@ export default {
       } else {
         if (this.dynamic_type == "answer") {
           axios
-            .post("/spring/answer/reply", {
-              comment_id: this.comment_infor.AnswerCommentId,
+            .post(this.url + "/comment/reply", {
+              comment_id: this.comment_infor.answerCommentId,
               reply_user_id: this.$store.state.user_info.user_id,
               reply_content: this.comment_now,
             }) //待修改
@@ -324,6 +321,7 @@ export default {
             })
             .catch((err) => {
               console.log(err);
+              console.log(this.comment_infor);
             });
         } else {
           axios
@@ -366,13 +364,13 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
-        if (this.comment_infor.blogCommentUserId == this.$store.state.user_info.user_id) {
-          //发comment的用户和当前登录的用户id是相同的id
-          this.delete_dialog_visible = true;
-          if (this.dynamic_type == "answer")
-            this.now_delete_id = this.comment_infor.AnswerCommentId;
-          else this.now_delete_id = this.comment_infor.blogCommentId;
-        } else {
+          if(this.dynamic_type == "answer" && this.comment_infor.answerCommentUserId == this.$store.state.user_info.user_id){
+            this.now_delete_id = this.comment_infor.answerCommentId;
+            this.delete_dialog_visible = true;
+          } else if(this.dynamic_type == "blog" && this.comment_infor.blogCommentUserId == this.$store.state.user_info.user_id){
+            this.now_delete_id = this.comment_infor.blogCommentId;
+            this.delete_dialog_visible = true;
+          } else {
           ElMessage({
             message: "您不具有对这条评论的删除权限！",
             type: "warning",
@@ -408,7 +406,7 @@ export default {
           });
       } else {
         axios
-          .delete(this.url + "/comment/" + this.now_delete_id)
+          .post(this.url + "/uncomment/" + this.now_delete_id)
           .then((res) => {
             this.delete_dialog_visible = false;
             this.now_delete_id = -1;

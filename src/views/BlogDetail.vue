@@ -86,6 +86,7 @@
               v-loading="oss_loading"
             >
               <p v-html="this.blog_detail.blogContent"></p>
+              <img v-if="this.blog_detail.blogImage!=undefined" :src = "this.blog_detail.blogImage">
             </div>
             <el-affix
               target=".main_field"

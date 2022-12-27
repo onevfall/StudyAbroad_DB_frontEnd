@@ -8,9 +8,9 @@
       <div class="two_block_hori">
         <div>
           <div class="avatar_text">
-            <el-avatar shape="square" :size="70" :src="institution.institution_profile" />
+            <el-avatar shape="square" :size="70" :src="institution.institutionProfile" />
             <div>
-                <p class="enname">{{ institution.institution_name }}</p>
+                <p class="enname">{{ institution.institutionName }}</p>
             </div>
           </div>
           <!-- 下面主要介绍机构简介 -->
@@ -18,7 +18,7 @@
               <div style="margin:10px;"> 
                 <div>
                     <span class="info_text">简介：</span>
-                    <span style="color:gray;">{{institution.institution_introduction}}</span>
+                    <span style="color:gray;">{{institution.institutionIntroduction}}</span>
                 </div>
               </div>
           </div>
@@ -49,7 +49,7 @@ export default {
       this.$router.push({
         path:'/institution_detail',
         query:{
-          institution_id:this.institution.institution_id
+          institution_id:this.institution.institutionId
         }
       })
     }
