@@ -1,9 +1,9 @@
 <template>
   <el-card shadow="never" style="margin-top: 15px; margin-bottom: 15px">
     <el-row type="flex" align="middle">
-      <el-col :span="5">{{ report.ReportDate.replace("T", " ") }}</el-col>
+      <el-col :span="5">{{ report.reportDate }}</el-col>
       <!-- <el-col :span="4"><div style="word-wrap:break-word;width:150px;margin-left: 10px;">{{report.ReportReason}}</div></el-col> -->
-      <el-col :span="5">{{ this.TextType }}</el-col>
+      <el-col :span="5">{{ this.textType }}</el-col>
       <el-col :span="5">{{ this.adminFeedback }}</el-col>
       <!-- <el-col :span="4">{{report.ReportAnswerResult}}</el-col> -->
       <el-col :span="5">
@@ -15,7 +15,7 @@
         <el-button
           type="success"
           plain
-          :disabled="this.report.ReportAnswerResult == null ? true : false"
+          :disabled="this.report.reportAnswerResult == null ? true : false"
           @click="checkSeen"
         >
           确认已读<el-icon class="el-icon--right"><Check /></el-icon>
@@ -27,29 +27,28 @@
     v-model="DetailDialogVisible"
     title="举报详情"
     width="30%"
-    
     draggable
   >
     <div class="report_item">
       <div class="report_item_name">举报时间</div>
       <div class="report_item_content">
-        {{ report.ReportDate.replace("T", " ") }}
+        {{ report.reportDate }}
       </div>
     </div>
 
     <div class="report_item">
       <div class="report_item_name">被举报信息类型</div>
       <div class="report_item_content">
-        {{ this.TextType }}
+        {{ this.textType }}
       </div>
     </div>
 
-    <div class="report_item">
+    <!-- <div class="report_item">
       <div class="report_item_name">被举报信息ID</div>
       <div class="report_item_content">
         {{ report.Id }}
       </div>
-    </div>
+    </div> -->
 
     <div class="report_item">
       <div class="report_item_name">被举报信息内容</div>
@@ -69,7 +68,7 @@
     <div class="report_item">
       <div class="report_item_name">举报原因</div>
       <div class="report_item_content">
-        {{ report.ReportReason }}
+        {{ this.reportDetail.ReportReason }}
       </div>
     </div>
 
@@ -86,7 +85,6 @@
         {{ this.adminFeedback }}
       </div>
     </div>
-    <!-- <span style="font-size:18px">你确认要删除该认证信息吗? 此操作不可逆!</span> -->
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="DetailDialogVisible = false">确认</el-button>
@@ -107,7 +105,7 @@ export default {
   data() {
     return {
       DetailDialogVisible: false,
-      TextType: "",
+      textType: "",
       BeingReportedUserName: "",
       htmlText: "",
       reportDetail: "",
@@ -115,16 +113,16 @@ export default {
   },
   computed: {
     adminFeedback() {
-      return this.report.ReportAnswerResult == null
+      return this.report.reportAnswerResult == null
         ? "正在处理中"
-        : this.report.ReportAnswerResult
+        : this.report.reportAnswerResult
         ? "举报成功"
         : "举报失败";
     },
     BeingReportedContent() {
       var temp = "11";
       // console.log("12345", this.htmlText);
-      if (this.TextType === "回答评论") {
+      if (this.textType === "回答评论") {
         if (this.reportDetail.RepliedComment == null) {
           temp =
             this.reportDetail.AnswerCommentContent +
@@ -138,7 +136,7 @@ export default {
             this.reportDetail.RepliedComment +
             " )";
       }
-      if (this.TextType === "动态评论") {
+      if (this.textType === "动态评论") {
         if (this.reportDetail.RepliedComment == null) {
           temp =
             this.reportDetail.AnswerCommentContent +
@@ -152,7 +150,7 @@ export default {
             this.reportDetail.RepliedComment +
             " )";
       }
-      if (this.TextType === "回答") {
+      if (this.textType === "回答") {
         temp =
           this.htmlText.substring(0, 20) +
           "..." +
@@ -160,7 +158,7 @@ export default {
           this.reportDetail.QuestionTitle +
           " )";
       }
-      if (this.TextType === "动态") {
+      if (this.textType === "动态") {
         temp = this.htmlText.substring(0, 20);
         // console.log("动态", temp);
       }
@@ -209,43 +207,45 @@ export default {
     getData(){
       switch (this.report.Type) {
       case "answercomment":
-        this.TextType = "回答评论";
+        this.textType = "回答评论";
         break;
       case "answer":
-        this.TextType = "回答";
+        this.textType = "回答";
         break;
       case "blogcomment":
-        this.TextType = "动态评论";
+        this.textType = "动态评论";
         break;
       case "blog":
-        this.TextType = "动态";
+        this.textType = "动态";
         break;
     }
     axios
-      .get("/spring/personal_center/check/" + this.report.Type, {
+      .get("/spring/admin/check/" + this.report.Type, {
         params: {
-          report_id: this.report.ReportId,
+          report_id: this.report.reportId,
         },
       })
       .then((res) => {
+        console.log("card de")
+        console.log(res)
         this.htmlText = "";
         if (res.data.status) {
           this.BeingReportedUserName = res.data.data.ReportedUserName;
           this.reportDetail = res.data.data;
-          if (this.TextType === "回答评论") {
+          if (this.textType === "回答评论") {
             if (res.data.data.RepliedComment == null) {
               this.ToText(res.data.data.RepliedAnswerContent);
             }
           }
-          if (this.TextType === "动态评论") {
+          if (this.textType === "动态评论") {
             if (res.data.data.RepliedComment == null) {
               this.ToText(res.data.data.RepliedBlogContent);
             }
           }
-          if (this.TextType === "回答") {
+          if (this.textType === "回答") {
             this.ToText(res.data.data.AnswerContent);
           }
-          if (this.TextType === "动态") {
+          if (this.textType === "动态") {
             this.ToText(res.data.data.BlogContent);
           }
         }

@@ -21,7 +21,7 @@
             <el-tag
               type="warning"
               size="large"
-              v-if="this.question_info.user_university != 'null'"
+              v-if="this.question_info.userUniversity != null"
               >已认证:{{ this.question_info.userUniversity }}
               {{ this.question_info.userQualification }}</el-tag
             >

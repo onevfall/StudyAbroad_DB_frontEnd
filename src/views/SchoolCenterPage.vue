@@ -120,15 +120,38 @@
                 </div>
               </el-main>
               <el-footer height="10px">
-                <div style="margin: 10px; vertical-align: bottom">
-                  <!-- 搜索键 -->
-                  <el-button
-                    type="warning"
-                    size="large"
-                    color="#626aef"
-                    @click="filter"
-                    >搜索</el-button
-                  >
+                <div class="bottom_button">
+                  <div style="margin: 10px">
+                    <!-- 搜索键 -->
+                    <el-button
+                      type="warning"
+                      size="large"
+                      color="#626aef"
+                      @click="filter"
+                      >搜索</el-button
+                    >
+                  </div>
+                  <div style="margin: 20px; text-align: left">
+                    <!-- 搜索键 -->
+                    <el-button
+                      type="warning"
+                      size="large"
+                      color="#626aef"
+                      @click="ai_drawer_visible = true, predict_offer_drawer = true"
+                      >AI录取预测</el-button
+                    >
+                  </div>
+
+                  <div style="margin: 20px; text-align: left">
+                    <!-- 搜索键 -->
+                    <el-button
+                      type="warning"
+                      size="large"
+                      color="#626aef"
+                      @click="ai_drawer_visible = true, predict_offer_drawer = false"
+                      >上传你的Offer</el-button
+                    >
+                  </div>
                 </div>
               </el-footer>
             </el-container>
@@ -139,6 +162,134 @@
         </el-main>
       </el-container>
     </div>
+
+    <el-drawer
+      v-model="ai_drawer_visible"
+      title="AI择校"
+      :before-close="handleClose"
+    >
+    <div class="infor_item" v-if="predict_offer_drawer">
+      <span>上传你的成绩, 获取你的Offer预测!</span>
+    </div>
+
+    <div class="infor_item" v-else>
+      <span>上传你的offer, 将你的福气和大家分享, 会有机会获得鸟币哦!</span>
+    </div>
+      
+      <div style="margin-left: 15px">
+        <div class="infor_item">
+          <div class="infor_item_name">托福成绩</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input-number
+              v-model="predict_input.toefl_language"
+              :max="120"
+            />
+          </div>
+        </div>
+        <div class="infor_item">
+          <div class="infor_item_name">雅思成绩</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input-number
+              v-model="predict_input.ielts_language"
+              :precision="1"
+              :step="0.5"
+              :max="9.0"
+            />
+          </div>
+        </div>
+        <div class="infor_item">
+          <div class="infor_item_name">gpa(百分制)</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input-number
+              v-model="predict_input.gpa"
+              :precision="1"
+              :step="0.1"
+              :max="100.0"
+            />
+          </div>
+        </div>
+        <div class="infor_item">
+          <div class="infor_item_name">申请年份</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input-number
+              v-model="predict_input.year"
+              :min="this.predict_offer_drawer?2022:2000"
+              :max="2050"
+            />
+          </div>
+        </div>
+        <div class="infor_item" v-if="predict_offer_drawer">
+          <div class="infor_item_name">本科学校</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-select
+              v-model="predict_input.school"
+              class="m-2"
+              placeholder="选择你本科学校的所在层次"
+            >
+              <el-option
+                v-for="item in school_level_options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
+        </div>
+        <div class="infor_item" v-else>
+          <div class="infor_item_name">offer院校</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input
+              v-model="predict_input.school"
+              placeholder="请输入所录取的院校名称（建议输入英文全称）"
+              clearable
+            />
+          </div>
+        </div>
+        <div class="infor_item">
+          <div class="infor_item_name">专业</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input
+              v-model="predict_input.major"
+              placeholder="请输入专业"
+              clearable
+            />
+          </div>
+        </div>
+        <div class="infor_item" v-if="predict_offer_drawer">
+          <div>
+            <el-button type="success" @click="predict_offer"
+              >确认提交<el-icon class="el-icon--right"><CircleCheck /></el-icon
+            ></el-button>
+          </div>
+        </div>
+        <div class="infor_item" v-else>
+          <div>
+            <el-button type="success" @click="upload_offer"
+              >确认上传Offer数据<el-icon class="el-icon--right"><Upload /></el-icon
+            ></el-button>
+          </div>
+        </div>
+        <div class="infor_item" v-if="predict_result_shown&&predict_offer_drawer">
+          <div>
+            <el-button type="danger" @click="clear_predict_data"
+              >清空数据<el-icon class="el-icon--right"><Warning /></el-icon
+            ></el-button>
+          </div>
+        </div>
+        <div class="infor_item" v-if="predict_result_shown&&predict_offer_drawer">
+        <el-table :data="this.predict_result">
+          <el-table-column property="school_name" label="预测结果" width="400" />
+        </el-table>
+      </div>
+      </div>
+    </el-drawer>
 
     <div class="left_text" v-if="isCreated">
       候鸟留学平台为您智能推荐【<span style="color: coral">{{
@@ -180,10 +331,11 @@
 import axios from "axios";
 import { onMounted, ref } from "vue";
 import SchoolCard from "../components/SchoolCard.vue";
-
+import { ElMessage } from "element-plus";
 export default {
   components: {
     SchoolCard,
+    ElMessage,
   },
   data() {
     return {
@@ -196,7 +348,42 @@ export default {
       search_value: "",
       isLoading: false,
       isCreated: true,
-      //以下为搜索限定词
+      //以下为offer上传相关变量
+      ai_drawer_visible: false,
+      predict_result_shown:false,
+      predict_offer_drawer:false,
+      predict_result:[],
+      predict_input: {
+        toefl_language: 0,
+        ielts_language: 0.0,
+        gpa: 85.0,
+        year: 2023,
+        school: "",
+        major: "",
+      },
+      school_level_options: [
+        {
+          value: "985&211",
+          label: "985&211高校",
+        },
+        {
+          value: "211",
+          label: "211高校",
+        },
+        {
+          value: "其它双一流高校",
+          label: "其它双一流高校",
+        },
+        {
+          value: "双非",
+          label: "非双一流高校",
+        },
+        {
+          value: "海本",
+          label: "海外高校",
+        },
+      ],
+      //以下为搜索限定词 & offer上传选择词
       rank_type_value: ref(""),
       country_value: ref(""),
       year_value: ref("2022"),
@@ -280,6 +467,133 @@ export default {
           school_id: this.search_value,
         },
       });
+    },
+    clear_predict_data(){
+      this.predict_input={
+        toefl_language: 0,
+        ielts_language: 0.0,
+        gpa: 85.0,
+        year: 2023,
+        school: "",
+        major: "",
+      },
+      this.predict_result=[],
+      this.predict_result_shown = false
+    },
+    predict_offer() {
+      //判断是否登录
+      if (this.$store.state.is_login == false) {
+        //若未登录
+        ElMessage({
+          message: "请先登录",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
+        });
+        /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
+        this.$router.push({
+          path: "/login",
+          query: { redirect: this.$route.fullPath },
+        });
+      }
+      this.predict_result_shown = false
+      console.log(this.predict_input)
+      var language_score = ""
+      if(this.predict_input.ielts_language!=0.0)
+      {
+        language_score = this.predict_input.ielts_language //+ "-9.0"
+      }
+      else if (this.predict_input.toefl_language!=0){
+        language_score = this.predict_input.toefl_language //+ "-120"
+      }
+      else{
+        ElMessage.error("请完善语言成绩再进行预测");
+        return;
+      }
+      if(this.predict_input.school == "" || this.predict_input.major == "")
+      {
+        ElMessage.error("请完善相关信息再进行预测");
+        return;
+      }
+      console.log(this.predict_input)
+      axios({
+        url: "spring/ai" + "?total=" + language_score + "&gpa=" + this.predict_input.gpa //+"-100" 
+            + "&year=" + this.predict_input.year + "&school=" + this.predict_input.school + "&subject=" + this.predict_input.major + "&sid=4",
+        method: "get",
+      })
+        .then((res) => {
+          console.log(res)
+          if(res.data.status){
+            this.predict_result_shown = true
+            this.predict_result = []
+            for(let i = 0; i < res.data.data.length; ++i)
+            {
+              var dict = {}
+              dict["school_name"] = res.data.data[i];
+              this.predict_result.push(dict); 
+            }
+            console.log(this.predict_result)
+          }
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("预测失败");
+        });
+
+    },
+    upload_offer(){
+      if (this.$store.state.is_login == false) {
+        //若未登录
+        ElMessage({
+          message: "请先登录",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
+        });
+        /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
+        this.$router.push({
+          path: "/login",
+          query: { redirect: this.$route.fullPath },
+        });
+      }
+      var language_score = ""
+      if(this.predict_input.ielts_language!=0.0)
+      {
+        language_score = this.predict_input.ielts_language //+ "/9.0"
+      }
+      else if (this.predict_input.toefl_language!=0){
+        language_score = this.predict_input.toefl_language //+ "/120"
+      }
+      else{
+        ElMessage.error("请完善语言成绩再进行上传");
+        return;
+      }
+      if(this.predict_input.school == "" || this.predict_input.major == "")
+      {
+        ElMessage.error("请完善相关信息再进行上传");
+        return;
+      }
+      axios.post("spring/ai",{
+        total:language_score,
+        gpa: this.predict_input.gpa,
+        year: this.predict_input.year,
+        school: this.predict_input.school,
+        subject: this.predict_input.major,
+        userId: this.$store.state.user_info.user_id
+      })
+        .then((res) => {
+          console.log(res)
+          if(res.data.status){
+            ElMessage.success("Offer上传成功！您得到10鸟币奖励")
+            this.ai_drawer_visible = false
+            this.clear_predict_data()
+          }
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("上传失败");
+        });
+
     },
     filter() {
       this.isCreated = false;
@@ -365,7 +679,7 @@ export default {
       method: "get",
     })
       .then((res) => {
-        console.log("页面初始化")
+        console.log("页面初始化");
         console.log(res);
         this.all_num = res.data.obj.college_num;
         this.page_num = Math.ceil(this.all_num / this.PAGESIZE); //向上取整
@@ -378,7 +692,7 @@ export default {
             this.year_value +
             "&" +
             "page_size=" +
-            this.PAGESIZE+
+            this.PAGESIZE +
             "&page=" +
             this.cur_page,
           method: "get",
@@ -434,6 +748,12 @@ export default {
   opacity: 0.6; /*不透明度*/
   background-blend-mode: overlay;
 }
+.bottom_button {
+  text-align: left;
+  margin-left: 20%;
+  display: flex;
+  align-items: center;
+}
 .drawing {
   height: 90%;
   object-fit: cover; /*图片缩放自适应原图的比例 */
@@ -487,5 +807,22 @@ p.QS_rank_test {
   border-radius: 17px;
   background: linear-gradient(#ffffffd0, #bdecfdd5);
   box-shadow: -5px -5px 10px #eff0f0, 5px 5px 10px #ffffff;
+}
+.infor_item {
+  text-align: left;
+  margin-top: 20px;
+  /* margin-left: 3%; */
+  display: flex;
+  align-items: center;
+}
+
+.infor_item .infor_item_name {
+  width: 70px;
+  margin-right: 20px;
+}
+
+.infor_item .infor_item_content {
+  width: 300px;
+  text-align: left;
 }
 </style>
