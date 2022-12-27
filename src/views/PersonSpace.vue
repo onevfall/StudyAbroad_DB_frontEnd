@@ -548,11 +548,11 @@
                       <div class="star_date">
                         <div>
                           发布于{{
-                            star_question.question_date.replace("T", " ")
+                            star_question.question_date
                           }}
                         </div>
                         <div>
-                          收藏于{{ star_question.star_time.replace("T", " ") }}
+                          收藏于{{ star_question.star_time}}
                         </div>
                         <div
                           style="margin-top: 5%; margin-right: 10%"
@@ -632,10 +632,10 @@
                       </div>
                       <div class="star_date">
                         <div>
-                          发布于{{ star_answer.answer_date.replace("T", " ") }}
+                          发布于{{ star_answer.answer_date }}
                         </div>
                         <div>
-                          收藏于{{ star_answer.star_time.replace("T", " ") }}
+                          收藏于{{ star_answer.star_time }}
                         </div>
                         <div style="margin-top: 20%">
                           <el-row>
@@ -787,10 +787,10 @@
                       </div>
                       <div class="star_date">
                         <div>
-                          发布于{{ star_blog.blog_date.replace("T", " ") }}
+                          发布于{{ star_blog.blog_date }}
                         </div>
                         <div>
-                          收藏于{{ star_blog.star_date.replace("T", " ") }}
+                          收藏于{{ star_blog.star_date }}
                         </div>
                         <div style="margin-top: 30%">
                           <el-row>
@@ -1663,6 +1663,9 @@ export default {
     },
     getParams () {
       this.host_id = this.$route.query.host_id;
+      if(this.host_id == null){
+        this.host_id = this.$store.state.user_info.user_id
+      }
       console.log("h" + this.host_id);
     },
     reportResponse (res) {
@@ -1683,7 +1686,12 @@ export default {
       }
     },
     initPage: function () {
+      if(this.host_id == -1){
+        this.host_id = this.$store.state.user_info.user_id
+      }
       this.visit_id = this.$store.state.user_info.user_id;
+      console.log("施朱博测试中：")
+      console.log(this.host_id)
       this.getParams();
       console.log(this.host_id + "  " + this.visit_id);
       //个人信息
@@ -1803,7 +1811,7 @@ export default {
         });
       //收藏问题列表
       axios({
-        url: "api/star/questions",
+        url: "spring/personal_center/star/questions",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1817,7 +1825,7 @@ export default {
         });
       //收藏回答列表
       axios({
-        url: "api/star/answers",
+        url: "spring/personal_center/star/answers",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1831,7 +1839,7 @@ export default {
         });
       //收藏动态列表
       axios({
-        url: "api/star/blogs",
+        url: "spring/personal_center/star/blogs",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1845,7 +1853,7 @@ export default {
         });
       //问题列表
       axios({
-        url: "api/userinfo/questions",
+        url: "spring/personal_center/user_info/questions",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1859,7 +1867,7 @@ export default {
         });
       //回答列表
       axios({
-        url: "api/userinfo/answers",
+        url: "spring/personal_center/user_info/answers",
         params: { user_id: this.host_id },
         method: "get",
       })
@@ -1873,7 +1881,7 @@ export default {
         });
       //动态列表
       axios({
-        url: "api/userinfo/blogs",
+        url: "spring/personal_center/user_info/blogs",
         params: { user_id: this.host_id },
         method: "get",
       })
