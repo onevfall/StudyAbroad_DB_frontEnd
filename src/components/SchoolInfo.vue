@@ -13,7 +13,8 @@
             {{ school.universityEnname }}
           </p>
 
-          <p class="p1">{{ school.universityChname }}</p>
+          <p class="p1">{{ school.universityChName }}</p>
+          <p class="p1">{{ school.universityEnName }}</p>
           <p class="p1">{{ school.universityAbbreviation }}</p>
         </div>
         <span style="float: right; margin-top: 50px; margin-right: 50px">
