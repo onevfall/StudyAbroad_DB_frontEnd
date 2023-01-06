@@ -3,7 +3,7 @@
 作者：王若晗 方新宇
 -->
 <template>
-  <div class="common-layout" v-loading.fullscreen.lock="this.card_info.length == 0">
+  <div class="common-layout" v-loading.fullscreen.lock="this.question_info == '' ">
     <el-container>
       <el-main>
         <el-card id="question" shadow="never">
@@ -437,6 +437,7 @@ export default {
           query: { redirect: this.$route.fullPath },
         });
       } else {
+        console.log(this.question_info)
         this.$router.push({
           name: "answer_edit",
           params: {
@@ -467,6 +468,7 @@ export default {
     },
     initPage: function () {
       this.question_id = this.$route.query.question_id;
+      this.question_info = '';
       axios({
         url: "spring/qa/question",
         method: "get",

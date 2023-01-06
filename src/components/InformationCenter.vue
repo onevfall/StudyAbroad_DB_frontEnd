@@ -13,14 +13,6 @@
         <div class="info-right-title">
           <span class="right-title-text">消息中心</span>
         </div>
-        <!-- <div>
-        <div class="small-title">
-        <span >认证信息</span>
-        </div>
-        <div style="margin-left:30px">
-        <certification-card></certification-card>
-        </div>
-     </div> -->
         <div class="right-content-all">
           <div class="right-nav">
             <el-tabs type="border-card" v-model="activeName">
@@ -195,6 +187,7 @@ export default {
           },
         })
         .then((res) => {
+          console.log(1111)
           console.log(res)
           if(res.data.status){
             this.answer_report=res.data.data.answer_report
@@ -219,6 +212,7 @@ export default {
             this.report_overall_list.push.apply(this.report_overall_list,this.answercomment_report)
             this.report_overall_list.push.apply(this.report_overall_list,this.blogcomment_report)
             this.now_list=this.report_overall_list
+            console.log(this.now_list)
           } 
         })
         .catch((err) => {
