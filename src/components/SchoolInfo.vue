@@ -101,12 +101,12 @@ export default {
       .then((res) => {
         this.web_school_info = res.data.obj.data.text;
         this.web_school_photo = res.data.obj.data.img_url;
-        if (this.web_school_info == undefined) {
+        if (this.web_school_info == undefined||this.web_school_info == "None") {
           this.web_school_info = this.school.universityIntroduction;
         } else {
           this.web_school_info = this.web_school_info.replace(/\[.*?\]/g, ""); // 去除[]中的内容
         }
-        if (this.web_school_photo != undefined) {
+        if (this.web_school_photo != undefined && this.web_school_photo != "None") {
           this.dataList = [].concat(this.web_school_photo);
         } else {
           this.dataList = this.school.universityPhoto;
