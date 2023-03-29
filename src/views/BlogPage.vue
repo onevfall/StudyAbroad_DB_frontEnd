@@ -129,7 +129,7 @@ export default {
       blog_list: [],
       loading: false,
       blog_num_total: 0,
-      PAGESIZE: 6,
+      PAGESIZE: 8,
       cur_page: 1,
     };
   },
