@@ -10,8 +10,8 @@ module.exports = defineConfig({
         changeOrigin: true
       },
       '/spring': {
-        target: 'http://43.143.84.166:8888',
-        // target:'http://49.235.72.134:8888', 
+        //target: 'http://43.143.84.166:8888',
+        target:'http://49.235.72.134:8888', 
         changeOrigin: true,
         pathRewrite: {
           '^/spring': ''
