@@ -11,6 +11,7 @@ import SchoolDetail from '../views/SchoolDetail.vue'
 import BlogEdit from '../views/BlogEdit'
 import QuestionEdit from '../views/QuestionEdit.vue'
 import AnswerEdit from '../views/AnswerEdit.vue'
+import WriteCenter from '../views/WriteCenter.vue'
 
 import InstitutionDetail from '../views/InstitutionDetail.vue'
 import SchoolCenterPage from '../views/SchoolCenterPage.vue'
@@ -139,6 +140,14 @@ const routes = [
     component: InstitutionCenter,
     meta: {
       title: '机构中心'
+    }
+  },
+  {
+    path: '/write_center',
+    name: 'write_center',
+    component: WriteCenter,
+    meta: {
+      title: '文书服务'
     }
   },
   {
