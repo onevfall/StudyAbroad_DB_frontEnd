@@ -248,7 +248,7 @@ export default {
       // console.log("获取答案信息")
       await this.reloadAnswer(); //先获取answer infor
       axios
-        .get("/api/userinfo", {
+        .get("/spring/personal_center/user_info", {
           params: {
             user_id: this.answer_infor.answerUserId,
           },

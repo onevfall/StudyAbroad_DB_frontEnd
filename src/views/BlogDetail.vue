@@ -227,7 +227,7 @@ export default {
       /*在此处向服务器请求数据，初始化所需变量*/
       //博客用户
       //先注释掉看看是不是这个的问题
-      axios.get("api/userinfo?user_id=" + this.$route.query.user_id).then((res) => {
+      axios.get("spring/personal_center/user_info?user_id=" + this.$route.query.user_id).then((res) => {
         this.blog_user_info = res.data.data;
       });
       //相关博客
