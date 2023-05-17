@@ -128,6 +128,7 @@ export default {
     font-family: "宋体";
 }
 .nextpage{
+  display: flex;
   margin-left:1px;
   margin-top:10px;
   text-align:left;
@@ -136,10 +137,11 @@ export default {
 .nextpage .icon{
   padding-top:5px;
   padding-left:5px;
+  padding-right: 10px;
 }
 .nextpage .button{
   padding-top:-10px;
-  margin-top:-10px;
+  margin-top:-3px;
   color:#469afb;
   font-family: "宋体";
 }

@@ -2113,7 +2113,7 @@ body {
 }
 
 .star_date {
-  font-size: 3px;
+  /* font-size: 3px; */
   color: gray;
   width: 50%;
   text-align: right;
