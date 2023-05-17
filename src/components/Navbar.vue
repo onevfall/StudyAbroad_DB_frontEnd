@@ -26,7 +26,7 @@
       <el-menu-item index="institution_center" @click="goInstitutionCenter"
         >看看机构</el-menu-item
       >
-      <el-menu-item index="writer_center" @click="goInstitutionCenter"
+      <el-menu-item index="writer_center" @click="goWriteServiceCenter"
         >文书服务</el-menu-item
       >
     </el-sub-menu>
@@ -111,6 +111,11 @@ export default {
     goInstitutionCenter() {
       router.push({
         name: "institution_center",
+      });
+    },
+    goWriteServiceCenter(){
+      router.push({
+        name:"write_center"
       });
     },
     goSchoolCenter() {

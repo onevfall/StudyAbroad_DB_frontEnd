@@ -537,11 +537,12 @@ export default {
 .blog_bg {
   margin: 0 auto;
   border-radius: 2%;
-  background-color: rgb(124, 178, 222);
+  background-image: linear-gradient(rgb(124, 178, 222), #e7e6e6);
+  /* background-color: rgb(124, 178, 222); */
   border: #9d9d9d73 1px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
   text-align: center;
-  width: 98%;
+  width: 100%;
 }
 
 .blog_title {
