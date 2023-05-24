@@ -377,7 +377,17 @@ p.QS_rank_test {
 
 .tag-container {
     display: block;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
+
+/* .ml-2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+} */
 
 
 </style>

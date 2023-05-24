@@ -14,16 +14,16 @@
             <span
               style="font-size: 20px; font-weight: bold; margin-right: 1%"
               >{{ this.$store.state.user_info.user_name }}</span
-            ><span style="font-size: 3px; color: gray"
+            ><span style="font-size: 15px; color: gray"
               >用户等级{{ this.person_info.user_level }}</span
             >
           </div>
-          <div style="font-size: 3px; text-align: left; color: gray">
+          <div style="font-size: 15px; text-align: left; color: gray">
             <span style="margin-right: 5%"
               >粉丝数：{{ this.person_info.user_follower }}</span
             ><span>关注数：{{ this.person_info.user_follows }}</span>
           </div>
-          <div style="font-size: 3px; text-align: left; color: gray">
+          <div style="font-size: 15px; text-align: left; color: gray">
             <span>鸟币数：{{ this.coin }}</span>
           </div>
         </div>
