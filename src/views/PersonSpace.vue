@@ -23,7 +23,7 @@
                   margin-right: 1%;
                 ">{{ person_info.user_name }}
               </span>
-              <span style="font-size: 3px; color: gray; text-align: left">
+              <span style="font-size: 15px; color: gray; text-align: left">
                 等级：{{ person_info.user_level }}</span>
             </div>
             <div class="user_profile_content">
