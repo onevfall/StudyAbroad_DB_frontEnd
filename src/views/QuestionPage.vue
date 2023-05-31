@@ -192,7 +192,8 @@
                     >
                   </el-row>
                   <el-row id="answer_content">
-                    {{ ans.answerSummary }}
+                    <div style="line-height:23px">
+                    {{ ans.answerSummary }}</div>
                   </el-row>
                   <el-row style="margin-top: 25px">
                     <el-col
@@ -712,6 +713,7 @@ export default {
 }
 
 #answer_content {
+  height:30%;
   font-size: 20px;
   color: black;
   margin-top: 10px;
