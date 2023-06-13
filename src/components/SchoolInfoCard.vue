@@ -146,13 +146,15 @@
       <div class="score_info">
         <img src="../assets/cup.png" /> <span class="info_tag"> 平均SAT</span>：
         <span class="score_content">1400</span>
+        <el-button type="primary" plain @click="goGRE" style="margin-left: 20px;">查看SAT考试详细信息</el-button> 
       </div>
       <div>
         <img src="../assets/cup.png" />
-        <span class="info_tag"> Tofel需求</span>：
+        <span class="info_tag"> TOEFL需求</span>：
         <span class="score_content">{{
           school.universityTofelRequirement
         }}</span>
+        <el-button type="primary" plain @click="goTOEFL" style="margin-left: 20px;">查看TOEFL考试详细信息</el-button> 
       </div>
       <div>
         <img src="../assets/cup.png" />
@@ -160,6 +162,13 @@
         <span class="score_content">{{
           school.universityIeltsRequirement
         }}</span>
+        <el-button type="primary" plain @click="goIELTS" style="margin-left: 20px;">查看IELTS考试详细信息</el-button> 
+      </div>
+      <div>
+        <img src="../assets/cup.png" />
+        <span class="info_tag"> GRE需求</span>：
+        <span class="score_content">320 + 3.5</span>
+        <el-button type="primary" plain @click="goGRE" style="margin-left: 20px;">查看GRE考试详细信息</el-button> 
       </div>
       <div>
         <img src="../assets/dollar.png" />

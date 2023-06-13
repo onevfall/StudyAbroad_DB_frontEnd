@@ -5,7 +5,7 @@
 -->
 <template>
   <el-container class="info_table" v-loading="loading">
-    <el-aside width="60%" class="left" >
+    <el-aside width="60%" class="left">
       <div class="con1" style="width: 100%; float: left">
         <img :src="this.school.universityBadge" class="school_badge" />
         <div style="float: left; text-align: left">
@@ -16,6 +16,10 @@
           <p class="p1">{{ school.universityChName }}</p>
           <p class="p1">{{ school.universityEnName }}</p>
           <p class="p1">{{ school.universityAbbreviation }}</p>
+
+          <el-button type="success" round @click="goWritePaper">
+            想报考这个高校? 快来试试撰写文书！<el-icon class="el-icon--right"><Edit /></el-icon>
+          </el-button>
         </div>
         <span style="float: right; margin-top: 50px; margin-right: 50px">
           <follow-button
@@ -35,8 +39,7 @@
       </p>
     </el-aside>
 
-    <el-main
-      >
+    <el-main>
       <div class="container">
         <div class="lunbo" @mouseenter="clear" @mouseleave="run">
           <div class="img">
@@ -92,33 +95,39 @@ export default {
   },
   watch: {
     school: function (newVal, oldVal) {
-    // web API
-    this.axios
-      .get("/spring/college/detail/intro", {
-        params: {
-          college_name: this.school.universityChName,
-        },
-      })
-      .then((res) => {
-        console.log(res)
-        this.web_school_info = res.data.obj.data.text;
-        this.web_school_photo = res.data.obj.data.img_url;
-        if (this.web_school_info == undefined || this.web_school_info == "None") {
-          this.web_school_info = this.school.universityIntroduction;
-        } else {
-          this.web_school_info = this.web_school_info.replace(/\[.*?\]/g, ""); // 去除[]中的内容
-        }
-        if (this.web_school_photo != undefined && this.web_school_photo != "None") {
-          this.dataList = [].concat(this.web_school_photo);
-        } else {
-          this.dataList = this.school.universityPhoto;
-        }
-        this.loading = false;
-      })
-      .catch((err) => {
-        this.loading = false;
-        console.log(err);
-      });
+      // web API
+      this.axios
+        .get("/spring/college/detail/intro", {
+          params: {
+            college_name: this.school.universityChName,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          this.web_school_info = res.data.obj.data.text;
+          this.web_school_photo = res.data.obj.data.img_url;
+          if (
+            this.web_school_info == undefined ||
+            this.web_school_info == "None"
+          ) {
+            this.web_school_info = this.school.universityIntroduction;
+          } else {
+            this.web_school_info = this.web_school_info.replace(/\[.*?\]/g, ""); // 去除[]中的内容
+          }
+          if (
+            this.web_school_photo != undefined &&
+            this.web_school_photo != "None"
+          ) {
+            this.dataList = [].concat(this.web_school_photo);
+          } else {
+            this.dataList = this.school.universityPhoto;
+          }
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
     },
   },
   created() {
@@ -129,6 +138,14 @@ export default {
     //点击小圆圈切换图片
     gotoPage(index) {
       this.currentIndex = index;
+    },
+    goWritePaper() {
+      this.$router.push({
+        path: "/write_center",
+        query: {
+          school: this.school.universityEnName,
+        },
+      });
     },
     //下一张
     next() {
