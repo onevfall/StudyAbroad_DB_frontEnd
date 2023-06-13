@@ -240,6 +240,7 @@
             </el-select>
           </div>
         </div>
+        
         <div class="infor_item" v-else>
           <div class="infor_item_name">offer院校</div>
           <!-- <span>{{}}</span> -->
@@ -251,6 +252,7 @@
             />
           </div>
         </div>
+
         <div class="infor_item">
           <div class="infor_item_name">专业</div>
           <!-- <span>{{}}</span> -->
@@ -262,6 +264,85 @@
             />
           </div>
         </div>
+        <div class="infor_item">
+          <div class="infor_item_name">国家奖学金数量</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input-number
+              v-model="predict_input.national_scholarship_num"
+              :min="0"
+              :max="4"
+            />
+          </div>
+        </div>
+
+        <div class="infor_item">
+          <div class="infor_item_name">省部级奖学金数量</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input-number
+              v-model="predict_input.provincial_scholarship_num"
+              :min="0"
+              :max="4"
+            />
+          </div>
+        </div>
+
+        <div class="infor_item">
+          <div class="infor_item_name">校级奖学金数量</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input-number
+              v-model="predict_input.school_scholarship_num"
+              :min="0"
+              :max="4"
+            />
+          </div>
+        </div>
+
+        
+        <div class="infor_item">
+          <div class="infor_item_name">其它类型奖学金数量</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input-number
+              v-model="predict_input.other_type_scholarship_num"
+              :min="0"
+              :max="4"
+            />
+          </div>
+        </div>
+
+        <div class="infor_item" >
+          <div class="infor_item_name">科研与社会实践活动情况</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input
+              v-model="predict_input.activities"
+              :rows="2"
+              placeholder="请如实分点输入你的科研与社会实践活动情况"
+              type="textarea"
+              clearable
+            />
+          </div>
+        </div>
+
+        
+        <div class="infor_item" >
+          <div class="infor_item_name">发表论文或其它学术成果情况</div>
+          <!-- <span>{{}}</span> -->
+          <div class="infor_item_content">
+            <el-input
+              v-model="predict_input.papers"
+              :rows="4"
+              placeholder="请如实分点输入你的发表论文或其它学术成果情况, 格式为：论文名称, 发表期刊, 发表时间, 作者排名"
+              type="textarea"
+              clearable
+            />
+          </div>
+        </div>
+
+
         <div class="infor_item" v-if="predict_offer_drawer">
           <div>
             <el-button type="success" @click="predict_offer"
@@ -360,10 +441,29 @@ export default {
         year: 2023,
         school: "",
         major: "",
+        national_scholarship_num: "",
+        provincial_scholarship_num: "",
+        school_scholarship_num: "",
+        other_type_scholarship_num: "",
+        activities: "",
+        papers: "",
       },
+      // scientific_research: [],
       school_level_options: [
         {
-          value: "985&211",
+          value:"清华&北大",
+          label:"清华&北大",
+        },
+        {
+          value:"华五",
+          label:"华五",
+        },
+        {
+          value:"中坚九校",
+          label:"中坚九校",
+        },
+        {
+          value: "其余985&211",
           label: "985&211高校",
         },
         {
@@ -373,6 +473,10 @@ export default {
         {
           value: "其它双一流高校",
           label: "其它双一流高校",
+        },
+        {
+          value: "双一流学科建设高校",
+          label: "其它双一流学科建设高校",
         },
         {
           value: "双非",

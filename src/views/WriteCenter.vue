@@ -82,23 +82,39 @@
                 <el-card class="box-card">
                   <template #header>
                     <div class="card-header">
-                      <div >文书信息</div>
-                      <div style="width:30px"></div>
-                      <div style="display:inline-block;"> 
+                      <div>文书信息</div>
+                      <div style="width: 30px"></div>
+                      <div style="display: inline-block">
                         <!--仍有问题-->
-                      <el-tag class="ml-2 tag-container" type="primary">目标院校 {{ this.form.school}}</el-tag>
-                      <br>
-                      <el-tag class="ml-2 tag-container" type="success">申请专业 {{ this.form.major}}</el-tag>
-                      <br>
-                      <el-tag class="ml-2 tag-container" type="info">文书类型 Personal Statement</el-tag>
-                      <br>
-                      <el-tag class="ml-2 tag-container" type="warning">申请学位 {{ this.form.degree }}</el-tag>
-                    </div>
+                        <el-tag class="ml-2 tag-container" type="primary"
+                          >目标院校 {{ this.form.school }}</el-tag
+                        >
+                        <br />
+                        <el-tag class="ml-2 tag-container" type="success"
+                          >申请专业 {{ this.form.major }}</el-tag
+                        >
+                        <br />
+                        <el-tag class="ml-2 tag-container" type="info"
+                          >文书类型 Personal Statement</el-tag
+                        >
+                        <br />
+                        <el-tag class="ml-2 tag-container" type="warning"
+                          >申请学位 {{ this.form.degree }}</el-tag
+                        >
+                      </div>
                     </div>
                   </template>
                   <el-scrollbar height="240px">
-                  <span style="white-space: pre-wrap; display:inline-block;text-align: left;">{{ this.result }}</span>
-                </el-scrollbar>
+                    <span
+                      v-loading="loading"
+                      style="
+                        white-space: pre-wrap;
+                        display: inline-block;
+                        text-align: left;
+                      "
+                      >{{ this.result }}</span
+                    >
+                  </el-scrollbar>
                 </el-card>
               </el-tab-pane>
             </el-tabs>
@@ -115,11 +131,13 @@ import { TabsPaneContext } from "element-plus";
 import InstitutionCard from "../components/InstitutionCard.vue";
 import PageLoading from "../components/PageLoading.vue";
 import DocumentCard from "../components/DocumentCard.vue";
+import { ElMessage } from "element-plus";
 export default {
   components: {
     InstitutionCard,
     PageLoading,
     DocumentCard,
+    ElMessage,
   },
   data() {
     return {
@@ -138,38 +156,72 @@ export default {
       activeName: "first",
       documents: [],
       advice: "",
-      result: ""
+      result: "",
+      loading: false,
     };
   },
   methods: {
     onSubmit() {
-      // this.activeName = "second";
-      // this.advice = "advice";
-      axios.post(
-          "http://127.0.0.1:8000/writing/", //?school=" + this.form.school + "&major=" + this.form.major + "&degree=" + this.form.degree + "&document_ps=" + this.form.document,
+      if (this.$store.state.is_login == false) {
+        //若未登录
+        ElMessage({
+          message: "请先登录",
+          type: "warning",
+          showClose: true,
+          duration: 2000,
+        });
+        /**之后此处需记录当前页面路径，以便于登陆完成后跳转 */
+        this.$router.push({
+          path: "/login",
+          query: { redirect: this.$route.fullPath },
+        });
+      }
+      this.loading = true;
+
+      axios
+        .post("spring/coin/record", {
+          user_id: this.$store.state.user_info.user_id,
+          change_num: -5,
+          change_reason: "使用AI文书修改单次花费5个鸟币",
+        })
+        .then((res) => {
+          console.log(res);
+          if(res.data.status)
           {
-            school: this.form.school,
-            major:this.form.major,
-            degree:this.form.degree,
-            document_ps:this.form.document
-          },
-       )
-      // axios.post(
-      //   "http://127.0.0.1:8000/writing/",
-      //   {JSON.stringify(this.form)},
-      //   // headers:{
-      //   //   // 'content-type':'application/x-www-form-urlencoded; charset=UTF-8',
-      //   //   'Access-Control-Allow-Origin': process.env.VUE_APP_Access_Control_Allow_Origin
-      //   // }
-      // )
-      .then((res) => {
-        console.log(res);
-        this.result = res.data;
-      })
-      .catch((errMsg) => {
-            console.log(errMsg);
-            console.log("1111");
-          });
+            axios
+            .post(
+              "http://127.0.0.1:8000/writing/", //?school=" + this.form.school + "&major=" + this.form.major + "&degree=" + this.form.degree + "&document_ps=" + this.form.document,
+              {
+                school: this.form.school,
+                major: this.form.major,
+                degree: this.form.degree,
+                document_ps: this.form.document,
+              }
+            )
+            .then((res) => {
+              this.loading = false;
+              console.log(res);
+              this.result = res.data;
+            })
+            .catch((errMsg) => {
+              console.log(errMsg);
+              console.log("获取文书修改意见失败，请重试");
+            });
+          }
+          else{
+            this.loading = false;
+            ElMessage({
+              message: "鸟币不足",
+              type: "warning",
+              showClose: true,
+              duration: 2000,
+            });
+          }
+        })
+        .catch((errMsg) => {
+          console.log(errMsg);
+          console.log("扣除鸟币失败");
+        });
     },
     handleClick(tab, event) {
       console.log(tab, event);
@@ -191,6 +243,11 @@ export default {
   mounted() {},
   created() {
     this.getDocuments(1);
+    if(this.$route.query.school)
+    {
+      this.form.school = this.$route.query.school;
+    }
+    
   },
 };
 </script>
@@ -376,11 +433,11 @@ p.QS_rank_test {
 }
 
 .tag-container {
-    display: block;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
+  display: block;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
 /* .ml-2 {
   display: flex;
@@ -388,7 +445,5 @@ p.QS_rank_test {
   align-items: center;
   text-align: center;
 } */
-
-
 </style>
   
