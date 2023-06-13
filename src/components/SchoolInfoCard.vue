@@ -359,6 +359,30 @@ export default {
         },
       });
     },
+    goTOEFL(){
+      this.$router.push({
+        path: "news",
+        query: {
+          news_id: 109,
+        },
+      });
+    },
+    goIELTS(){
+      this.$router.push({
+        path: "news",
+        query: {
+          news_id: 113,
+        },
+      });
+    },
+    goGRE(){
+      this.$router.push({
+        path: "news",
+        query: {
+          news_id: 108,
+        },
+      });
+    }
   },
 };
 </script>
