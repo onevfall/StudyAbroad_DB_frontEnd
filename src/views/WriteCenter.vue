@@ -190,7 +190,7 @@ export default {
           {
             axios
             .post(
-              "http://127.0.0.1:8000/writing/", //?school=" + this.form.school + "&major=" + this.form.major + "&degree=" + this.form.degree + "&document_ps=" + this.form.document,
+              "http://1.117.102.181:8000/writing/", //?school=" + this.form.school + "&major=" + this.form.major + "&degree=" + this.form.degree + "&document_ps=" + this.form.document,
               {
                 school: this.form.school,
                 major: this.form.major,

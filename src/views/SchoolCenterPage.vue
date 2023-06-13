@@ -367,6 +367,16 @@
         <div class="infor_item" v-if="predict_result_shown&&predict_offer_drawer">
         <el-table :data="this.predict_result">
           <el-table-column property="school_name" label="预测结果" width="400" />
+          <el-table-column label="详情查询情况" width="200" >
+            <template #default="scope">
+              <el-button  v-if="scope.row.school_id" @click="detailInfor(scope.row.school_id)">查看详情</el-button>
+            </template>
+          <!-- <el-table-column label="操作" width="400">
+              <template slotScope="scope">
+                  <el-button  v-if="scope.row.school_id" @click="detailInfor(scope.row.school_id)">查看详情</el-button>
+              </template>-->
+          </el-table-column> 
+
         </el-table>
       </div>
       </div>
@@ -572,6 +582,15 @@ export default {
         },
       });
     },
+    detailInfor(school_id){
+      console.log(school_id)
+      this.$router.push({
+        path: "/school_detail",
+        query: {
+          school_id: school_id,
+        },
+      });
+    },
     clear_predict_data(){
       this.predict_input={
         toefl_language: 0,
@@ -584,7 +603,7 @@ export default {
       this.predict_result=[],
       this.predict_result_shown = false
     },
-    predict_offer() {
+    async predict_offer() {
       //判断是否登录
       if (this.$store.state.is_login == false) {
         //若未登录
@@ -625,7 +644,7 @@ export default {
             + "&year=" + this.predict_input.year + "&school=" + this.predict_input.school + "&subject=" + this.predict_input.major + "&sid=4",
         method: "get",
       })
-        .then((res) => {
+        .then(async (res) => {
           console.log(res)
           if(res.data.status){
             this.predict_result_shown = true
@@ -634,7 +653,19 @@ export default {
             {
               var dict = {}
               dict["school_name"] = res.data.data[i];
-              this.predict_result.push(dict); 
+              await console.log(dict)
+              await axios({
+                url: "/spring/college/id/en"+"?university_enname="+ dict["school_name"],
+                method: "get"
+              })
+              .then((res)=>{
+                if(res.data.status)
+                {
+                  dict["school_id"] = res.data.obj.university_id
+                  console.log(dict)
+                }
+                this.predict_result.push(dict);                
+              }) 
             }
             console.log(this.predict_result)
           }
